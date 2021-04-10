@@ -60,6 +60,28 @@ public class Resources {
     }
 
     /**
+     * Returns the as positive the negative resources in a subtraction
+     * @param operand operand of the subrtaction
+     * @return Returns the as positive the negative resources in a subtraction
+     */
+    public Resources negativeSubValues(Resources operand){
+        Resources diff=new Resources();
+
+        this.resourceMap.forEach(diff.resourceMap::put); /*duplicate the current object*/
+        operand.resourceMap.forEach((key,value)-> diff.resourceMap.merge(key,value, (v1,v2)->v1-v2));/*subtract the operand*/
+
+        for(ResourceTypes type : ResourceTypes.values()){
+            if(diff.resourceMap.get(type)>0){
+                diff.set(type,0);
+            }
+            else{
+                diff.set(type,-diff.resourceMap.get(type));
+            }
+        }
+        return diff;
+    }
+
+    /**
      * This method switches blank resources in a specified type resource
      * @param type Type of the resource in which blank need to be converted
      * @return The new resource quantity
@@ -72,6 +94,30 @@ public class Resources {
 
         substitute.eraseBlank();
         return substitute;
+    }
+
+    /**
+     * Check if every resource of the subtraction is greater than zero
+     * @param operand The resource to subtract
+     * @return True if every resource of the subtraction is greater than zero and false otherwiwse
+     */
+    public boolean isSubPositive(Resources operand){
+        try{
+            this.sub(operand);
+            return true;
+        }
+        catch (NegativeResourceValueException e){
+            return false;
+        }
+    }
+
+    /**
+     * Returns the number of resources of a specified type
+     * @param type Type of the resource to be returned
+     * @return The number of resources
+     */
+    public int getResourceNumber(ResourceTypes type){
+        return this.resourceMap.get(type);
     }
 
     /**
