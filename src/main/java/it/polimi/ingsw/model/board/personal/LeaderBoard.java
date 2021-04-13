@@ -49,7 +49,7 @@ public class LeaderBoard {
     public ArrayList<ExtraProduction> getProductionEffects(){
         ArrayList<ExtraProduction> effects = new ArrayList<>();
         for(LeaderCard card : this.leaderCards){
-            if(card.getSpecialAbility() instanceof ExtraProduction)
+            if(card.getType()=='p')
                 effects.add((ExtraProduction) card.getSpecialAbility());
         }
         return effects;
@@ -62,7 +62,7 @@ public class LeaderBoard {
     public ArrayList<Discount> getDiscountEffects(){
         ArrayList<Discount> effects = new ArrayList<>();
         for(LeaderCard card : this.leaderCards){
-            if(card.getSpecialAbility() instanceof Discount)
+            if(card.getType() == 'd')
                 effects.add((Discount) card.getSpecialAbility());
         }
         return effects;
@@ -75,7 +75,7 @@ public class LeaderBoard {
     public ArrayList<ExtraDeposit> getExtraDepostEffects(){
         ArrayList<ExtraDeposit> effects = new ArrayList<>();
         for(LeaderCard card : this.leaderCards){
-            if(card.getSpecialAbility() instanceof ExtraDeposit)
+            if(card.getType() == 'e')
                 effects.add((ExtraDeposit) card.getSpecialAbility());
         }
         return effects;
@@ -88,7 +88,7 @@ public class LeaderBoard {
     public ArrayList<ExtraResource> getExtraResource(){
         ArrayList<ExtraResource> effects = new ArrayList<>();
         for(LeaderCard card : this.leaderCards){
-            if(card.getSpecialAbility() instanceof ExtraResource)
+            if(card.getType() == 'r')
                 effects.add((ExtraResource) card.getSpecialAbility());
         }
         return effects;
