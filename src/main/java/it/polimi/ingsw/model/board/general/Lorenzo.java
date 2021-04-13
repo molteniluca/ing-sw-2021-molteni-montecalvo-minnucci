@@ -11,7 +11,7 @@ public class Lorenzo {
     private ArrayList<ActionTokens> actionTokens;
 
     public Lorenzo() {
-        faithTrack = new FaithTrack();
+        faithTrack = new FaithTrack(new FaithObserver());
         positionToken = 0;
         actionTokens = new ArrayList<>();
         this.actionTokens.addAll(Arrays.asList(ActionTokens.values()));

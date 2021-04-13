@@ -82,4 +82,22 @@ public class ResourcesTest extends TestCase {
         assert resources.getResourceNumber(ResourceTypes.GOLD) == 13;
         assert resources.getResourceNumber(ResourceTypes.STONES) == 5;
     }
+
+    public void testEquals(){
+        Resources resources= new Resources();
+        resources.set(ResourceTypes.BLANK,8);
+        resources.set(ResourceTypes.STONES,5);
+        resources.set(ResourceTypes.GOLD,5);
+
+        Resources resources2= new Resources();
+        resources2.set(ResourceTypes.BLANK,8);
+        resources2.set(ResourceTypes.STONES,5);
+        resources2.set(ResourceTypes.GOLD,5);
+
+        assert resources.equals(resources2);
+        assert resources.equals(resources);
+
+        assert !resources.equals(resources.add(resources2));
+
+    }
 }

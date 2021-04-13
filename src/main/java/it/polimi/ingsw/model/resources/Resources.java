@@ -126,4 +126,24 @@ public class Resources {
     private void eraseBlank(){
         set(ResourceTypes.BLANK,0);
     }
+
+
+    /**
+     * A method that compares two resources objects
+     * @param compare The operand to which compare the object
+     * @return True if are equal or false if are not
+     */
+    public boolean equals(Resources compare){
+        try {
+            Resources diff = this.sub(compare);
+            for(ResourceTypes type : ResourceTypes.values()){
+                if(diff.getResourceNumber(type)!=0){
+                    return false;
+                }
+            }
+            return true;
+        } catch (NegativeResourceValueException e) {
+            return false;
+        }
+    }
 }

@@ -1,44 +1,97 @@
 package it.polimi.ingsw.model.board.personal;
 
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.Discount;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraDeposit;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraProduction;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
+import it.polimi.ingsw.model.resources.Resources;
 import jdk.jshell.spi.ExecutionControl;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Class that represents a board containing the leader cards
+ */
 public class LeaderBoard {
-    private ArrayList<LeaderCard> leaderCards;
+    private final ArrayList<LeaderCard> leaderCards;
+    private final ArrayList<LeaderCard> leaderCardsInHand;
+    private int victoryPoints = 0;
 
-    public LeaderBoard() {
+    public LeaderBoard(ArrayList<LeaderCard> leaderCardsInHand) {
         this.leaderCards = new ArrayList<>();
+        this.leaderCardsInHand = leaderCardsInHand;
     }
 
-    public void playLeader(LeaderCard leader)throws ExecutionControl.NotImplementedException {
+    /**
+     * Check and plays the leader card
+     * @param leader The leader card to play
+     * @param resources The resources required to play the card
+     * @param cards The list of cards required to play the card
+     */
+    public void playLeader(LeaderCard leader, Resources resources, ArrayList<DevelopmentCard> cards)throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
     }
 
-    public void discardLeader (LeaderCard leader)throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    /**
+     * This method discards a leader card
+     * @param leader LeaderCard to be discarded
+     */
+    public void discardLeader (LeaderCard leader){
+        leaderCardsInHand.remove(leader);
+        victoryPoints++;
     }
 
-    public ArrayList<ExtraProduction> getProductionEffects() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    /**
+     * Method that gets the ExtraProduction effects
+     * @return The list of the effects
+     */
+    public ArrayList<ExtraProduction> getProductionEffects(){
+        ArrayList<ExtraProduction> effects = new ArrayList<>();
+        for(LeaderCard card : this.leaderCards){
+            if(card.getSpecialAbility() instanceof ExtraProduction)
+                effects.add((ExtraProduction) card.getSpecialAbility());
+        }
+        return effects;
     }
 
-    public ArrayList<Discount> getDiscountEffects()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    /**
+     * Method that gets the Discount effects
+     * @return The list of the effects
+     */
+    public ArrayList<Discount> getDiscountEffects(){
+        ArrayList<Discount> effects = new ArrayList<>();
+        for(LeaderCard card : this.leaderCards){
+            if(card.getSpecialAbility() instanceof Discount)
+                effects.add((Discount) card.getSpecialAbility());
+        }
+        return effects;
     }
 
-    public ArrayList<ExtraDeposit> getExtraDepostEffects()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    /**
+     * Method that gets the ExtraDeposit effects
+     * @return The list of the effects
+     */
+    public ArrayList<ExtraDeposit> getExtraDepostEffects(){
+        ArrayList<ExtraDeposit> effects = new ArrayList<>();
+        for(LeaderCard card : this.leaderCards){
+            if(card.getSpecialAbility() instanceof ExtraDeposit)
+                effects.add((ExtraDeposit) card.getSpecialAbility());
+        }
+        return effects;
     }
 
-    public ArrayList<ExtraResource> getExtraResource()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    /**
+     * Method that gets the ExtraResource effects
+     * @return The list of the effects
+     */
+    public ArrayList<ExtraResource> getExtraResource(){
+        ArrayList<ExtraResource> effects = new ArrayList<>();
+        for(LeaderCard card : this.leaderCards){
+            if(card.getSpecialAbility() instanceof ExtraResource)
+                effects.add((ExtraResource) card.getSpecialAbility());
+        }
+        return effects;
     }
 
     public void activateLeaderEffect(LeaderCard leader)throws ExecutionControl.NotImplementedException {

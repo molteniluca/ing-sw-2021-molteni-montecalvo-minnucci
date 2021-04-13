@@ -17,10 +17,10 @@ public class PersonalBoard {
     private GeneralBoard generalBoard;
 
     public PersonalBoard(GeneralBoard generalBoard) {
-        this.faithTrack = new FaithTrack();
+        //this.faithTrack = new FaithTrack();
         this.deposit = new Deposit();
         this.cardBoard = new CardBoard();
-        this.leaderBoard = new LeaderBoard();
+        //this.leaderBoard = new LeaderBoard();
         this.generalBoard = generalBoard;
     }
 
