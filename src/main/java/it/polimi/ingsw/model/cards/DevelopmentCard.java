@@ -67,16 +67,10 @@ public class DevelopmentCard extends Card{
 
     /**
      * Check if is it possible to use the production of the DevelopmentCard
-     * @param resource resources available for the player to produce
+     * @param resource resources available for the player to produce, NB: resource must be only resources available at all: not used for any other production!
      * @return boolean true or false possibility to use that one DevelopmentCard with that resources available
      */
     public Boolean checkAvailability(Resources resource) {
-        try{
-            resource.sub(getProductionCost());
-            return true;
-        }
-        catch (NegativeResourceValueException ex) {
-            return false;
-        }
+        return resource.isSubPositive(getProductionCost());
     }
 }
