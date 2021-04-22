@@ -1,12 +1,16 @@
 package it.polimi.ingsw.model.cards;
 
+/**
+ * Class of DevelopmentCardRequirement. It stands for types and levels of DevelopmentCards required
+ * to activate LeaderCard.
+ */
 public class DevelopmentCardRequirement {
     private final char type;
-    private final int level;
+    private int level;
 
     /**
-     * Constructor of DevelopmentCardRequirement
-     * @param type color of flags required
+     * Constructor of DevelopmentCardRequirement for colors and level requirements
+     * @param type color of flags required: b = blue, g = green, p = purple, y = yellow
      * @param level level (numbers of dots in flags) required
      */
     public DevelopmentCardRequirement(char type, int level){
@@ -15,8 +19,16 @@ public class DevelopmentCardRequirement {
     }
 
     /**
+     * Constructor of DevelopmentCardRequirement for only colors requirements
+     * @param type color of flags required: b = blue, g = green, p = purple, y = yellow
+     */
+    public DevelopmentCardRequirement(char type){
+        this.type = type;
+    }
+
+    /**
      * Getter of type (color) of DevelopmentCardRequirement
-     * @return the color of flags required
+     * @return the color of flags required: b = blue, g = green, p = purple, y = yellow
      */
     public char getType() {
         return type;
