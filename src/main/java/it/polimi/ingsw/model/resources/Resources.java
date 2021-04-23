@@ -19,13 +19,24 @@ public class Resources {
         }
     }
 
+    public Resources(int gold, int stones, int shelds, int serveants, int faith) {
+        this.resourceMap = new HashMap<>();
+        this.set(ResourceTypes.GOLD,gold);
+        this.set(ResourceTypes.STONES,stones);
+        this.set(ResourceTypes.SHIELDS,shelds);
+        this.set(ResourceTypes.SERVANTS,serveants);
+        this.set(ResourceTypes.FAITH,faith);
+        this.set(ResourceTypes.BLANK,0);
+    }
+
     /**
      * Sets the value of a specified resource in the object
      * @param resource the type of the resource to be set
      * @param number the value of the resource to be set
      */
-    public void set(ResourceTypes resource, int number){
+    public Resources set(ResourceTypes resource, int number){
         resourceMap.put(resource,number);
+        return this;
     }
 
     /**
@@ -61,7 +72,7 @@ public class Resources {
 
     /**
      * Returns the as positive the negative resources in a subtraction
-     * @param operand operand of the subrtaction
+     * @param operand operand of the subtraction
      * @return Returns the as positive the negative resources in a subtraction
      */
     public Resources negativeSubValues(Resources operand){
@@ -99,7 +110,7 @@ public class Resources {
     /**
      * Check if every resource of the subtraction is greater than zero
      * @param operand The resource to subtract
-     * @return True if every resource of the subtraction is greater than zero and false otherwiwse
+     * @return True if every resource of the subtraction is greater than zero and false otherwise
      */
     public boolean isSubPositive(Resources operand){
         try{
@@ -145,5 +156,15 @@ public class Resources {
         } catch (NegativeResourceValueException e) {
             return false;
         }
+    }
+
+    /**
+     * This method gets and removes the faith from the resource values
+     * @return The faith
+     */
+    public int getEraseFaith(){
+        int faith=this.resourceMap.get(ResourceTypes.FAITH);
+        this.set(ResourceTypes.FAITH,0);
+        return faith;
     }
 }
