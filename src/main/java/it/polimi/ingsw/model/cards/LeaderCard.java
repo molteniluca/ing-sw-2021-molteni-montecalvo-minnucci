@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.cards.specialAbility.SpecialAbility;
 import it.polimi.ingsw.model.resources.Resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,11 +18,12 @@ public class LeaderCard extends Card{
     /**
      * Constructor of LeaderCard
      * @param victoryPoint Victory Point of Card
+     * @param image name of image file associated
      * @param resourceRequirements resources required to activate LeaderCard's effect
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(int victoryPoint, Resources resourceRequirements, SpecialAbility specialAbility) {
-        super(victoryPoint);
+    public LeaderCard(int victoryPoint, String image, Resources resourceRequirements, SpecialAbility specialAbility) {
+        super(victoryPoint, image);
         this.resourceRequirements = resourceRequirements;
         this.isActive = false;
         this.specialAbility = specialAbility;
@@ -32,11 +32,12 @@ public class LeaderCard extends Card{
     /**
      * Constructor of LeaderCard
      * @param victoryPoint Victory Point of Card
+     * @param image name of image file associated
      * @param developmentCardRequirementWithLevel DevelopmentCard with level and color necessary to activate LeaderCard's effect
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(int victoryPoint, DevelopmentCardRequirement developmentCardRequirementWithLevel, SpecialAbility specialAbility) {
-        super(victoryPoint);
+    public LeaderCard(int victoryPoint, String image,  DevelopmentCardRequirement developmentCardRequirementWithLevel, SpecialAbility specialAbility) {
+        super(victoryPoint, image);
         this.developmentCardRequirementWithLevel = developmentCardRequirementWithLevel;
         this.isActive = false;
         this.specialAbility = specialAbility;
@@ -45,11 +46,12 @@ public class LeaderCard extends Card{
     /**
      * Constructor of LeaderCard
      * @param victoryPoint Victory Point of Card
+     * @param image name of image file associated
      * @param developmentCardRequirementOnlyColor list of DevelopmentCards with only color required, 1 card equals 1 char
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(int victoryPoint, List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor, SpecialAbility specialAbility) {
-        super(victoryPoint);
+    public LeaderCard(int victoryPoint, String image, List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor, SpecialAbility specialAbility) {
+        super(victoryPoint, image);
         this.developmentCardRequirementOnlyColor = developmentCardRequirementOnlyColor;
         this.isActive = false;
         this.specialAbility = specialAbility;

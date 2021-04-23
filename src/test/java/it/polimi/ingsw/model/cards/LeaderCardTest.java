@@ -67,9 +67,9 @@ public class LeaderCardTest {
         developmentCardRequirementListOnlyColors.add(developmentCardRequirementColor2);
         developmentCardRequirementListOnlyColors.add(developmentCardRequirementColor3);
 
-        leaderCardRes = new LeaderCard(2, resRequired, specialAbility); //create LeaderCard that required resources
-        leaderCardLev = new LeaderCard(2, developmentCardRequirementLevel, specialAbility); //create LeaderCard that required one card with level and color
-        leaderCardCol = new LeaderCard(2, developmentCardRequirementListOnlyColors, specialAbility); //create LeaderCard that required different DevelopmentCards (different colors)
+        leaderCardRes = new LeaderCard(2, "name1", resRequired, specialAbility); //create LeaderCard that required resources
+        leaderCardLev = new LeaderCard(2, "name2",developmentCardRequirementLevel, specialAbility); //create LeaderCard that required one card with level and color
+        leaderCardCol = new LeaderCard(2, "name3",developmentCardRequirementListOnlyColors, specialAbility); //create LeaderCard that required different DevelopmentCards (different colors)
 
         resAvailableEnough.set(GOLD, 5);
         resAvailableScarce.set(GOLD, 4);
@@ -88,11 +88,11 @@ public class LeaderCardTest {
         resProdCost.set(GOLD, 2);
         resProdPow.set(FAITH, 1);
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard(1, resDevCost, 'y', 2, resProdCost, resProdPow);
-        DevelopmentCard developmentCard2 = new DevelopmentCard(2, resDevCost, 'y', 1, resProdCost, resProdPow);
-        DevelopmentCard developmentCard3 = new DevelopmentCard(2, resDevCost, 'b', 3, resProdCost, resProdPow);
+        DevelopmentCard developmentCard1 = new DevelopmentCard(1, "name1", resDevCost, 'y', 2, resProdCost, resProdPow);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(2, "name2", resDevCost, 'y', 1, resProdCost, resProdPow);
+        DevelopmentCard developmentCard3 = new DevelopmentCard(2, "name3", resDevCost, 'b', 3, resProdCost, resProdPow);
 
-        DevelopmentCard developmentCard4 = new DevelopmentCard(1, resDevCost, 'g', 1, resProdCost, resProdPow);
+        DevelopmentCard developmentCard4 = new DevelopmentCard(1, "name4", resDevCost, 'g', 1, resProdCost, resProdPow);
 
         developmentCardListAvailableEnough.add(developmentCard1);
         developmentCardListAvailableEnough.add(developmentCard2);

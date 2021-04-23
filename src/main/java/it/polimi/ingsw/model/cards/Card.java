@@ -7,6 +7,7 @@ public abstract class Card {
 
     private final int victoryPoint;
     private boolean isSelected;
+    private final String image;
 
     /**
      * Getter of IsSelected of card
@@ -24,9 +25,11 @@ public abstract class Card {
     /**
      * Constructor of Card
      * @param victoryPoint Victory Point of Card, any card has them
+     * @param image file name associated
      */
-    public Card(int victoryPoint) {
+    public Card(int victoryPoint, String image) {
         this.victoryPoint = victoryPoint;
+        this.image = image;
         this.isSelected = false;
     }
 
@@ -38,5 +41,11 @@ public abstract class Card {
         return victoryPoint;
     }
 
-
+    /**
+     * Getter of String image
+     * @return the name of image file associated
+     */
+    public String getImage() {
+        return image;
+    }
 }

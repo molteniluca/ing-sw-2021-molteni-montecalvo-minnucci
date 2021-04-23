@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.resources.Resources;
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 /**
  * DevelopmentCard is a subclass of Card, its aim is to produce new resources.
@@ -18,14 +16,15 @@ public class DevelopmentCard extends Card{
     /**
      * Constructor of DevelopmentCard class
      * @param victoryPoint Victory Point of Card
+     * @param image name of image file associated
      * @param cost cost in term of resources to buy the Card
      * @param type color of flag's Card, b = blue, g = green, p = purple, y = yellow
      * @param level number of dots in flag's Card (if none, level = 1)
      * @param productionCost resources needed for production
      * @param productionPower resources obtained from production
      */
-    public DevelopmentCard(int victoryPoint, Resources cost, char type, int level, Resources productionCost, Resources productionPower) {
-        super(victoryPoint);
+    public DevelopmentCard(int victoryPoint, String image, Resources cost, char type, int level, Resources productionCost, Resources productionPower) {
+        super(victoryPoint, image);
         this.cost = cost;
         this.type = type;
         this.level = level;

@@ -31,7 +31,7 @@ public class DevelopmentCardTest {
 
         resReq.set(SHIELDS, 1);
 
-        DevelopmentCard devCard = new DevelopmentCard(1, resDevCost, 'y', 1, resProdCost, resProdPow);
+        DevelopmentCard devCard = new DevelopmentCard(1, "name1", resDevCost, 'y', 1, resProdCost, resProdPow);
 
         //resAv IS EMPTY, resProdCost has 1 res required
         assertFalse(devCard.checkAvailability(resAvailable));
