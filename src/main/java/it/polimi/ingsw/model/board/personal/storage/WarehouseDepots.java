@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.board.personal.storage;
 
+import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
 import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * Class that represents the multilevel storage type
  */
 public class WarehouseDepots {
-    private ArrayList<Level> warehouseDepots;
+    private final ArrayList<Level> warehouseDepots;
     private Resources swapDeposit;
 
     public WarehouseDepots(){
@@ -27,7 +28,9 @@ public class WarehouseDepots {
      * Method to add resources to the swap area from where the player can organize the resources
      * @param resource The resources to be added
      */
-    public void addResourceSwap(Resources resource){
+    public void addResourceSwap(Resources resource) throws FaithNotAllowedException {
+        if(resource.getResourceNumber(ResourceTypes.FAITH)!=0)
+            throw new FaithNotAllowedException("Faith not allowed in the storage");
         swapDeposit.add(resource);
     }
 

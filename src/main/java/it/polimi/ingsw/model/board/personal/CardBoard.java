@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Class that represent a production deck of a player
  */
 public class CardBoard {
-    private ArrayList<DevelopmentCard>[] productionCards;
+    private final ArrayList<DevelopmentCard>[] productionCards;
 
     @SuppressWarnings("unchecked") //can't create array of typed lists
     public CardBoard(){

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.board.personal.storage;
 
+import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
 import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
@@ -17,7 +18,11 @@ public class WarehouseDepotsTest extends TestCase {
         Resources res = new Resources();
         res.set(ResourceTypes.GOLD,2);
         res.set(ResourceTypes.STONES,2);
-        wd.addResourceSwap(res);
+        try {
+            wd.addResourceSwap(res);
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
 
         try {
             wd.moveToLevel(3,ResourceTypes.GOLD,2);
@@ -42,7 +47,11 @@ public class WarehouseDepotsTest extends TestCase {
         res.set(ResourceTypes.GOLD,2);
         res.set(ResourceTypes.STONES,2);
         res.set(ResourceTypes.SHIELDS,4);
-        wd.addResourceSwap(res);
+        try {
+            wd.addResourceSwap(res);
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
 
         try {
             wd.moveToLevel(3,ResourceTypes.GOLD,2);

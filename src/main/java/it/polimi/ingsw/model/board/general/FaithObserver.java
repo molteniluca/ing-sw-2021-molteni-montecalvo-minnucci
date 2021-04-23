@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.board.general;
 
-import it.polimi.ingsw.model.board.FaithTrack;
-
+import it.polimi.ingsw.model.board.personal.FaithTrack;
 import java.util.ArrayList;
 
 /**

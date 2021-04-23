@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.board;
+package it.polimi.ingsw.model.board.personal;
 
 import it.polimi.ingsw.model.board.general.FaithObserver;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
@@ -15,6 +15,7 @@ public class FaithTrack {
         this.faithCards = new int[]{0,0,0}; /* 0: card turned upside down; 1: card in place; 2: card discarded*/
         this.position = 0;
         this.faithObserver=faithObserver;
+        faithObserver.registerTrack(this);
     }
 
     /**

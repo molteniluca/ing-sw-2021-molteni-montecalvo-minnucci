@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.board.personal.storage;
 
+import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
+import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
 /**
@@ -21,7 +23,9 @@ public class StrongBox {
      * Adds resources to the storage
      * @param resource The resources to be added
      */
-    public void addResource(Resources resource){
+    public void addResource(Resources resource) throws FaithNotAllowedException {
+        if(resource.getResourceNumber(ResourceTypes.FAITH)!=0)
+            throw new FaithNotAllowedException("Faith not allowed in the storage");
         this.resources=this.resources.add(resource);
     }
 

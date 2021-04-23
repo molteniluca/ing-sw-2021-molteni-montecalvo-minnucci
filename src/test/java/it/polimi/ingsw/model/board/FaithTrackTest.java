@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.board;
 
 import it.polimi.ingsw.model.board.general.FaithObserver;
+import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import junit.framework.TestCase;
 
@@ -34,9 +35,6 @@ public class FaithTrackTest extends TestCase {
         FaithObserver fo= new FaithObserver();
         FaithTrack ft= new FaithTrack(fo);
         FaithTrack ft2= new FaithTrack(fo);
-
-        fo.registerTrack(ft);
-        fo.registerTrack(ft2);
 
         try {
             ft.incrementPosition(6);

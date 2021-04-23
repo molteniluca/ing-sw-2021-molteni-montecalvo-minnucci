@@ -19,16 +19,6 @@ public class Resources {
         }
     }
 
-    public Resources(int gold, int stones, int shelds, int serveants, int faith) {
-        this.resourceMap = new HashMap<>();
-        this.set(ResourceTypes.GOLD,gold);
-        this.set(ResourceTypes.STONES,stones);
-        this.set(ResourceTypes.SHIELDS,shelds);
-        this.set(ResourceTypes.SERVANTS,serveants);
-        this.set(ResourceTypes.FAITH,faith);
-        this.set(ResourceTypes.BLANK,0);
-    }
-
     /**
      * Sets the value of a specified resource in the object
      * @param resource the type of the resource to be set
