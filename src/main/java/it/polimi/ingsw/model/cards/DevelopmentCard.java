@@ -32,6 +32,10 @@ public class DevelopmentCard extends Card{
         this.productionPower = productionPower;
     }
 
+    public Resources getCost() {
+        return cost;
+    }
+
     /**
      * Getter of type
      * @return type (color) of DevelopmentCard
