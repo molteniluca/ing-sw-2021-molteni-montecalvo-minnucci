@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * LeaderCard is a subclass of Card, it has a special effect available only after obtain certain requirements
  */
-public class LeaderCard {
+public class LeaderCard extends Card{
     private Resources resourceRequirements;
     private DevelopmentCardRequirement developmentCardRequirementWithLevel;
     private List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor;
@@ -18,10 +18,12 @@ public class LeaderCard {
 
     /**
      * Constructor of LeaderCard
+     * @param victoryPoint Victory Point of Card
      * @param resourceRequirements resources required to activate LeaderCard's effect
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(Resources resourceRequirements, SpecialAbility specialAbility) {
+    public LeaderCard(int victoryPoint, Resources resourceRequirements, SpecialAbility specialAbility) {
+        super(victoryPoint);
         this.resourceRequirements = resourceRequirements;
         this.isActive = false;
         this.specialAbility = specialAbility;
@@ -29,10 +31,12 @@ public class LeaderCard {
 
     /**
      * Constructor of LeaderCard
+     * @param victoryPoint Victory Point of Card
      * @param developmentCardRequirementWithLevel DevelopmentCard with level and color necessary to activate LeaderCard's effect
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(DevelopmentCardRequirement developmentCardRequirementWithLevel, SpecialAbility specialAbility) {
+    public LeaderCard(int victoryPoint, DevelopmentCardRequirement developmentCardRequirementWithLevel, SpecialAbility specialAbility) {
+        super(victoryPoint);
         this.developmentCardRequirementWithLevel = developmentCardRequirementWithLevel;
         this.isActive = false;
         this.specialAbility = specialAbility;
@@ -40,10 +44,12 @@ public class LeaderCard {
 
     /**
      * Constructor of LeaderCard
+     * @param victoryPoint Victory Point of Card
      * @param developmentCardRequirementOnlyColor list of DevelopmentCards with only color required, 1 card equals 1 char
      * @param specialAbility the ability of LeaderCard: Discount, ExtraDeposit, ExtraResource, ExtraProduction
      */
-    public LeaderCard(List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor, SpecialAbility specialAbility) {
+    public LeaderCard(int victoryPoint, List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor, SpecialAbility specialAbility) {
+        super(victoryPoint);
         this.developmentCardRequirementOnlyColor = developmentCardRequirementOnlyColor;
         this.isActive = false;
         this.specialAbility = specialAbility;

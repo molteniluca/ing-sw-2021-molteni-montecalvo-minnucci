@@ -67,9 +67,9 @@ public class LeaderCardTest {
         developmentCardRequirementListOnlyColors.add(developmentCardRequirementColor2);
         developmentCardRequirementListOnlyColors.add(developmentCardRequirementColor3);
 
-        leaderCardRes = new LeaderCard(resRequired, specialAbility); //create LeaderCard that required resources
-        leaderCardLev = new LeaderCard(developmentCardRequirementLevel, specialAbility); //create LeaderCard that required one card with level and color
-        leaderCardCol = new LeaderCard(developmentCardRequirementListOnlyColors, specialAbility); //create LeaderCard that required different DevelopmentCards (different colors)
+        leaderCardRes = new LeaderCard(2, resRequired, specialAbility); //create LeaderCard that required resources
+        leaderCardLev = new LeaderCard(2, developmentCardRequirementLevel, specialAbility); //create LeaderCard that required one card with level and color
+        leaderCardCol = new LeaderCard(2, developmentCardRequirementListOnlyColors, specialAbility); //create LeaderCard that required different DevelopmentCards (different colors)
 
         resAvailableEnough.set(GOLD, 5);
         resAvailableScarce.set(GOLD, 4);
