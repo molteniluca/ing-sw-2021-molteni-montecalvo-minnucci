@@ -23,19 +23,19 @@ public class MarketTest {
         market = new Market();
         bought = new Resources();
         ResourceTypes[][] marketMatrix = market.getMarketMatrix();
-        market.setExternalResource(ResourceTypes.SHIELDS);
+        market.setExternalResource(ResourceTypes.SHIELD);
 
         //set marketMatrix because it is filled with casual resources but tests cannot be casuals
-        marketMatrix[0][0] = ResourceTypes.SERVANTS;
-        marketMatrix[0][1] = ResourceTypes.SHIELDS;
-        marketMatrix[0][2] = ResourceTypes.SERVANTS;
-        marketMatrix[0][3] = ResourceTypes.STONES;
+        marketMatrix[0][0] = ResourceTypes.SERVANT;
+        marketMatrix[0][1] = ResourceTypes.SHIELD;
+        marketMatrix[0][2] = ResourceTypes.SERVANT;
+        marketMatrix[0][3] = ResourceTypes.STONE;
         marketMatrix[1][0] = ResourceTypes.BLANK;
         marketMatrix[1][1] = ResourceTypes.FAITH;
         marketMatrix[1][2] = ResourceTypes.BLANK;
         marketMatrix[1][3] = ResourceTypes.BLANK;
         marketMatrix[2][0] = ResourceTypes.BLANK;
-        marketMatrix[2][1] = ResourceTypes.STONES;
+        marketMatrix[2][1] = ResourceTypes.STONE;
         marketMatrix[2][2] = ResourceTypes.GOLD;
         marketMatrix[2][3] = ResourceTypes.GOLD;
 
@@ -48,38 +48,38 @@ public class MarketTest {
 
         bought = market.buyColumn(0);
         //check the external resource and the map of Resources returned by the method
-        assertEquals(market.getExternalResource(), ResourceTypes.SERVANTS);
+        assertEquals(market.getExternalResource(), ResourceTypes.SERVANT);
         assertEquals(bought.getResourceNumber(ResourceTypes.GOLD), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.STONES), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELDS), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANTS), 1);
+        assertEquals(bought.getResourceNumber(ResourceTypes.STONE), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELD), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANT), 1);
         assertEquals(bought.getResourceNumber(ResourceTypes.FAITH), 0);
         assertEquals(bought.getResourceNumber(ResourceTypes.BLANK), 2);
 
         //check if external resource is added successfully and if pushColumn worked
         marketMatrix = market.getMarketMatrix();
         assertEquals(marketMatrix[0][0], ResourceTypes.BLANK);
-        assertEquals(marketMatrix[2][0], ResourceTypes.SHIELDS);
+        assertEquals(marketMatrix[2][0], ResourceTypes.SHIELD);
 
 
         bought = market.buyColumn(1);
-        assertEquals(market.getExternalResource(), ResourceTypes.SHIELDS);
+        assertEquals(market.getExternalResource(), ResourceTypes.SHIELD);
         assertEquals(bought.getResourceNumber(ResourceTypes.GOLD), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.STONES), 1);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELDS), 1);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANTS), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.STONE), 1);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELD), 1);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANT), 0);
         assertEquals(bought.getResourceNumber(ResourceTypes.FAITH), 1);
         assertEquals(bought.getResourceNumber(ResourceTypes.BLANK), 0);
 
         assertEquals(marketMatrix[0][1], ResourceTypes.FAITH);
-        assertEquals(marketMatrix[2][1], ResourceTypes.SERVANTS);
+        assertEquals(marketMatrix[2][1], ResourceTypes.SERVANT);
 
 
         market.buyColumn(2);
-        assertEquals(market.getExternalResource(), ResourceTypes.SERVANTS);
+        assertEquals(market.getExternalResource(), ResourceTypes.SERVANT);
 
         market.buyColumn(3);
-        assertEquals(market.getExternalResource(), ResourceTypes.STONES);
+        assertEquals(market.getExternalResource(), ResourceTypes.STONE);
 
 
         exception.expect(IndexOutOfBoundsException.class);
@@ -93,29 +93,29 @@ public class MarketTest {
         /*test all possible legit values of row*/
 
         bought = market.buyRow(0);
-        assertEquals(market.getExternalResource(), ResourceTypes.SERVANTS);
+        assertEquals(market.getExternalResource(), ResourceTypes.SERVANT);
         assertEquals(bought.getResourceNumber(ResourceTypes.GOLD), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.STONES), 1);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELDS), 1);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANTS), 2);
+        assertEquals(bought.getResourceNumber(ResourceTypes.STONE), 1);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELD), 1);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANT), 2);
         assertEquals(bought.getResourceNumber(ResourceTypes.FAITH), 0);
         assertEquals(bought.getResourceNumber(ResourceTypes.BLANK), 0);
 
         marketMatrix = market.getMarketMatrix();
-        assertEquals(marketMatrix[0][0], ResourceTypes.SHIELDS);
-        assertEquals(marketMatrix[0][3], ResourceTypes.SHIELDS);
+        assertEquals(marketMatrix[0][0], ResourceTypes.SHIELD);
+        assertEquals(marketMatrix[0][3], ResourceTypes.SHIELD);
 
         bought = market.buyRow(1);
         assertEquals(market.getExternalResource(), ResourceTypes.BLANK);
         assertEquals(bought.getResourceNumber(ResourceTypes.GOLD), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.STONES), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELDS), 0);
-        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANTS), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.STONE), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SHIELD), 0);
+        assertEquals(bought.getResourceNumber(ResourceTypes.SERVANT), 0);
         assertEquals(bought.getResourceNumber(ResourceTypes.FAITH), 1);
         assertEquals(bought.getResourceNumber(ResourceTypes.BLANK), 3);
 
         assertEquals(marketMatrix[1][0],ResourceTypes.FAITH);
-        assertEquals(marketMatrix[1][3], ResourceTypes.SERVANTS); //because externalResource changed after buyRow(0)
+        assertEquals(marketMatrix[1][3], ResourceTypes.SERVANT); //because externalResource changed after buyRow(0)
 
         market.buyRow(2);
         assertEquals(market.getExternalResource(), ResourceTypes.BLANK);
@@ -134,18 +134,18 @@ public class MarketTest {
         marketMatrix = market.getMarketMatrix();
 
         assertEquals(market.getExternalResource(), ResourceTypes.BLANK);
-        assertEquals(marketMatrix[0][0], ResourceTypes.SHIELDS);
+        assertEquals(marketMatrix[0][0], ResourceTypes.SHIELD);
         assertEquals(marketMatrix[1][0], ResourceTypes.BLANK);
-        assertEquals(marketMatrix[2][0], ResourceTypes.SHIELDS);
-        assertEquals(marketMatrix[0][1], ResourceTypes.SERVANTS);
-        assertEquals(marketMatrix[0][2], ResourceTypes.STONES);
-        assertEquals(marketMatrix[0][3], ResourceTypes.SERVANTS);
+        assertEquals(marketMatrix[2][0], ResourceTypes.SHIELD);
+        assertEquals(marketMatrix[0][1], ResourceTypes.SERVANT);
+        assertEquals(marketMatrix[0][2], ResourceTypes.STONE);
+        assertEquals(marketMatrix[0][3], ResourceTypes.SERVANT);
 
     }
 
     @Test
     public void testgetExternalResource()
     {
-        assertEquals(market.getExternalResource(), ResourceTypes.SHIELDS);
+        assertEquals(market.getExternalResource(), ResourceTypes.SHIELD);
     }
 }

@@ -73,7 +73,7 @@ public class LeaderCardTest {
 
         resAvailableEnough.set(GOLD, 5);
         resAvailableScarce.set(GOLD, 4);
-        resAvailableScarce.set(SHIELDS, 6); //for instance, resAvaSca has not enough GOLD and it can have lots of SHIELDS (not needed)
+        resAvailableScarce.set(SHIELD, 6); //for instance, resAvaSca has not enough GOLD and it can have lots of SHIELDS (not needed)
 
         developmentCardListAvailableEnough = new ArrayList<>();
         developmentCardListAvailableScarce = new ArrayList<>();
@@ -84,7 +84,7 @@ public class LeaderCardTest {
         resProdCost = new Resources();
         resProdPow = new Resources();
 
-        resDevCost.set(SHIELDS, 2);
+        resDevCost.set(SHIELD, 2);
         resProdCost.set(GOLD, 2);
         resProdPow.set(FAITH, 1);
 

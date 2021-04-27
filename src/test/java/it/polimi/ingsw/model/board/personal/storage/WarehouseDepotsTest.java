@@ -17,7 +17,7 @@ public class WarehouseDepotsTest extends TestCase {
 
         Resources res = new Resources();
         res.set(ResourceTypes.GOLD,2);
-        res.set(ResourceTypes.STONES,2);
+        res.set(ResourceTypes.STONE,2);
         try {
             wd.addResourceSwap(res);
         } catch (FaithNotAllowedException e) {
@@ -45,8 +45,8 @@ public class WarehouseDepotsTest extends TestCase {
 
         Resources res = new Resources();
         res.set(ResourceTypes.GOLD,2);
-        res.set(ResourceTypes.STONES,2);
-        res.set(ResourceTypes.SHIELDS,4);
+        res.set(ResourceTypes.STONE,2);
+        res.set(ResourceTypes.SHIELD,4);
         try {
             wd.addResourceSwap(res);
         } catch (FaithNotAllowedException e) {
@@ -55,8 +55,8 @@ public class WarehouseDepotsTest extends TestCase {
 
         try {
             wd.moveToLevel(3,ResourceTypes.GOLD,2);
-            wd.moveToLevel(2,ResourceTypes.STONES,2);
-            wd.moveToLevel(3,ResourceTypes.SHIELDS,2);
+            wd.moveToLevel(2,ResourceTypes.STONE,2);
+            wd.moveToLevel(3,ResourceTypes.SHIELD,2);
         } catch (TypeNotChangeableException e) {
             assert true;
         } catch (LevelTooSmallException | NegativeResourceValueException e) {
@@ -64,7 +64,7 @@ public class WarehouseDepotsTest extends TestCase {
         }
 
         try {
-            wd.moveToLevel(1,ResourceTypes.SHIELDS,4);
+            wd.moveToLevel(1,ResourceTypes.SHIELD,4);
         } catch (TypeNotChangeableException | NegativeResourceValueException e) {
             e.printStackTrace();
         } catch (LevelTooSmallException e) {
@@ -72,7 +72,7 @@ public class WarehouseDepotsTest extends TestCase {
         }
 
         try {
-            wd.moveToLevel(1,ResourceTypes.SERVANTS,1);
+            wd.moveToLevel(1,ResourceTypes.SERVANT,1);
         } catch (TypeNotChangeableException | NegativeResourceValueException e) {
             e.printStackTrace();
         } catch (LevelTooSmallException e) {

@@ -41,14 +41,14 @@ public class CardDealerTest {
     @Test
     public void testgetCost() {
         Resources cost = new Resources();
-        cost.set(ResourceTypes.SHIELDS, 2);
+        cost.set(ResourceTypes.SHIELD, 2);
         cost.set(ResourceTypes.GOLD, 2);
 
         assertTrue(cardDealer.getCost(2,0).equals(cost));
 
         cost = new Resources();
-        cost.set(ResourceTypes.SHIELDS,3);
-        cost.set(ResourceTypes.SERVANTS,3);
+        cost.set(ResourceTypes.SHIELD,3);
+        cost.set(ResourceTypes.SERVANT,3);
         assertTrue(cardDealer.getCost(1,3).equals(cost));
 
     }
@@ -98,12 +98,12 @@ public class CardDealerTest {
         productionPower = new Resources();
 
         cost.set(ResourceTypes.GOLD, 4);
-        cost.set(ResourceTypes.SHIELDS, 4);
+        cost.set(ResourceTypes.SHIELD, 4);
 
-        productionCost.set(ResourceTypes.STONES,1);
+        productionCost.set(ResourceTypes.STONE,1);
 
         productionPower.set(ResourceTypes.GOLD, 3);
-        productionPower.set(ResourceTypes.SHIELDS, 1);
+        productionPower.set(ResourceTypes.SHIELD, 1);
 
         //check first cell
         developmentCard = cardDealer.drawCard(0,0);
@@ -117,11 +117,11 @@ public class CardDealerTest {
         productionPower = new Resources();
 
 
-        cost.set(ResourceTypes.SERVANTS,2);
-        cost.set(ResourceTypes.STONES,2);
+        cost.set(ResourceTypes.SERVANT,2);
+        cost.set(ResourceTypes.STONE,2);
         productionCost.set(ResourceTypes.GOLD,1);
-        productionCost.set(ResourceTypes.SHIELDS,1);
-        productionPower.set(ResourceTypes.STONES,2);
+        productionCost.set(ResourceTypes.SHIELD,1);
+        productionPower.set(ResourceTypes.STONE,2);
         productionPower.set(ResourceTypes.FAITH,1);
 
         developmentCard = cardDealer.drawCard(2,3);
@@ -134,11 +134,11 @@ public class CardDealerTest {
         productionCost = new Resources();
         productionPower = new Resources();
 
-        cost.set(ResourceTypes.SERVANTS,3);
+        cost.set(ResourceTypes.SERVANT,3);
         productionCost.set(ResourceTypes.GOLD,2);
-        productionPower.set(ResourceTypes.SERVANTS,1);
-        productionPower.set(ResourceTypes.SHIELDS,1);
-        productionPower.set(ResourceTypes.STONES,1);
+        productionPower.set(ResourceTypes.SERVANT,1);
+        productionPower.set(ResourceTypes.SHIELD,1);
+        productionPower.set(ResourceTypes.STONE,1);
 
         developmentCard = cardDealer.drawCard(2,3);
         assertTrue(developmentCard.getCost().equals(cost));

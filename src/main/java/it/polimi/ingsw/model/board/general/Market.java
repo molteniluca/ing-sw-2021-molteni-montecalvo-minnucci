@@ -27,12 +27,12 @@ public class Market {
 
         availableResources.add(ResourceTypes.GOLD);
         availableResources.add(ResourceTypes.GOLD);
-        availableResources.add(ResourceTypes.SERVANTS);
-        availableResources.add(ResourceTypes.SERVANTS);
-        availableResources.add(ResourceTypes.SHIELDS);
-        availableResources.add(ResourceTypes.SHIELDS);
-        availableResources.add(ResourceTypes.STONES);
-        availableResources.add(ResourceTypes.STONES);
+        availableResources.add(ResourceTypes.SERVANT);
+        availableResources.add(ResourceTypes.SERVANT);
+        availableResources.add(ResourceTypes.SHIELD);
+        availableResources.add(ResourceTypes.SHIELD);
+        availableResources.add(ResourceTypes.STONE);
+        availableResources.add(ResourceTypes.STONE);
         availableResources.add(ResourceTypes.FAITH);
 
         for (i = 0; i < 4; i++) {

@@ -72,7 +72,7 @@ public class LevelTest extends TestCase {
         assertEquals(l1.getResourceNumber(),1);
 
         try {
-            l1.removeResources(1,ResourceTypes.STONES);
+            l1.removeResources(1,ResourceTypes.STONE);
             assert false;
         } catch (LevelTooSmallException | NegativeResourceValueException e) {
             assert false;
@@ -92,7 +92,7 @@ public class LevelTest extends TestCase {
         l1 = new Level(ResourceTypes.GOLD,3);
 
         try {
-            l1.addResources(3,ResourceTypes.STONES);
+            l1.addResources(3,ResourceTypes.STONE);
             assert false;
         } catch (LevelTooSmallException | NegativeResourceValueException e) {
             assert false;

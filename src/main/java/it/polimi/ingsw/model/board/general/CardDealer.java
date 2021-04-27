@@ -28,7 +28,7 @@ public class CardDealer {
         //Can't define Arrays of typed lists
         //Read from the JsonFile of cards
         Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new FileReader(ClassLoader.getSystemResource("json/cards.json").getPath()));
+        JsonReader reader = new JsonReader(new FileReader(ClassLoader.getSystemResource("json/developmentCards.json").getPath()));
         List<DevelopmentCard> data = gson.fromJson(reader,  new TypeToken<ArrayList<DevelopmentCard>>(){}.getType());
 
 

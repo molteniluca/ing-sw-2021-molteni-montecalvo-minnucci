@@ -1,10 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.board.general.Market;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import org.junit.Before;
 import org.junit.Test;
 
 import static it.polimi.ingsw.model.resources.ResourceTypes.*;
@@ -25,11 +21,11 @@ public class DevelopmentCardTest {
         resProdPow = new Resources();
         resReq = new Resources();
 
-        resDevCost.set(SHIELDS, 2);
+        resDevCost.set(SHIELD, 2);
         resProdCost.set(GOLD, 2);
         resProdPow.set(FAITH, 1);
 
-        resReq.set(SHIELDS, 1);
+        resReq.set(SHIELD, 1);
 
         DevelopmentCard devCard = new DevelopmentCard(1, "name1", resDevCost, 'y', 1, resProdCost, resProdPow);
 
@@ -46,22 +42,22 @@ public class DevelopmentCardTest {
         //resAv < resProdCost with 1 res
         assertFalse(devCard.checkAvailability(resAvailable2));
 
-        resAvailable.set(SERVANTS, 2);
-        resProdCost.set(SERVANTS, 1);
+        resAvailable.set(SERVANT, 2);
+        resProdCost.set(SERVANT, 1);
 
         //resAv >= resProdCost with 2 res defined
         assertTrue(devCard.checkAvailability(resAvailable));
 
-        resAvailable2.set(SERVANTS, 1);
+        resAvailable2.set(SERVANT, 1);
 
         //resAv < resProdCost with 2 res defined, GOLD KO, SERVANTS OK
         assertFalse(devCard.checkAvailability(resAvailable2));
 
-        resAvailable.set(SHIELDS, 2);
-        resAvailable.set(STONES, 2);
+        resAvailable.set(SHIELD, 2);
+        resAvailable.set(STONE, 2);
         resAvailable.set(FAITH, 2);
-        resProdCost.set(SHIELDS, 2);
-        resProdCost.set(STONES, 1);
+        resProdCost.set(SHIELD, 2);
+        resProdCost.set(STONE, 1);
         resProdCost.set(FAITH, 2);
 
         //resAv >= resProdCost with all res defined
@@ -71,15 +67,15 @@ public class DevelopmentCardTest {
         assertFalse(devCard.checkAvailability(resAvailable2));
 
         resAvailable2.set(GOLD, 3);
-        resAvailable2.set(SERVANTS, 3);
-        resAvailable2.set(SHIELDS, 1);
-        resAvailable2.set(STONES, 3);
+        resAvailable2.set(SERVANT, 3);
+        resAvailable2.set(SHIELD, 1);
+        resAvailable2.set(STONE, 3);
         resAvailable2.set(FAITH, 3);
 
         //resAv < resProdCost due to only one num of res, all res defined
         assertFalse(devCard.checkAvailability(resAvailable2));
 
-        resAvailable2.set(SHIELDS, 2);
+        resAvailable2.set(SHIELD, 2);
 
         //Again, with every res defined and every num of res needed
         assertTrue(devCard.checkAvailability(resAvailable2));
