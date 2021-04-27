@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,9 +23,9 @@ public class CardDealer {
      * Creates and populates the CardDealer using DevelopmentCards obtained from the Json file Cards
      * @throws FileNotFoundException in case there is no file
      */
-
     @SuppressWarnings("unchecked")
-    public CardDealer() throws FileNotFoundException{ // Can't define Arrays of typed lists
+    public CardDealer() throws FileNotFoundException{
+        //Can't define Arrays of typed lists
         //Read from the JsonFile of cards
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new FileReader(ClassLoader.getSystemResource("json/cards.json").getPath()));
@@ -98,6 +99,17 @@ public class CardDealer {
         }
     }
 
+
+    /**
+     * Method that returns the cost of a specific element od cardMatrix
+     * @param row cardMatrix row
+     * @param column cardMatrix column
+     * @return the cost of the first element in the stack of the chosen cardMatrix cell
+     */
+    public Resources getCost(int row, int column)
+    {
+        return cardMatrix[row][column].peek().getCost();
+    }
 
     /**
      * Pops one of the first cards in cardMatrix

@@ -35,6 +35,23 @@ public class CardDealerTest {
         cardType.add('p');
     }
 
+    /**
+     * Checks if the returned cost is correct
+     */
+    @Test
+    public void testgetCost() {
+        Resources cost = new Resources();
+        cost.set(ResourceTypes.SHIELDS, 2);
+        cost.set(ResourceTypes.GOLD, 2);
+
+        assertTrue(cardDealer.getCost(2,0).equals(cost));
+
+        cost = new Resources();
+        cost.set(ResourceTypes.SHIELDS,3);
+        cost.set(ResourceTypes.SERVANTS,3);
+        assertTrue(cardDealer.getCost(1,3).equals(cost));
+
+    }
 
     /**
      * Checks if type, level and victory point of every card are correct
