@@ -25,4 +25,7 @@ public class ExtraDeposit implements SpecialAbility{
         return resourceType;
     }
 
+    public ExtraDeposit applyExtraDeposit(){
+        return this;
+    }
 }

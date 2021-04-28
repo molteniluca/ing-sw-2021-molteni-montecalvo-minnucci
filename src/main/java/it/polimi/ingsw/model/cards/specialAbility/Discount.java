@@ -24,4 +24,7 @@ public class Discount implements SpecialAbility{
         return resourceDiscount;
     }
 
+    public Discount applyDiscount(){
+        return this;
+    }
 }

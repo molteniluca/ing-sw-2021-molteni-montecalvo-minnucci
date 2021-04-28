@@ -26,4 +26,8 @@ public class ExtraProduction implements SpecialAbility{
         return productionCost;
     }
 
+    public ExtraProduction applyExtraProduction(){
+        return this;
+    }
+
 }

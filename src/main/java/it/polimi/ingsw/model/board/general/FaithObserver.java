@@ -23,7 +23,7 @@ public class FaithObserver {
 
     /**
      * Notify all tracks
-     * @param zone The zone triggering the nitification
+     * @param zone The zone triggering the notification
      */
     public void notify(int zone){
         for(FaithTrack faithTrack : tracks){

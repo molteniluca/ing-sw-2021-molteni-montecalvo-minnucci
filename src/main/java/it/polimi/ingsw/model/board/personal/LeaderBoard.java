@@ -33,13 +33,28 @@ public class LeaderBoard {
      * @param cards The list of cards required to play the card
      */
     public void playLeader(LeaderCard leader, Resources resources, ArrayList<DevelopmentCard> cards) throws UnusableCardException {
-        if(leaderCardsInHand.contains(leader) && leader.checkRequirements(resources,cards)){
+        if(checkPlayLeader(leader,resources,cards)){
             leaderCardsInHand.remove(leader);
             leaderCards.add(leader);
             activateLeaderEffect(leader);
         }else{
             throw new UnusableCardException("The leader card is not playable");
         }
+    }
+
+    /**
+     * This method checks whether a leader card is playable with the current resources and cards
+     * @param leader The leader to be played
+     * @param resources The resources to check
+     * @param cards The card list to check
+     * @return True if is playable and false if not
+     */
+    public boolean checkPlayLeader(LeaderCard leader, Resources resources, ArrayList<DevelopmentCard> cards){
+        return leaderCardsInHand.contains(leader) && leader.checkRequirements(resources,cards);
+    }
+
+    public ArrayList<LeaderCard> getLeaderCardsInHand() {
+        return leaderCardsInHand;
     }
 
     /**
@@ -103,7 +118,7 @@ public class LeaderBoard {
         return effects;
     }
 
-    public void activateLeaderEffect(LeaderCard leader) {
+    private void activateLeaderEffect(LeaderCard leader) {
         if(leader.getSpecialAbility().applyExtraDeposit()!=null){
             personalBoard.getDeposit().getStorage().addLevel(new Level(leader.getSpecialAbility().applyExtraDeposit().getResourceType(),2));
         }

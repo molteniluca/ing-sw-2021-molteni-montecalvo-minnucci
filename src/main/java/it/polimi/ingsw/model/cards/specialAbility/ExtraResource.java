@@ -25,4 +25,7 @@ public class ExtraResource implements SpecialAbility{
         return resource;
     }
 
+    public ExtraResource applyExtraResource(){
+        return this;
+    }
 }
