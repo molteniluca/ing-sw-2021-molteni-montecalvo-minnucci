@@ -112,7 +112,7 @@ public class LeaderCard extends Card{
      * @return true or false, true if that LeaderCard has the correct parameters to be active
      */
     public boolean checkRequirements(Resources resources, List<DevelopmentCard> cards) {
-
+        char[] colors = {'b', 'g', 'p', 'y'};
         //Check which requirement is needed: resources or developmentCards;
         //then: check if LeaderCards has its requirements
 
@@ -126,15 +126,12 @@ public class LeaderCard extends Card{
             }
         }
         else if(getDevelopmentCardRequirementOnlyColor()!=null){
-                if((cards.stream().filter(x -> (x.getType()=='b')).count())>=developmentCardRequirementOnlyColor.stream().filter(x -> x.getType()=='b').count()){
-                    if((cards.stream().filter(x -> (x.getType()=='g')).count())>=developmentCardRequirementOnlyColor.stream().filter(x -> x.getType()=='g').count()){
-                        if((cards.stream().filter(x -> (x.getType()=='p')).count())>=developmentCardRequirementOnlyColor.stream().filter(x -> x.getType()=='p').count()){
-                            if((cards.stream().filter(x -> (x.getType()=='y')).count())>=developmentCardRequirementOnlyColor.stream().filter(x -> x.getType()=='y').count()){
-                                return true;
-                            }
-                        }
-                    }
+            for (char color: colors) {
+                if ((cards.stream().filter(x -> (x.getType() == color)).count()) < developmentCardRequirementOnlyColor.stream().filter(x -> x.getType() == color).count()) {
+                    break;
                 }
+                return true;
+            }
         }
         return false;
     }
