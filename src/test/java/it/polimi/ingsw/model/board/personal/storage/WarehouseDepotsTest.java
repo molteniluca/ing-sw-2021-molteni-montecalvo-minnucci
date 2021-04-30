@@ -80,7 +80,7 @@ public class WarehouseDepotsTest extends TestCase {
         }
 
 
-        assert wd.getResources().equals(res);
+        assert wd.getResources().equals(new Resources().set(ResourceTypes.GOLD,2).set(ResourceTypes.SERVANT,1).set(ResourceTypes.STONE,2));
 
 
     }
