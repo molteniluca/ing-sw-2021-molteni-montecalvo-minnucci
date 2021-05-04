@@ -73,10 +73,8 @@ public class WarehouseDepotsTest extends TestCase {
 
         try {
             wd.moveToLevel(1,ResourceTypes.SERVANT,1);
-        } catch (TypeNotChangeableException | NegativeResourceValueException e) {
+        } catch (TypeNotChangeableException | NegativeResourceValueException | LevelTooSmallException e) {
             e.printStackTrace();
-        } catch (LevelTooSmallException e) {
-            assert true;
         }
 
 

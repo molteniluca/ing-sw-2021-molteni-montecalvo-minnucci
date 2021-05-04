@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.board.personal;
 
 import it.polimi.ingsw.model.board.general.FaithObserver;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.resources.Resources;
 
 /**
  * Class that represents the faith of a player
@@ -117,5 +118,9 @@ public class FaithTrack {
 
     public int[] getFaithCards(){
         return faithCards;
+    }
+
+    public void dropResources(Resources res) throws FaithOverflowException {
+        faithObserver.dropResources(res,this);
     }
 }

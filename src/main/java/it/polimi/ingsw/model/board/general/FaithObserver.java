@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model.board.general;
 
 import it.polimi.ingsw.model.board.personal.FaithTrack;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.resources.Resources;
+
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,14 @@ public class FaithObserver {
     public void notify(int zone){
         for(FaithTrack faithTrack : tracks){
             faithTrack.checkRelationship(zone);
+        }
+    }
+
+    public void dropResources(Resources res, FaithTrack callingFaithTrack) throws FaithOverflowException {
+        for (FaithTrack ft : tracks) {
+            if (ft != callingFaithTrack) {
+                ft.incrementPosition(res.getTotalResourceNumber());
+            }
         }
     }
 }

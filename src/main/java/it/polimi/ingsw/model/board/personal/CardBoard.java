@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public class CardBoard {
     private final ArrayList<DevelopmentCard>[] productionCards;
+    private int numberOfCards=0;
 
     @SuppressWarnings("unchecked") //can't create array of typed lists
     public CardBoard(){
@@ -18,6 +19,10 @@ public class CardBoard {
         for (int i=0;i<3;i++) {
             productionCards[i]=new ArrayList<>();
         }
+    }
+
+    public int getNumberOfCards() {
+        return numberOfCards;
     }
 
     /**
@@ -37,8 +42,10 @@ public class CardBoard {
      * @throws IncompatibleCardLevelException In case of an out of rule move
      */
     public void insertCard(DevelopmentCard card, int place) throws IncompatibleCardLevelException {
-        if(productionCards[place].size()==card.getLevel()-1)
+        if(productionCards[place].size()==card.getLevel()-1) {
             productionCards[place].add(card);
+            numberOfCards++;
+        }
         else
             throw new IncompatibleCardLevelException( "Trying to put an incompatible level card on to another");
     }

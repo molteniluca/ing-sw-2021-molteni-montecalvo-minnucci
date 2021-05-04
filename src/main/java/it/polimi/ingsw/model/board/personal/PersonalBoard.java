@@ -249,4 +249,11 @@ public class PersonalBoard{
         }else
             throw new UnusableCardException("There aren't enough resources to play this card");
     }
+
+    /**
+     * This method drops the resources contained int the swap area and notifies the others faith tracks
+     */
+    public void dropResources() throws FaithOverflowException {
+        this.faithTrack.dropResources(this.deposit.getStorage().removeFromSwap());
+    }
 }

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.resources;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
+import static it.polimi.ingsw.model.resources.ResourceTypes.*;
 
 /**
  * Class that represents a quantity of resources.
@@ -91,7 +93,7 @@ public class Resources {
         Resources substitute=new Resources();
 
         this.resourceMap.forEach(substitute.resourceMap::put); /*duplicate the current object*/
-        substitute.resourceMap.put(type,this.resourceMap.get(type)+this.resourceMap.get(ResourceTypes.BLANK));
+        substitute.resourceMap.put(type,this.resourceMap.get(type)+this.resourceMap.get(BLANK));
 
         substitute.eraseBlank();
         return substitute;
@@ -125,7 +127,7 @@ public class Resources {
      * A method that sets the blank resource value to zero
      */
     private void eraseBlank(){
-        set(ResourceTypes.BLANK,0);
+        set(BLANK,0);
     }
 
 
@@ -153,8 +155,16 @@ public class Resources {
      * @return The faith
      */
     public int getEraseFaith(){
-        int faith=this.resourceMap.get(ResourceTypes.FAITH);
-        this.set(ResourceTypes.FAITH,0);
+        int faith=this.resourceMap.get(FAITH);
+        this.set(FAITH,0);
         return faith;
+    }
+    
+    public int getTotalResourceNumber(){
+        int total=0;
+        for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) { //We count only real resources
+            total+=this.resourceMap.get(res);
+        }
+        return total;
     }
 }
