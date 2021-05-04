@@ -159,7 +159,11 @@ public class Resources {
         this.set(FAITH,0);
         return faith;
     }
-    
+
+    /**
+     * This method gets the number of REAL resources
+     * @return the number of REAL resources
+     */
     public int getTotalResourceNumber(){
         int total=0;
         for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) { //We count only real resources

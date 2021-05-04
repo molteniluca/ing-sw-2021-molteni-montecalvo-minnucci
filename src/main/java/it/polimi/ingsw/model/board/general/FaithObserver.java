@@ -34,6 +34,12 @@ public class FaithObserver {
         }
     }
 
+    /**
+     * This method handles the drop of resources adding a bonus to the others faith tracks
+     * @param res The resources to be dropped
+     * @param callingFaithTrack The faith track calling the method
+     * @throws FaithOverflowException In case a player gets out of bound on the faith track
+     */
     public void dropResources(Resources res, FaithTrack callingFaithTrack) throws FaithOverflowException {
         for (FaithTrack ft : tracks) {
             if (ft != callingFaithTrack) {

@@ -120,6 +120,11 @@ public class FaithTrack {
         return faithCards;
     }
 
+    /**
+     * This method gets the resources to be dropped and handles them
+     * @param res The resources to be dropped
+     * @throws FaithOverflowException In case a player gets out of bounds
+     */
     public void dropResources(Resources res) throws FaithOverflowException {
         faithObserver.dropResources(res,this);
     }
