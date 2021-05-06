@@ -161,7 +161,7 @@ public class Resources {
     }
 
     /**
-     * This method gets the number of REAL resources
+     * This method gets the number of REAL resources (GOLD,STONE,SHIELD,SERVANT)
      * @return the number of REAL resources
      */
     public int getTotalResourceNumber(){
