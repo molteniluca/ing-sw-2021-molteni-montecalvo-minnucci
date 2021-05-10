@@ -1,5 +1,10 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.controller.Server;
+
+import java.io.*;
+import java.net.Socket;
+
 /**
  * Hello world!
  *
@@ -8,6 +13,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Server server= new Server(9000);
     }
 }
