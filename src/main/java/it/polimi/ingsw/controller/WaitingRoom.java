@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.controller.exceptions.FullRoomException;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -10,23 +11,29 @@ import java.util.ArrayList;
  */
 public class WaitingRoom extends Thread{
     private final int numPlayers;
+    private final String id;
     private final ArrayList<ClientHandler> clients = new ArrayList<>();
     private final ArrayList<String> clientsNames = new ArrayList<>();
+    private Game game=null;
+    private boolean connectionsClosed=false;
 
     /**
      * The constructor of the class
      * @param numPlayers The number of players in this game
      */
-    public WaitingRoom(int numPlayers) {
+    public WaitingRoom(int numPlayers, String id) {
+        this.id = id;
         this.numPlayers=numPlayers;
     }
 
     public void run(){
+        game=new Game(numPlayers, clients, clientsNames, id);
         try {
-            new Game(numPlayers, clients, clientsNames);
+            game.startGame();
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
+            printDebug("Socket error, a client has disconnected");
+            game.setGameEnded(true);
+            closeAll();
         }
     }
 
@@ -45,5 +52,27 @@ public class WaitingRoom extends Thread{
                 this.start();
             }
         }
+    }
+
+    /**
+     * Closes all clients connections
+     */
+    public synchronized void closeAll(){
+        if(!connectionsClosed)
+        {
+            for(ClientHandler c : clients){
+                c.closeConnection();
+            }
+            printDebug("Game ended");
+            connectionsClosed=true;
+        }
+    }
+
+    /**
+     * Debug method that prints in the server's stdout debug messages regarding this game
+     * @param s The message
+     */
+    private void printDebug(String s){
+        System.out.println(LocalTime.now().toString() + "\t\tGame[ID:" + id +"] -> "+s);
     }
 }

@@ -20,6 +20,7 @@ public class ClientHandler extends Thread{
     private HashMap<String,WaitingRoom> waitingRooms;
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
+    private String id=null;
 
     /**
      * Constructor of the class
@@ -54,15 +55,19 @@ public class ClientHandler extends Thread{
             e.printStackTrace();
         }
 
-        while (true){
+        while (!client.isClosed()){
             try {
                 sendHeartBeat();
                 sleep(heartBeatInterval);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
+                printDebug("Error client disconnected!");
+                waitingRooms.get(id).closeAll();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-                System.exit(-1);
             }
         }
+
+        printDebug("Client Disconnected");
     }
 
     /**
@@ -97,9 +102,9 @@ public class ClientHandler extends Thread{
      */
     private void createGame(int numPlayers) throws IOException, ClassNotFoundException {
         String id = randomizeId();
-        waitingRooms.put(id,new WaitingRoom(numPlayers));
+        waitingRooms.put(id,new WaitingRoom(numPlayers,id));
 
-        printDebug("New game,Players:"+((Integer)numPlayers).toString()+" ID:"+id);
+        printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
 
         out.writeObject("CREATE SUCCESS ID:"+id);
 
@@ -114,14 +119,16 @@ public class ClientHandler extends Thread{
     private void joinGame(String id) throws IOException, ClassNotFoundException {
         try {
             waitingRooms.get(id).joinRoom(this, receiveObject(String.class));
+            this.id=id;
             printDebug("Joined game:"+id);
-
         } catch (FullRoomException e) {
             out.writeObject("ERROR! THE ROOM IS FULL");
-            printDebug("FULL ROOM:"+id);
+            printDebug("Trying to join a full room:"+id);
+            client.close();
         } catch (NullPointerException e){
             out.writeObject("THIS ROOM DOESN'T EXIST!");
-            printDebug("NULL ROOM:"+id);
+            printDebug("Trying to join a null room:"+id);
+            client.close();
         }
     }
 
@@ -153,5 +160,16 @@ public class ClientHandler extends Thread{
      */
     private void sendHeartBeat() throws IOException {
         sendObject("HeartBeat");
+    }
+
+    /**
+     * Closes a connection with the client
+     */
+    public void closeConnection(){
+        try {
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

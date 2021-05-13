@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.cards.specialAbility.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -23,30 +24,40 @@ import java.util.Random;
 public class Game{
     private GeneralBoard generalBoard;
     private ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
+    private final String id;
+    private boolean gameEnded = false;
 
     /**
      * Constructor of the class
      * @param numPlayers The number of players of this game
      * @param clients The client handlers for each player
      * @param playerNames The name of each player
-     * @throws IOException In case there's a problem communicating with the client
+     * @param id The game room id for debugging reasons
      */
-    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames) throws IOException {
+    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id){
+        this.id = id;
         Player[] players;
         players = new Player[numPlayers];
         generalBoard = new GeneralBoard();
 
         Random rand = new Random();
-        int inkwellPlayer = (int) rand.nextFloat()*numPlayers;
+        int inkwellPlayer = Math.round(rand.nextFloat()*numPlayers);
 
         ArrayList<LeaderCard>[] leaderCardsInHand = getStartingLeaders();
 
-        for(int i=0; i<numPlayers; i++){
+        for(int i=inkwellPlayer; i<numPlayers; i++){
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard,clients.get(i), leaderCardsInHand[i]);
             playerTurns.add(new PlayerTurn(players[i]));
         }
 
-        startGame(inkwellPlayer);
+        for(int i=0; i<inkwellPlayer; i++){
+            players[i] = new Player(playerNames.get(i),false,generalBoard,clients.get(i), leaderCardsInHand[i]);
+            playerTurns.add(new PlayerTurn(players[i]));
+        }
+    }
+
+    public void setGameEnded(boolean gameEnded) {
+        this.gameEnded = gameEnded;
     }
 
     /**
@@ -70,16 +81,11 @@ public class Game{
 
     /**
      * Starts the game
-     * @param startingPlayer The first player to begin
      * @throws IOException In case a client disconnects
      */
-    private void startGame(int startingPlayer) throws IOException {
-
-        for(int i=startingPlayer; i<playerTurns.size(); i++){
-            playerTurns.get(i).beginTurn();
-        }
-
-        while(true){
+    public void startGame() throws IOException {
+        printDebug("Game started");
+        while(!gameEnded){
             for(PlayerTurn p: playerTurns){
                 p.beginTurn();
             }
@@ -112,5 +118,14 @@ public class Game{
         }
 
         return gson.fromJson(reader,  new TypeToken<ArrayList<LeaderCard>>(){}.getType());
+    }
+
+
+    /**
+     * Debug method that prints in the server's stdout debug messages regarding this game
+     * @param s The message
+     */
+    private void printDebug(String s){
+        System.out.println(LocalTime.now().toString() + "\t\tGame[ID:" + id +"] -> "+s);
     }
 }
