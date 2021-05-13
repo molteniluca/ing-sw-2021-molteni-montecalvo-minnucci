@@ -14,6 +14,8 @@ import java.util.Random;
  * This class represents an entity that communicates with the client and executes the basic operations
  */
 public class ClientHandler extends Thread{
+    private static int heartBeatInterval=10000; /*Heartbeat interval in milliseconds*/
+
     private Socket client;
     private HashMap<String,WaitingRoom> waitingRooms;
     private ObjectInputStream in = null;
@@ -51,6 +53,16 @@ public class ClientHandler extends Thread{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        while (true){
+            try {
+                sendHeartBeat();
+                sleep(heartBeatInterval);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
     }
 
     /**
@@ -74,7 +86,7 @@ public class ClientHandler extends Thread{
      * @param o The object to be sent
      * @throws IOException In case there's a problem communicating with the client
      */
-    public void sendObject(Object o) throws IOException {
+    public synchronized void sendObject(Object o) throws IOException {
         out.writeObject(o);
     }
 
@@ -133,5 +145,13 @@ public class ClientHandler extends Thread{
             id.append(chars.charAt((int) (rand.nextFloat() * chars.length())));
         }
         return id.toString();
+    }
+
+    /**
+     * Sends the heart beat to the client to make sure is working
+     * @throws IOException In case the server can't communicate with the client
+     */
+    private void sendHeartBeat() throws IOException {
+        sendObject("HeartBeat");
     }
 }

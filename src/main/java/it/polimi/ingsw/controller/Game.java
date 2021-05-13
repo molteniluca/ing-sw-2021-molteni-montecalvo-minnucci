@@ -31,7 +31,11 @@ public class Game{
     }
 
     private ArrayList<LeaderCard>[] getStartingLeaders(){
-        return null;
+        ArrayList<LeaderCard> []array = new ArrayList[4];
+        for(int i=0;i<4;i++){
+            array[i]=new ArrayList<>();
+        }
+        return array;
     }
 
     private void startGame(int startingPlayer) throws IOException {
