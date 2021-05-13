@@ -27,13 +27,13 @@ public class PlayerTurn implements Turn{
      */
     @Override
     public void beginTurn() throws IOException {
-        player.getClientHandler().sendObject("StartingTurn");
+        player.getClientHandler().sendObject("TurnBegin");
         try {
             sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        player.getClientHandler().sendObject("EndTurn");
+        player.getClientHandler().sendObject("TurnEnd");
     }
 
 

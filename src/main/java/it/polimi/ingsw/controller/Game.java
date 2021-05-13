@@ -64,6 +64,7 @@ public class Game{
      * This method gets and splits the leader cards in 5 for each player
      * @return An array of lists of leader cards
      */
+    @SuppressWarnings("unchecked")
     private ArrayList<LeaderCard>[] getStartingLeaders(){
         ArrayList<LeaderCard> []array = new ArrayList[4];
         ArrayList<LeaderCard> cards = getLeadersFromFile();
@@ -85,6 +86,10 @@ public class Game{
      */
     public void startGame() throws IOException {
         printDebug("Game started");
+        for(PlayerTurn p : playerTurns){
+            p.getPlayer().getClientHandler().sendObject("GameStarting");
+        }
+
         while(!gameEnded){
             for(PlayerTurn p: playerTurns){
                 p.beginTurn();
