@@ -6,6 +6,10 @@ import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
+
+/**
+ * This class represents a turn, for each player there's a turn
+ */
 public class PlayerTurn implements Turn{
     private final Player player;
 
@@ -17,6 +21,10 @@ public class PlayerTurn implements Turn{
         return player;
     }
 
+    /**
+     * This method begins a turn for this player
+     * @throws IOException In case the client disconnects
+     */
     @Override
     public void beginTurn() throws IOException {
         player.getClientHandler().sendObject("StartingTurn");
