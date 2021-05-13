@@ -4,11 +4,11 @@ import it.polimi.ingsw.model.board.general.ActionTokens;
 import it.polimi.ingsw.model.board.general.Lorenzo;
 import jdk.jshell.spi.ExecutionControl;
 
-public class SelfPlayingTurn {
+public class SelfPlayingTurn implements Turn{
     private Lorenzo lorenzo;
 
-    public void beginTurn()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    public void beginTurn(){
+
     }
 
     private ActionTokens drawToken()throws ExecutionControl.NotImplementedException {

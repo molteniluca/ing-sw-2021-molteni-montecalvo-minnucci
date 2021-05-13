@@ -14,10 +14,10 @@ import java.util.Random;
  * This class represents an entity that communicates with the client and executes the basic operations
  */
 public class ClientHandler extends Thread{
-    Socket client;
-    HashMap<String,WaitingRoom> waitingRooms;
-    ObjectInputStream in = null;
-    ObjectOutputStream out = null;
+    private Socket client;
+    private HashMap<String,WaitingRoom> waitingRooms;
+    private ObjectInputStream in = null;
+    private ObjectOutputStream out = null;
 
     /**
      * Constructor of the class
@@ -61,7 +61,7 @@ public class ClientHandler extends Thread{
      * @throws ClassNotFoundException In case the client sends an unknown class
      * @throws ClassCastException In case the client doesn't send the specified type of object
      */
-    private <T> T receiveObject(Class<? extends T> c) throws IOException, ClassNotFoundException, ClassCastException {
+    public <T> T receiveObject(Class<? extends T> c) throws IOException, ClassNotFoundException, ClassCastException {
         Object read = null;
         while(read==null){
             read = in.readObject();
@@ -70,11 +70,20 @@ public class ClientHandler extends Thread{
     }
 
     /**
+     * Sends an object to the client
+     * @param o The object to be sent
+     * @throws IOException In case there's a problem communicating with the client
+     */
+    public void sendObject(Object o) throws IOException {
+        out.writeObject(o);
+    }
+
+    /**
      * Creates a new game and adds it to the sever list
      * @param numPlayers Number of players to add
      * @throws IOException In case there's a problem communicating with the client
      */
-    private void createGame(int numPlayers) throws IOException {
+    private void createGame(int numPlayers) throws IOException, ClassNotFoundException {
         String id = randomizeId();
         waitingRooms.put(id,new WaitingRoom(numPlayers));
 
@@ -90,10 +99,11 @@ public class ClientHandler extends Thread{
      * @param id The id of the game
      * @throws IOException In case there's a problem communicating with the client
      */
-    private void joinGame(String id) throws IOException{
+    private void joinGame(String id) throws IOException, ClassNotFoundException {
         try {
-            waitingRooms.get(id).joinRoom(client);
+            waitingRooms.get(id).joinRoom(this, receiveObject(String.class));
             printDebug("Joined game:"+id);
+
         } catch (FullRoomException e) {
             out.writeObject("ERROR! THE ROOM IS FULL");
             printDebug("FULL ROOM:"+id);

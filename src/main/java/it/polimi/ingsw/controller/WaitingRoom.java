@@ -2,15 +2,16 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.exceptions.FullRoomException;
 
-import java.net.Socket;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * This class represents a waiting room where all the sockets hang before the game starts
  */
 public class WaitingRoom extends Thread{
-    int numPlayers;
-    ArrayList<Socket> clients = new ArrayList<>();
+    private final int numPlayers;
+    private final ArrayList<ClientHandler> clients = new ArrayList<>();
+    private final ArrayList<String> clientsNames = new ArrayList<>();
 
     /**
      * The constructor of the class
@@ -20,8 +21,13 @@ public class WaitingRoom extends Thread{
         this.numPlayers=numPlayers;
     }
 
-    public void Run(){
-        //start the game
+    public void run(){
+        try {
+            new Game(numPlayers, clients, clientsNames);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     /**
@@ -29,11 +35,12 @@ public class WaitingRoom extends Thread{
      * @param client The client to add
      * @throws FullRoomException In case the room is full
      */
-    public void joinRoom(Socket client) throws FullRoomException {
+    public synchronized void joinRoom(ClientHandler client, String name) throws FullRoomException {
         if(clients.size()>=numPlayers){
             throw new FullRoomException("This waiting room is already full and the game is started!");
         }else {
             clients.add(client);
+            clientsNames.add(name);
             if (clients.size() == numPlayers) {
                 this.start();
             }

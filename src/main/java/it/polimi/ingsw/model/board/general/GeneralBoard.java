@@ -13,11 +13,18 @@ public class GeneralBoard {
 
     /**
      * Creates the general board and every element in it
-     * @throws FileNotFoundException if the constructor of CardDealer does not found the file
      */
-    public GeneralBoard() throws FileNotFoundException {
+    public GeneralBoard(){
+        CardDealer temp;
         market = new Market();
-        cardDealer = new CardDealer();
+        try {
+            temp = new CardDealer();
+        } catch (FileNotFoundException e) {
+            temp = null;
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        cardDealer = temp;
         this.lorenzo = new Lorenzo();
         this.faithObserver = new FaithObserver();
     }
