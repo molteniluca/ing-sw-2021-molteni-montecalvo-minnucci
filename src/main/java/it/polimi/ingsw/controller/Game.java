@@ -61,7 +61,7 @@ public class Game{
         for(int i=0;i<4;i++){
             array[i]=new ArrayList<>();
 
-            for(int k=0; k<5; k++) {
+            for(int k=0; k<4; k++) {
                 array[i].add(cards.remove(cards.size()-1));
             }
         }
