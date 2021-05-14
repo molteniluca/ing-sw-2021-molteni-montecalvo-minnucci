@@ -55,7 +55,7 @@ public class Market {
 
 
     /**
-     * It's a  DEBUG METHOD because i don't know how i can access the matrix from test beacuse
+     * It's a TEST METHOD because i don't know how i can access the matrix from test because
      * it creates marketMatrix filling it in casual order
      * @return the matrix representing the market
      */
@@ -66,7 +66,7 @@ public class Market {
 
 
     /**
-     * It's a DEBUG METHOD
+     * It's a TEST METHOD
      * @param externalResource the resource assigned to externalResource
      */
     public void setExternalResource(ResourceTypes externalResource)
