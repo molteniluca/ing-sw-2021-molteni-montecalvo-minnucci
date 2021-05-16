@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.exceptions.FullRoomException;
-import it.polimi.ingsw.model.resources.Resources;
+import static it.polimi.ingsw.controller.NetworkMessages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Random;
+
 
 /**
  * This class represents an entity that communicates with the client and executes the basic operations
@@ -39,18 +40,20 @@ public class ClientHandler extends Thread{
     @Override
     public void run() {
         printDebug("Connected");
-        String command;
+        NetworkMessages command;
 
         try {
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
 
-            command = receiveObject(String.class);
+            command = receiveObject(NetworkMessages.class);
 
-            if(command.equals("createGame")){
+            if(command == CREATEGAME){
                 createGame(receiveObject(Integer.class));
-            }else if(command.equals("joinGame")){
+            }else if(command == JOINGAME){
                 joinGame(receiveObject(String.class));
+            }else{
+                client.close();
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -107,7 +110,8 @@ public class ClientHandler extends Thread{
 
         printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
 
-        sendObject("CREATE SUCCESS ID:"+id);
+        sendObject(SUCCESS);
+        sendObject(id);
 
         joinGame(id);
     }
@@ -123,12 +127,14 @@ public class ClientHandler extends Thread{
             this.id=id;
             printDebug("Joined game:"+id);
         } catch (FullRoomException e) {
-            out.writeObject("ERROR! THE ROOM IS FULL");
+            out.writeObject(ERROR);
+            out.writeObject("THE ROOM IS FULL!");
             printDebug("Trying to join a full room:"+id);
             client.close();
         } catch (NullPointerException e){
+            out.writeObject(ERROR);
             out.writeObject("THIS ROOM DOESN'T EXIST!");
-            printDebug("Trying to join a null room:"+id);
+            printDebug("Trying to join a not existing room:"+id);
             client.close();
         }
     }
@@ -160,7 +166,7 @@ public class ClientHandler extends Thread{
      * @throws IOException In case the server can't communicate with the client
      */
     private void sendHeartBeat() throws IOException {
-        sendObject("HeartBeat");
+        sendObject(HEARTBEAT);
     }
 
     /**

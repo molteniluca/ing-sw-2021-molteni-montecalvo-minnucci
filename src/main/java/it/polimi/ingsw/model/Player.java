@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.ClientHandler;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.board.personal.PersonalBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;

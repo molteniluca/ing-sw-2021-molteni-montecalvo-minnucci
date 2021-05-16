@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Player;
 import java.io.IOException;
 import java.io.Serializable;
 
+import static it.polimi.ingsw.controller.NetworkMessages.*;
 import static java.lang.Thread.sleep;
 
 
@@ -30,14 +31,14 @@ public class PlayerTurn implements Turn, Serializable {
      */
     @Override
     public void beginTurn() throws IOException {
-        clientHandler.sendObject("TurnBegin");
+        clientHandler.sendObject(TURNBEGIN);
         try {
             //player.getClientHandler().refreshClientObjects();
             sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        clientHandler.sendObject("TurnEnd");
+        clientHandler.sendObject(TURNEND);
     }
 
 

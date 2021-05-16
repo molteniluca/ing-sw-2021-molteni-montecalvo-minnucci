@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import static it.polimi.ingsw.controller.NetworkMessages.*;
+
 /**
  * Class that represents an entire game
  */
@@ -85,7 +87,7 @@ public class Game implements Serializable {
     public void startGame() throws IOException {
         printDebug("Game started");
         for(PlayerTurn p : playerTurns){
-            p.getClientHandler().sendObject("GameStarting");
+            p.getClientHandler().sendObject(GAMESTARTED);
         }
 
         while(!gameEnded){
