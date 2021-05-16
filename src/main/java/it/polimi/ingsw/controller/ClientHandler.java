@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.exceptions.FullRoomException;
+import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -73,7 +74,7 @@ public class ClientHandler extends Thread{
     /**
      * Receive an object of type c from the client
      * @param c The type of the object
-     * @return The object recived from the client
+     * @return The object received from the client
      * @throws IOException In case there's a problem communicating with the client
      * @throws ClassNotFoundException In case the client sends an unknown class
      * @throws ClassCastException In case the client doesn't send the specified type of object
@@ -106,7 +107,7 @@ public class ClientHandler extends Thread{
 
         printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
 
-        out.writeObject("CREATE SUCCESS ID:"+id);
+        sendObject("CREATE SUCCESS ID:"+id);
 
         joinGame(id);
     }
@@ -171,5 +172,13 @@ public class ClientHandler extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Game getGame(){
+        return waitingRooms.get(id).getGame();
+    }
+
+    public void refreshClientObjects() throws IOException {
+        sendObject(getGame());
     }
 }

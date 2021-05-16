@@ -26,6 +26,10 @@ public class WaitingRoom extends Thread{
         this.numPlayers=numPlayers;
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     public void run(){
         game=new Game(numPlayers, clients, clientsNames, id);
         try {

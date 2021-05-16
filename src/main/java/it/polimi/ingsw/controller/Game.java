@@ -10,9 +10,7 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +19,7 @@ import java.util.Random;
 /**
  * Class that represents an entire game
  */
-public class Game{
+public class Game implements Serializable {
     private GeneralBoard generalBoard;
     private ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
     private final String id;
@@ -46,13 +44,13 @@ public class Game{
         ArrayList<LeaderCard>[] leaderCardsInHand = getStartingLeaders();
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
-            players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard,clients.get(i), leaderCardsInHand[i]);
-            playerTurns.add(new PlayerTurn(players[i]));
+            players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
+            playerTurns.add(new PlayerTurn(players[i],clients.get(i)));
         }
 
         for(int i=0; i<inkwellPlayer; i++){
-            players[i] = new Player(playerNames.get(i),false,generalBoard,clients.get(i), leaderCardsInHand[i]);
-            playerTurns.add(new PlayerTurn(players[i]));
+            players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
+            playerTurns.add(new PlayerTurn(players[i],clients.get(i)));
         }
     }
 
@@ -87,7 +85,7 @@ public class Game{
     public void startGame() throws IOException {
         printDebug("Game started");
         for(PlayerTurn p : playerTurns){
-            p.getPlayer().getClientHandler().sendObject("GameStarting");
+            p.getClientHandler().sendObject("GameStarting");
         }
 
         while(!gameEnded){

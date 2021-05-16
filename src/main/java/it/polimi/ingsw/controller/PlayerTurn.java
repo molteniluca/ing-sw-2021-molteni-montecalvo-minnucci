@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Player;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import static java.lang.Thread.sleep;
 
@@ -10,11 +11,13 @@ import static java.lang.Thread.sleep;
 /**
  * This class represents a turn, for each player there's a turn
  */
-public class PlayerTurn implements Turn{
+public class PlayerTurn implements Turn, Serializable {
     private final Player player;
+    private final ClientHandler clientHandler;
 
-    public PlayerTurn(Player player){
+    public PlayerTurn(Player player, ClientHandler clientHandler){
         this.player = player;
+        this.clientHandler = clientHandler;
     }
 
     public Player getPlayer() {
@@ -27,14 +30,18 @@ public class PlayerTurn implements Turn{
      */
     @Override
     public void beginTurn() throws IOException {
-        player.getClientHandler().sendObject("TurnBegin");
+        clientHandler.sendObject("TurnBegin");
         try {
+            //player.getClientHandler().refreshClientObjects();
             sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        player.getClientHandler().sendObject("TurnEnd");
+        clientHandler.sendObject("TurnEnd");
     }
 
 
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
 }

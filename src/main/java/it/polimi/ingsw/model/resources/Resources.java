@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.resources;
 
+import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
@@ -8,7 +9,7 @@ import static it.polimi.ingsw.model.resources.ResourceTypes.*;
 /**
  * Class that represents a quantity of resources.
  */
-public class Resources {
+public class Resources implements Serializable {
     private final HashMap<ResourceTypes,Integer> resourceMap;
 
     /**
