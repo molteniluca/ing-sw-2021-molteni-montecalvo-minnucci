@@ -125,4 +125,12 @@ public class LeaderBoard implements Serializable {
             personalBoard.getDeposit().getStorage().addLevel(new Level(leader.getSpecialAbility().applyExtraDeposit().getResourceType(),2));
         }
     }
+
+    public int getVictoryPoint() {
+        int points=0;
+        for(LeaderCard l : leaderCards){
+            points+=l.getVictoryPoint();
+        }
+        return points;
+    }
 }

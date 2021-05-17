@@ -22,7 +22,7 @@ public class PersonalBoardTest {
     PersonalBoard personalBoard;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         ArrayList<DevelopmentCardRequirement> developmentCardRequirement;
         developmentCardRequirement= new ArrayList<>();
@@ -41,6 +41,8 @@ public class PersonalBoardTest {
         try {
             personalBoard.getCardBoard().insertCard(new DevelopmentCard(1,"a",new Resources(),'c',1,new Resources().set(ResourceTypes.SHIELD,2).set(ResourceTypes.SERVANT,1),new Resources().set(ResourceTypes.FAITH,1).set(ResourceTypes.STONE,1)),0);
         } catch (IncompatibleCardLevelException e) {
+            e.printStackTrace();
+        } catch (WinException e) {
             e.printStackTrace();
         }
         try {

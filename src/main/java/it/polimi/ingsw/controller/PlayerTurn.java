@@ -1,14 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.exceptions.UnusableCardException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
 
@@ -34,7 +32,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the client disconnects
      */
     @Override
-    public void beginTurn() throws IOException, FaithOverflowException {
+    public void beginTurn() throws IOException, FaithOverflowException, WinException, EmptyStackException {
         boolean leaderAction = true;
         boolean error = true;
         clientHandler.sendObject(TURNBEGIN);
@@ -192,7 +190,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean buyDevelopmentCard() throws IOException {
+    private boolean buyDevelopmentCard() throws IOException, WinException, EmptyStackException {
         try {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class));
             return false;

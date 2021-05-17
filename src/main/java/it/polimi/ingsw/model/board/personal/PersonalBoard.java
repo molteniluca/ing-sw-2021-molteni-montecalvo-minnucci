@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.board.personal;
 
 import it.polimi.ingsw.model.board.general.GeneralBoard;
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.Discount;
@@ -13,6 +12,7 @@ import it.polimi.ingsw.model.resources.Resources;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 
 public class PersonalBoard implements Serializable {
     private final FaithTrack faithTrack;
@@ -47,6 +47,20 @@ public class PersonalBoard implements Serializable {
 
     public LeaderBoard getLeaderBoard() {
         return leaderBoard;
+    }
+
+
+    /**
+     * This method gets all the victory points of a player
+     * @return The victory points
+     */
+    public int getVictoryPoints(){
+        int points=0;
+        points+=faithTrack.getVictoryPoint();
+        points+=deposit.getVictoryPoint();
+        points+=cardBoard.getAllVictoryPoint();
+        points+=leaderBoard.getVictoryPoint();
+        return points;
     }
 
     /**
@@ -275,7 +289,7 @@ public class PersonalBoard implements Serializable {
      * @param column Column of the card dealer
      * @param place Where to place the card in the personal dashboard
      */
-    public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException {
+    public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException {
         if(checkDrawCard(row,column)){
             this.deposit.removeResources(generalBoard.getCardDealer().getCost(row,column));
             this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column),place);

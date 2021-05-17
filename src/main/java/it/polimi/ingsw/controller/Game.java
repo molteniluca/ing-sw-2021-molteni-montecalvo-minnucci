@@ -10,12 +10,11 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.exceptions.WinException;
 
 import java.io.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
 
@@ -28,6 +27,7 @@ public class Game implements Serializable {
     private final ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
     private final String id;
     private boolean gameEnded = false;
+    private final int  numPlayers;
 
     /**
      * Constructor of the class
@@ -37,6 +37,7 @@ public class Game implements Serializable {
      * @param id The game room id for debugging reasons
      */
     public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id){
+        this.numPlayers=numPlayers;
         this.id = id;
         Player[] players;
         players = new Player[numPlayers];
@@ -96,15 +97,31 @@ public class Game implements Serializable {
             for(PlayerTurn p: playerTurns){
                 try {
                     p.beginTurn();
-                } catch (FaithOverflowException e) {
+                } catch (FaithOverflowException | WinException | EmptyStackException e) {
                     gameEnded=true;
                 }
             }
         }
 
-        for(PlayerTurn p : playerTurns){
-            p.getClientHandler().sendObject(GAMEENDED);
+        ArrayList<Integer> victoryPoints=getAllVictoryPoints();
+        int maxValue = Collections.max(victoryPoints);
+
+        for(int i=0; i<numPlayers; i++){
+            playerTurns.get(i).getClientHandler().sendObject(GAMEENDED);
+            if(maxValue == victoryPoints.get(i)){
+                playerTurns.get(i).getClientHandler().sendObject(YOUWON);
+            }else{
+                playerTurns.get(i).getClientHandler().sendObject(YOULOST);
+            }
         }
+    }
+
+    private ArrayList<Integer> getAllVictoryPoints(){
+        ArrayList<Integer> points= new ArrayList<>();
+        for (PlayerTurn p : playerTurns){
+            points.add(p.getPlayer().getPersonalBoard().getVictoryPoints());
+        }
+        return points;
     }
 
     /**

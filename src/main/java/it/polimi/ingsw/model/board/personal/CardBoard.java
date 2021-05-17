@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.board.personal;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException;
+import it.polimi.ingsw.model.exceptions.WinException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,13 +43,16 @@ public class CardBoard implements Serializable {
      * @param place The place to insert the card
      * @throws IncompatibleCardLevelException In case of an out of rule move
      */
-    public void insertCard(DevelopmentCard card, int place) throws IncompatibleCardLevelException {
+    public void insertCard(DevelopmentCard card, int place) throws IncompatibleCardLevelException, WinException {
         if(productionCards[place].size()==card.getLevel()-1) {
             productionCards[place].add(card);
             numberOfCards++;
         }
         else
             throw new IncompatibleCardLevelException( "Trying to put an incompatible level card on to another");
+        if(numberOfCards==7){
+            throw new WinException("You bought seven cards!");
+        }
     }
 
     /**

@@ -44,4 +44,15 @@ public class Deposit implements Serializable {
         Resources diff = resources.sub(storage.removeFromSwap());
         chest.removeResource(diff);
     }
+
+    /**
+     * This method gets the victory points associated with this resource
+     * @return The victory points
+     */
+    public int getVictoryPoint() {
+        int points=0;
+        points+=Math.floor(storage.getResources().getTotalResourceNumber()/5.0);
+        points+=Math.floor(chest.getResources().getTotalResourceNumber()/5.0);
+        return points;
+    }
 }
