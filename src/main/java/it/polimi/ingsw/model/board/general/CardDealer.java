@@ -9,12 +9,13 @@ import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
 
-public class CardDealer {
+public class CardDealer implements Serializable {
     private Stack<DevelopmentCard>[][] cardMatrix; //STACK
     private final int ROWS = 3;
     private final int COLUMNS = 4;

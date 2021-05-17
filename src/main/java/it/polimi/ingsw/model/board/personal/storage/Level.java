@@ -6,10 +6,12 @@ import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * Class that represents a level of storage
  */
-public class Level {
+public class Level implements Serializable {
     private ResourceTypes resourceType;
     private int resourceNumber;
     private final boolean fixedResource;

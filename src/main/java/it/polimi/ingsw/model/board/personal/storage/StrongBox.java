@@ -5,10 +5,12 @@ import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * Class that represents the storage box
  */
-public class StrongBox {
+public class StrongBox implements Serializable {
     private Resources resources;
 
     public StrongBox(){

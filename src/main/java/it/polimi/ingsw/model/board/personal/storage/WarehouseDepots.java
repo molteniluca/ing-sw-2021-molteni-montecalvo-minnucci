@@ -7,12 +7,13 @@ import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Class that represents the multilevel storage type
  */
-public class WarehouseDepots {
+public class WarehouseDepots implements Serializable {
     private final ArrayList<Level> warehouseDepots;
     private Resources swapDeposit;
 

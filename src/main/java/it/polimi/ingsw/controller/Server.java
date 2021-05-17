@@ -9,7 +9,7 @@ import java.util.HashMap;
  * This class represents the server which handles the incoming connections and hands them to a client handler
  */
 public class Server {
-    private HashMap<String,WaitingRoom> rooms;
+    private final HashMap<String,WaitingRoom> rooms;
     public int port;
 
     /**

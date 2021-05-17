@@ -4,9 +4,10 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.board.personal.PersonalBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player{
+public class Player implements Serializable {
     private final String name;
     private final boolean hasInkwell;
     private final PersonalBoard personalBoard;

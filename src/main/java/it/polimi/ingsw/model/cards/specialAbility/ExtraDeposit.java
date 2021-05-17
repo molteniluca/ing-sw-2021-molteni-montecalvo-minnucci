@@ -2,11 +2,13 @@ package it.polimi.ingsw.model.cards.specialAbility;
 
 import it.polimi.ingsw.model.resources.ResourceTypes;
 
+import java.io.Serializable;
+
 /**
  * A specialAbility that gives a new special 2-slot depot that must contains the resource indicated.
  * Player can fill it with resources that he already have in other level of depot.
  */
-public class ExtraDeposit implements SpecialAbility{
+public class ExtraDeposit implements SpecialAbility, Serializable {
     private final ResourceTypes resourceType;
 
     /**

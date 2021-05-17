@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.board.general;
 
 import it.polimi.ingsw.model.board.personal.FaithTrack;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Lorenzo {
+public class Lorenzo implements Serializable {
     private final FaithTrack faithTrack;
     private int positionToken;
     private ArrayList<ActionTokens> actionTokens;

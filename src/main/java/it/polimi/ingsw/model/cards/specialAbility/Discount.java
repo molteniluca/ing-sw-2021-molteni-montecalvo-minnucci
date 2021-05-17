@@ -2,10 +2,12 @@ package it.polimi.ingsw.model.cards.specialAbility;
 
 import it.polimi.ingsw.model.resources.ResourceTypes;
 
+import java.io.Serializable;
+
 /**
  * A specialAbility that discounts the cost of purchasable DevelopmentCard
  */
-public class Discount implements SpecialAbility{
+public class Discount implements SpecialAbility, Serializable {
     private final ResourceTypes resourceDiscount;
 
     /**

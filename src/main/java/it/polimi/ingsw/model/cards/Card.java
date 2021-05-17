@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.cards;
 
+import java.io.Serializable;
+
 /**
  * Abstract Class of Card, DevelopmentCard and LeaderCard are subclasses of Card
  */
-public abstract class Card {
+public abstract class Card implements Serializable {
 
     private final int victoryPoint;
     private boolean isSelected;

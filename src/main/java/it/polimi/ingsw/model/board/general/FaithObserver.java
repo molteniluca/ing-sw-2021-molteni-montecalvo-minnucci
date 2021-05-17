@@ -4,12 +4,13 @@ import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Class implementing the pattern observer to notify all faith tracks when a player reaches a faith zone
  */
-public class FaithObserver {
+public class FaithObserver implements Serializable {
     ArrayList<FaithTrack> tracks;
 
     public FaithObserver(){

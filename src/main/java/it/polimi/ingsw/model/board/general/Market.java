@@ -3,10 +3,11 @@ package it.polimi.ingsw.model.board.general;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Market {
+public class Market implements Serializable {
     /// first element of a row is [x][0], first element of a column is [0][x]
     private final ResourceTypes[][] marketMatrix;
     private final int ROWS = 3;

@@ -4,10 +4,12 @@ import it.polimi.ingsw.model.board.general.FaithObserver;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * Class that represents the faith of a player
  */
-public class FaithTrack {
+public class FaithTrack implements Serializable {
     private final int[] faithCards;
     private int position;
     private final FaithObserver faithObserver;

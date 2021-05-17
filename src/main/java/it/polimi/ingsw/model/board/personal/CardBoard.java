@@ -4,12 +4,13 @@ import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Class that represent a production deck of a player
  */
-public class CardBoard {
+public class CardBoard implements Serializable {
     private final ArrayList<DevelopmentCard>[] productionCards;
     private int numberOfCards=0;
 

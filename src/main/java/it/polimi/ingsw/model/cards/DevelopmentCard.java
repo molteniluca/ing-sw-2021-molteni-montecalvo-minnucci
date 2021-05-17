@@ -2,11 +2,13 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * DevelopmentCard is a subclass of Card, its aim is to produce new resources.
  * It has a cost and rules for its production
  */
-public class DevelopmentCard extends Card{
+public class DevelopmentCard extends Card implements Serializable {
     private final Resources cost;   //in the top of card, number and type of resource required to obtain DevelopmentCard
     private final char type;    //b = blue, g = green, p = purple, y = yellow
     private final int level;    //number of dots in the flags

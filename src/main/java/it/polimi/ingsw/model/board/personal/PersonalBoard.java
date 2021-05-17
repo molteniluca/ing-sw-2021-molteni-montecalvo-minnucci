@@ -9,10 +9,11 @@ import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PersonalBoard{
+public class PersonalBoard implements Serializable {
     private final FaithTrack faithTrack;
     private final Deposit deposit;
     private final CardBoard cardBoard;

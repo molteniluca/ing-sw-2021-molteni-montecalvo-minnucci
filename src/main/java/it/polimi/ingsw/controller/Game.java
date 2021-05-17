@@ -22,8 +22,9 @@ import static it.polimi.ingsw.controller.NetworkMessages.*;
  * Class that represents an entire game
  */
 public class Game implements Serializable {
-    private GeneralBoard generalBoard;
-    private ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
+    private static final long serialVersionUID = 6732146736278436274L;
+
+    private final ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
     private final String id;
     private boolean gameEnded = false;
 
@@ -38,7 +39,7 @@ public class Game implements Serializable {
         this.id = id;
         Player[] players;
         players = new Player[numPlayers];
-        generalBoard = new GeneralBoard();
+        GeneralBoard generalBoard = new GeneralBoard();
 
         Random rand = new Random();
         int inkwellPlayer = Math.round(rand.nextFloat()*numPlayers);

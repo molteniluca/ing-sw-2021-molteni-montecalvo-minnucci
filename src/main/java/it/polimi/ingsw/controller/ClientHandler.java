@@ -16,10 +16,10 @@ import java.util.Random;
  * This class represents an entity that communicates with the client and executes the basic operations
  */
 public class ClientHandler extends Thread{
-    private static int heartBeatInterval=10000; /*Heartbeat interval in milliseconds*/
+    private static final int heartBeatInterval=10000; /*Heartbeat interval in milliseconds*/
 
-    private Socket client;
-    private HashMap<String,WaitingRoom> waitingRooms;
+    private final Socket client;
+    private final HashMap<String,WaitingRoom> waitingRooms;
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
     private String id=null;
@@ -55,8 +55,12 @@ public class ClientHandler extends Thread{
             }else{
                 client.close();
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            try {
+                client.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
 
         while (!client.isClosed()){
@@ -79,14 +83,26 @@ public class ClientHandler extends Thread{
      * @param c The type of the object
      * @return The object received from the client
      * @throws IOException In case there's a problem communicating with the client
-     * @throws ClassNotFoundException In case the client sends an unknown class
      * @throws ClassCastException In case the client doesn't send the specified type of object
      */
-    public <T> T receiveObject(Class<? extends T> c) throws IOException, ClassNotFoundException, ClassCastException {
+    public <T> T receiveObject(Class<? extends T> c) throws IOException {
         Object read = null;
         while(read==null){
-            read = in.readObject();
+            try {
+                read = in.readObject();
+                if(read.getClass() != c){
+                    read = null;
+                }
+            } catch (ClassNotFoundException e) {
+                continue;
+            }
+            if(read==null){
+                sendObject(ERROR);
+                sendObject("Unexpected object, expecting:"+c.toString());
+                printDebug("Unexpected object, expecting:"+c.toString());
+            }
         }
+
         return c.cast(read);
     }
 
@@ -104,7 +120,7 @@ public class ClientHandler extends Thread{
      * @param numPlayers Number of players to add
      * @throws IOException In case there's a problem communicating with the client
      */
-    private void createGame(int numPlayers) throws IOException, ClassNotFoundException {
+    private void createGame(int numPlayers) throws IOException {
         String id = randomizeId();
         waitingRooms.put(id,new WaitingRoom(numPlayers,id));
 
@@ -121,7 +137,7 @@ public class ClientHandler extends Thread{
      * @param id The id of the game
      * @throws IOException In case there's a problem communicating with the client
      */
-    private void joinGame(String id) throws IOException, ClassNotFoundException {
+    private void joinGame(String id) throws IOException {
         try {
             waitingRooms.get(id).joinRoom(this, receiveObject(String.class));
             this.id=id;

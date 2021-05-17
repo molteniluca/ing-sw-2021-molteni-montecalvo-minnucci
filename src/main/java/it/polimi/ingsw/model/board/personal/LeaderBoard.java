@@ -9,12 +9,14 @@ import it.polimi.ingsw.model.cards.specialAbility.ExtraProduction;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
 import it.polimi.ingsw.model.exceptions.UnusableCardException;
 import it.polimi.ingsw.model.resources.Resources;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Class that represents a board containing the leader cards
  */
-public class LeaderBoard {
+public class LeaderBoard implements Serializable {
     private final ArrayList<LeaderCard> leaderCards;
     private final ArrayList<LeaderCard> leaderCardsInHand;
     private final PersonalBoard personalBoard;

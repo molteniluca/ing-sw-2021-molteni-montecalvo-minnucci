@@ -3,11 +3,13 @@ package it.polimi.ingsw.model.cards.specialAbility;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * A specialAbility that allows player to produce more (one more production
  * available, player can decide to use it or not)
  */
-public class ExtraProduction implements SpecialAbility{
+public class ExtraProduction implements SpecialAbility, Serializable {
     private final ResourceTypes productionCost;
 
     /**

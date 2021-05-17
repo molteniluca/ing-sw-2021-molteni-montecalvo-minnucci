@@ -5,10 +5,12 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
+
 /**
  * Class that represents the resources storing area
  */
-public class Deposit {
+public class Deposit implements Serializable {
     private final WarehouseDepots storage;
     private final StrongBox chest;
 

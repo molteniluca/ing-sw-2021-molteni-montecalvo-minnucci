@@ -3,12 +3,13 @@ package it.polimi.ingsw.model.cards;
 import it.polimi.ingsw.model.cards.specialAbility.SpecialAbility;
 import it.polimi.ingsw.model.resources.Resources;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * LeaderCard is a subclass of Card, it has a special effect available only after obtain certain requirements
  */
-public class LeaderCard extends Card{
+public class LeaderCard extends Card implements Serializable {
     private Resources resourceRequirements;
     private DevelopmentCardRequirement developmentCardRequirementWithLevel;
     private List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor;

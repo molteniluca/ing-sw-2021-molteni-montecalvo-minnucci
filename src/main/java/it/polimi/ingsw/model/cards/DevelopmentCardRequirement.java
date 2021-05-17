@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.cards;
 
+import java.io.Serializable;
+
 /**
  * Class of DevelopmentCardRequirement. It stands for types and levels of DevelopmentCards required
  * to activate LeaderCard.
  */
-public class DevelopmentCardRequirement {
+public class DevelopmentCardRequirement implements Serializable {
     private final char type;
     private int level;
 
