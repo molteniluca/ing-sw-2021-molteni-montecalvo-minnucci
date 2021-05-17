@@ -203,4 +203,8 @@ public class ClientHandler extends Thread{
     public void refreshClientObjects() throws IOException {
         sendObject(getGame());
     }
+
+    public NetworkMessages receiveMessage() throws IOException {
+        return receiveObject(NetworkMessages.class);
+    }
 }

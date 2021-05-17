@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.board.personal;
 
 import it.polimi.ingsw.model.board.general.GeneralBoard;
+import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.Discount;
@@ -47,7 +48,7 @@ public class PersonalBoard implements Serializable {
     public LeaderBoard getLeaderBoard() {
         return leaderBoard;
     }
-    
+
     /**
      * This method produces resources using a development card
      * @param card The development card
@@ -55,6 +56,41 @@ public class PersonalBoard implements Serializable {
      * @throws FaithOverflowException In case a card returns too much faith
      */
     public void produce(DevelopmentCard card) throws UnusableCardException, FaithOverflowException {
+        if(Arrays.asList(cardBoard.getUpperDevelopmentCards()).contains(card)){
+            if(checkProduce(card)){
+                Resources cost=handleDiscount(card.getProductionCost());
+
+                try {
+                    deposit.removeResources(cost);
+                } catch (NegativeResourceValueException e) {
+                    e.printStackTrace();
+                }
+
+                this.faithTrack.incrementPosition(card.getProductionPower().getEraseFaith());
+
+                try {
+                    deposit.getChest().addResource(card.getProductionPower());
+                } catch (FaithNotAllowedException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                throw new UnusableCardException("Can't use the card, there are not enough resources");
+            }
+        }
+        else{
+            throw new UnusableCardException("Can't use cards not in the visible area of the board");
+        }
+    }
+
+    /**
+     * This method produces resources using a development card
+     * @param cardIndex The development card
+     * @throws UnusableCardException In case the ard is not contained in the visible part of the board
+     * @throws FaithOverflowException In case a card returns too much faith
+     */
+    public void produce(int cardIndex) throws UnusableCardException, FaithOverflowException {
+        DevelopmentCard card = cardBoard.getUpperDevelopmentCards()[cardIndex];
         if(Arrays.asList(cardBoard.getUpperDevelopmentCards()).contains(card)){
             if(checkProduce(card)){
                 Resources cost=handleDiscount(card.getProductionCost());
@@ -168,10 +204,24 @@ public class PersonalBoard implements Serializable {
     /**
      * This method buys a column from the market and adds the resources to the swap area
      * @param column The column to be bought
+     * @param effect The effect to be used, null for none
      */
     public void buyColumn(int column, ExtraResource effect) throws FaithOverflowException {
         Resources res=this.generalBoard.getMarket().buyColumn(column);
         handleFaithAndStore(effect, res);
+    }
+
+    /**
+     * This method buys a column from the market and adds the resources to the swap area
+     * @param column The column to be bought
+     * @param effectIndex The effect index (-1 for none)
+     */
+    public void buyColumn(int column, int effectIndex) throws FaithOverflowException, IndexOutOfBoundsException {
+        if(effectIndex==-1){
+            buyColumn(column,null);
+        }else{
+            buyColumn(column,leaderBoard.getExtraResource().get(effectIndex));
+        }
     }
 
     /**
@@ -181,6 +231,19 @@ public class PersonalBoard implements Serializable {
     public void buyRow(int row, ExtraResource effect) throws FaithOverflowException {
         Resources res=this.generalBoard.getMarket().buyRow(row);
         handleFaithAndStore(effect, res);
+    }
+
+    /**
+     * This method buys a column from the market and adds the resources to the swap area
+     * @param row The column to be bought
+     * @param effectIndex The effect index (-1 for none)
+     */
+    public void buyRow(int row, int effectIndex) throws FaithOverflowException, IndexOutOfBoundsException {
+        if(effectIndex==-1){
+            buyRow(row,null);
+        }else{
+            buyRow(row,leaderBoard.getExtraResource().get(effectIndex));
+        }
     }
 
     private void handleFaithAndStore(ExtraResource effect, Resources res) throws FaithOverflowException {
@@ -237,6 +300,15 @@ public class PersonalBoard implements Serializable {
      */
     public boolean checkPlayLeader(LeaderCard leaderCard){
         return this.leaderBoard.checkPlayLeader(leaderCard,this.deposit.getTotalResources(),this.cardBoard.getDevelopmentCards());
+    }
+
+    /**
+     * This method plays a leader card
+     * @param leaderCard The leader card to be played
+     * @throws UnusableCardException In case the card is not playable
+     */
+    public void playLeader(int leaderCard) throws UnusableCardException {
+        playLeader(leaderBoard.getLeaderCardsInHand().get(leaderCard));
     }
 
     /**

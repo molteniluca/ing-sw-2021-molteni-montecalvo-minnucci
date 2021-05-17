@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 
 import java.io.*;
 import java.time.LocalTime;
@@ -93,8 +94,16 @@ public class Game implements Serializable {
 
         while(!gameEnded){
             for(PlayerTurn p: playerTurns){
-                p.beginTurn();
+                try {
+                    p.beginTurn();
+                } catch (FaithOverflowException e) {
+                    gameEnded=true;
+                }
             }
+        }
+
+        for(PlayerTurn p : playerTurns){
+            p.getClientHandler().sendObject(GAMEENDED);
         }
     }
 

@@ -1,6 +1,11 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException;
+import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
+import it.polimi.ingsw.model.exceptions.UnusableCardException;
+import it.polimi.ingsw.model.resources.ResourceTypes;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,35 +34,49 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the client disconnects
      */
     @Override
-    public void beginTurn() throws IOException {
-        boolean leaderAction = false;
+    public void beginTurn() throws IOException, FaithOverflowException {
+        boolean leaderAction = true;
+        boolean error = true;
         clientHandler.sendObject(TURNBEGIN);
 
         clientHandler.refreshClientObjects();
 
         NetworkMessages action = clientHandler.receiveObject(NetworkMessages.class);
-        if(action==ACTIVATELEADER){
-            leaderAction=true;
-            activateLeader();
+
+        while(action==ACTIVATELEADER && error){
+            error = activateLeader();
+            if(!error)
+                leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
-        }
-        switch(action){
-            case ACTIVATEPRODUCTION:
-                activateProduction();
-                break;
-            case BUYRESOURCES:
-                buyResources();
-                break;
-            case BUYCARD:
-                buyDevelopmentCard();
-                break;
         }
 
-        action = clientHandler.receiveObject(NetworkMessages.class);
-        if(action==ACTIVATELEADER && !leaderAction){
-            activateLeader();
+        error=true;
+        while(error){
+            switch(action){
+                case ACTIVATEPRODUCTION:
+                    error = activateProduction();
+                    break;
+                case BUYCOLUMN:
+                    error = buyColumn();
+                    break;
+                case BUYROW:
+                    error = buyRow();
+                    break;
+                case BUYCARD:
+                    error = buyDevelopmentCard();
+                    break;
+            }
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
+
+        error=true;
+        while(action==ACTIVATELEADER && error && leaderAction){
+            error = activateLeader();
+            if(!error)
+                leaderAction=false;
+            action = clientHandler.receiveObject(NetworkMessages.class);
+        }
+
         while (action!=TURNEND){
             clientHandler.sendObject(ERROR);
             clientHandler.sendObject("You can only end the turn");
@@ -67,20 +86,121 @@ public class PlayerTurn implements Turn, Serializable {
         clientHandler.sendObject(TURNEND);
     }
 
-    private void activateLeader(){
-
+    /**
+     * This method activates a leader card
+     * Expects leaderIndex->int
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    private boolean activateLeader() throws IOException {
+        try {
+            player.getPersonalBoard().playLeader(clientHandler.receiveObject(int.class));
+            return false;
+        } catch (UnusableCardException e) {
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject("This card is not playable");
+            return true;
+        }
     }
 
-    private void activateProduction(){
-
+    /**
+     * This method activates a production
+     * Expects productionType->networkMessage
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    private boolean activateProduction() throws IOException {
+        boolean error=true;
+        switch (clientHandler.receiveMessage()) {
+            case PROD1:
+                try {
+                    player.getPersonalBoard().produce(clientHandler.receiveObject(ResourceTypes.class),
+                            clientHandler.receiveObject(ResourceTypes.class),
+                            clientHandler.receiveObject(ResourceTypes.class)
+                    );
+                    error=false;
+                } catch (NegativeResourceValueException | FaithOverflowException e) {
+                    clientHandler.sendObject(ERROR);
+                    clientHandler.sendObject(e.toString());
+                }
+                break;
+            case PROD2:
+                try {
+                    player.getPersonalBoard().produce(clientHandler.receiveObject(int.class));
+                    error=false;
+                } catch (UnusableCardException | FaithOverflowException e) {
+                    clientHandler.sendObject(ERROR);
+                    clientHandler.sendObject(e.toString());
+                }
+                break;
+            case PROD3:
+                try {
+                    player.getPersonalBoard().produce(clientHandler.receiveObject(ResourceTypes.class),
+                            clientHandler.receiveObject(ResourceTypes.class)
+                    );
+                    error=false;
+                } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
+                    clientHandler.sendObject(ERROR);
+                    clientHandler.sendObject(e.toString());
+                }
+                break;
+            default:
+                clientHandler.sendObject(ERROR);
+                clientHandler.sendObject("Expecting a production action");
+                error=true;
+        }
+        return error;
     }
 
-    private void buyResources(){
-
+    /**
+     * This method buys a column
+     * Expects columnIndex->int
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    private boolean buyColumn() throws IOException, FaithOverflowException {
+        try {
+            player.getPersonalBoard().buyColumn(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject(e.toString());
+            return true;
+        }
     }
 
-    private void buyDevelopmentCard(){
+    /**
+     * This method buys a row
+     * Expects rowIndex->int
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    private boolean buyRow() throws IOException, FaithOverflowException {
+        try {
+            player.getPersonalBoard().buyRow(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject(e.toString());
+            return true;
+        }
+    }
 
+    /**
+     * This method buys a development card
+     * Expects cardRow->int, cardColumn->int, placeToInsert->int
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    private boolean buyDevelopmentCard() throws IOException {
+        try {
+            player.getPersonalBoard().drawCard(clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class));
+            return false;
+        } catch (IncompatibleCardLevelException | NegativeResourceValueException e) {
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject(e.toString());
+            return true;
+        }
     }
 
     public ClientHandler getClientHandler() {
