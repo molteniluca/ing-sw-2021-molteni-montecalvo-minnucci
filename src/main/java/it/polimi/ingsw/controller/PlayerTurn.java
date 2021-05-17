@@ -56,9 +56,11 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
                 case BUYCOLUMN:
                     error = buyColumn();
+                    handleSwap();
                     break;
                 case BUYROW:
                     error = buyRow();
+                    handleSwap();
                     break;
                 case BUYCARD:
                     error = buyDevelopmentCard();
@@ -82,6 +84,31 @@ public class PlayerTurn implements Turn, Serializable {
         }
 
         clientHandler.sendObject(TURNEND);
+    }
+
+
+    private void handleSwap() throws IOException, FaithOverflowException {
+        while(player.getPersonalBoard().getDeposit().getStorage().getSwapDeposit().getTotalResourceNumber()!=0){
+            switch (clientHandler.receiveMessage()){
+                case MOVETOSWAP:
+                    try {
+                        player.getPersonalBoard().getDeposit().getStorage().moveToLevel(clientHandler.receiveObject(int.class),
+                                clientHandler.receiveObject(ResourceTypes.class),
+                                clientHandler.receiveObject(int.class)
+                        );
+                    } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    }
+                    break;
+                case MOVETOLEVEL:
+                    player.getPersonalBoard().getDeposit().getStorage().moveToSwap(clientHandler.receiveObject(int.class));
+                    break;
+                case DROPRESOURCES:
+                    player.getPersonalBoard().dropResources();
+                    break;
+            }
+        }
     }
 
     /**

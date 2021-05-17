@@ -79,6 +79,10 @@ public class WarehouseDepots implements Serializable {
         return sum;
     }
 
+    public Resources getSwapDeposit(){
+        return swapDeposit;
+    }
+
     /**
      * Method used to add a level to the deposit
      * @param level Level object to be added
