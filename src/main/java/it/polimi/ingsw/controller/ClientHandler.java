@@ -53,6 +53,8 @@ public class ClientHandler extends Thread{
             }else if(command == JOINGAME){
                 joinGame(receiveObject(String.class));
             }else{
+                sendObject(ERROR);
+
                 client.close();
             }
         } catch (IOException e) {
@@ -85,7 +87,7 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      * @throws ClassCastException In case the client doesn't send the specified type of object
      */
-    public <T> T receiveObject(Class<? extends T> c) throws IOException {
+    public synchronized <T> T receiveObject(Class<? extends T> c) throws IOException {
         Object read = null;
         while(read==null){
             try {
@@ -121,15 +123,19 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      */
     private void createGame(int numPlayers) throws IOException {
-        String id = randomizeId();
-        waitingRooms.put(id,new WaitingRoom(numPlayers,id));
+        synchronized (waitingRooms){
+            String id = randomizeId();
+            while(waitingRooms.containsKey(id))
+                id = randomizeId();
+            waitingRooms.put(id,new WaitingRoom(numPlayers,id));
 
-        printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
+            printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
 
-        sendObject(SUCCESS);
-        sendObject(id);
+            sendObject(SUCCESS);
+            sendObject(id);
 
-        joinGame(id);
+            joinGame(id);
+        }
     }
 
     /**
