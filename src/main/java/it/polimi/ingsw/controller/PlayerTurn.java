@@ -109,6 +109,7 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
             }
         }
+        clientHandler.sendObject(SUCCESS);
     }
 
     /**
@@ -120,6 +121,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean activateLeader() throws IOException {
         try {
             player.getPersonalBoard().playLeader(clientHandler.receiveObject(int.class));
+            clientHandler.sendObject(SUCCESS);
             return false;
         } catch (UnusableCardException e) {
             clientHandler.sendObject(ERROR);
@@ -174,6 +176,8 @@ public class PlayerTurn implements Turn, Serializable {
                 clientHandler.sendObject("Expecting a production action");
                 error=true;
         }
+        if(!error)
+            clientHandler.sendObject(SUCCESS);
         return error;
     }
 
@@ -186,6 +190,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyColumn() throws IOException, FaithOverflowException {
         try {
             player.getPersonalBoard().buyColumn(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IndexOutOfBoundsException e) {
             clientHandler.sendObject(ERROR);
@@ -203,6 +208,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyRow() throws IOException, FaithOverflowException {
         try {
             player.getPersonalBoard().buyRow(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IndexOutOfBoundsException e) {
             clientHandler.sendObject(ERROR);
@@ -220,6 +226,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyDevelopmentCard() throws IOException, WinException, EmptyStackException {
         try {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class));
+            clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IncompatibleCardLevelException | NegativeResourceValueException e) {
             clientHandler.sendObject(ERROR);
