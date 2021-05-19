@@ -4,12 +4,14 @@ package it.polimi.ingsw.view;
 
 public interface View {
 
-    public void welcomeInfo();
+    void initializeView();
 
-    public void askCreateOrJoin();
+    void welcomeInfo();
 
-    public void askServerInfo();
+    void askCreateOrJoin();
 
-    public void askNickname();
+    void askServerInfo();
+
+    void askNickname();
 
 }

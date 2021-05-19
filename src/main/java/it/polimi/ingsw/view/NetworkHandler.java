@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.controller.NetworkMessages;
-import it.polimi.ingsw.observer.Observer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +41,7 @@ public class NetworkHandler extends Thread{
                 e.printStackTrace();
             }
 
-
+/*
         while (!server.isClosed()){
             try {
                 sendHeartBeat();
@@ -54,7 +53,7 @@ public class NetworkHandler extends Thread{
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
     }
 

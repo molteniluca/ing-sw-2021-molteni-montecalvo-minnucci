@@ -29,15 +29,7 @@ public class Client {
         else {
             view = new CLI();
         }
-
-
-        view.welcomeInfo();
-
-        view.askServerInfo();
-
-        view.askCreateOrJoin();
-
-        view.askNickname();
+        view.initializeView();
     }
 }
 

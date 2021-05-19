@@ -10,6 +10,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        new Server(9000);
+        new Server(10000);
     }
 }

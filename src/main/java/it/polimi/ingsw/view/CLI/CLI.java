@@ -15,6 +15,17 @@ public class CLI implements View, Serializable {
 
 
     @Override
+    public void initializeView() {
+        welcomeInfo();
+
+        askServerInfo();
+
+        askCreateOrJoin();
+
+        askNickname();
+    }
+
+    @Override
     public void welcomeInfo() {
         refresh();
         printTitle();
@@ -68,6 +79,7 @@ public class CLI implements View, Serializable {
             else
             {
                 System.out.println("Insert room id:");
+                roomid = input.readLine();
                 networkHandler.sendObject(JOINGAME);
             }
 

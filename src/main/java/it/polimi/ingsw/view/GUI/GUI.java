@@ -6,6 +6,11 @@ import it.polimi.ingsw.view.View;
 public class GUI implements View {
 
     @Override
+    public void initializeView() {
+
+    }
+
+    @Override
     public void welcomeInfo() {
 
     }
