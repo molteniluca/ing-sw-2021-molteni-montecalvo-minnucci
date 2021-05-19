@@ -92,16 +92,22 @@ public class ClientHandler extends Thread{
         while(read==null){
             try {
                 read = in.readObject();
+                if(read.getClass() == NetworkMessages.class) {
+                    if (read == HEARTBEAT) {
+                        read = null;
+                        continue;
+                    }
+                }
                 if(read.getClass() != c){
+                    sendObject(ERROR);
+                    sendObject("Unexpected object, expecting:"+c.toString());
+                    printDebug("Unexpected object, expecting:"+c.toString());
                     read = null;
                 }
             } catch (ClassNotFoundException e) {
-                continue;
-            }
-            if(read==null){
                 sendObject(ERROR);
-                sendObject("Unexpected object, expecting:"+c.toString());
-                printDebug("Unexpected object, expecting:"+c.toString());
+                sendObject("Unexpected object");
+                printDebug("Unexpected object");
             }
         }
 
