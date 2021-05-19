@@ -1,24 +1,29 @@
 package it.polimi.ingsw.view.CLI;
 
-import it.polimi.ingsw.controller.ClientHandler;
-import it.polimi.ingsw.controller.Server;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.exceptions.NameAlreadyPresentException;
 
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.SQLOutput;
-import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.io.*;
 
-public class CLI implements View {
+import static it.polimi.ingsw.controller.NetworkMessages.*;
 
-    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+public class CLI implements View, Serializable {
+
+    private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    private NetworkHandler networkHandler;
 
 
+    @Override
+    public void initializeView() {
+        welcomeInfo();
+
+        askServerInfo();
+
+        askCreateOrJoin();
+
+        askNickname();
+    }
 
     @Override
     public void welcomeInfo() {
@@ -27,31 +32,72 @@ public class CLI implements View {
     }
 
     @Override
-    public void askCreateOrJoin() throws Exception{
-        int currentAction;
+    public void askCreateOrJoin(){
+        int currentAction = -1;
         int numberOfPlayers;
+        String roomid;
+        NetworkMessages command;
 
         refresh();
         printTitle();
-        System.out.println(ColorCLI.ANSI_RED + "\n1)Create game\n2)Join Game"+ ColorCLI.RESET);
-        System.out.print("Select option: ");
-        currentAction = Integer.parseInt(input.readLine());
+
+        do{
+            try {
+                System.out.println(ColorCLI.ANSI_RED + "\n1)Create game\n2)Join Game" + ColorCLI.RESET);
+                System.out.print("Select option: ");
+                currentAction = Integer.parseInt(input.readLine());
+            }
+            catch (IOException e)
+            {
+               wrongInput();
+            }
+
+        }while (currentAction < 0);
 
 
-        if(currentAction == 1)
+        try
         {
-            System.out.print("Insert number of players: ");
-            numberOfPlayers = Integer.parseInt(input.readLine());
-            askServerInfo();
+            //Create or join
+            if(currentAction == 1)
+            {
+                System.out.print("Insert number of players: ");
+                numberOfPlayers = Integer.parseInt(input.readLine());
+
+                networkHandler.sendObject(CREATEGAME);
+                networkHandler.sendObject(numberOfPlayers);
+
+                command = networkHandler.receiveObject(NetworkMessages.class);
+
+                if(command == SUCCESS) {
+                    roomid = networkHandler.receiveObject(String.class);
+                    System.out.println("\nYou created a game successfully, your room id is " + ColorCLI.ANSI_RED + roomid + ColorCLI.RESET);
+                }
+                else
+                    System.out.println("Something went wrong, exiting");
+            }
+
+            else
+            {
+                System.out.println("Insert room id:");
+                roomid = input.readLine();
+                networkHandler.sendObject(JOINGAME);
+            }
+
+        }catch (IOException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
         }
 
+
     }
+
+
 
     @Override
     public void askServerInfo() {
         String currentString;
-        String serverAddress;
-        int serverPort = -1;
+        String serverAddress = "localhost";
+        int serverPort = 10000;
 
         System.out.println("Please specify the following settings (default values between brackets)");
 
@@ -61,43 +107,43 @@ public class CLI implements View {
                 System.out.print("Enter server address [127.0.0.1] : ");
                 currentString = input.readLine();
 
-                //input check sul formato della stringa con RegEX
-                if(!"".equals(currentString.trim()))
+                //da fare input check sul formato della stringa con RegEX
+                if (!"".equals(currentString.trim()))
                     serverAddress = currentString;
 
                 correctInput = true;
 
             } catch (IOException e) {
-                System.out.println("Wrong input, retry");
+                wrongInput();
                 //correct = false;
             }
 
 
         }
 
-        do{
+        correctInput = false;
+        while (!correctInput)
+        {
             try {
-                System.out.print("Enter server port [32000] : ");
+                System.out.print("Enter server port ["+serverPort+"] : ");
                 currentString = input.readLine();
 
-                if(!"".equals(currentString.trim()))
+                if (!"".equals(currentString.trim()))
                     serverPort = Integer.parseInt(currentString);
 
-            }
-            catch (NumberFormatException e){
-                System.out.println("Input errato, riprovare");
-            }
-            catch (IOException e) {
+                correctInput = true;
+            } catch (NumberFormatException e) {
+                wrongInput();
+                correctInput = false;
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-        }while (serverPort < 0);
+         }
 
-        ///Notify server about creation of a game, receive roomId
-
-       // System.out.print("\nYou created a game, your room id is " + ColorCLI.ANSI_RED + ColorCLI.RESET: ");
-
-
+        networkHandler = new NetworkHandler(serverAddress,serverPort);
+        networkHandler.start();
     }
+
 
     @Override
     public void askNickname() {
@@ -107,7 +153,7 @@ public class CLI implements View {
         do{
             try
             {
-                System.out.println("Please enter your name: ");
+                System.out.print("Please enter your name: ");
                 nickname = input.readLine();
 
                 //check if nickname already exists and eventually throws an Exception
@@ -115,14 +161,13 @@ public class CLI implements View {
 
                 /*
                Send nickname and receive ack or nack from the server if name is already taken
-                  throw new NameAlreadyPresentException("Name already present, chose another one");
-
-                 */
+               throw new NameAlreadyPresentException("Name already present, chose another one");
+                */
 
             }
             catch (NumberFormatException e) //NameAlreadyPresentException
             {
-                System.out.println("Wrong input, retry");
+               wrongInput();
             }
 
             catch (IOException e)
@@ -133,9 +178,9 @@ public class CLI implements View {
         }while(!correctInput);
 
 
+
+
     }
-
-
 
     private void printTitle() {
         System.out.println(ColorCLI.ANSI_YELLOW +"888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
@@ -153,4 +198,9 @@ public class CLI implements View {
         System.out.print(ColorCLI.CLEAR);
         System.out.flush();
     }
+
+    private void wrongInput(){
+        System.out.println("Wrong input, retry");
+    }
+
 }
