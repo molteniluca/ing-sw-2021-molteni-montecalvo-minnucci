@@ -7,9 +7,9 @@ import java.io.Serializable;
 
 public class GeneralBoard implements Serializable {
     private final Market market;
-    private final Lorenzo lorenzo;
+    private transient final Lorenzo lorenzo;
     private final CardDealer cardDealer;
-    private final FaithObserver faithObserver;
+    private transient final FaithObserver faithObserver;
 
 
     /**

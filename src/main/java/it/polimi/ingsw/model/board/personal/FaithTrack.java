@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class FaithTrack implements Serializable {
     private final int[] faithCards;
     private int position;
-    private final FaithObserver faithObserver;
+    private transient final FaithObserver faithObserver;
 
     public FaithTrack(FaithObserver faithObserver) {
         this.faithCards = new int[]{0,0,0}; /* 0: card turned upside down; 1: card in place; 2: card discarded*/
