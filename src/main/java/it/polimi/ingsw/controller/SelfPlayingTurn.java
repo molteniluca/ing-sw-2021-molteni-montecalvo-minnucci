@@ -27,4 +27,18 @@ public class SelfPlayingTurn implements Turn{
         throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
     }
 
+    @Override
+    public void startGame(){
+
+    }
+
+    @Override
+    public int getVictoryPoints(){
+        return 0;
+    }
+
+    @Override
+    public void endGame(boolean winner) {
+
+    }
 }

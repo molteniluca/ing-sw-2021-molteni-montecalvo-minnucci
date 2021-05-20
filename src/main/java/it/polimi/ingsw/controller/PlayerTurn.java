@@ -238,4 +238,23 @@ public class PlayerTurn implements Turn, Serializable {
     public ClientHandler getClientHandler() {
         return clientHandler;
     }
+
+
+    public void startGame() throws IOException {
+        clientHandler.sendObject(GAMESTARTED);
+        clientHandler.refreshClientObjects();
+    }
+    public int getVictoryPoints(){
+        return player.getPersonalBoard().getVictoryPoints();
+    }
+
+    public void endGame(boolean winner) throws IOException {
+        clientHandler.sendObject(GAMEENDED);
+        if(winner){
+            clientHandler.sendObject(YOUWON);
+        }else{
+            clientHandler.sendObject(YOULOST);
+        }
+    }
+
 }

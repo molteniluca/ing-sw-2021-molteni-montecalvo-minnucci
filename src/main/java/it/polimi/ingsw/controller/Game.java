@@ -16,15 +16,13 @@ import java.io.*;
 import java.time.LocalTime;
 import java.util.*;
 
-import static it.polimi.ingsw.controller.NetworkMessages.*;
-
 /**
  * Class that represents an entire game
  */
 public class Game implements Serializable {
     private static final long serialVersionUID = 6732146736278436274L;
 
-    private final ArrayList<PlayerTurn> playerTurns = new ArrayList<>();
+    private final ArrayList<Turn> turns = new ArrayList<>();
     private final String id;
     private boolean gameEnded = false;
     private final int  numPlayers;
@@ -43,6 +41,7 @@ public class Game implements Serializable {
         players = new Player[numPlayers];
         GeneralBoard generalBoard = new GeneralBoard();
 
+
         Random rand = new Random();
         int inkwellPlayer = Math.round(rand.nextFloat()*numPlayers);
 
@@ -50,12 +49,16 @@ public class Game implements Serializable {
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
-            playerTurns.add(new PlayerTurn(players[i],clients.get(i)));
+            turns.add(new PlayerTurn(players[i],clients.get(i)));
         }
 
         for(int i=0; i<inkwellPlayer; i++){
             players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
-            playerTurns.add(new PlayerTurn(players[i],clients.get(i)));
+            turns.add(new PlayerTurn(players[i],clients.get(i)));
+        }
+
+        if(numPlayers==1){
+            turns.add(new SelfPlayingTurn());
         }
     }
 
@@ -89,15 +92,14 @@ public class Game implements Serializable {
      */
     public void startGame() throws IOException {
         printDebug("Game started");
-        for(PlayerTurn p : playerTurns){
-            p.getClientHandler().sendObject(GAMESTARTED);
-            p.getClientHandler().refreshClientObjects();
+        for(Turn turn : turns){
+            turn.startGame();
         }
 
         while(!gameEnded){
-            for(PlayerTurn p: playerTurns){
+            for(Turn turn: turns){
                 try {
-                    p.beginTurn();
+                    turn.beginTurn();
                 } catch (FaithOverflowException | WinException | EmptyStackException e) {
                     gameEnded=true;
                 }
@@ -108,19 +110,14 @@ public class Game implements Serializable {
         int maxValue = Collections.max(victoryPoints);
 
         for(int i=0; i<numPlayers; i++){
-            playerTurns.get(i).getClientHandler().sendObject(GAMEENDED);
-            if(maxValue == victoryPoints.get(i)){
-                playerTurns.get(i).getClientHandler().sendObject(YOUWON);
-            }else{
-                playerTurns.get(i).getClientHandler().sendObject(YOULOST);
-            }
+            turns.get(i).endGame(maxValue == victoryPoints.get(i));
         }
     }
 
     private ArrayList<Integer> getAllVictoryPoints(){
         ArrayList<Integer> points= new ArrayList<>();
-        for (PlayerTurn p : playerTurns){
-            points.add(p.getPlayer().getPersonalBoard().getVictoryPoints());
+        for (Turn turn : turns){
+            points.add(turn.getVictoryPoints());
         }
         return points;
     }

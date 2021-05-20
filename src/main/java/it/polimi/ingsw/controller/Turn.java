@@ -7,4 +7,10 @@ import java.io.IOException;
 
 public interface Turn {
     void beginTurn() throws IOException, FaithOverflowException, WinException;
+
+    void startGame() throws IOException;
+
+    int getVictoryPoints();
+
+    void endGame(boolean winner) throws IOException;
 }
