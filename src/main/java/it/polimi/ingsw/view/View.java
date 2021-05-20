@@ -2,16 +2,41 @@ package it.polimi.ingsw.view;
 
 //used to implement an observable interface
 
-public interface View {
+import it.polimi.ingsw.controller.Game;
 
-    void initializeView();
+import java.util.LinkedList;
+import java.util.Queue;
 
-    void welcomeInfo();
+public abstract class View extends Thread{
+    private final Queue<Object> messsages= new LinkedList<>();
 
-    void askCreateOrJoin();
+    public abstract void welcomeInfo();
 
-    void askServerInfo();
+    public abstract void askCreateOrJoin();
 
-    void askNickname();
+    public abstract void askServerInfo();
 
+    public abstract void askNickname();
+
+    public void notifyResponse(Object o){
+        messsages.add(o);
+        this.notify();
+    }
+
+    public void updateObjects(Game game){
+
+    }
+
+    protected Object waitAndGetResponse() {
+        if(messsages.size()==0) {
+            synchronized (this){
+                try{
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return messsages.remove();
+    }
 }

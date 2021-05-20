@@ -41,8 +41,11 @@ public class PlayerTurn implements Turn, Serializable {
 
         NetworkMessages action = clientHandler.receiveObject(NetworkMessages.class);
 
-        while(action==ACTIVATELEADER && error){
-            error = activateLeader();
+        while((action == DISCARDLEADER || action == ACTIVATELEADER)  && error){
+            if(action == ACTIVATELEADER)
+                error = activateLeader();
+            else
+                error = discardLeader();
             if(!error)
                 leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
@@ -51,8 +54,10 @@ public class PlayerTurn implements Turn, Serializable {
         error=true;
         while(error){
             switch(action){
-                case ACTIVATEPRODUCTION:
-                    error = activateProduction();
+                case PROD1:
+                case PROD2:
+                case PROD3:
+                    error = activateProduction(action);
                     break;
                 case BUYCOLUMN:
                     error = buyColumn();
@@ -70,8 +75,11 @@ public class PlayerTurn implements Turn, Serializable {
         }
 
         error=true;
-        while(action==ACTIVATELEADER && error && leaderAction){
-            error = activateLeader();
+        while((action== ACTIVATELEADER || action==DISCARDLEADER) && error && leaderAction){
+            if(action == ACTIVATELEADER)
+                error = activateLeader();
+            else
+                error = discardLeader();
             if(!error)
                 leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
@@ -113,6 +121,20 @@ public class PlayerTurn implements Turn, Serializable {
     }
 
     /**
+     * This method discards a leader
+     * @return true if error and false if not
+     * @throws IOException in case of connection problems
+     */
+    public boolean discardLeader() throws IOException{
+        try {
+            player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(int.class));
+            return true;
+        }catch (IndexOutOfBoundsException e){
+            return false;
+        }
+    }
+
+    /**
      * This method activates a leader card
      * Expects leaderIndex->int
      * @return true if error and false if not
@@ -136,9 +158,9 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean activateProduction() throws IOException {
+    private boolean activateProduction(NetworkMessages message) throws IOException {
         boolean error=true;
-        switch (clientHandler.receiveMessage()) {
+        switch (message) {
             case PROD1:
                 try {
                     player.getPersonalBoard().produce(clientHandler.receiveObject(ResourceTypes.class),
@@ -239,15 +261,28 @@ public class PlayerTurn implements Turn, Serializable {
         return clientHandler;
     }
 
-
+    /**
+     * Game setup for this player
+     * @throws IOException In case the communication with the client goes wrong
+     */
     public void startGame() throws IOException {
         clientHandler.sendObject(GAMESTARTED);
         clientHandler.refreshClientObjects();
     }
+
+    /**
+     * Gets all the victory points of a player
+     * @return The victory points
+     */
     public int getVictoryPoints(){
         return player.getPersonalBoard().getVictoryPoints();
     }
 
+    /**
+     * Ends the game for this plaer
+     * @param winner True if this player is winner and false if not
+     * @throws IOException In case the communication with the client goes wrong
+     */
     public void endGame(boolean winner) throws IOException {
         clientHandler.sendObject(GAMEENDED);
         if(winner){

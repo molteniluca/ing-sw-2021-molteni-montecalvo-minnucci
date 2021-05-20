@@ -16,8 +16,6 @@ import java.util.Random;
  * This class represents an entity that communicates with the client and executes the basic operations
  */
 public class ClientHandler extends Thread{
-    private static final int heartBeatInterval=10000; /*Heartbeat interval in milliseconds*/
-
     private final Socket client;
     private final HashMap<String,WaitingRoom> waitingRooms;
     private ObjectInputStream in = null;
@@ -46,6 +44,8 @@ public class ClientHandler extends Thread{
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
 
+            new HeartbeatThreadServer(this);
+
             command = receiveObject(NetworkMessages.class);
 
             if(command == CREATEGAME){
@@ -67,11 +67,7 @@ public class ClientHandler extends Thread{
 
         while (!client.isClosed()){
             try {
-                sendHeartBeat();
-                sleep(heartBeatInterval);
-            } catch (IOException e) {
-                printDebug("Error client disconnected!");
-                waitingRooms.get(id).closeAll();
+                sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -155,13 +151,11 @@ public class ClientHandler extends Thread{
             this.id=id;
             printDebug("Joined game:"+id);
         } catch (FullRoomException e) {
-            out.writeObject(ERROR);
-            out.writeObject("THE ROOM IS FULL!");
+            out.writeObject(FULLROOMERROR);
             printDebug("Trying to join a full room:"+id);
             client.close();
         } catch (NullPointerException e){
-            out.writeObject(ERROR);
-            out.writeObject("THIS ROOM DOESN'T EXIST!");
+            out.writeObject(UNKNOWNIDERROR);
             printDebug("Trying to join a not existing room:"+id);
             client.close();
         }
@@ -193,7 +187,7 @@ public class ClientHandler extends Thread{
      * Sends the heart beat to the client to make sure is working
      * @throws IOException In case the server can't communicate with the client
      */
-    private void sendHeartBeat() throws IOException {
+    public void sendHeartBeat() throws IOException {
         sendObject(HEARTBEAT);
     }
 

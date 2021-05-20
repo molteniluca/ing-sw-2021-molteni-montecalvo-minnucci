@@ -1,12 +1,13 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
-public class GUI implements View {
+public class GUI extends View {
 
     @Override
-    public void initializeView() {
+    public void run() {
 
     }
 
@@ -27,6 +28,11 @@ public class GUI implements View {
 
     @Override
     public void askNickname() {
+
+    }
+
+    @Override
+    public void updateObjects(Game game) {
 
     }
 }

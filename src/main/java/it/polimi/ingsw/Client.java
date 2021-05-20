@@ -29,7 +29,7 @@ public class Client {
         else {
             view = new CLI();
         }
-        view.initializeView();
+        view.start();
     }
 }
 

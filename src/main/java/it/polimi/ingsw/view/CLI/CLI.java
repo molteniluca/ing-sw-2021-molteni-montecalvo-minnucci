@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
@@ -8,14 +9,15 @@ import java.io.*;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
 
-public class CLI implements View, Serializable {
+public class CLI extends View {
 
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
+    private Object message;
 
 
     @Override
-    public void initializeView() {
+    public void run() {
         welcomeInfo();
 
         askServerInfo();
@@ -66,10 +68,10 @@ public class CLI implements View, Serializable {
                 networkHandler.sendObject(CREATEGAME);
                 networkHandler.sendObject(numberOfPlayers);
 
-                command = networkHandler.receiveObject(NetworkMessages.class);
+                command = (NetworkMessages) waitAndGetResponse();
 
                 if(command == SUCCESS) {
-                    roomid = networkHandler.receiveObject(String.class);
+                    roomid = (String) waitAndGetResponse();
                     System.out.println("\nYou created a game successfully, your room id is " + ColorCLI.ANSI_RED + roomid + ColorCLI.RESET);
                 }
                 else
@@ -83,7 +85,7 @@ public class CLI implements View, Serializable {
                 networkHandler.sendObject(JOINGAME);
             }
 
-        }catch (IOException | ClassNotFoundException e)
+        }catch (IOException  e)
         {
             e.printStackTrace();
         }
@@ -140,8 +142,12 @@ public class CLI implements View, Serializable {
             }
          }
 
-        networkHandler = new NetworkHandler(serverAddress,serverPort);
-        networkHandler.start();
+        try {
+            networkHandler = new NetworkHandler(serverAddress,serverPort,this);
+            networkHandler.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -181,6 +187,7 @@ public class CLI implements View, Serializable {
 
 
     }
+
 
     private void printTitle() {
         System.out.println(ColorCLI.ANSI_YELLOW +"888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 
 import java.io.IOException;
@@ -11,93 +12,78 @@ import static it.polimi.ingsw.controller.NetworkMessages.*;
 
 
 public class NetworkHandler extends Thread{
-
-    private static int heartBeatInterval=50000; /*Heartbeat interval in milliseconds*/
     private Socket server;
-    private ObjectInputStream in = null;
-    private ObjectOutputStream out = null;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private final View view;
 
-    public NetworkHandler(String serverAddress, int serverPort)
-    {
-        try {
-            server = new Socket(serverAddress, serverPort);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+    public NetworkHandler(String serverAddress, int serverPort, View view) throws IOException {
+        this.view=view;
+        server = new Socket(serverAddress, serverPort);
+        out = new ObjectOutputStream(server.getOutputStream());
+        in = new ObjectInputStream(server.getInputStream());
+        new HeartBeatThreadClient(this);
     }
 
     @Override
     public void run() {
-        NetworkMessages command;
-
-            try {
-                out = new ObjectOutputStream(server.getOutputStream());
-                in = new ObjectInputStream(server.getInputStream());
-
-
-            } catch (IOException  e) {
-                e.printStackTrace();
-            }
-
-/*
         while (!server.isClosed()){
             try {
-                sendHeartBeat();
-                sleep(heartBeatInterval);
+                view.notifyResponse(receiveObject(Object.class));
             } catch (IOException e) {
-                //printDebug("Error client disconnected!");
                closeConnection();
             }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
+        }
     }
 
 
-
-    /**
-     * Receive an object of type c from the client
-     * @param c The type of the object
-     * @return The object received from the client
-     * @throws IOException In case there's a problem communicating with the client
-     * @throws ClassNotFoundException In case the client sends an unknown class
-     * @throws ClassCastException In case the client doesn't send the specified type of object
-     */
-    public <T> T receiveObject(Class<? extends T> c) throws IOException, ClassNotFoundException, ClassCastException {
+    private <T> T receiveObject(Class<? extends T> c) throws IOException {
         Object read = null;
         while(read==null){
-            read = in.readObject();
+            try {
+                read = in.readObject();
+                if(read.getClass() == NetworkMessages.class) {
+                    if (read == HEARTBEAT) {
+                        read = null;
+                        continue;
+                    }
+                }
+                if(read.getClass() == Game.class) {
+                    view.updateObjects((Game) read);
+                    read=null;
+                    continue;
+                }
+                if(read.getClass() != c){
+                    sendObject(ERROR);
+                    sendObject("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
+                    read = null;
+                }
+            } catch (ClassNotFoundException e) {
+                sendObject(ERROR);
+                sendObject("Unexpected object");
+            }
         }
         return c.cast(read);
     }
 
-    /**
-     * Sends an object to the client
-     * @param o The object to be sent
-     * @throws IOException In case there's a problem communicating with the client
-     */
     public synchronized void sendObject(Object o) throws IOException {
         out.writeObject(o);
     }
 
-
-    private void sendHeartBeat() throws IOException {
+    public void sendHeartBeat() throws IOException {
         sendObject(HEARTBEAT);
     }
 
-    /**
-     * Closes a connection with the client
-     */
-    private void closeConnection(){
+    public void closeConnection(){
         try {
             server.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private NetworkMessages receiveMessage() throws IOException {
+        return receiveObject(NetworkMessages.class);
     }
 
 }
