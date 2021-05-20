@@ -100,8 +100,8 @@ public class ClientHandler extends Thread{
                 }
                 if(read.getClass() != c){
                     sendObject(ERROR);
-                    sendObject("Unexpected object, expecting:"+c.toString());
-                    printDebug("Unexpected object, expecting:"+c.toString());
+                    sendObject("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
+                    printDebug("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
                     read = null;
                 }
             } catch (ClassNotFoundException e) {
