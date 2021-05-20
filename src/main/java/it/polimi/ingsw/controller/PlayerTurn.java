@@ -37,7 +37,7 @@ public class PlayerTurn implements Turn, Serializable {
         boolean error = true;
         clientHandler.sendObject(TURNBEGIN);
 
-        clientHandler.refreshClientObjects();
+        clientHandler.sendGame();
 
         NetworkMessages action = clientHandler.receiveObject(NetworkMessages.class);
 
@@ -267,7 +267,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     public void startGame() throws IOException {
         clientHandler.sendObject(GAMESTARTED);
-        clientHandler.refreshClientObjects();
+        clientHandler.sendGame();
     }
 
     /**

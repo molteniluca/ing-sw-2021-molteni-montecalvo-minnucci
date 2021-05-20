@@ -21,6 +21,7 @@ public class ClientHandler extends Thread{
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
     private String id=null;
+    private HeartbeatThreadServer heartbeatThreadServer = null;
 
     /**
      * Constructor of the class
@@ -44,7 +45,7 @@ public class ClientHandler extends Thread{
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
 
-            new HeartbeatThreadServer(this);
+            heartbeatThreadServer = new HeartbeatThreadServer(this);
 
             command = receiveObject(NetworkMessages.class);
 
@@ -67,9 +68,12 @@ public class ClientHandler extends Thread{
 
         while (!client.isClosed()){
             try {
-                sleep(10000);
+                synchronized (this){
+                    this.wait();
+                    refreshObjects();
+                }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
         }
 
@@ -202,15 +206,55 @@ public class ClientHandler extends Thread{
         }
     }
 
+    /**
+     * Handles the disconnection of this client
+     */
+    public void handleDisconnect(){
+        printDebug("Invoked disconnect");
+        if(getWaitingRoom()!=null) {
+            getWaitingRoom().closeAll();
+            getWaitingRoom().interrupt();
+            waitingRooms.remove(id);
+        }else{
+            this.closeConnection();
+        }
+    }
+
+    /**
+     * Gets the game associated with this client
+     * @return The game object
+     */
     private Game getGame(){
         return waitingRooms.get(id).getGame();
     }
 
-    public void refreshClientObjects() throws IOException {
+    /**
+     * Sends the entire game to the client
+     */
+    public void sendGame() throws IOException {
         sendObject(getGame());
     }
 
+    /**
+     * Method used to receive a network message from the client
+     * @return The received message
+     */
     public NetworkMessages receiveMessage() throws IOException {
         return receiveObject(NetworkMessages.class);
+    }
+
+    /**
+     * Gets the waiting room associated with this client
+     * @return The waiting room
+     */
+    public WaitingRoom getWaitingRoom(){
+        return waitingRooms.get(id);
+    }
+
+    /**
+     * Refreshes client objects
+     */
+    private void refreshObjects(){
+
     }
 }

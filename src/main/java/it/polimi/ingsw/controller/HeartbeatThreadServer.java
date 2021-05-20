@@ -19,7 +19,8 @@ public class HeartbeatThreadServer extends TimerTask {
         try {
             clientHandler.sendHeartBeat();
         } catch (IOException e) {
-            clientHandler.closeConnection();
+            clientHandler.handleDisconnect();
+            this.cancel();
         }
     }
 }

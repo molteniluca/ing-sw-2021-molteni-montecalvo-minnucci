@@ -31,9 +31,7 @@ public abstract class View extends Thread{
         }
     }
 
-    public void updateObjects(Game game){
-
-    }
+    public abstract void updateObjects(Game game);
 
     protected Object waitAndGetResponse() {
         synchronized (this){

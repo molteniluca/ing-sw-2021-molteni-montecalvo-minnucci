@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
+import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
@@ -238,6 +239,11 @@ public class CLI extends View {
                 System.out.print("\bX");
             System.out.print("] ");
         }
+    }
+
+    @Override
+    public void updateObjects(Game game) {
+
     }
 
     private void refresh() {
