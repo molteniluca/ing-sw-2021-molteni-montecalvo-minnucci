@@ -91,6 +91,7 @@ public class Game implements Serializable {
         printDebug("Game started");
         for(PlayerTurn p : playerTurns){
             p.getClientHandler().sendObject(GAMESTARTED);
+            p.getClientHandler().refreshClientObjects();
         }
 
         while(!gameEnded){
