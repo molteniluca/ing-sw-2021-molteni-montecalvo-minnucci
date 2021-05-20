@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-//used to implement an observable interface
+
 
 import it.polimi.ingsw.controller.Game;
 
@@ -8,7 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class View extends Thread{
-    private final Queue<Object> messsages= new LinkedList<>();
+    private final Queue<Object> messages = new LinkedList<>();
+
+    public abstract void initializeView();
 
     public abstract void welcomeInfo();
 
@@ -18,8 +20,12 @@ public abstract class View extends Thread{
 
     public abstract void askNickname();
 
+    public abstract void showHomepage();
+
+    public abstract void showFaithTrack();
+
     public void notifyResponse(Object o){
-        messsages.add(o);
+        messages.add(o);
         synchronized (this) {
             this.notify();
         }
@@ -31,7 +37,7 @@ public abstract class View extends Thread{
 
     protected Object waitAndGetResponse() {
         synchronized (this){
-            if(messsages.size()==0) {
+            if(messages.size()==0) {
                 try{
                     this.wait();
                 } catch (InterruptedException e) {
@@ -39,6 +45,6 @@ public abstract class View extends Thread{
                 }
             }
         }
-        return messsages.remove();
+        return messages.remove();
     }
 }

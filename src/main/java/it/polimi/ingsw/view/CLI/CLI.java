@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.CLI;
 
-import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
@@ -8,15 +7,24 @@ import it.polimi.ingsw.view.View;
 import java.io.*;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
+import static it.polimi.ingsw.view.CLI.ColoredResources.*;
 
 public class CLI extends View {
 
+    private static final int MAX_POSITION = 25;
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
 
 
     @Override
     public void run() {
+        initializeView();
+
+        showHomepage();
+    }
+    
+    @Override
+    public void initializeView(){
         welcomeInfo();
 
         askServerInfo();
@@ -200,6 +208,36 @@ public class CLI extends View {
                 "888   \"   888 888  888      X88 Y88b. Y8b.     888          X88      Y88..88P 888         888  T88b Y8b.     888  888 888  888 888      X88      X88 888  888 888  888 Y88b.   Y8b.     \n" +
                 "888       888 \"Y888888  88888P'  \"Y888 \"Y8888  888      88888P'       \"Y88P\"  888         888   T88b \"Y8888  888  888 \"Y888888 888  88888P'  88888P' \"Y888888 888  888  \"Y8888P \"Y8888  \n" +
                 "                                                                                                                                                                                        \n" + ColorCLI.RESET);
+    }
+
+    @Override
+    public void showHomepage() {
+        showLegend();
+        showFaithTrack();
+    }
+
+    private void showLegend(){
+        System.out.println("Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE);
+    }
+
+    @Override
+    public void showFaithTrack(){
+        //To add position received from Server
+        int position = 2;
+
+        System.out.println("FAITH TRACK");
+        for(int i =0; i< MAX_POSITION; i++) {
+            if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || (i>=19) && (i<=24)) {
+                System.out.print(ColorCLI.ANSI_YELLOW);
+                if (i % 8 == 0)
+                    System.out.print(ColorCLI.ANSI_RED);
+            } else
+                System.out.print(ColorCLI.RESET);
+            System.out.print("[ ");
+            if (i == position)
+                System.out.print("\bX");
+            System.out.print("] ");
+        }
     }
 
     private void refresh() {

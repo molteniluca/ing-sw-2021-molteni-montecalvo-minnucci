@@ -12,6 +12,11 @@ public class GUI extends View {
     }
 
     @Override
+    public void initializeView() {
+
+    }
+
+    @Override
     public void welcomeInfo() {
 
     }
@@ -28,6 +33,16 @@ public class GUI extends View {
 
     @Override
     public void askNickname() {
+
+    }
+
+    @Override
+    public void showHomepage() {
+
+    }
+
+    @Override
+    public void showFaithTrack() {
 
     }
 
