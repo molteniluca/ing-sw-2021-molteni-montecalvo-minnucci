@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.board.general.ActionTokens;
 import it.polimi.ingsw.model.board.general.Lorenzo;
 import jdk.jshell.spi.ExecutionControl;
 
-public class SelfPlayingTurn implements Turn{
+import java.io.Serializable;
+
+public class SelfPlayingTurn implements Turn, Serializable {
     private Lorenzo lorenzo;
 
     public void beginTurn(){

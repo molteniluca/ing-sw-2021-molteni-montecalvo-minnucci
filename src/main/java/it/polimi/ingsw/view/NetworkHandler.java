@@ -29,7 +29,7 @@ public class NetworkHandler extends Thread{
     public void run() {
         while (!server.isClosed()){
             try {
-                view.notifyResponse(receiveObject(Object.class));
+                view.notifyResponse(receiveObject());
             } catch (IOException e) {
                closeConnection();
             }
@@ -37,7 +37,7 @@ public class NetworkHandler extends Thread{
     }
 
 
-    private <T> T receiveObject(Class<? extends T> c) throws IOException {
+    private Object receiveObject() throws IOException {
         Object read = null;
         while(read==null){
             try {
@@ -51,19 +51,12 @@ public class NetworkHandler extends Thread{
                 if(read.getClass() == Game.class) {
                     view.updateObjects((Game) read);
                     read=null;
-                    continue;
-                }
-                if(read.getClass() != c){
-                    sendObject(ERROR);
-                    sendObject("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
-                    read = null;
                 }
             } catch (ClassNotFoundException e) {
-                sendObject(ERROR);
-                sendObject("Unexpected object");
+                e.printStackTrace();
             }
         }
-        return c.cast(read);
+        return read;
     }
 
     public synchronized void sendObject(Object o) throws IOException {
@@ -81,9 +74,4 @@ public class NetworkHandler extends Thread{
             e.printStackTrace();
         }
     }
-
-    private NetworkMessages receiveMessage() throws IOException {
-        return receiveObject(NetworkMessages.class);
-    }
-
 }

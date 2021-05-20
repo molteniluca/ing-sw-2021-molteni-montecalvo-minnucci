@@ -20,7 +20,9 @@ public abstract class View extends Thread{
 
     public void notifyResponse(Object o){
         messsages.add(o);
-        this.notify();
+        synchronized (this) {
+            this.notify();
+        }
     }
 
     public void updateObjects(Game game){
@@ -28,8 +30,8 @@ public abstract class View extends Thread{
     }
 
     protected Object waitAndGetResponse() {
-        if(messsages.size()==0) {
-            synchronized (this){
+        synchronized (this){
+            if(messsages.size()==0) {
                 try{
                     this.wait();
                 } catch (InterruptedException e) {

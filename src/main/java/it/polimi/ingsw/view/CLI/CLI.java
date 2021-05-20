@@ -13,7 +13,6 @@ public class CLI extends View {
 
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
-    private Object message;
 
 
     @Override
@@ -164,7 +163,9 @@ public class CLI extends View {
 
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
+                networkHandler.sendObject(nickname);
 
+                System.out.println(waitAndGetResponse());
                 /*
                Send nickname and receive ack or nack from the server if name is already taken
                throw new NameAlreadyPresentException("Name already present, chose another one");
