@@ -2,9 +2,9 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
-import it.polimi.ingsw.controller.WaitingRoom;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
+import java.util.regex.*;
 
 import java.io.*;
 
@@ -17,7 +17,6 @@ public class CLI extends View {
     private static final int MAX_POSITION = 25;
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
-
 
     @Override
     public void run() {
@@ -112,7 +111,7 @@ public class CLI extends View {
             else
             {
                 do {
-                    System.out.print("Insert room id:");
+                    System.out.print("Insert room id: ");
                     roomId = input.readLine().toUpperCase();
                     if(roomId.length() !=5)
                         System.out.println(ANSI_RED+"Room id must be 5 characters long, retry"+RESET);
@@ -130,13 +129,12 @@ public class CLI extends View {
 
     }
 
-
-
     @Override
     public void askServerInfo() {
         String currentString;
         String serverAddress = "localhost";
         int serverPort = 10000;
+        String regexNumberIp = "([0-9]|[1-9][0-9]|[1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5])";
 
         System.out.println("Please specify the following settings (default values between brackets)");
 
@@ -146,16 +144,27 @@ public class CLI extends View {
                 System.out.print("Enter server address [127.0.0.1] : ");
                 currentString = input.readLine();
 
-                //da fare input check sul formato della stringa con RegEX
-                if (!"".equals(currentString.trim()))
+                if (!"".equals(currentString.trim())) {
+                    //Regex to check input server address
+                    String regexAddress = "^" + regexNumberIp + "\\." + regexNumberIp + "\\." + regexNumberIp + "\\." + regexNumberIp + "$";
+                    Pattern pattern = Pattern.compile(regexAddress);
+                    Matcher matcher = pattern.matcher(currentString);
+
+                    if (!matcher.matches())
+                        throw new IOException();
+
                     serverAddress = currentString;
+                }
 
                 correctInput = true;
 
+
             } catch (IOException e) {
                 wrongInput();
-                correctInput = false;
+                //correct = false;
             }
+
+
         }
 
         correctInput = false;
@@ -185,10 +194,9 @@ public class CLI extends View {
         }
     }
 
-
     @Override
     public void askNickname() {
-        String nickname = null;
+        String nickname;
         boolean correctInput = false;
 
         do{
@@ -220,7 +228,6 @@ public class CLI extends View {
         }while(!correctInput);
     }
 
-
     private void printTitle() {
         System.out.println(ANSI_YELLOW +
                 "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
@@ -236,10 +243,10 @@ public class CLI extends View {
 
     @Override
     public void showHomepage() {
+        refresh();
         showLegend();
         showFaithTrack();
     }
-
 
     private void showLegend(){
         System.out.println("Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE);
@@ -252,7 +259,7 @@ public class CLI extends View {
 
         System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
-            if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || (i>=19) && (i<=24)) {
+            if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || i>=19) {
                 System.out.print(ColorCLI.ANSI_YELLOW);
                 if (i % 8 == 0)
                     System.out.print(ColorCLI.ANSI_RED);
@@ -264,10 +271,6 @@ public class CLI extends View {
             System.out.print("] ");
         }
     }
-
-
-
-
 
     @Override
     public void updateObjects(Game game) {
