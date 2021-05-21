@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class View extends Thread{
-    private final Queue<Object> messages = new LinkedList<>();
+    public final Queue<Object> messages = new LinkedList<>();
 
     public abstract void initializeView();
 

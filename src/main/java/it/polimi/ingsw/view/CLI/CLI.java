@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.controller.WaitingRoom;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
@@ -9,11 +10,12 @@ import java.io.*;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
 import static it.polimi.ingsw.view.CLI.ColoredResources.*;
+import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class CLI extends View {
 
     private static final int MAX_POSITION = 25;
-    private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
 
 
@@ -45,7 +47,8 @@ public class CLI extends View {
     public void askCreateOrJoin(){
         int currentAction = -1;
         int numberOfPlayers;
-        String roomid;
+        String roomId;
+        String currentString;
         NetworkMessages command;
 
         refresh();
@@ -53,25 +56,44 @@ public class CLI extends View {
 
         do{
             try {
-                System.out.println(ColorCLI.ANSI_RED + "\n1)Create game\n2)Join Game" + ColorCLI.RESET);
+                System.out.println(ANSI_GREEN + "\n1)Create game\n2)Join Game" + RESET);
                 System.out.print("Select option: ");
                 currentAction = Integer.parseInt(input.readLine());
             }
-            catch (IOException e)
+            catch (IOException | NumberFormatException e)
             {
                wrongInput();
             }
 
-        }while (currentAction < 0);
+        }while((currentAction < 1) || (currentAction>2));
 
 
         try
         {
-            //Create or join
+            //Create game
             if(currentAction == 1)
             {
-                System.out.print("Insert number of players: ");
-                numberOfPlayers = Integer.parseInt(input.readLine());
+                do {
+                    System.out.print("Insert number of players (max 4): ");
+                    currentString = input.readLine();
+
+                    if (!"".equals(currentString.trim()))
+                        try {
+                            numberOfPlayers = Integer.parseInt(currentString);
+                        }catch (NumberFormatException e)
+                        {
+                            wrongInput();
+                            numberOfPlayers = 6;
+                        }
+                    else
+                        numberOfPlayers = 0;
+
+                    if(numberOfPlayers > 4 )
+                        System.out.println(ANSI_RED+"The game support max 4 players"+RESET);
+                    if(numberOfPlayers <= 0)
+                        System.out.println(ANSI_RED+"Insert at least one player"+RESET);
+
+                } while((numberOfPlayers<=0) || (numberOfPlayers >= 5));
 
                 networkHandler.sendObject(CREATEGAME);
                 networkHandler.sendObject(numberOfPlayers);
@@ -79,18 +101,25 @@ public class CLI extends View {
                 command = (NetworkMessages) waitAndGetResponse();
 
                 if(command == SUCCESS) {
-                    roomid = (String) waitAndGetResponse();
-                    System.out.println("\nYou created a game successfully, your room id is " + ColorCLI.ANSI_RED + roomid + ColorCLI.RESET);
+                    roomId = (String) waitAndGetResponse();
+                    System.out.println("\nYou created a game successfully, your room id is " + ANSI_PURPLE + roomId + RESET);
                 }
                 else
-                    System.out.println("Something went wrong, exiting");
+                    System.out.println(ANSI_RED+"Something went wrong, exiting"+RESET);
             }
 
+            //Join game
             else
             {
-                System.out.println("Insert room id:");
-                roomid = input.readLine();
+                do {
+                    System.out.print("Insert room id:");
+                    roomId = input.readLine().toUpperCase();
+                    if(roomId.length() !=5)
+                        System.out.println(ANSI_RED+"Room id must be 5 characters long, retry"+RESET);
+                }while(roomId.length() !=5);
+
                 networkHandler.sendObject(JOINGAME);
+                networkHandler.sendObject(roomId);
             }
 
         }catch (IOException  e)
@@ -125,10 +154,8 @@ public class CLI extends View {
 
             } catch (IOException e) {
                 wrongInput();
-                //correct = false;
+                correctInput = false;
             }
-
-
         }
 
         correctInput = false;
@@ -179,7 +206,6 @@ public class CLI extends View {
                Send nickname and receive ack or nack from the server if name is already taken
                throw new NameAlreadyPresentException("Name already present, chose another one");
                 */
-
             }
             catch (NumberFormatException e) //NameAlreadyPresentException
             {
@@ -192,15 +218,12 @@ public class CLI extends View {
             }
 
         }while(!correctInput);
-
-
-
-
     }
 
 
     private void printTitle() {
-        System.out.println(ColorCLI.ANSI_YELLOW +"888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
+        System.out.println(ANSI_YELLOW +
+                "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
                 "8888b   d8888                   888                                           d88P\"       888   Y88b                           Y8P                                                      \n" +
                 "88888b.d88888                   888                                           888         888    888                                                                                    \n" +
                 "888Y88888P888  8888b.  .d8888b  888888 .d88b.  888d888 .d8888b        .d88b.  888888      888   d88P .d88b.  88888b.   8888b.  888 .d8888b  .d8888b   8888b.  88888b.   .d8888b .d88b.  \n" +
@@ -208,7 +231,7 @@ public class CLI extends View {
                 "888  Y8P  888 .d888888 \"Y8888b. 888   88888888 888     \"Y8888b.      888  888 888         888 T88b  88888888 888  888 .d888888 888 \"Y8888b. \"Y8888b. .d888888 888  888 888     88888888 \n" +
                 "888   \"   888 888  888      X88 Y88b. Y8b.     888          X88      Y88..88P 888         888  T88b Y8b.     888  888 888  888 888      X88      X88 888  888 888  888 Y88b.   Y8b.     \n" +
                 "888       888 \"Y888888  88888P'  \"Y888 \"Y8888  888      88888P'       \"Y88P\"  888         888   T88b \"Y8888  888  888 \"Y888888 888  88888P'  88888P' \"Y888888 888  888  \"Y8888P \"Y8888  \n" +
-                "                                                                                                                                                                                        \n" + ColorCLI.RESET);
+                "                                                                                                                                                                                        \n" + RESET);
     }
 
     @Override
@@ -216,6 +239,7 @@ public class CLI extends View {
         showLegend();
         showFaithTrack();
     }
+
 
     private void showLegend(){
         System.out.println("Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE);
@@ -226,7 +250,7 @@ public class CLI extends View {
         //To add position received from Server
         int position = 2;
 
-        System.out.println("FAITH TRACK");
+        System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
             if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || (i>=19) && (i<=24)) {
                 System.out.print(ColorCLI.ANSI_YELLOW);
@@ -241,6 +265,10 @@ public class CLI extends View {
         }
     }
 
+
+
+
+
     @Override
     public void updateObjects(Game game) {
 
@@ -252,7 +280,7 @@ public class CLI extends View {
     }
 
     private void wrongInput(){
-        System.out.println("Wrong input, retry");
+        System.out.println(ANSI_RED+"Wrong input, retry"+RESET);
     }
 
 }
