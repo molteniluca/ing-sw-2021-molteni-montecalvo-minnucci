@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.model.board.personal.storage.StrongBox;
+import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
@@ -22,15 +25,47 @@ public class CLI extends View {
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
     private Game game;
+    private boolean gameUpdated = false;
 
+    @Override
+    public void showWarehouse(){
+
+    }
+
+    @Override
+    public void showStrongbox(){
+        StrongBox strongBox = game.getTurn(1).getPlayer().getPersonalBoard().getDeposit().getChest();
+        Resources res = strongBox.getResources();
+        int i = 0;
+
+        System.out.println("\nSTRONGBOX");
+        for (ResourceTypes resourceTypes: ResourceTypes.values()) {
+            if(i == 2)
+                System.out.println();
+            if(!resourceTypes.toString().equals("BLANK") && !resourceTypes.toString().equals("FAITH"))
+                System.out.print(ColoredResources.valueOf(resourceTypes.toString()) + ": " + res.getResourceNumber(resourceTypes) + "\t");
+            i++;
+        }
+    }
 
     @Override
     public void run() {
         initializeView();
 
+        while(!gameUpdated){
+            try{
+
+                synchronized (this){
+                    wait();
+                }
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        gameUpdated = false;
+
         showHomepage();
 
-        //game.setGameEnded(true);
     }
 
     /**
@@ -55,6 +90,10 @@ public class CLI extends View {
         refresh();
         showLegend();
         showFaithTrack();
+
+        showStrongbox();
+        //showWarehouse();
+
     }
 
     /**
@@ -310,6 +349,7 @@ public class CLI extends View {
                 System.out.print("\bX");
             System.out.print("] ");
         }
+        System.out.println(RESET);
     }
 
 
@@ -319,8 +359,10 @@ public class CLI extends View {
      * @param game the new game received from the server
      */
     @Override
-    public void updateObjects(Game game) {
+    public synchronized void updateObjects(Game game) {
         this.game = game;
+        notify();
+        gameUpdated = true;
     }
 
     /**

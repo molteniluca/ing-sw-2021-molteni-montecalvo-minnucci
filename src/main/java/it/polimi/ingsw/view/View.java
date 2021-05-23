@@ -24,6 +24,10 @@ public abstract class View extends Thread{
 
     public abstract void showFaithTrack();
 
+    public abstract void showWarehouse();
+
+    public abstract void showStrongbox();
+
     public void notifyResponse(Object o){
         messages.add(o);
         synchronized (this) {

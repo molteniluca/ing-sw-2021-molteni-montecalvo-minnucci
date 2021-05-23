@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
 public class GUI extends View {
@@ -43,6 +42,16 @@ public class GUI extends View {
 
     @Override
     public void showFaithTrack() {
+
+    }
+
+    @Override
+    public void showWarehouse() {
+
+    }
+
+    @Override
+    public void showStrongbox() {
 
     }
 
