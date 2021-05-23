@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
+
 import java.util.regex.*;
 
 import java.io.*;
@@ -12,19 +13,29 @@ import static it.polimi.ingsw.controller.NetworkMessages.*;
 import static it.polimi.ingsw.view.CLI.ColoredResources.*;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
+/**
+ * Concrete class that represent the Command Line interface created by the user
+ */
 public class CLI extends View {
 
     private static final int MAX_POSITION = 25;
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
+    private Game game;
+
 
     @Override
     public void run() {
         initializeView();
 
         showHomepage();
+
+        //game.setGameEnded(true);
     }
-    
+
+    /**
+     * Initialize the view and performs basilar operations
+     */
     @Override
     public void initializeView(){
         welcomeInfo();
@@ -36,12 +47,30 @@ public class CLI extends View {
         askNickname();
     }
 
+    /**
+     * Method that shows the personalBoard of the user
+     */
+    @Override
+    public void showHomepage() {
+        refresh();
+        showLegend();
+        showFaithTrack();
+    }
+
+    /**
+     * It clears the screen and then prints the initial
+     * information like the title of the game
+     */
     @Override
     public void welcomeInfo() {
         refresh();
         printTitle();
     }
 
+    /**
+     * Method that asks the user if it wants to create a new game or join
+     * an already existing game, than send the answer to the server
+     */
     @Override
     public void askCreateOrJoin(){
         int currentAction = -1;
@@ -129,6 +158,11 @@ public class CLI extends View {
 
     }
 
+
+    /**
+     * It asks the user information about the server. And than
+     * creates the networkHandler with the given info
+     */
     @Override
     public void askServerInfo() {
         String currentString;
@@ -194,6 +228,9 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Method that asks the nickname and sends it to thw server
+     */
     @Override
     public void askNickname() {
         String nickname;
@@ -228,6 +265,9 @@ public class CLI extends View {
         }while(!correctInput);
     }
 
+    /**
+     * Method that prints the title of the game in ASCIIArt
+     */
     private void printTitle() {
         System.out.println(ANSI_YELLOW +
                 "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
@@ -241,17 +281,17 @@ public class CLI extends View {
                 "                                                                                                                                                                                        \n" + RESET);
     }
 
-    @Override
-    public void showHomepage() {
-        refresh();
-        showLegend();
-        showFaithTrack();
-    }
-
+    /**
+     * It shows the legend of the CLI associating every
+     * resource to a colored circle
+     */
     private void showLegend(){
         System.out.println("Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE);
     }
 
+    /**
+     * Method that prints out the faith track of a user
+     */
     @Override
     public void showFaithTrack(){
         //To add position received from Server
@@ -272,16 +312,28 @@ public class CLI extends View {
         }
     }
 
+
+    /**
+     * Method thar sets the game when it is updated. Called by the NetworkHandler if
+     * a game object is received
+     * @param game the new game received from the server
+     */
     @Override
     public void updateObjects(Game game) {
-
+        this.game = game;
     }
 
+    /**
+     * It clears the screen printing a clear character
+     */
     private void refresh() {
         System.out.print(ColorCLI.CLEAR);
         System.out.flush();
     }
 
+    /**
+     * It notifies the user about a wrong input
+     */
     private void wrongInput(){
         System.out.println(ANSI_RED+"Wrong input, retry"+RESET);
     }

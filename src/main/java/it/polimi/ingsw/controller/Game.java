@@ -25,7 +25,7 @@ public class Game implements Serializable {
     private final ArrayList<Turn> turns = new ArrayList<>();
     private final String id;
     private boolean gameEnded = false;
-    private final int  numPlayers;
+    private final int numPlayers;
 
     /**
      * Constructor of the class

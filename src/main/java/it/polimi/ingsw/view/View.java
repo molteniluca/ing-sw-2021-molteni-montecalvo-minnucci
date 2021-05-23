@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class View extends Thread{
-    public final Queue<Object> messages = new LinkedList<>();
+    public final Queue<Object> messages = new LinkedList<>(); //List of received messages
 
     public abstract void initializeView();
 
@@ -33,6 +33,12 @@ public abstract class View extends Thread{
 
     public abstract void updateObjects(Game game);
 
+
+    /**
+     * Suspend the view thread if there are no messages,
+     * otherwise return and remove the first object in the list of messages
+     * @return the message or the object received
+     */
     protected Object waitAndGetResponse() {
         synchronized (this){
             if(messages.size()==0) {

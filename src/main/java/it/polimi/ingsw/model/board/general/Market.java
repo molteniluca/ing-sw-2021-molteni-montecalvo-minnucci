@@ -8,6 +8,8 @@ import java.util.*;
 
 
 public class Market implements Serializable {
+    private static final long serialVersionUID = 6732146736272436274L;
+
     /// first element of a row is [x][0], first element of a column is [0][x]
     private final ResourceTypes[][] marketMatrix;
     private final int ROWS = 3;
