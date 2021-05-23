@@ -2,8 +2,10 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
-import it.polimi.ingsw.model.board.personal.storage.StrongBox;
+import it.polimi.ingsw.model.board.general.Market;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
@@ -27,46 +29,32 @@ public class CLI extends View {
     private Game game;
     private boolean gameUpdated = false;
 
-    @Override
-    public void showWarehouse(){
-
-    }
 
     @Override
-    public void showStrongbox(){
-        StrongBox strongBox = game.getTurn(1).getPlayer().getPersonalBoard().getDeposit().getChest();
-        Resources res = strongBox.getResources();
-        int i = 0;
-
-        System.out.println("\nSTRONGBOX");
-        for (ResourceTypes resourceTypes: ResourceTypes.values()) {
-            if(i == 2)
-                System.out.println();
-            if(!resourceTypes.toString().equals("BLANK") && !resourceTypes.toString().equals("FAITH"))
-                System.out.print(ColoredResources.valueOf(resourceTypes.toString()) + ": " + res.getResourceNumber(resourceTypes) + "\t");
-            i++;
-        }
-    }
-
-    @Override
-    public void run() {
+    public void run(){
         initializeView();
 
         while(!gameUpdated){
-            try{
-
-                synchronized (this){
+            try {
+                synchronized (this) { //FIXME synchronized should be 'this'?
                     wait();
                 }
-            }catch (InterruptedException e){
+            }catch (InterruptedException e)
+            {
                 e.printStackTrace();
             }
         }
         gameUpdated = false;
 
+
+        //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
+
+
         showHomepage();
 
+        //game.setGameEnded(true);
     }
+
 
     /**
      * Initialize the view and performs basilar operations
@@ -87,12 +75,43 @@ public class CLI extends View {
      */
     @Override
     public void showHomepage() {
-        refresh();
-        showLegend();
-        showFaithTrack();
+        int currentAction = -1;
 
-        showStrongbox();
-        //showWarehouse();
+        while (currentAction!=0) {
+            refresh();
+            showLegend();
+            showFaithTrack();
+            showStrongbox();
+            showWarehouse();
+
+            System.out.println(RESET + "\n1) Show market");
+            System.out.println("2) Show card dealer");
+            System.out.println("3) Produce");
+            System.out.println("4) Show leader cards");
+            System.out.println("5) End turn");
+            System.out.println("0) Exit game");
+
+            currentAction = integerInput("Select action", 0, 5);
+
+            switch (currentAction){
+                case 1:
+                    showMarket();
+                    break;
+                case 2:
+                    System.out.println("NOT IMPLEMENTED YET");
+                    break;
+                case 3:
+                    System.out.println("NOT IMPLEMENTED YET");
+                    break;
+                case 4:
+                    System.out.println("NOT IMPLEMENTED YET");
+                    break;
+                case 5:
+                    System.out.println("NOT IMPLEMENTED YET");
+                case 0:
+                    break;
+            }
+        }
 
     }
 
@@ -284,7 +303,7 @@ public class CLI extends View {
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
                 networkHandler.sendObject(nickname);
-
+                System.out.println("\nWaiting for players ...");
                 System.out.println(waitAndGetResponse());
                 /*
                Send nickname and receive ack or nack from the server if name is already taken
@@ -325,7 +344,7 @@ public class CLI extends View {
      * resource to a colored circle
      */
     private void showLegend(){
-        System.out.println("Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE);
+        System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE+"\n");
     }
 
     /**
@@ -334,7 +353,7 @@ public class CLI extends View {
     @Override
     public void showFaithTrack(){
         //To add position received from Server
-        int position = 2;
+        int position = game.getTurn(1).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
         System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
@@ -350,20 +369,122 @@ public class CLI extends View {
             System.out.print("] ");
         }
         System.out.println(RESET);
+        System.out.print("\n");
     }
 
 
     /**
-     * Method thar sets the game when it is updated. Called by the NetworkHandler if
+     * Method that prints the market matrix and the external resource
+     * the player is not important because the general board is shared
+     * between the players
+     */
+    public synchronized void showMarket() {
+        int currentAction = -1;
+        int column;
+        int row;
+
+
+        refresh();
+        Market market = game.getTurn(0).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+
+        ResourceTypes[][] marketMatrix;
+        ResourceTypes externalResource;
+
+
+
+        //Prints the market matrix
+        while(currentAction != 0) {
+            marketMatrix = market.getMarketMatrix();
+            externalResource = market.getExternalResource();
+            System.out.println(RESET + "\nMARKET:");
+            System.out.print("\t\t\t   ");
+            System.out.println(selectResourceColor(externalResource) + ": external resource");
+
+            for (int i = 0; i < market.ROWS; i++) {
+                for (int j = 0; j < market.COLUMNS; j++) {
+                    System.out.print(selectResourceColor(marketMatrix[i][j]) + "\t");
+                }
+                System.out.print(RESET + "← " + i + "\n");
+
+            }
+
+            System.out.println(" ↑ \t ↑ \t ↑ \t ↑ \t");
+            System.out.println(" 0 \t 1 \t 2 \t 3 \t\n");
+            showLegend();
+
+            //Asks the user if it wants to buy a column or a row
+            System.out.println("\n1) Buy column");
+            System.out.println("2) Buy row");
+            System.out.println("0) Exit");
+
+            currentAction = integerInput("Select action", 0, 2);
+
+            switch (currentAction) {
+                case 1:
+                    column = integerInput("Chose column", 0, market.COLUMNS);
+                    try {
+                        game.getTurn(0).getPlayer().getPersonalBoard().buyColumn(column, null);
+                    } catch (FaithOverflowException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 2:
+                    row = integerInput("Chose row", 0, market.ROWS);
+                    try {
+                        game.getTurn(0).getPlayer().getPersonalBoard().buyRow(row, null);
+                    } catch (FaithOverflowException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 0:
+                    break;
+            }
+        }
+    }
+
+
+    /**
+     * Method that shows the WareHouse of a player
+     */
+    @Override
+    public void showWarehouse(){
+
+    }
+
+    /**
+     * Method that shows the strongbox of a player
+     */
+    @Override
+    public void showStrongbox(){
+        StrongBox strongBox = game.getTurn(1).getPlayer().getPersonalBoard().getDeposit().getChest();
+        Resources res = strongBox.getResources();
+        int i = 0;
+
+        System.out.println("\nSTRONGBOX");
+        for (ResourceTypes resourceTypes: ResourceTypes.values()) {
+            if(i == 2)
+                System.out.println();
+            if(!resourceTypes.toString().equals("BLANK") && !resourceTypes.toString().equals("FAITH"))
+                System.out.print(ColoredResources.valueOf(resourceTypes.toString()) + ": " + res.getResourceNumber(resourceTypes) + "\t");
+            i++;
+        }
+        System.out.print("\n");
+    }
+
+
+
+    /**
+     * Method that sets the game when it is updated. Called by the NetworkHandler if
      * a game object is received
      * @param game the new game received from the server
      */
     @Override
     public synchronized void updateObjects(Game game) {
         this.game = game;
-        notify();
+        notify(); //wakes up the thread that was waiting for the game
         gameUpdated = true;
     }
+
 
     /**
      * It clears the screen printing a clear character
@@ -371,6 +492,61 @@ public class CLI extends View {
     private void refresh() {
         System.out.print(ColorCLI.CLEAR);
         System.out.flush();
+    }
+
+
+    /**
+     * Method that associates a ResourceType to a ColoredResources
+     * @param resource the resource that has to be printed
+     * @return the color of the resource
+     */
+    private ColoredResources selectResourceColor(ResourceTypes resource) {
+        switch (resource) {
+            case GOLD:
+                return GOLD;
+
+            case BLANK:
+                return BLANK;
+
+            case FAITH:
+                return FAITH;
+
+            case STONE:
+                return STONE;
+
+            case SHIELD:
+                return SHIELD;
+
+            case SERVANT:
+                return SERVANT;
+
+        }
+
+        return null;
+    }
+
+    /**
+     * Method that returns a correct integer input for a particular request
+     * @param request The string that has to be print no space or columns are required at the end
+     * @param min minimum value of the range
+     * @param max maximum value of the range
+     * @return a correct integer in the range
+     */
+    private int integerInput(String request, int min, int max) {
+        int value = -1;
+        do{
+            try{
+                System.out.print(request + ": ");
+                value = Integer.parseInt(input.readLine());
+                if(value<min || value> max)
+                    throw new NumberFormatException();
+            }catch (IOException | NumberFormatException e )
+            {
+                wrongInput();
+            }
+        }while (value<min || value >max);
+
+        return value;
     }
 
     /**

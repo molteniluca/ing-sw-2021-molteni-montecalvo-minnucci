@@ -12,8 +12,8 @@ public class Market implements Serializable {
 
     /// first element of a row is [x][0], first element of a column is [0][x]
     private final ResourceTypes[][] marketMatrix;
-    private final int ROWS = 3;
-    private final int COLUMNS = 4;
+    public final  int ROWS = 3;
+    public final int COLUMNS = 4;
     private ResourceTypes externalResource;
 
     /**

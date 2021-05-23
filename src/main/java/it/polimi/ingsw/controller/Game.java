@@ -159,7 +159,9 @@ public class Game implements Serializable {
         System.out.println(LocalTime.now().toString() + "\t\tGame[ID:" + id +"] -> "+s);
     }
 
-    public PlayerTurn getTurn(int i){
+
+    public PlayerTurn getTurn(int i)
+    {
         return (PlayerTurn) turns.get(i);
     }
 }

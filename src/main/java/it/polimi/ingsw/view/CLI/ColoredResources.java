@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.CLI;
 
 public enum ColoredResources {
     FAITH( ColorCLI.ANSI_RED +" ● "+ColorCLI.RESET),
-    BLANK( ColorCLI.ANSI_WHITE +" ● "+ColorCLI.RESET),
+    BLANK(ColorCLI.ANSI_WHITE + " ● " +ColorCLI.RESET),
     GOLD(ColorCLI.ANSI_YELLOW + " ● " + ColorCLI.RESET),
     SHIELD(ColorCLI.ANSI_BLUE + " ● " + ColorCLI.RESET),
     STONE(ColorCLI.ANSI_GRAY + " ● " + ColorCLI.RESET),
