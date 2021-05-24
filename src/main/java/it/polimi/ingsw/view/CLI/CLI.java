@@ -353,7 +353,7 @@ public class CLI extends View {
     @Override
     public void showFaithTrack(){
         //To add position received from Server
-        int position = game.getTurn(1).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
+        int position = game.getTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
         System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
@@ -456,7 +456,7 @@ public class CLI extends View {
      */
     @Override
     public void showStrongbox(){
-        StrongBox strongBox = game.getTurn(1).getPlayer().getPersonalBoard().getDeposit().getChest();
+        StrongBox strongBox = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getChest();
         Resources res = strongBox.getResources();
         int i = 0;
 

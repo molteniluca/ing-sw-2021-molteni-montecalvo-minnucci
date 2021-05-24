@@ -17,8 +17,10 @@ import static it.polimi.ingsw.controller.NetworkMessages.*;
 public class PlayerTurn implements Turn, Serializable {
     private final Player player;
     private final transient ClientHandler clientHandler;
+    private final transient WaitingRoom waitingRoom;
 
-    public PlayerTurn(Player player, ClientHandler clientHandler){
+    public PlayerTurn(Player player, ClientHandler clientHandler, WaitingRoom waitingRoom){
+        this.waitingRoom = waitingRoom;
         this.player = player;
         this.clientHandler = clientHandler;
     }

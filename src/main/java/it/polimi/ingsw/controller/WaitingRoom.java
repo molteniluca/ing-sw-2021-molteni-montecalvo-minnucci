@@ -31,7 +31,7 @@ public class WaitingRoom extends Thread{
     }
 
     public void run(){
-        game=new Game(numPlayers, clients, clientsNames, id);
+        game=new Game(numPlayers, clients, clientsNames, id, this);
         try {
             game.startGame();
         } catch (IOException e) {
