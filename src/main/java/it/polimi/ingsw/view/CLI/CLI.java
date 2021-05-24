@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
+import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.board.personal.storage.StrongBox;
@@ -448,7 +449,30 @@ public class CLI extends View {
      */
     @Override
     public void showWarehouse(){
+        System.out.println("WAREHOUSE");
+        WarehouseDepots warehouseDepots = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
+        for(int i = 0; i < warehouseDepots.getNumberLevels(); i++){
+            //Warehouse layout
+
+            if(i == 0)
+                System.out.printf("\t");
+            else if(i == 1 || i > 2) {
+                if(i == 3)
+                    System.out.println("Extra deposit");
+                System.out.printf("  ");
+            }
+
+            //Warehouse Resources printed
+            if(warehouseDepots.getResourceTypeLevel(i) != null)
+                System.out.println(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i).toString()) + ": " + warehouseDepots.getResourcesNumber(i));
+            else {
+                for (int j = 0; j <= i; j++) {
+                    System.out.printf(BLANK + " ");
+                }
+                System.out.print("\n");
+            }
+        }
     }
 
     /**
@@ -456,7 +480,7 @@ public class CLI extends View {
      */
     @Override
     public void showStrongbox(){
-        StrongBox strongBox = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getChest();
+        StrongBox strongBox = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
         int i = 0;
 
@@ -468,6 +492,7 @@ public class CLI extends View {
                 System.out.print(ColoredResources.valueOf(resourceTypes.toString()) + ": " + res.getResourceNumber(resourceTypes) + "\t");
             i++;
         }
+        System.out.print("\n");
         System.out.print("\n");
     }
 

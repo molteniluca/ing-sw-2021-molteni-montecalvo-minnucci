@@ -11,24 +11,24 @@ import java.io.Serializable;
  * Class that represents the resources storing area
  */
 public class Deposit implements Serializable {
-    private final WarehouseDepots storage;
-    private final StrongBox chest;
+    private final WarehouseDepots warehouseDepots;
+    private final StrongBox strongBox;
 
     public Deposit() {
-        this.storage = new WarehouseDepots();
-        this.chest = new StrongBox();
+        this.warehouseDepots = new WarehouseDepots();
+        this.strongBox = new StrongBox();
     }
 
-    public WarehouseDepots getStorage() {
-        return storage;
+    public WarehouseDepots getWarehouseDepots() {
+        return warehouseDepots;
     }
 
-    public StrongBox getChest() {
-        return chest;
+    public StrongBox getStrongBox() {
+        return strongBox;
     }
 
     public Resources getTotalResources(){
-        return storage.getResources().add(chest.getResources());
+        return warehouseDepots.getResources().add(strongBox.getResources());
     }
 
     public boolean checkRemoveResource(Resources requirements){
@@ -41,8 +41,8 @@ public class Deposit implements Serializable {
      * @throws NegativeResourceValueException In case in the swap area there are more resources than the ones to be removed
      */
     public void removeResources(Resources resources) throws NegativeResourceValueException {
-        Resources diff = resources.sub(storage.removeFromSwap());
-        chest.removeResource(diff);
+        Resources diff = resources.sub(warehouseDepots.removeFromSwap());
+        strongBox.removeResource(diff);
     }
 
     /**
@@ -51,8 +51,8 @@ public class Deposit implements Serializable {
      */
     public int getVictoryPoint() {
         int points=0;
-        points+=Math.floor(storage.getResources().getTotalResourceNumber()/5.0);
-        points+=Math.floor(chest.getResources().getTotalResourceNumber()/5.0);
+        points+=Math.floor(warehouseDepots.getResources().getTotalResourceNumber()/5.0);
+        points+=Math.floor(strongBox.getResources().getTotalResourceNumber()/5.0);
         return points;
     }
 }

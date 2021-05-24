@@ -67,7 +67,7 @@ public class LeaderBoardTest {
     @Test
     public void activateLeaderEffect() throws FaithNotAllowedException, LevelTooSmallException, NegativeResourceValueException, TypeNotChangeableException, UnusableCardException {
         personalBoard.playLeader(personalBoard.getLeaderBoard().getLeaderCardsInHand().get(0));
-        personalBoard.getDeposit().getStorage().addResourceSwap(new Resources().set(ResourceTypes.STONE,1));
-        personalBoard.getDeposit().getStorage().moveToLevel(3,ResourceTypes.STONE,1);
+        personalBoard.getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(ResourceTypes.STONE,1));
+        personalBoard.getDeposit().getWarehouseDepots().moveToLevel(3,ResourceTypes.STONE,1);
     }
 }

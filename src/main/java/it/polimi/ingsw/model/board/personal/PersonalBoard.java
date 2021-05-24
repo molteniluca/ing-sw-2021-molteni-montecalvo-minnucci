@@ -83,7 +83,7 @@ public class PersonalBoard implements Serializable {
                 this.faithTrack.incrementPosition(card.getProductionPower().getEraseFaith());
 
                 try {
-                    deposit.getChest().addResource(card.getProductionPower());
+                    deposit.getStrongBox().addResource(card.getProductionPower());
                 } catch (FaithNotAllowedException e) {
                     e.printStackTrace();
                 }
@@ -118,7 +118,7 @@ public class PersonalBoard implements Serializable {
                 this.faithTrack.incrementPosition(card.getProductionPower().getEraseFaith());
 
                 try {
-                    deposit.getChest().addResource(card.getProductionPower());
+                    deposit.getStrongBox().addResource(card.getProductionPower());
                 } catch (FaithNotAllowedException e) {
                     e.printStackTrace();
                 }
@@ -176,7 +176,7 @@ public class PersonalBoard implements Serializable {
                 this.faithTrack.incrementPosition(1);
             }else{
                 try {
-                    deposit.getChest().addResource(new Resources().set(output,1));
+                    deposit.getStrongBox().addResource(new Resources().set(output,1));
                 } catch (FaithNotAllowedException e) {
                     e.printStackTrace();
                 }
@@ -201,7 +201,7 @@ public class PersonalBoard implements Serializable {
                     faithTrack.incrementPosition(1);
                 else {
                     try {
-                        deposit.getChest().addResource(new Resources().set(output,1));
+                        deposit.getStrongBox().addResource(new Resources().set(output,1));
                     } catch (FaithNotAllowedException e) {
                         e.printStackTrace();
                     }
@@ -267,7 +267,7 @@ public class PersonalBoard implements Serializable {
         }
         res=handleBlank(res,effect);
         try {
-            this.deposit.getStorage().addResourceSwap(res);
+            this.deposit.getWarehouseDepots().addResourceSwap(res);
         } catch (FaithNotAllowedException e) {
             e.printStackTrace();
         }
@@ -341,6 +341,6 @@ public class PersonalBoard implements Serializable {
      * This method drops the resources contained int the swap area and notifies the others faith tracks
      */
     public void dropResources() throws FaithOverflowException {
-        this.faithTrack.dropResources(this.deposit.getStorage().removeFromSwap());
+        this.faithTrack.dropResources(this.deposit.getWarehouseDepots().removeFromSwap());
     }
 }

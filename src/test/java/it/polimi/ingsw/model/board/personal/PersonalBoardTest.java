@@ -16,8 +16,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class PersonalBoardTest {
     PersonalBoard personalBoard;
 
@@ -55,7 +53,7 @@ public class PersonalBoardTest {
         }
 
         try {
-            personalBoard.getDeposit().getChest().addResource(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1));
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1));
         } catch (FaithNotAllowedException e) {
             e.printStackTrace();
         }
@@ -90,7 +88,7 @@ public class PersonalBoardTest {
     @Test
     public void testProduce() {
         try {
-            personalBoard.getDeposit().getChest().addResource(new Resources().set(ResourceTypes.SERVANT,1));
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SERVANT,1));
         } catch (FaithNotAllowedException e) {
             e.printStackTrace();
         }

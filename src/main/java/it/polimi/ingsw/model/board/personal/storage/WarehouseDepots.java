@@ -79,6 +79,18 @@ public class WarehouseDepots implements Serializable {
         return sum;
     }
 
+    public int getNumberLevels(){
+        return warehouseDepots.size();
+    }
+
+    public ResourceTypes getResourceTypeLevel(int level){
+        return warehouseDepots.get(level).getResourceType();
+    }
+
+    public int getResourcesNumber(int level){
+        return warehouseDepots.get(level).getResourceNumber();
+    }
+
     public Resources getSwapDeposit(){
         return swapDeposit;
     }

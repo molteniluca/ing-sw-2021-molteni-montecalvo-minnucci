@@ -130,7 +130,7 @@ public class LeaderBoard implements Serializable {
 
     private void activateLeaderEffect(LeaderCard leader) {
         if(leader.getSpecialAbility().applyExtraDeposit()!=null){
-            personalBoard.getDeposit().getStorage().addLevel(new Level(leader.getSpecialAbility().applyExtraDeposit().getResourceType(),2));
+            personalBoard.getDeposit().getWarehouseDepots().addLevel(new Level(leader.getSpecialAbility().applyExtraDeposit().getResourceType(),2));
         }
     }
 
