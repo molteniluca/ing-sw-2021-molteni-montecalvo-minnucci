@@ -262,6 +262,10 @@ public class ClientHandler extends Thread{
             sendObject(objectUpdates.remove());
     }
 
+    /**
+     * Method that inserts an update in the sending queue
+     * @param objectUpdate The object to be sent
+     */
     public void insertUpdate(ObjectUpdate objectUpdate){
         this.objectUpdates.add(objectUpdate);
     }
