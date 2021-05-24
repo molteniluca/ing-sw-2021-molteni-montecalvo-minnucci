@@ -33,7 +33,7 @@ public class Game implements Serializable {
      * @param playerNames The name of each player
      * @param id The game room id for debugging reasons
      */
-    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id){
+    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id, WaitingRoom waitingRoom){
         this.numPlayers=numPlayers;
         this.id = id;
         Player[] players;
@@ -48,12 +48,12 @@ public class Game implements Serializable {
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i)));
+            turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom));
         }
 
         for(int i=0; i<inkwellPlayer; i++){
             players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i)));
+            turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom));
         }
 
         if(numPlayers==1){
