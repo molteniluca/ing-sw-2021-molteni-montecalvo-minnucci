@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 
@@ -18,6 +20,7 @@ import java.util.Random;
 public class ClientHandler extends Thread{
     private final Socket client;
     private final HashMap<String,WaitingRoom> waitingRooms;
+    private final Queue<ObjectUpdate> objectUpdates = new LinkedList<>();
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
     private String id=null;
@@ -72,7 +75,7 @@ public class ClientHandler extends Thread{
                     this.wait();
                     refreshObjects();
                 }
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | IOException e) {
                 break;
             }
         }
@@ -254,7 +257,12 @@ public class ClientHandler extends Thread{
     /**
      * Refreshes client objects
      */
-    private void refreshObjects(){
+    private void refreshObjects() throws IOException {
+        while (objectUpdates.size()!=0)
+            sendObject(objectUpdates.remove());
+    }
 
+    public void insertUpdate(ObjectUpdate objectUpdate){
+        this.objectUpdates.add(objectUpdate);
     }
 }

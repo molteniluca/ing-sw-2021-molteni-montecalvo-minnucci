@@ -79,4 +79,20 @@ public class WaitingRoom extends Thread{
     private void printDebug(String s){
         System.out.println(LocalTime.now().toString() + "\t\tGame[ID:" + id +"] -> "+s);
     }
+
+    /**
+     * Notifies the clients the new objects
+     * @param o The new objects
+     */
+    private void notifyClients(Object o){
+        ObjectUpdate objectUpdate=new ObjectUpdate(o,this.game.getCurrentPlayer());
+
+        for(ClientHandler c : clients){
+            c.insertUpdate(objectUpdate);
+        }
+
+        for(ClientHandler c : clients){
+            c.notify();
+        }
+    }
 }

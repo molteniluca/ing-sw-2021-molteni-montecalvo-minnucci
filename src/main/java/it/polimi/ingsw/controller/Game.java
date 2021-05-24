@@ -20,12 +20,11 @@ import java.util.*;
  * Class that represents an entire game
  */
 public class Game implements Serializable {
-    private static final long serialVersionUID = 6732146736278436274L;
-
     private final ArrayList<Turn> turns = new ArrayList<>();
     private final String id;
-    private boolean gameEnded = false;
-    private final int numPlayers;
+    private final int  numPlayers;
+    private transient boolean gameEnded = false;
+    private int currentPlayer;
 
     /**
      * Constructor of the class
@@ -60,6 +59,10 @@ public class Game implements Serializable {
         if(numPlayers==1){
             turns.add(new SelfPlayingTurn());
         }
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public void setGameEnded(boolean gameEnded) {
@@ -97,9 +100,9 @@ public class Game implements Serializable {
         }
 
         while(!gameEnded){
-            for(Turn turn: turns){
+            for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
                 try {
-                    turn.beginTurn();
+                    turns.get(currentPlayer).beginTurn();
                 } catch (FaithOverflowException | WinException | EmptyStackException e) {
                     gameEnded=true;
                 }
