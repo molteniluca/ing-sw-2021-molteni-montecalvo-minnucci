@@ -52,6 +52,8 @@ public class PlayerTurn implements Turn, Serializable {
                 leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
+        if(!error)
+            clientHandler.sendGame();
 
         error=true;
         while(error){
@@ -76,6 +78,8 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
 
+        clientHandler.sendGame();
+
         error=true;
         while((action== ACTIVATELEADER || action==DISCARDLEADER) && error && leaderAction){
             if(action == ACTIVATELEADER)
@@ -86,6 +90,9 @@ public class PlayerTurn implements Turn, Serializable {
                 leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
+
+        if(!error)
+            clientHandler.sendGame();
 
         while (action!=TURNEND){
             clientHandler.sendObject(ERROR);
