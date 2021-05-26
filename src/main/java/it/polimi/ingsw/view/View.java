@@ -44,13 +44,14 @@ public abstract class View extends Thread{
      * @return the message or the object received
      */
     protected Object waitAndGetResponse() {
-        synchronized (this){
-            if(messages.size()==0) {
+        while(messages.size()==0){
+            synchronized (this){
                 try{
                     this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         }
         return messages.remove();
