@@ -405,6 +405,8 @@ public class CLI extends View {
         //Prints the market matrix
         while(currentAction != 0) {
             refresh();
+            showLegend();
+
             marketMatrix = market.getMarketMatrix();
             externalResource = market.getExternalResource();
             System.out.println(RESET + "\nMARKET:");
@@ -421,7 +423,8 @@ public class CLI extends View {
 
             System.out.println(" ↑ \t ↑ \t ↑ \t ↑ \t");
             System.out.println(" 0 \t 1 \t 2 \t 3 \t\n");
-            showLegend();
+
+            showWarehouse();
 
             //Asks the user if it wants to buy a column or a row
             System.out.println("\n1) Buy column");
@@ -434,8 +437,11 @@ public class CLI extends View {
                 case 1:
                     column = integerInput("Chose column", 0, market.COLUMNS-1);
                     try {
+
                         networkHandler.sendObject(BUYCOLUMN);
                         networkHandler.sendObject(column);
+
+
                     }catch (IOException e)
                     {
                         e.printStackTrace();
@@ -460,7 +466,7 @@ public class CLI extends View {
 
     /**
      * Method that shows the card dealer, the player is not important because
-     * card dealer is a common object
+     * the card dealer is a common object
      */
     public void showCardDealer() {
         int currentAction;
@@ -516,7 +522,7 @@ public class CLI extends View {
                     System.out.print("Type: " + ANSI_GREEN + "Green" + RESET +"\t\t\t\t\t\t\t");
                     break;
                 case 'p':
-                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t\t");
+                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t");
                     break;
                 case 'y':
                     System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET +"\t\t\t\t\t\t");
@@ -530,37 +536,24 @@ public class CLI extends View {
             System.out.print("Level: "+card.getLevel()+ "\t\t\t\t\t\t\t");
         }
 
-        //Cost of the card
+        //Cost of the card FIXME not well  formatted for all cards
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
             Resources cost = card.getCost();
             System.out.print("Cost: ");
-            for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) //Only real resources are counted
-            {
-                int currentCost = cost.getResourceNumber(res);
-                if(currentCost>0 )
-                {
-                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
-                }
-            }
+            printResources(cost, null);
             System.out.print("\b\b  \t\t\t\t\t"); //erase the last comma
+
         }
 
         //Production cost FIXME not well formatted for all cards
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
-            Resources cost = card.getProductionCost();
+            Resources productionCost = card.getProductionCost();
             System.out.print("Production Cost: ");
-            for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) //Only real resources are counted
-            {
-                int currentCost = cost.getResourceNumber(res);
-                if(currentCost>0 )
-                {
-                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
-                }
-            }
+            printResources(productionCost, null);
             System.out.print("\b\b \t\t\t");
         }
 
@@ -568,16 +561,9 @@ public class CLI extends View {
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
-            Resources cost = card.getCost();
+            Resources productionPower = card.getProductionPower();
             System.out.print("Production Power: ");
-            for (ResourceTypes res : ResourceTypes.values()) //Only real resources are counted
-            {
-                int currentCost = cost.getResourceNumber(res);
-                if(currentCost>0 )
-                {
-                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
-                }
-            }
+            printResources(productionPower, "all");
             System.out.print("\b\b  \t\t\t");
         }
     }
@@ -634,7 +620,6 @@ public class CLI extends View {
     }
 
 
-
     /**
      * Method that sets the game when it is updated. Called by the NetworkHandler if
      * a game object is received
@@ -656,6 +641,38 @@ public class CLI extends View {
         System.out.flush();
     }
 
+    /**
+     * Method that prints the resources given
+     * @param resources the resources that has to be printed
+     * @param modality the wat of printing that resources:
+     * 'real' prints only shield, stone, gold and servant is the default value
+     * 'all' prints also faith and blank
+     */
+    private void printResources(Resources resources, String modality)
+    {
+        if(modality == null)
+            modality = "real";
+
+        if(modality.equals("real")) {
+            for (ResourceTypes res : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) //Only real resources are counted
+            {
+                int amount = resources.getResourceNumber(res);
+                if (amount > 0) {
+                    System.out.print(amount + "" + selectResourceColor(res) + ", ");
+                }
+            }
+        }
+
+        if(modality.equals("all")){
+            for (ResourceTypes res :ResourceTypes.values()) //Only real resources are counted
+            {
+                int amount = resources.getResourceNumber(res);
+                if (amount > 0) {
+                    System.out.print(amount + "" + selectResourceColor(res) + ", ");
+                }
+            }
+        }
+    }
 
     /**
      * Method that associates a ResourceType to a ColoredResources
@@ -687,9 +704,10 @@ public class CLI extends View {
         return null;
     }
 
+
     /**
      * Method that returns a correct integer input for a particular request
-     * @param request The string that has to be print no space or columns are required at the end
+     * @param request The string that has to be print, no space or columns are required at the end
      * @param min minimum value of the range
      * @param max maximum value of the range
      * @return a correct integer in the range
