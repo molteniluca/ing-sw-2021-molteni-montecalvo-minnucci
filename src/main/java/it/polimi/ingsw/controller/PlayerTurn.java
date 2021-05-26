@@ -65,10 +65,12 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
                 case BUYCOLUMN:
                     error = buyColumn();
+                    clientHandler.sendGame();
                     handleSwap();
                     break;
                 case BUYROW:
                     error = buyRow();
+                    clientHandler.sendGame();
                     handleSwap();
                     break;
                 case BUYCARD:
@@ -107,7 +109,7 @@ public class PlayerTurn implements Turn, Serializable {
     private void handleSwap() throws IOException, FaithOverflowException {
         while(player.getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber()!=0){
             switch (clientHandler.receiveMessage()){
-                case MOVETOSWAP:
+                case MOVETOLEVEL:
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(clientHandler.receiveObject(int.class),
                                 clientHandler.receiveObject(ResourceTypes.class),
@@ -118,7 +120,7 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(e.toString());
                     }
                     break;
-                case MOVETOLEVEL:
+                case MOVETOSWAP:
                     player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(int.class));
                     break;
                 case DROPRESOURCES:
