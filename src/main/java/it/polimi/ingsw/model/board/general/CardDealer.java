@@ -102,7 +102,7 @@ public class CardDealer implements Serializable {
 
 
     /**
-     * Method that returns the cost of a specific element od cardMatrix
+     * Method that returns the cost of a specific element of cardMatrix
      * @param row cardMatrix row
      * @param column cardMatrix column
      * @return the cost of the first element in the stack of the chosen cardMatrix cell
@@ -110,6 +110,12 @@ public class CardDealer implements Serializable {
     public Resources getCost(int row, int column)
     {
         return cardMatrix[row][column].peek().getCost();
+    }
+
+
+    public Stack<DevelopmentCard>[][] getCardMatrix()
+    {
+        return cardMatrix;
     }
 
     /**

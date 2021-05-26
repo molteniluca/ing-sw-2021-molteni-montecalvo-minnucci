@@ -2,7 +2,9 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.model.board.general.CardDealer;
 import it.polimi.ingsw.model.board.general.Market;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
@@ -11,11 +13,18 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Stack;
 import java.util.regex.*;
 
 import java.io.*;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
+import static it.polimi.ingsw.model.resources.ResourceTypes.GOLD;
+import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
+import static it.polimi.ingsw.model.resources.ResourceTypes.SHIELD;
+import static it.polimi.ingsw.model.resources.ResourceTypes.STONE;
 import static it.polimi.ingsw.view.CLI.ColoredResources.*;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
@@ -30,7 +39,6 @@ public class CLI extends View {
     private Game game;
     private boolean gameUpdated = false;
 
-
     @Override
     public void run(){
         initializeView();
@@ -44,6 +52,10 @@ public class CLI extends View {
             {
                 e.printStackTrace();
             }
+
+            finally {
+                showHomepage();
+            }
         }
         gameUpdated = false;
 
@@ -51,8 +63,7 @@ public class CLI extends View {
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
 
 
-        showHomepage();
-
+        //showHomepage();
         //game.setGameEnded(true);
     }
 
@@ -76,6 +87,7 @@ public class CLI extends View {
      */
     @Override
     public void showHomepage() {
+        gameUpdated = false;
         int currentAction = -1;
 
         while (currentAction!=0) {
@@ -84,6 +96,7 @@ public class CLI extends View {
             showFaithTrack();
             showStrongbox();
             showWarehouse();
+
 
             System.out.println(RESET + "\n1) Show market");
             System.out.println("2) Show card dealer");
@@ -99,7 +112,7 @@ public class CLI extends View {
                     showMarket();
                     break;
                 case 2:
-                    System.out.println("NOT IMPLEMENTED YET");
+                    showCardDealer();
                     break;
                 case 3:
                     System.out.println("NOT IMPLEMENTED YET");
@@ -113,8 +126,8 @@ public class CLI extends View {
                     break;
             }
         }
-
     }
+
 
     /**
      * It clears the screen and then prints the initial
@@ -344,17 +357,17 @@ public class CLI extends View {
      * It shows the legend of the CLI associating every
      * resource to a colored circle
      */
-    private void showLegend(){
-        System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + GOLD +" Shield:" + SHIELD + " Servant:" + SERVANT + " Stone:" + STONE+"\n");
+    private void showLegend() {
+        System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + ColoredResources.GOLD +" Shield:" + ColoredResources.SHIELD + " Servant:" + ColoredResources.SERVANT + " Stone:" + ColoredResources.STONE+"\n");
     }
 
     /**
      * Method that prints out the faith track of a user
      */
     @Override
-    public void showFaithTrack(){
+    public void showFaithTrack() {
         //To add position received from Server
-        int position = game.getTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
+        int position = game.getTurn(1).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
         System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
@@ -384,17 +397,14 @@ public class CLI extends View {
         int column;
         int row;
 
-
-        refresh();
         Market market = game.getTurn(0).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
 
         ResourceTypes[][] marketMatrix;
         ResourceTypes externalResource;
 
-
-
         //Prints the market matrix
         while(currentAction != 0) {
+            refresh();
             marketMatrix = market.getMarketMatrix();
             externalResource = market.getExternalResource();
             System.out.println(RESET + "\nMARKET:");
@@ -405,7 +415,7 @@ public class CLI extends View {
                 for (int j = 0; j < market.COLUMNS; j++) {
                     System.out.print(selectResourceColor(marketMatrix[i][j]) + "\t");
                 }
-                System.out.print(RESET + "← " + i + "\n");
+                System.out.print(RESET + "\b← " + i + "\n");
 
             }
 
@@ -422,18 +432,23 @@ public class CLI extends View {
 
             switch (currentAction) {
                 case 1:
-                    column = integerInput("Chose column", 0, market.COLUMNS);
+                    column = integerInput("Chose column", 0, market.COLUMNS-1);
                     try {
-                        game.getTurn(0).getPlayer().getPersonalBoard().buyColumn(column, null);
-                    } catch (FaithOverflowException e) {
+                        networkHandler.sendObject(BUYCOLUMN);
+                        networkHandler.sendObject(column);
+                    }catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
+
                     break;
                 case 2:
-                    row = integerInput("Chose row", 0, market.ROWS);
+                    row = integerInput("Chose row", 0, market.ROWS-1);
                     try {
-                        game.getTurn(0).getPlayer().getPersonalBoard().buyRow(row, null);
-                    } catch (FaithOverflowException e) {
+                        networkHandler.sendObject(BUYCOLUMN);
+                        networkHandler.sendObject(row);
+                    }catch (IOException e)
+                    {
                         e.printStackTrace();
                     }
                     break;
@@ -443,12 +458,135 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Method that shows the card dealer, the player is not important because
+     * card dealer is a common object
+     */
+    public void showCardDealer() {
+        int currentAction;
+        ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
+        Stack<DevelopmentCard>[][] cardMatrix = game.getTurn(0).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
+
+        refresh();
+        System.out.println("CARD DEALER:");
+
+        for(int i = 2; i >= 0; i--)
+        {
+            for(int j = 0; j<4; j++)
+            {
+                currentLine.add(cardMatrix[i][j].peek());
+            }
+            printCards(currentLine);
+            currentLine.clear();
+            System.out.print("\n");
+        }
+
+        //Asks the user if it wants to buy a column or a row
+        System.out.println("\n1) Buy card");
+        System.out.println("0) Exit");
+        currentAction = integerInput("Select action", 0, 1);
+
+        switch (currentAction) {
+
+            case 1:
+                int row = integerInput("Chose row", 0, 2);
+                int column = integerInput("Chose column", 0, 3);
+                break;
+            case 0:
+                break;
+        }
+
+
+    }
+
+    /**
+     * It prints out an ArrayList of cards one by one in the same line
+     * @param cards the array of cards that as to be printed
+     */
+    private void printCards(ArrayList<DevelopmentCard> cards) {
+        //Type of the card
+        System.out.print("\n");
+        for (DevelopmentCard card : cards)
+        {
+            switch (card.getType()){
+                case 'b':
+                    System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET +"\t\t\t\t\t\t\t");
+                    break;
+                case 'g':
+                    System.out.print("Type: " + ANSI_GREEN + "Green" + RESET +"\t\t\t\t\t\t\t");
+                    break;
+                case 'p':
+                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t\t");
+                    break;
+                case 'y':
+                    System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET +"\t\t\t\t\t\t");
+                    break;
+            }
+        }
+        //Level of the card
+        System.out.print("\n");
+        for (DevelopmentCard card : cards)
+        {
+            System.out.print("Level: "+card.getLevel()+ "\t\t\t\t\t\t\t");
+        }
+
+        //Cost of the card
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources cost = card.getCost();
+            System.out.print("Cost: ");
+            for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) //Only real resources are counted
+            {
+                int currentCost = cost.getResourceNumber(res);
+                if(currentCost>0 )
+                {
+                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
+                }
+            }
+            System.out.print("\b\b  \t\t\t\t\t"); //erase the last comma
+        }
+
+        //Production cost FIXME not well formatted for all cards
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources cost = card.getProductionCost();
+            System.out.print("Production Cost: ");
+            for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) //Only real resources are counted
+            {
+                int currentCost = cost.getResourceNumber(res);
+                if(currentCost>0 )
+                {
+                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
+                }
+            }
+            System.out.print("\b\b \t\t\t");
+        }
+
+        //Production power FIXME not well formatted for all cards
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources cost = card.getCost();
+            System.out.print("Production Power: ");
+            for (ResourceTypes res : ResourceTypes.values()) //Only real resources are counted
+            {
+                int currentCost = cost.getResourceNumber(res);
+                if(currentCost>0 )
+                {
+                    System.out.print(currentCost+""+ selectResourceColor(res) +", ");
+                }
+            }
+            System.out.print("\b\b  \t\t\t");
+        }
+    }
 
     /**
      * Method that shows the WareHouse of a player
      */
     @Override
-    public void showWarehouse(){
+    public void showWarehouse() {
         System.out.println("WAREHOUSE");
         WarehouseDepots warehouseDepots = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
@@ -479,7 +617,7 @@ public class CLI extends View {
      * Method that shows the strongbox of a player
      */
     @Override
-    public void showStrongbox(){
+    public void showStrongbox() {
         StrongBox strongBox = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
         int i = 0;
@@ -492,7 +630,6 @@ public class CLI extends View {
                 System.out.print(ColoredResources.valueOf(resourceTypes.toString()) + ": " + res.getResourceNumber(resourceTypes) + "\t");
             i++;
         }
-        System.out.print("\n");
         System.out.print("\n");
     }
 
@@ -528,22 +665,22 @@ public class CLI extends View {
     private ColoredResources selectResourceColor(ResourceTypes resource) {
         switch (resource) {
             case GOLD:
-                return GOLD;
+                return ColoredResources.GOLD;
 
             case BLANK:
-                return BLANK;
+                return ColoredResources.BLANK;
 
             case FAITH:
-                return FAITH;
+                return ColoredResources.FAITH;
 
             case STONE:
-                return STONE;
+                return ColoredResources.STONE;
 
             case SHIELD:
-                return SHIELD;
+                return ColoredResources.SHIELD;
 
             case SERVANT:
-                return SERVANT;
+                return ColoredResources.SERVANT;
 
         }
 
@@ -577,7 +714,7 @@ public class CLI extends View {
     /**
      * It notifies the user about a wrong input
      */
-    private void wrongInput(){
+    private void wrongInput() {
         System.out.println(ANSI_RED+"Wrong input, retry"+RESET);
     }
 

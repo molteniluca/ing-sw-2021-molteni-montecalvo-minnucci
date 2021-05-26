@@ -59,6 +59,24 @@
         </configuration>
       </plugin>
 
+      <!-- Plugins used for building jar
+      command to create the file:
+      mvn clean compile assembly:single
+      7ZNGA-->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>it.polimi.ingsw.Client</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 </project>

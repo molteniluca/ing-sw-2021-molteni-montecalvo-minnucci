@@ -58,8 +58,6 @@ public class Market implements Serializable {
 
 
     /**
-     * It's a TEST METHOD because i don't know how i can access the matrix from test because
-     * it creates marketMatrix filling it in casual order
      * @return the matrix representing the market
      */
     public ResourceTypes[][] getMarketMatrix()
