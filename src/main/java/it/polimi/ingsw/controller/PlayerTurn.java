@@ -153,7 +153,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     private boolean activateLeader() throws IOException {
         try {
-            player.getPersonalBoard().playLeader(clientHandler.receiveObject(int.class));
+            player.getPersonalBoard().playLeader(clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             return false;
         } catch (UnusableCardException e) {
@@ -186,7 +186,7 @@ public class PlayerTurn implements Turn, Serializable {
                 break;
             case PROD2:
                 try {
-                    player.getPersonalBoard().produce(clientHandler.receiveObject(int.class));
+                    player.getPersonalBoard().produce(clientHandler.receiveObject(Integer.class));
                     error=false;
                 } catch (UnusableCardException | FaithOverflowException e) {
                     clientHandler.sendObject(ERROR);
@@ -258,7 +258,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     private boolean buyDevelopmentCard() throws IOException, WinException, EmptyStackException {
         try {
-            player.getPersonalBoard().drawCard(clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class),clientHandler.receiveObject(int.class));
+            player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IncompatibleCardLevelException | NegativeResourceValueException e) {
