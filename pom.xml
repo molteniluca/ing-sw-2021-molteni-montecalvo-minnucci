@@ -62,7 +62,7 @@
       <!-- Plugins used for building jar
       command to create the file:
       mvn clean compile assembly:single
-      7ZNGA-->
+      -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>

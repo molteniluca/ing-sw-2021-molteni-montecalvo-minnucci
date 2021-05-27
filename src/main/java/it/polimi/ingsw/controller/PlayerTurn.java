@@ -222,7 +222,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     private boolean buyColumn() throws IOException, FaithOverflowException {
         try {
-            player.getPersonalBoard().buyColumn(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            player.getPersonalBoard().buyColumn(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IndexOutOfBoundsException e) {
@@ -240,7 +240,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     private boolean buyRow() throws IOException, FaithOverflowException {
         try {
-            player.getPersonalBoard().buyRow(clientHandler.receiveObject(int.class), clientHandler.receiveObject(int.class));
+            player.getPersonalBoard().buyRow(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             return false;
         } catch (IndexOutOfBoundsException e) {

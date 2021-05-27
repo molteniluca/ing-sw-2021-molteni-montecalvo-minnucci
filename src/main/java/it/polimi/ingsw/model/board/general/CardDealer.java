@@ -10,10 +10,7 @@ import it.polimi.ingsw.model.resources.Resources;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class CardDealer implements Serializable {
     private Stack<DevelopmentCard>[][] cardMatrix; //STACK
@@ -98,6 +95,16 @@ public class CardDealer implements Serializable {
                     break;
             }
         }
+
+        /*
+        //Shuffles the single stacks
+        for (int i=0; i<ROWS; i++) {
+            for (int k=0; k<COLUMNS; k++) {
+                Collections.shuffle(this.cardMatrix[i][k]);
+            }
+        }
+
+         */
     }
 
 

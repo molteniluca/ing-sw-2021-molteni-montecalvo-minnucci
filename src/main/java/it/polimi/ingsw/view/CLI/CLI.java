@@ -52,18 +52,12 @@ public class CLI extends View {
             {
                 e.printStackTrace();
             }
-
-            finally {
-                showHomepage();
-            }
         }
         gameUpdated = false;
 
-
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
 
-
-        //showHomepage();
+        showHomepage();
         //game.setGameEnded(true);
     }
 
@@ -72,7 +66,7 @@ public class CLI extends View {
      * Initialize the view and performs basilar operations
      */
     @Override
-    public void initializeView(){
+    public void initializeView() {
         welcomeInfo();
 
         askServerInfo();
@@ -87,7 +81,7 @@ public class CLI extends View {
      */
     @Override
     public void showHomepage() {
-        gameUpdated = false;
+        //gameUpdated = false;
         int currentAction = -1;
 
         while (currentAction!=0) {
@@ -105,7 +99,7 @@ public class CLI extends View {
             System.out.println("5) End turn");
             System.out.println("0) Exit game");
 
-            currentAction = integerInput("Select action", 0, 5);
+            currentAction = integerInput("Select action: ", 0, 5);
 
             switch (currentAction){
                 case 1:
@@ -392,7 +386,7 @@ public class CLI extends View {
      * the player is not important because the general board is shared
      * between the players
      */
-    public synchronized void showMarket() {
+    public void showMarket() {
         int currentAction = -1;
         int column;
         int row;
@@ -431,17 +425,15 @@ public class CLI extends View {
             System.out.println("2) Buy row");
             System.out.println("0) Exit");
 
-            currentAction = integerInput("Select action", 0, 2);
+            currentAction = integerInput("Select action: ", 0, 2);
 
             switch (currentAction) {
                 case 1:
-                    column = integerInput("Chose column", 0, market.COLUMNS-1);
+                    column = integerInput("Chose column: ", 0, market.COLUMNS-1);
                     try {
-
                         networkHandler.sendObject(BUYCOLUMN);
                         networkHandler.sendObject(column);
-
-
+                        networkHandler.sendObject(-1); //null effect index
                     }catch (IOException e)
                     {
                         e.printStackTrace();
@@ -449,10 +441,11 @@ public class CLI extends View {
 
                     break;
                 case 2:
-                    row = integerInput("Chose row", 0, market.ROWS-1);
+                    row = integerInput("Chose row: ", 0, market.ROWS-1);
                     try {
-                        networkHandler.sendObject(BUYCOLUMN);
+                        networkHandler.sendObject(BUYROW);
                         networkHandler.sendObject(row);
+                        networkHandler.sendObject(-1); //null effect index
                     }catch (IOException e)
                     {
                         e.printStackTrace();
@@ -476,7 +469,7 @@ public class CLI extends View {
         refresh();
         System.out.println("CARD DEALER:");
 
-        for(int i = 2; i >= 0; i--)
+        for(int i = 0; i <= 2; i++)
         {
             for(int j = 0; j<4; j++)
             {
@@ -490,82 +483,19 @@ public class CLI extends View {
         //Asks the user if it wants to buy a column or a row
         System.out.println("\n1) Buy card");
         System.out.println("0) Exit");
-        currentAction = integerInput("Select action", 0, 1);
+        currentAction = integerInput("Select action: ", 0, 1);
 
         switch (currentAction) {
 
             case 1:
-                int row = integerInput("Chose row", 0, 2);
-                int column = integerInput("Chose column", 0, 3);
+                int row = integerInput("Chose row: ", 0, 2);
+                int column = integerInput("Chose column: ", 0, 3);
                 break;
             case 0:
                 break;
         }
 
 
-    }
-
-    /**
-     * It prints out an ArrayList of cards one by one in the same line
-     * @param cards the array of cards that as to be printed
-     */
-    private void printCards(ArrayList<DevelopmentCard> cards) {
-        //Type of the card
-        System.out.print("\n");
-        for (DevelopmentCard card : cards)
-        {
-            switch (card.getType()){
-                case 'b':
-                    System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET +"\t\t\t\t\t\t\t");
-                    break;
-                case 'g':
-                    System.out.print("Type: " + ANSI_GREEN + "Green" + RESET +"\t\t\t\t\t\t\t");
-                    break;
-                case 'p':
-                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t");
-                    break;
-                case 'y':
-                    System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET +"\t\t\t\t\t\t");
-                    break;
-            }
-        }
-        //Level of the card
-        System.out.print("\n");
-        for (DevelopmentCard card : cards)
-        {
-            System.out.print("Level: "+card.getLevel()+ "\t\t\t\t\t\t\t");
-        }
-
-        //Cost of the card FIXME not well  formatted for all cards
-        System.out.print("\n");
-        for(DevelopmentCard card : cards)
-        {
-            Resources cost = card.getCost();
-            System.out.print("Cost: ");
-            printResources(cost, null);
-            System.out.print("\b\b  \t\t\t\t\t"); //erase the last comma
-
-        }
-
-        //Production cost FIXME not well formatted for all cards
-        System.out.print("\n");
-        for(DevelopmentCard card : cards)
-        {
-            Resources productionCost = card.getProductionCost();
-            System.out.print("Production Cost: ");
-            printResources(productionCost, null);
-            System.out.print("\b\b \t\t\t");
-        }
-
-        //Production power FIXME not well formatted for all cards
-        System.out.print("\n");
-        for(DevelopmentCard card : cards)
-        {
-            Resources productionPower = card.getProductionPower();
-            System.out.print("Production Power: ");
-            printResources(productionPower, "all");
-            System.out.print("\b\b  \t\t\t");
-        }
     }
 
     /**
@@ -632,6 +562,7 @@ public class CLI extends View {
         gameUpdated = true;
     }
 
+    //SUPPORT METHODS
 
     /**
      * It clears the screen printing a clear character
@@ -645,13 +576,11 @@ public class CLI extends View {
      * Method that prints the resources given
      * @param resources the resources that has to be printed
      * @param modality the wat of printing that resources:
-     * 'real' prints only shield, stone, gold and servant is the default value
+     * 'real' prints only shield, stone, gold and servant
      * 'all' prints also faith and blank
      */
-    private void printResources(Resources resources, String modality)
-    {
-        if(modality == null)
-            modality = "real";
+    private int printResources(Resources resources, String modality) {
+        int printedResources=0;
 
         if(modality.equals("real")) {
             for (ResourceTypes res : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) //Only real resources are counted
@@ -659,6 +588,7 @@ public class CLI extends View {
                 int amount = resources.getResourceNumber(res);
                 if (amount > 0) {
                     System.out.print(amount + "" + selectResourceColor(res) + ", ");
+                    printedResources++;
                 }
             }
         }
@@ -669,9 +599,12 @@ public class CLI extends View {
                 int amount = resources.getResourceNumber(res);
                 if (amount > 0) {
                     System.out.print(amount + "" + selectResourceColor(res) + ", ");
+                    printedResources++;
                 }
             }
         }
+        System.out.print("\b\b"); //erase the last comma and the last space
+        return printedResources;
     }
 
     /**
@@ -705,9 +638,108 @@ public class CLI extends View {
     }
 
 
+
+    /**
+     * It prints out an ArrayList of cards one by one in the same line
+     * @param cards the array of cards that as to be printed
+     */
+    private void printCards(ArrayList<DevelopmentCard> cards) {
+        int tabs = 0; //the number of tabs used for formatiing
+
+        //Type of the card
+        System.out.print("\n");
+        for (DevelopmentCard card : cards)
+        {
+            switch (card.getType()){
+                case 'b':
+                    System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET +"\t\t\t\t\t\t\t");
+                    break;
+                case 'g':
+                    System.out.print("Type: " + ANSI_GREEN + "Green" + RESET +"\t\t\t\t\t\t\t");
+                    break;
+                case 'p':
+                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t");
+                    break;
+                case 'y':
+                    System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET +"\t\t\t\t\t\t");
+                    break;
+            }
+        }
+        //Level of the card
+        System.out.print("\n");
+        for (DevelopmentCard card : cards)
+        {
+            System.out.print("Level: "+card.getLevel()+ "\t\t\t\t\t\t\t");
+        }
+
+        //Cost of the card
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources cost = card.getCost();
+            System.out.print("Cost: ");
+            tabs = printResources(cost, "real");
+            switch (tabs){
+                case 1:
+                    System.out.print("\t\t\t\t\t\t\t");
+                    break;
+                case 2:
+                    System.out.print("\t\t\t\t\t");
+                    break;
+                case 3:
+                    System.out.print("\t\t\t\t");
+                    break;
+            }
+
+        }
+
+        //Production cost
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources productionCost = card.getProductionCost();
+            System.out.print("Production Cost: ");
+            tabs = printResources(productionCost, "real");
+
+            switch (tabs){
+                case 1:
+                    System.out.print("\t\t\t\t");
+                    break;
+                case 2:
+                    System.out.print("\t\t\t");
+                    break;
+                case 3:
+                    System.out.print("\t\t");
+                    break;
+            }
+        }
+
+        //Production power
+        System.out.print("\n");
+        for(DevelopmentCard card : cards)
+        {
+            Resources productionPower = card.getProductionPower();
+            System.out.print("Production Power: ");
+            tabs = printResources(productionPower, "all");
+
+            switch (tabs){
+                case 1:
+                    System.out.print("\t\t\t\t");
+                    break;
+                case 2:
+                    System.out.print("\t\t");
+                    break;
+                case 3:
+                    System.out.print("\t");
+                    break;
+            }
+        }
+    }
+
+
     /**
      * Method that returns a correct integer input for a particular request
-     * @param request The string that has to be print, no space or columns are required at the end
+     * @param request The string that has to be print, spaces and columns are required in the string
      * @param min minimum value of the range
      * @param max maximum value of the range
      * @return a correct integer in the range
@@ -716,7 +748,7 @@ public class CLI extends View {
         int value = -1;
         do{
             try{
-                System.out.print(request + ": ");
+                System.out.print(request);
                 value = Integer.parseInt(input.readLine());
                 if(value<min || value> max)
                     throw new NumberFormatException();
