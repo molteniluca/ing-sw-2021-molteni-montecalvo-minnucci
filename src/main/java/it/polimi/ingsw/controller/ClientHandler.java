@@ -118,6 +118,7 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      */
     public synchronized void sendObject(Object o) throws IOException {
+        out.reset();
         out.writeObject(o);
     }
 
@@ -230,7 +231,8 @@ public class ClientHandler extends Thread{
      * Sends the entire game to the client
      */
     public void sendGame() throws IOException {
-        sendObject(getGame());
+        Game g=getGame();
+        sendObject(g);
     }
 
     /**
