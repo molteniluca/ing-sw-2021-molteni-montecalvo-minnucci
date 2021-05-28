@@ -59,10 +59,52 @@
         </configuration>
       </plugin>
 
+
+
+      <!--Jar Plugin-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <id>client-jar</id>
+            <phase>package</phase>
+            <goals>
+            <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>it.polimi.ingsw.Client</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>server-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>it.polimi.ingsw.Server</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+
       <!-- Plugins used for building jar
       command to create the file:
       mvn clean compile assembly:single
-      -->
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -76,6 +118,7 @@
           </descriptorRefs>
         </configuration>
       </plugin>
+      -->
 
     </plugins>
   </build>
