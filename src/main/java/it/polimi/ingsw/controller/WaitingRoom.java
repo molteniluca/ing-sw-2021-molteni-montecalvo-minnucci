@@ -31,8 +31,8 @@ public class WaitingRoom extends Thread{
     }
 
     public void run(){
-        game=new Game(numPlayers, clients, clientsNames, id, this);
         try {
+            game=new Game(numPlayers, clients, clientsNames, id, this);
             game.startGame();
         } catch (IOException e) {
             printDebug("Socket error, a client has disconnected");
