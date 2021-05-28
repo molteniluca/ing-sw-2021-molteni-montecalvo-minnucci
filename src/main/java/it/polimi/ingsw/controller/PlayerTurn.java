@@ -119,12 +119,15 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.toString());
                     }
+                    clientHandler.sendGame();
                     break;
                 case MOVETOSWAP:
                     player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(int.class));
+                    clientHandler.sendGame();
                     break;
                 case DROPRESOURCES:
                     player.getPersonalBoard().dropResources();
+                    clientHandler.sendGame();
                     break;
             }
         }

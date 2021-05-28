@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 /**
@@ -33,6 +34,7 @@ public class Server {
      * @param serverSocket The socket of the server
      */
     private void waitForConnection(ServerSocket serverSocket){
+        printDebug("Server started");
         while(true){
             try {
                 acceptConnection(serverSocket.accept());
@@ -49,4 +51,13 @@ public class Server {
     private void acceptConnection(Socket client){
         new ClientHandler(client,rooms).start();
     }
+
+    /**
+     * Debug method that prints in the server's stdout debug messages regarding the server
+     * @param s The message
+     */
+    private void printDebug(String s){
+        System.out.println(LocalTime.now().toString() + "\t\t" + "SERVER -> "+s);
+    }
+
 }
