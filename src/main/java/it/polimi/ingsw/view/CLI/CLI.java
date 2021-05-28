@@ -2,11 +2,11 @@ package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.NetworkMessages;
-import it.polimi.ingsw.model.board.general.CardDealer;
 import it.polimi.ingsw.model.board.general.Market;
+import it.polimi.ingsw.model.board.personal.CardBoard;
+import it.polimi.ingsw.model.board.personal.PersonalBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
-import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
@@ -31,17 +31,20 @@ import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 /**
  * Concrete class that represent the Command Line interface created by the user
  */
-public class CLI extends View {
+public class CLI extends View{
 
     private static final int MAX_POSITION = 25;
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
     private Game game;
     private boolean gameUpdated = false;
+    private int playerNumber; //the number of the player received before GAMESTARTED
 
     @Override
     public void run(){
+
         initializeView();
+
 
         while(!gameUpdated){
             try {
@@ -56,9 +59,13 @@ public class CLI extends View {
         gameUpdated = false;
 
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
+        playerNumber = (int) waitAndGetResponse();
+        System.out.println(waitAndGetResponse()); //gamestarted
+        while(true) {
+            if(waitAndGetResponse() == TURNBEGIN)
+                showHomepage();
+        }
 
-        showHomepage();
-        //game.setGameEnded(true);
     }
 
 
@@ -84,13 +91,14 @@ public class CLI extends View {
         //gameUpdated = false;
         int currentAction = -1;
 
-        while (currentAction!=0) {
+
+        while ((currentAction!=0) && (currentAction !=5)){
             refresh();
             showLegend();
             showFaithTrack();
+            showCardBoard();
             showStrongbox();
             showWarehouse();
-
 
             System.out.println(RESET + "\n1) Show market");
             System.out.println("2) Show card dealer");
@@ -101,7 +109,7 @@ public class CLI extends View {
 
             currentAction = integerInput("Select action: ", 0, 5);
 
-            switch (currentAction){
+            switch (currentAction) {
                 case 1:
                     showMarket();
                     break;
@@ -109,14 +117,20 @@ public class CLI extends View {
                     showCardDealer();
                     break;
                 case 3:
-                    System.out.println("NOT IMPLEMENTED YET");
+                    showProduce();
                     break;
                 case 4:
                     System.out.println("NOT IMPLEMENTED YET");
                     break;
                 case 5:
-                    System.out.println("NOT IMPLEMENTED YET");
+                    try {
+                        networkHandler.sendObject(TURNEND);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case 0:
+                    System.exit(0);
                     break;
             }
         }
@@ -138,7 +152,7 @@ public class CLI extends View {
      * an already existing game, than send the answer to the server
      */
     @Override
-    public void askCreateOrJoin(){
+    public void askCreateOrJoin() {
         int currentAction = -1;
         int numberOfPlayers;
         String roomId;
@@ -312,7 +326,6 @@ public class CLI extends View {
                 correctInput = true;
                 networkHandler.sendObject(nickname);
                 System.out.println("\nWaiting for players ...");
-                System.out.println(waitAndGetResponse());
                 /*
                Send nickname and receive ack or nack from the server if name is already taken
                throw new NameAlreadyPresentException("Name already present, chose another one");
@@ -329,22 +342,6 @@ public class CLI extends View {
             }
 
         }while(!correctInput);
-    }
-
-    /**
-     * Method that prints the title of the game in ASCIIArt
-     */
-    private void printTitle() {
-        System.out.println(ANSI_YELLOW +
-                "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
-                "8888b   d8888                   888                                           d88P\"       888   Y88b                           Y8P                                                      \n" +
-                "88888b.d88888                   888                                           888         888    888                                                                                    \n" +
-                "888Y88888P888  8888b.  .d8888b  888888 .d88b.  888d888 .d8888b        .d88b.  888888      888   d88P .d88b.  88888b.   8888b.  888 .d8888b  .d8888b   8888b.  88888b.   .d8888b .d88b.  \n" +
-                "888 Y888P 888     \"88b 88K      888   d8P  Y8b 888P\"   88K           d88\"\"88b 888         8888888P\" d8P  Y8b 888 \"88b     \"88b 888 88K      88K          \"88b 888 \"88b d88P\"   d8P  Y8b \n" +
-                "888  Y8P  888 .d888888 \"Y8888b. 888   88888888 888     \"Y8888b.      888  888 888         888 T88b  88888888 888  888 .d888888 888 \"Y8888b. \"Y8888b. .d888888 888  888 888     88888888 \n" +
-                "888   \"   888 888  888      X88 Y88b. Y8b.     888          X88      Y88..88P 888         888  T88b Y8b.     888  888 888  888 888      X88      X88 888  888 888  888 Y88b.   Y8b.     \n" +
-                "888       888 \"Y888888  88888P'  \"Y888 \"Y8888  888      88888P'       \"Y88P\"  888         888   T88b \"Y8888  888  888 \"Y888888 888  88888P'  88888P' \"Y888888 888  888  \"Y8888P \"Y8888  \n" +
-                "                                                                                                                                                                                        \n" + RESET);
     }
 
     /**
@@ -469,6 +466,7 @@ public class CLI extends View {
         refresh();
         System.out.println("CARD DEALER:");
 
+
         for(int i = 0; i <= 2; i++)
         {
             for(int j = 0; j<4; j++)
@@ -480,10 +478,22 @@ public class CLI extends View {
             System.out.print("\n");
         }
 
+        System.out.println();
+        showLegend();
         //Asks the user if it wants to buy a column or a row
         System.out.println("\n1) Buy card");
         System.out.println("0) Exit");
         currentAction = integerInput("Select action: ", 0, 1);
+
+
+        try{
+            networkHandler.sendObject(BUYCARD);
+            //networkHandler.sendObject(row, column, place); //FIXME Place è il posto sulla plancia
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
 
         switch (currentAction) {
 
@@ -510,11 +520,11 @@ public class CLI extends View {
             //Warehouse layout
 
             if(i == 0)
-                System.out.printf("\t");
+                System.out.print("\t");
             else if(i == 1 || i > 2) {
                 if(i == 3)
                     System.out.println("Extra deposit");
-                System.out.printf("  ");
+                System.out.print("  ");
             }
 
             //Warehouse Resources printed
@@ -522,7 +532,7 @@ public class CLI extends View {
                 System.out.println(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i).toString()) + ": " + warehouseDepots.getResourcesNumber(i));
             else {
                 for (int j = 0; j <= i; j++) {
-                    System.out.printf(BLANK + " ");
+                    System.out.print(BLANK + " ");
                 }
                 System.out.print("\n");
             }
@@ -551,6 +561,72 @@ public class CLI extends View {
 
 
     /**
+     * Method that shows the card Board of a player
+     */
+    public void showCardBoard() {
+        CardBoard cardBoard = game.getTurn(0).getPlayer().getPersonalBoard().getCardBoard();
+
+        System.out.println("CARD BOARD");
+        if(cardBoard.getDevelopmentCards().size() == 0)
+            System.out.println(ANSI_GREEN+"There are no development cards"+RESET);
+        else
+            printCards(cardBoard.getDevelopmentCards());
+    }
+
+
+    public void showProduce() {
+        int currentAction;
+
+        refresh();
+        showCardBoard();
+        showStrongbox();
+        showWarehouse();
+
+        PersonalBoard personalBoard = game.getTurn(0).getPlayer().getPersonalBoard();
+        Resources totalResources = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
+
+
+        System.out.println("\n1)Card production");
+        System.out.println("2)Base production");
+        System.out.println("3)Leader card production"); //FIXME appears only if the player has a particular leader card
+        System.out.println("0)Exit");
+        currentAction = integerInput("Select action: ", 0, 3);
+
+        //networkHandler.sendObject(PRODUCTION);
+
+        switch (currentAction) {
+            case 1:
+                int currentCard;
+                currentCard = integerInput("Select card: ", 0, 3);
+                //FIXME send resources and check if the production is possible
+                break;
+            case 2:
+                int firstResource, secondResource, productionResult;
+                System.out.println(ANSI_GREEN+"\nYou can produce one generic resource (except faith) using 2 resources"+RESET);
+                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                firstResource = integerInput("Select first resource: ", 1,4);
+                secondResource = integerInput("Select second resource: ",1,4);
+                productionResult = integerInput("Select production result: ",1,4);
+                //FIXME send resources and than check if you can produce
+                break;
+            case 3:
+                //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
+                //FIXME only if the player has one or two leader cards with the extraProduction effect
+                System.out.println("Leader card effect, NOT IMPLEMENTED YET");
+                System.out.println("1)Activate leader effect one");
+                System.out.println("2)Activate leader effect two");
+                integerInput("Select action: ", 0,2);
+                //FIXME send action and receive effects
+                break;
+            case 0:
+                break;
+        }
+    }
+
+
+    //SUPPORT METHODS
+
+    /**
      * Method that sets the game when it is updated. Called by the NetworkHandler if
      * a game object is received
      * @param game the new game received from the server
@@ -562,7 +638,8 @@ public class CLI extends View {
         gameUpdated = true;
     }
 
-    //SUPPORT METHODS
+
+
 
     /**
      * It clears the screen printing a clear character
@@ -570,6 +647,23 @@ public class CLI extends View {
     private void refresh() {
         System.out.print(ColorCLI.CLEAR);
         System.out.flush();
+    }
+
+
+    /**
+     * Method that prints the title of the game in ASCIIArt
+     */
+    private void printTitle() {
+        System.out.println(ANSI_YELLOW +
+                "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
+                "8888b   d8888                   888                                           d88P\"       888   Y88b                           Y8P                                                      \n" +
+                "88888b.d88888                   888                                           888         888    888                                                                                    \n" +
+                "888Y88888P888  8888b.  .d8888b  888888 .d88b.  888d888 .d8888b        .d88b.  888888      888   d88P .d88b.  88888b.   8888b.  888 .d8888b  .d8888b   8888b.  88888b.   .d8888b .d88b.  \n" +
+                "888 Y888P 888     \"88b 88K      888   d8P  Y8b 888P\"   88K           d88\"\"88b 888         8888888P\" d8P  Y8b 888 \"88b     \"88b 888 88K      88K          \"88b 888 \"88b d88P\"   d8P  Y8b \n" +
+                "888  Y8P  888 .d888888 \"Y8888b. 888   88888888 888     \"Y8888b.      888  888 888         888 T88b  88888888 888  888 .d888888 888 \"Y8888b. \"Y8888b. .d888888 888  888 888     88888888 \n" +
+                "888   \"   888 888  888      X88 Y88b. Y8b.     888          X88      Y88..88P 888         888  T88b Y8b.     888  888 888  888 888      X88      X88 888  888 888  888 Y88b.   Y8b.     \n" +
+                "888       888 \"Y888888  88888P'  \"Y888 \"Y8888  888      88888P'       \"Y88P\"  888         888   T88b \"Y8888  888  888 \"Y888888 888  88888P'  88888P' \"Y888888 888  888  \"Y8888P \"Y8888  \n" +
+                "                                                                                                                                                                                        \n" + RESET);
     }
 
     /**
@@ -603,7 +697,7 @@ public class CLI extends View {
                 }
             }
         }
-        System.out.print("\b\b"); //erase the last comma and the last space
+        System.out.print("\b\b"); //FIXME erase the last comma and the last space but does not work in terminal
         return printedResources;
     }
 
@@ -644,7 +738,7 @@ public class CLI extends View {
      * @param cards the array of cards that as to be printed
      */
     private void printCards(ArrayList<DevelopmentCard> cards) {
-        int tabs = 0; //the number of tabs used for formatiing
+        int tabs; //the number of tabs used for formatiing
 
         //Type of the card
         System.out.print("\n");
