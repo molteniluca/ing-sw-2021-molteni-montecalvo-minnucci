@@ -1,15 +1,14 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.controller.Server;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class Server
 {
     public static void main( String[] args )
     {
-        new Server(10000);
+        new it.polimi.ingsw.controller.Server(10000);
     }
 }

@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 
@@ -26,7 +27,7 @@ public class CardDealer implements Serializable {
         //Can't define Arrays of typed lists
         //Read from the JsonFile of cards
         Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new FileReader(ClassLoader.getSystemResource("json/developmentCards.json").getPath()));
+        JsonReader reader = new JsonReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("json/developmentCards.json")));
         List<DevelopmentCard> data = gson.fromJson(reader,  new TypeToken<ArrayList<DevelopmentCard>>(){}.getType());
 
 

@@ -143,12 +143,8 @@ public class Game implements Serializable {
                 .create();
 
         JsonReader reader = null;
-        try {
-            reader = new JsonReader(new FileReader(ClassLoader.getSystemResource("json/leaderCards.json").getPath()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        reader = new JsonReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("json/leaderCards.json")));
+
 
         return gson.fromJson(reader,  new TypeToken<ArrayList<LeaderCard>>(){}.getType());
     }
