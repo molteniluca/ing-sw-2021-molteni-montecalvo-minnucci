@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.Discount;
+import it.polimi.ingsw.model.cards.specialAbility.ExtraProduction;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
@@ -13,6 +14,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class PersonalBoard implements Serializable {
     private final FaithTrack faithTrack;
@@ -98,6 +101,15 @@ public class PersonalBoard implements Serializable {
     }
 
     /**
+     * Checks if a card can be utilized for production
+     * @param card Card to check
+     * @return True if you can produce and false if not
+     */
+    public boolean checkProduce(DevelopmentCard card){
+        return deposit.checkRemoveResource(handleDiscount(card.getProductionCost()));
+    }
+
+    /**
      * This method produces resources using a development card
      * @param cardIndex The development card
      * @throws UnusableCardException In case the ard is not contained in the visible part of the board
@@ -151,12 +163,14 @@ public class PersonalBoard implements Serializable {
     }
 
     /**
-     * Checks if a card can be utilized for production
-     * @param card Card to check
-     * @return True if you can produce and false if not
+     * This method checks whether you can produce using this production
+     * @param resource1 The first resource in input
+     * @param resource2 The second resource in input
+     * @param output The resource in output
+     * @return True if possible and false if not
      */
-    public boolean checkProduce(DevelopmentCard card){
-        return deposit.checkRemoveResource(handleDiscount(card.getProductionCost()));
+    public boolean checkProduce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output){
+        return deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).set(resource2,1)));
     }
 
     /**
@@ -185,6 +199,17 @@ public class PersonalBoard implements Serializable {
         else{
             throw new NegativeResourceValueException("There are not enough resources to make the production");
         }
+    }
+
+    /**
+     * Checks if the leader effect is active and if you have enough resources to make this production
+     * @param resource1 The input resource
+     * @param output The output resource
+     * @return True if possible and false if not
+     */
+    public boolean checkProduce(ResourceTypes resource1, ResourceTypes output){
+        return this.getLeaderBoard().getProductionEffects().stream().anyMatch(extraProduction -> extraProduction.getProductionCost()==resource1) &&
+                deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1)));
     }
 
     /**
@@ -342,5 +367,102 @@ public class PersonalBoard implements Serializable {
      */
     public void dropResources() throws FaithOverflowException {
         this.faithTrack.dropResources(this.deposit.getWarehouseDepots().removeFromSwap());
+    }
+
+
+
+
+
+    /* This section handles the same turn production */
+
+    private Resources availableResources;
+    private Stream<ExtraProduction> availableProductions;
+    private boolean prod1;
+    private boolean[] prod2;
+
+    /**
+     * This method initializes the production
+     */
+    public void initProduce() {
+        availableProductions = this.getLeaderBoard().getProductionEffects().stream();
+        availableResources = deposit.getTotalResources();
+        prod1 = true;
+        prod2 = new boolean[]{true, true, true};
+    }
+
+    /**
+     * Checks if the leader effect is active and produces faith and the specified resource in output
+     * @param resource1 The input resource
+     * @param output The output resource
+     */
+    public void enqueueProduce(ResourceTypes resource1, ResourceTypes output) throws UnusableCardException, NegativeResourceValueException, FaithOverflowException {
+        if(checkProduce(resource1,output)){
+            ExtraProduction match;
+            try {
+                 match = availableProductions.filter(extraProduction -> extraProduction.getProductionCost()==resource1).findFirst().get();
+                 availableProductions=availableProductions.filter(extraProduction -> extraProduction != match);
+                try {
+                    availableResources = availableResources.sub(new Resources().set(resource1,1));
+                    produce(resource1,output);
+                } catch (NegativeResourceValueException e) {
+                    throw new NegativeResourceValueException("Can't produce, not enough resources");
+                }
+            }catch( NoSuchElementException e){
+                throw new UnusableCardException("Can't produce using this card");
+            }
+
+        }else
+            throw new UnusableCardException("Can't produce using this card");
+    }
+
+    /**
+     * Produces resources using the default production
+     * @param resource1 The first resource in input
+     * @param resource2 The second resource in input
+     * @param output The resource in output
+     */
+    public void enqueueProduce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
+        if(availableResources.isSubPositive(handleDiscount(new Resources().set(resource1,1).set(resource2,1)))&& prod1){
+            try {
+                availableResources = availableResources.sub(handleDiscount(new Resources().set(resource1,1).set(resource2,1)));
+            } catch (NegativeResourceValueException e) {
+                e.printStackTrace();
+            }
+            produce(resource1,resource2,output);
+            prod1=false;
+        }
+        else{
+            throw new NegativeResourceValueException("There are not enough resources to make the production");
+        }
+    }
+
+    /**
+     * This method produces resources using a development card
+     * @param cardIndex The development card
+     * @throws UnusableCardException In case the ard is not contained in the visible part of the board
+     * @throws FaithOverflowException In case a card returns too much faith
+     */
+    public void enqueueProduce(int cardIndex) throws UnusableCardException, FaithOverflowException, NegativeResourceValueException {
+        if(prod2[cardIndex]) {
+            DevelopmentCard card = cardBoard.getUpperDevelopmentCards()[cardIndex];
+            if (checkProduce(card)) {
+                Resources cost = handleDiscount(card.getProductionCost());
+                if (availableResources.isSubPositive(cost)) {
+                    try {
+                        availableResources = availableResources.sub(cost);
+                    } catch (NegativeResourceValueException e) {
+                        e.printStackTrace();
+                    }
+                    produce(card);
+                    prod2[cardIndex]=false;
+                }
+                else
+                    throw new NegativeResourceValueException("Can't produce, not enough resources");
+            }
+            else
+                throw new NegativeResourceValueException("Can't produce, not enough resources");
+        }
+        else
+            throw new UnusableCardException("Can't produce, card already used");
     }
 }

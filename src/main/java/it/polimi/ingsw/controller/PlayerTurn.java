@@ -3,9 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
@@ -58,10 +60,8 @@ public class PlayerTurn implements Turn, Serializable {
         error=true;
         while(error){
             switch(action){
-                case PROD1:
-                case PROD2:
-                case PROD3:
-                    error = activateProduction(action);
+                case PRODUCTION:
+                    error = activateProduction();
                     break;
                 case BUYCOLUMN:
                     error = buyColumn();
@@ -172,49 +172,53 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean activateProduction(NetworkMessages message) throws IOException {
-        boolean error=true;
-        switch (message) {
-            case PROD1:
-                try {
-                    player.getPersonalBoard().produce(clientHandler.receiveObject(ResourceTypes.class),
-                            clientHandler.receiveObject(ResourceTypes.class),
-                            clientHandler.receiveObject(ResourceTypes.class)
-                    );
-                    error=false;
-                } catch (NegativeResourceValueException | FaithOverflowException e) {
+    private boolean activateProduction() throws IOException {
+        player.getPersonalBoard().initProduce();
+        boolean error = true;
+        while(true) {
+            NetworkMessages message = clientHandler.receiveMessage();
+            switch (message) {
+                case PROD1:
+                    try {
+                        player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(ResourceTypes.class),
+                                clientHandler.receiveObject(ResourceTypes.class),
+                                clientHandler.receiveObject(ResourceTypes.class)
+                        );
+                        error = false;
+                    } catch (NegativeResourceValueException | FaithOverflowException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    }
+                    break;
+                case PROD2:
+                    try {
+                        player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
+                        error = false;
+                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    }
+                    break;
+                case PROD3:
+                    try {
+                        player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(ResourceTypes.class),
+                                clientHandler.receiveObject(ResourceTypes.class)
+                        );
+                        error = false;
+                    } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    }
+                    break;
+                case ENDPRODUCTION:
+                    clientHandler.sendObject(SUCCESS);
+                    return error;
+                default:
                     clientHandler.sendObject(ERROR);
-                    clientHandler.sendObject(e.toString());
-                }
-                break;
-            case PROD2:
-                try {
-                    player.getPersonalBoard().produce(clientHandler.receiveObject(Integer.class));
-                    error=false;
-                } catch (UnusableCardException | FaithOverflowException e) {
-                    clientHandler.sendObject(ERROR);
-                    clientHandler.sendObject(e.toString());
-                }
-                break;
-            case PROD3:
-                try {
-                    player.getPersonalBoard().produce(clientHandler.receiveObject(ResourceTypes.class),
-                            clientHandler.receiveObject(ResourceTypes.class)
-                    );
-                    error=false;
-                } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
-                    clientHandler.sendObject(ERROR);
-                    clientHandler.sendObject(e.toString());
-                }
-                break;
-            default:
-                clientHandler.sendObject(ERROR);
-                clientHandler.sendObject("Expecting a production action");
-                error=true;
+                    clientHandler.sendObject("Expecting a production action");
+                    return true;
+            }
         }
-        if(!error)
-            clientHandler.sendObject(SUCCESS);
-        return error;
     }
 
     /**

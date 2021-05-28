@@ -102,4 +102,25 @@ public class WarehouseDepots implements Serializable {
     public void addLevel(Level level){
         warehouseDepots.add(level);
     }
+
+    /**
+     * This method removes resources from the warehouse depots levels
+     * @param sub The resources to be removed
+     * @throws NegativeResourceValueException In case the operation goes wrong
+     */
+    public void removeResources(Resources sub) throws NegativeResourceValueException {
+        for(Level l : warehouseDepots){
+            int num = sub.getResourceNumber(l.getResourceType());
+            num = Math.min(num,l.getResourceNumber());
+
+            try {
+                l.removeResources(num,l.getResourceType());
+            } catch (LevelTooSmallException e) {
+                e.printStackTrace();
+            } catch (TypeNotChangeableException e) {
+                e.printStackTrace();
+            }
+            sub = sub.sub(new Resources().set(l.getResourceType(), num));
+        }
+    }
 }
