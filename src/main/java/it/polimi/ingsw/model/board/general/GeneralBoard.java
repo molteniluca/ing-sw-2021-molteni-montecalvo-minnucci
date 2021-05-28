@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 public class GeneralBoard implements Serializable {
     private final Market market;
-    private transient final Lorenzo lorenzo;
     private final CardDealer cardDealer;
     private transient final FaithObserver faithObserver;
 
@@ -26,16 +25,11 @@ public class GeneralBoard implements Serializable {
             System.exit(-1);
         }
         cardDealer = temp;
-        this.lorenzo = new Lorenzo();
         this.faithObserver = new FaithObserver();
     }
 
     public Market getMarket() {
         return market;
-    }
-
-    public Lorenzo getLorenzo() {
-        return lorenzo;
     }
 
     public CardDealer getCardDealer() {

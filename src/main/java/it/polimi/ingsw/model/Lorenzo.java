@@ -1,5 +1,7 @@
-package it.polimi.ingsw.model.board.general;
+package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.board.general.ActionTokens;
+import it.polimi.ingsw.model.board.general.FaithObserver;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 
 import java.io.Serializable;

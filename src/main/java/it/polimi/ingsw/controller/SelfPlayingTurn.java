@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.board.general.ActionTokens;
-import it.polimi.ingsw.model.board.general.Lorenzo;
+import it.polimi.ingsw.model.Lorenzo;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.io.Serializable;
