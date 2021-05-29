@@ -51,14 +51,12 @@ public class Game implements Serializable {
         ArrayList<LeaderCard>[] leaderCardsInHand = getStartingLeaders();
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
-            clients.get(i).sendObject(playerCount);
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
             turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom, playerCount));
             playerCount++;
         }
 
         for(int i=0; i<inkwellPlayer; i++){
-            clients.get(i).sendObject(playerCount);
             players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
             turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom, playerCount));
             playerCount++;

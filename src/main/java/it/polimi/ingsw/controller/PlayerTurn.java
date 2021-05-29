@@ -289,6 +289,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     public void startGame() throws IOException {
         clientHandler.sendGame();
+        clientHandler.sendObject(playerNum);
         switch (playerNum){
             case 1:
                 while(true) {
@@ -337,8 +338,10 @@ public class PlayerTurn implements Turn, Serializable {
             default:
                 break;
         }
+        clientHandler.sendGame();
 
         player.getPersonalBoard().getLeaderBoard().selectLeaders(clientHandler.receiveObject(Integer[].class));
+        clientHandler.sendGame();
 
         clientHandler.sendObject(GAMESTARTED);
     }
