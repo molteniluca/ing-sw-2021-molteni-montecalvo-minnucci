@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.CardBoard;
 import it.polimi.ingsw.model.board.personal.PersonalBoard;
@@ -20,7 +20,7 @@ import java.util.regex.*;
 
 import java.io.*;
 
-import static it.polimi.ingsw.controller.NetworkMessages.*;
+import static it.polimi.ingsw.network.NetworkMessages.*;
 import static it.polimi.ingsw.model.resources.ResourceTypes.GOLD;
 import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
 import static it.polimi.ingsw.model.resources.ResourceTypes.SHIELD;

@@ -1,7 +1,8 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.controller.exceptions.FullRoomException;
-import static it.polimi.ingsw.controller.NetworkMessages.*;
+import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.network.exceptions.FullRoomException;
+import static it.polimi.ingsw.network.NetworkMessages.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -99,7 +100,7 @@ public class ClientHandler extends Thread{
                 if(read.getClass() != c){
                     sendObject(ERROR);
                     sendObject("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
-                    printDebug("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
+                    printDebug("Unexpected object, expecting:"+c+", but got:"+read.getClass());
                     read = null;
                 }
             } catch (ClassNotFoundException e) {
@@ -134,7 +135,7 @@ public class ClientHandler extends Thread{
                 id = randomizeId();
             waitingRooms.put(id,new WaitingRoom(numPlayers,id));
 
-            printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers).toString());
+            printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers));
 
             sendObject(SUCCESS);
             sendObject(id);

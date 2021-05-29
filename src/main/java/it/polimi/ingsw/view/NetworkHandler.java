@@ -1,14 +1,14 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.controller.NetworkMessages;
+import it.polimi.ingsw.network.NetworkMessages;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static it.polimi.ingsw.controller.NetworkMessages.*;
+import static it.polimi.ingsw.network.NetworkMessages.*;
 
 
 public class NetworkHandler extends Thread{

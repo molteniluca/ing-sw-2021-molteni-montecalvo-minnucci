@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.exceptions;
+package it.polimi.ingsw.network.exceptions;
 
 public class FullRoomException extends Exception {
     public FullRoomException(String s) {

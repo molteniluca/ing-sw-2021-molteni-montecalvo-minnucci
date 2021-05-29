@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
 import java.io.IOException;
 import java.util.Timer;

@@ -4,12 +4,15 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
+import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.NetworkMessages;
+import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.EmptyStackException;
 
-import static it.polimi.ingsw.controller.NetworkMessages.*;
+import static it.polimi.ingsw.network.NetworkMessages.*;
 
 
 /**

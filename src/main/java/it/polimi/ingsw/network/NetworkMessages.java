@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network;
 
 public enum NetworkMessages {
     SUCCESS,ERROR,FULLROOMERROR,UNKNOWNIDERROR,CREATEGAME,JOINGAME,HEARTBEAT,TURNBEGIN,TURNEND,GAMESTARTED,
