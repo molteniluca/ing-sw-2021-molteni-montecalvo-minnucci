@@ -99,22 +99,21 @@ public class FaithTrack implements Serializable {
      * @throws FaithOverflowException In case the faith goes out of bounds
      */
     public void incrementPosition(int increment) throws FaithOverflowException {
-        if(position+increment>24)
-            throw new FaithOverflowException("Trying to exceed faith boundaries");
         this.position+=increment;
-        switch(this.position){
-            case 8:
-                if(this.faithCards[0]==0)
-                    this.faithObserver.notify(0);
-                break;
-            case 16:
-                if(this.faithCards[1]==0)
+
+        if(this.position>=8){
+            if(this.faithCards[0]==0)
+                this.faithObserver.notify(0);
+
+            if(this.position>=16) {
+                if (this.faithCards[1] == 0)
                     this.faithObserver.notify(1);
-                break;
-            case 24:
-                if(this.faithCards[2]==0)
+
+                if (this.position >= 24) {
                     this.faithObserver.notify(2);
-                break;
+                    throw new FaithOverflowException("Trying to exceed faith boundaries");
+                }
+            }
         }
     }
 
