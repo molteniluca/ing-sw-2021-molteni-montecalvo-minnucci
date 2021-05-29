@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.exceptions.WinException;
 
 import java.io.*;
@@ -62,7 +63,7 @@ public class Game implements Serializable {
         }
 
         if(numPlayers==1){
-            turns.add(new SelfPlayingTurn());
+            turns.add(new SelfPlayingTurn(generalBoard));
         }
     }
 
@@ -104,24 +105,62 @@ public class Game implements Serializable {
             turn.startGame();
         }
 
+        if(numPlayers!=1)
+            multiplePlayerGame();
+        else
+            singlePlayerGame();
+    }
+
+    /**
+     * Executes a single player game
+     * @throws IOException In case a client disconnects
+     */
+    private void singlePlayerGame() throws IOException {
         while(!gameEnded){
             for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
                 try {
                     turns.get(currentPlayer).beginTurn();
-                } catch (FaithOverflowException | WinException | EmptyStackException e) {
+                } catch (FaithOverflowException e) {
+                    gameEnded=true;
+                    turns.get(0).endGame(currentPlayer==0);
+                } catch (NotEnoughCardException | EmptyStackException e) {
+                    gameEnded=true;
+                    turns.get(0).endGame(false);
+                } catch (WinException e) {
+                    gameEnded=true;
+                    turns.get(0).endGame(true);
+                }
+            }
+        }
+    }
+
+    /**
+     * Starts a multiple player game
+     * @throws IOException In case a client disconnects
+     */
+    private void multiplePlayerGame() throws IOException {
+        while(!gameEnded){
+            for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
+                try {
+                    turns.get(currentPlayer).beginTurn();
+                } catch (FaithOverflowException | WinException | EmptyStackException | NotEnoughCardException e) {
                     gameEnded=true;
                 }
             }
         }
 
-        ArrayList<Integer> victoryPoints=getAllVictoryPoints();
+        ArrayList<Integer> victoryPoints = getAllVictoryPoints();
         int maxValue = Collections.max(victoryPoints);
 
-        for(int i=0; i<numPlayers; i++){
+        for (int i = 0; i < numPlayers; i++) {
             turns.get(i).endGame(maxValue == victoryPoints.get(i));
         }
     }
 
+    /**
+     * Gets all the victory points from the players
+     * @return A list with all the victory points
+     */
     private ArrayList<Integer> getAllVictoryPoints(){
         ArrayList<Integer> points= new ArrayList<>();
         for (Turn turn : turns){
@@ -147,8 +186,7 @@ public class Game implements Serializable {
                 .registerTypeAdapterFactory(abilityAdapterFactory)
                 .create();
 
-        JsonReader reader = null;
-        reader = new JsonReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("json/leaderCards.json")));
+        JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("json/leaderCards.json"))));
 
 
         return gson.fromJson(reader,  new TypeToken<ArrayList<LeaderCard>>(){}.getType());

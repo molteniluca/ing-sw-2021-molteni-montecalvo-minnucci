@@ -1,46 +1,33 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.board.general.ActionTokens;
 import it.polimi.ingsw.model.Lorenzo;
-import jdk.jshell.spi.ExecutionControl;
+import it.polimi.ingsw.model.board.general.GeneralBoard;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 
 import java.io.Serializable;
 
+/**
+ * This class represents a Lorenzo il Magnifico's turn
+ */
 public class SelfPlayingTurn implements Turn, Serializable {
-    private Lorenzo lorenzo;
+    private final Lorenzo lorenzo;
 
-    public void beginTurn(){
-
+    public SelfPlayingTurn(GeneralBoard generalBoard){
+        lorenzo = new Lorenzo(generalBoard);
     }
 
-    private ActionTokens drawToken()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
+    public void beginTurn() throws FaithOverflowException, NotEnoughCardException {
+        lorenzo.play();
     }
 
-    private void discardDevelopment(ActionTokens actionTokens)throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
-    }
-
-    private void incrementFaithPosition(int increment)throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
-    }
-
-    private void shuffle()throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("NON IMPLEMENTATO");
-    }
-
-    @Override
     public void startGame(){
-
     }
 
-    @Override
     public int getVictoryPoints(){
-        return 0;
+        return lorenzo.getVictoryPoints();
     }
 
-    @Override
     public void endGame(boolean winner) {
-
     }
 }
