@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class LeaderBoard implements Serializable {
     private final ArrayList<LeaderCard> leaderCards;
-    private final ArrayList<LeaderCard> leaderCardsInHand;
+    private ArrayList<LeaderCard> leaderCardsInHand;
     private transient final PersonalBoard personalBoard;
     private int victoryPoints = 0;
 
@@ -74,6 +74,18 @@ public class LeaderBoard implements Serializable {
      */
     public void discardLeader (int leaderIndex) throws IndexOutOfBoundsException{
         discardLeader(leaderCardsInHand.get(leaderIndex));
+    }
+
+    /**
+     * This method selects the leader cards to be maintained
+     * @param leaderIndexes LeaderCard indexes to be maintained
+     */
+    public void selectLeaders (Integer []leaderIndexes) throws IndexOutOfBoundsException{
+        ArrayList<LeaderCard> tmp = new ArrayList<>();
+        for(Integer i : leaderIndexes){
+            tmp.add(leaderCardsInHand.get(i));
+        }
+        leaderCardsInHand = tmp;
     }
 
     /**
