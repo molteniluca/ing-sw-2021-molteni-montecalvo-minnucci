@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.controller.NetworkMessages.*;
@@ -20,11 +19,13 @@ public class PlayerTurn implements Turn, Serializable {
     private final Player player;
     private final transient ClientHandler clientHandler;
     private final transient WaitingRoom waitingRoom;
+    private final transient int playerNum;
 
-    public PlayerTurn(Player player, ClientHandler clientHandler, WaitingRoom waitingRoom){
+    public PlayerTurn(Player player, ClientHandler clientHandler, WaitingRoom waitingRoom, int playerNum){
         this.waitingRoom = waitingRoom;
         this.player = player;
         this.clientHandler = clientHandler;
+        this.playerNum = playerNum;
     }
 
     public Player getPlayer() {
@@ -284,6 +285,54 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the communication with the client goes wrong
      */
     public void startGame() throws IOException {
+        switch (playerNum){
+            case 1:
+                while(true) {
+                    try {
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        handleSwap();
+                        break;
+                    } catch (FaithNotAllowedException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    } catch (FaithOverflowException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case 2:
+                while(true) {
+                    try {
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        player.getPersonalBoard().getFaithTrack().incrementPosition(1);
+                        handleSwap();
+                        break;
+                    } catch (FaithNotAllowedException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    } catch (FaithOverflowException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case 3:
+                while(true) {
+                    try {
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        player.getPersonalBoard().getFaithTrack().incrementPosition(1);
+                        handleSwap();
+                        break;
+                    } catch (FaithNotAllowedException e) {
+                        clientHandler.sendObject(ERROR);
+                        clientHandler.sendObject(e.toString());
+                    } catch (FaithOverflowException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
         clientHandler.sendObject(GAMESTARTED);
         clientHandler.sendGame();
     }
