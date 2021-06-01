@@ -473,7 +473,7 @@ public class CLI extends View{
             else {
                 System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
                 System.out.println("0) Exit");
-                integerInput("Select action: ", 0, 0);
+                currentAction = integerInput("Select action: ", 0, 0);
             }
         }
     }
