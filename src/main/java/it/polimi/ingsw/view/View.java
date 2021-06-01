@@ -10,6 +10,7 @@ import java.util.Queue;
 
 public abstract class View extends Thread{
     public final Queue<Object> messages = new LinkedList<>(); //List of received messages
+    protected boolean gameUpdated=false;
 
     public abstract void initializeView();
 
@@ -36,8 +37,29 @@ public abstract class View extends Thread{
         }
     }
 
+    public void notifyNewGame(Game game){
+        updateObjects(game);
+        gameUpdated=true;
+        synchronized (this) {
+            this.notify();
+        }
+    }
+
     public abstract void updateObjects(Game game);
 
+    /**
+     * Suspend the view thread in wait for a new game object
+     */
+    protected void waitForUpdatedGame() {
+        gameUpdated=false;
+        while (!gameUpdated){
+            try{
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Suspend the view thread if there are no messages,
@@ -52,7 +74,6 @@ public abstract class View extends Thread{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }
         return messages.remove();

@@ -49,7 +49,7 @@ public class NetworkHandler extends Thread{
                     }
                 }
                 if(read.getClass() == Game.class) {
-                    view.updateObjects((Game) read);
+                    view.notifyNewGame((Game) read);
                     read=null;
                 }
             } catch (ClassNotFoundException e) {
