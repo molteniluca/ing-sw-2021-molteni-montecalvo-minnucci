@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -24,7 +25,7 @@ public abstract class View extends Thread{
 
     public abstract void showFaithTrack();
 
-    public abstract void showWarehouse();
+    public abstract void showWarehouse(WarehouseDepots warehouseDepots);
 
     public abstract void showStrongbox();
 

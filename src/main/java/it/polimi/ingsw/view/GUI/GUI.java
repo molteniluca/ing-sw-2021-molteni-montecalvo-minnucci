@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.view.View;
 
 public class GUI extends View {
@@ -46,7 +47,7 @@ public class GUI extends View {
     }
 
     @Override
-    public void showWarehouse() {
+    public void showWarehouse(WarehouseDepots warehouseDepots) {
 
     }
 
