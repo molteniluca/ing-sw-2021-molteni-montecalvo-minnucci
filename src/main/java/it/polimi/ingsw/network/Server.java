@@ -43,7 +43,8 @@ public class Server {
             try {
                 acceptConnection(serverSocket.accept());
             } catch (IOException e) {
-                System.out.println("Connection to the client failed:" + e.getMessage());
+                if(!serverSocket.isClosed())
+                    System.out.println("Connection to the client failed:" + e.getMessage());
             }
         }
     }
@@ -80,4 +81,17 @@ public class Server {
         System.out.println(LocalTime.now().toString().substring(0,14) + "\t\t" + "SERVER -> "+s);
     }
 
+    public static void main( String[] args )
+    {
+        if(args.length==0)
+            new Server(10000);
+        else {
+            if (args[0].equals("-h"))
+                System.out.println("Usage: ./executable PORT");
+            else if (args[0].matches("\\d+")) {
+                new Server(Integer.parseInt(args[0]));
+            } else
+                System.out.println("Wrong parameters, '-h' for help");
+        }
+    }
 }
