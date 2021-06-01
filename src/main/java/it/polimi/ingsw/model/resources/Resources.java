@@ -172,4 +172,16 @@ public class Resources implements Serializable {
         }
         return total;
     }
+
+    /**
+     * This method checks whether a resource is empty
+     * @return True if empty and false if not
+     */
+    public boolean isEmpty(){
+        int total=0;
+        for (ResourceTypes res : ResourceTypes.values()) {
+            total+=this.resourceMap.get(res);
+        }
+        return total==0;
+    }
 }
