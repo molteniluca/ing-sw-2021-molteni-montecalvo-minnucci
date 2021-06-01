@@ -40,13 +40,4 @@ public class StrongBox implements Serializable {
     public void removeResource(Resources resources) throws NegativeResourceValueException {
         this.resources=this.resources.sub(resources);
     }
-
-    /**
-     * Checks weather there is the amount required of resources
-     * @param resource The amount of resources to check
-     * @return Returns true weather there is the amount required of resources and false if not
-     */
-    public boolean isAvailableSpace(Resources resource){
-        return this.resources.isSubPositive(resource);
-    }
 }
