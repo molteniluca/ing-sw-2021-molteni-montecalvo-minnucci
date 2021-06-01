@@ -11,6 +11,7 @@ import java.io.Serializable;
  * Class that represents the storage box
  */
 public class StrongBox implements Serializable {
+    private static final long serialVersionUID = 6732146736278436292L;
     private Resources resources;
 
     public StrongBox(){

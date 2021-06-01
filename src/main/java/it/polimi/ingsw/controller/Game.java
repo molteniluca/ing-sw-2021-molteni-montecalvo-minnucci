@@ -23,6 +23,7 @@ import java.util.*;
  * Class that represents an entire game
  */
 public class Game implements Serializable {
+    public static final long serialVersionUID = 6732146736278436274L;
     private final ArrayList<Turn> turns = new ArrayList<>();
     private final String id;
     private final int  numPlayers;

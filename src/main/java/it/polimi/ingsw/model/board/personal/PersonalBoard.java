@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 public class PersonalBoard implements Serializable {
+    private static final long serialVersionUID = 6732146736278436290L;
     private final FaithTrack faithTrack;
     private final Deposit deposit;
     private final CardBoard cardBoard;

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 public class GeneralBoard implements Serializable {
+    private static final long serialVersionUID = 6732146736278436298L;
     private final Market market;
     private final CardDealer cardDealer;
     private transient final FaithObserver faithObserver;

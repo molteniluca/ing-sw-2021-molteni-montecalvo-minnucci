@@ -10,6 +10,7 @@ import java.io.Serializable;
  * Class that represents the faith of a player
  */
 public class FaithTrack implements Serializable {
+    private static final long serialVersionUID = 6732146736278436288L;
     private final int[] faithCards;
     private int position;
     private transient final FaithObserver faithObserver;

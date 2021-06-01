@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
+    private static final long serialVersionUID = 6732146736278436277L;
     private final String name;
     private final boolean hasInkwell;
     private final PersonalBoard personalBoard;

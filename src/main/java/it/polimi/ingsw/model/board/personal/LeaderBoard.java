@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * Class that represents a board containing the leader cards
  */
 public class LeaderBoard implements Serializable {
+    private static final long serialVersionUID = 6732146736278436289L;
     private final ArrayList<LeaderCard> leaderCards;
     private ArrayList<LeaderCard> leaderCardsInHand;
     private transient final PersonalBoard personalBoard;

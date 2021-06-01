@@ -19,6 +19,7 @@ import static it.polimi.ingsw.network.NetworkMessages.*;
  * This class represents a turn, for each player there's a turn
  */
 public class PlayerTurn implements Turn, Serializable {
+    private static final long serialVersionUID = 6732146736278436272L;
     private final Player player;
     private final transient ClientHandler clientHandler;
     private final transient WaitingRoom waitingRoom;

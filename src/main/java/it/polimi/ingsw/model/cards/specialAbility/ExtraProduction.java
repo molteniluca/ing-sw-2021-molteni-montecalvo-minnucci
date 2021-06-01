@@ -10,6 +10,7 @@ import java.io.Serializable;
  * available, player can decide to use it or not)
  */
 public class ExtraProduction implements SpecialAbility, Serializable {
+    private static final long serialVersionUID = 6732146736278436283L;
     private final ResourceTypes productionCost;
 
     /**

@@ -15,6 +15,7 @@ import java.util.Collections;
  * Class that represents lorenzo (the single player game opponent)
  */
 public class Lorenzo implements Serializable {
+    private static final long serialVersionUID = 6732146736278436276L;
     private final FaithTrack faithTrack;
     private int positionToken;
     private final ArrayList<ActionTokens> actionTokens;

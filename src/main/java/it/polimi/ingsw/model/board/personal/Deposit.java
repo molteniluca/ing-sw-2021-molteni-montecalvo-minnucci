@@ -11,6 +11,7 @@ import java.io.Serializable;
  * Class that represents the resources storing area
  */
 public class Deposit implements Serializable {
+    private static final long serialVersionUID = 6732146736278436287L;
     private final WarehouseDepots warehouseDepots;
     private final StrongBox strongBox;
 

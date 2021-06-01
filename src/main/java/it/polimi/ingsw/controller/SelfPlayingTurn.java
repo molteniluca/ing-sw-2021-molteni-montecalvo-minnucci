@@ -11,6 +11,7 @@ import java.io.Serializable;
  * This class represents a Lorenzo il Magnifico's turn
  */
 public class SelfPlayingTurn implements Turn, Serializable {
+    private static final long serialVersionUID = 6732146736278436273L;
     private final Lorenzo lorenzo;
 
     public SelfPlayingTurn(GeneralBoard generalBoard){

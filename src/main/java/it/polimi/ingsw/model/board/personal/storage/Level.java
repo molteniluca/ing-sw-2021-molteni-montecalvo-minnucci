@@ -12,6 +12,7 @@ import java.io.Serializable;
  * Class that represents a level of storage
  */
 public class Level implements Serializable {
+    private static final long serialVersionUID = 6732146736278436291L;
     private ResourceTypes resourceType;
     private int resourceNumber;
     private final boolean fixedResource;

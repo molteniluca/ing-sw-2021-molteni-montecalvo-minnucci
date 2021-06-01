@@ -8,6 +8,7 @@ import java.io.Serializable;
  * A specialAbility that discounts the cost of purchasable DevelopmentCard
  */
 public class Discount implements SpecialAbility, Serializable {
+    private static final long serialVersionUID = 6732146736278436281L;
     private final ResourceTypes resourceDiscount;
 
     /**

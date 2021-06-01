@@ -10,6 +10,7 @@ import static it.polimi.ingsw.model.resources.ResourceTypes.*;
  * Class that represents a quantity of resources.
  */
 public class Resources implements Serializable {
+    private static final long serialVersionUID = 6732146736278436275L;
     private final HashMap<ResourceTypes,Integer> resourceMap;
 
     /**

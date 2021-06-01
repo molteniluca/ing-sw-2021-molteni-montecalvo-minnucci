@@ -6,6 +6,7 @@ package it.polimi.ingsw.model.cards.specialAbility;
  * are all classes attribute to this Interface, connect with LeaderCard abstract class
  */
 public interface SpecialAbility{
+    static final long serialVersionUID = 6732146736278436285L;
     default Discount applyDiscount() {return null;}
 
     default ExtraDeposit applyExtraDeposit() {return null;}

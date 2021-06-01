@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 public class ObjectUpdate {
+    private static final long serialVersionUID = 6732146736278436200L;
     private Object object;
     private int player;
 

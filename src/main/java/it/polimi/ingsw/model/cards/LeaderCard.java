@@ -10,6 +10,7 @@ import java.util.List;
  * LeaderCard is a subclass of Card, it has a special effect available only after obtain certain requirements
  */
 public class LeaderCard extends Card implements Serializable {
+    private static final long serialVersionUID = 6732146736278436281L;
     private Resources resourceRequirements;
     private DevelopmentCardRequirement developmentCardRequirementWithLevel;
     private List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor;

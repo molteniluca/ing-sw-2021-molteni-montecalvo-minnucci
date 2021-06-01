@@ -9,6 +9,7 @@ import java.io.Serializable;
  *  A specialAbility that gives a resource instead of white marble in the market when you get one of them
  */
 public class ExtraResource implements SpecialAbility, Serializable {
+    private static final long serialVersionUID = 6732146736278436284L;
     private final ResourceTypes resource;
 
     /**

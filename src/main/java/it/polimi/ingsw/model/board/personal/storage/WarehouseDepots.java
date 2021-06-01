@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Class that represents the multilevel storage type
  */
 public class WarehouseDepots implements Serializable {
+    private static final long serialVersionUID = 6732146736278436295L;
     private final ArrayList<Level> warehouseDepots;
     private Resources swapDeposit;
 

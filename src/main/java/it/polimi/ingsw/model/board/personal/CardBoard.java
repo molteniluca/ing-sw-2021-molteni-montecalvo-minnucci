@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Class that represent a production deck of a player
  */
 public class CardBoard implements Serializable {
+    private static final long serialVersionUID = 6732146736278436286L;
     private final ArrayList<DevelopmentCard>[] productionCards;
     private int numberOfCards=0;
 

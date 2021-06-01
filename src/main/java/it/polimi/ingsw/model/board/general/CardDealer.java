@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class CardDealer implements Serializable {
+    private static final long serialVersionUID = 6732146736278436296L;
     private Stack<DevelopmentCard>[][] cardMatrix; //STACK
     private final int ROWS = 3;
     private final int COLUMNS = 4;

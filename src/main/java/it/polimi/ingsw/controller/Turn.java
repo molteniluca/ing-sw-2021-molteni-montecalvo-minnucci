@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.exceptions.WinException;
 import java.io.IOException;
 
 public interface Turn {
+    static final long serialVersionUID = 6732146736278436271L;
+
     void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException;
 
     void startGame() throws IOException;

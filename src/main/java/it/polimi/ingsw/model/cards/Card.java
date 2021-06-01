@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Abstract Class of Card, DevelopmentCard and LeaderCard are subclasses of Card
  */
 public abstract class Card implements Serializable {
+    private static final long serialVersionUID = 6732146736278436278L;
 
     private final int victoryPoint;
     private boolean isSelected;

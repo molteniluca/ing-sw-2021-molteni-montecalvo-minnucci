@@ -7,6 +7,7 @@ import java.io.Serializable;
  * to activate LeaderCard.
  */
 public class DevelopmentCardRequirement implements Serializable {
+    private static final long serialVersionUID = 6732146736278436280L;
     private final char type;
     private int level;
 

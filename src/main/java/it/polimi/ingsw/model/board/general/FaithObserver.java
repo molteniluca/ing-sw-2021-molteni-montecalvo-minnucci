@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Class implementing the pattern observer to notify all faith tracks when a player reaches a faith zone
  */
-public class FaithObserver implements Serializable {
+public class FaithObserver{
     ArrayList<FaithTrack> tracks;
 
     public FaithObserver(){

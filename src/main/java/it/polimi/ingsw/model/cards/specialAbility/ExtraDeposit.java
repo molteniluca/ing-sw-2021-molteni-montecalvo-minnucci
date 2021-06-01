@@ -9,6 +9,7 @@ import java.io.Serializable;
  * Player can fill it with resources that he already have in other level of depot.
  */
 public class ExtraDeposit implements SpecialAbility, Serializable {
+    private static final long serialVersionUID = 6732146736278436282L;
     private final ResourceTypes resourceType;
 
     /**
