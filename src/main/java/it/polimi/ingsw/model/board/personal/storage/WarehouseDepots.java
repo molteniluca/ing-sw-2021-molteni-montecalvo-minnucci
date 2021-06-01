@@ -33,7 +33,7 @@ public class WarehouseDepots implements Serializable {
     public void addResourceSwap(Resources resource) throws FaithNotAllowedException {
         if(resource.getResourceNumber(ResourceTypes.FAITH)!=0)
             throw new FaithNotAllowedException("Faith not allowed in the storage");
-        swapDeposit.add(resource);
+        swapDeposit = swapDeposit.add(resource);
     }
 
     /**
