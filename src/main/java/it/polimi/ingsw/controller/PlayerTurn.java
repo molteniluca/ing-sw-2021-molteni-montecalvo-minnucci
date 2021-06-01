@@ -83,6 +83,9 @@ public class PlayerTurn implements Turn, Serializable {
                     error = buyDevelopmentCard();
                     clientHandler.sendGame();
                     break;
+                default:
+                    clientHandler.sendObject(ERROR);
+                    clientHandler.sendObject("You must complete at lest one action");
             }
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
