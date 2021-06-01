@@ -135,8 +135,8 @@ public class PlayerTurn implements Turn, Serializable {
                     clientHandler.sendGame();
                     break;
             }
+            clientHandler.sendObject(SUCCESS);
         }
-        clientHandler.sendObject(SUCCESS);
     }
 
     /**
