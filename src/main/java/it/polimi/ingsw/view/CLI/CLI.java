@@ -1145,45 +1145,51 @@ public class CLI extends View{
         System.out.print("\n");
         for (DevelopmentCard card : cards)
         {
-            switch (card.getType()){
-                case 'b':
-                    System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET +"\t\t\t\t\t\t\t");
-                    break;
-                case 'g':
-                    System.out.print("Type: " + ANSI_GREEN + "Green" + RESET +"\t\t\t\t\t\t\t");
-                    break;
-                case 'p':
-                    System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET +"\t\t\t\t\t\t");
-                    break;
-                case 'y':
-                    System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET +"\t\t\t\t\t\t");
-                    break;
+            if(card!=null) {
+                switch (card.getType()) {
+                    case 'b':
+                        System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET + "\t\t\t\t\t\t\t");
+                        break;
+                    case 'g':
+                        System.out.print("Type: " + ANSI_GREEN + "Green" + RESET + "\t\t\t\t\t\t\t");
+                        break;
+                    case 'p':
+                        System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET + "\t\t\t\t\t\t");
+                        break;
+                    case 'y':
+                        System.out.print("Type: " + ANSI_YELLOW + "Yellow" + RESET + "\t\t\t\t\t\t");
+                        break;
+                }
             }
         }
         //Level of the card
         System.out.print("\n");
         for (DevelopmentCard card : cards)
         {
-            System.out.print("Level: "+card.getLevel()+ "\t\t\t\t\t\t\t");
+            if(card!=null) {
+                System.out.print("Level: " + card.getLevel() + "\t\t\t\t\t\t\t");
+            }
         }
 
         //Cost of the card
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
-            Resources cost = card.getCost();
-            System.out.print("Cost: ");
-            tabs = printResources(cost, "real");
-            switch (tabs){
-                case 1:
-                    System.out.print("\t\t\t\t\t\t\t");
-                    break;
-                case 2:
-                    System.out.print("\t\t\t\t\t");
-                    break;
-                case 3:
-                    System.out.print("\t\t\t\t");
-                    break;
+            if(card!=null) {
+                Resources cost = card.getCost();
+                System.out.print("Cost: ");
+                tabs = printResources(cost, "real");
+                switch (tabs) {
+                    case 1:
+                        System.out.print("\t\t\t\t\t\t\t");
+                        break;
+                    case 2:
+                        System.out.print("\t\t\t\t\t");
+                        break;
+                    case 3:
+                        System.out.print("\t\t\t\t");
+                        break;
+                }
             }
 
         }
@@ -1192,20 +1198,22 @@ public class CLI extends View{
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
-            Resources productionCost = card.getProductionCost();
-            System.out.print("Production Cost: ");
-            tabs = printResources(productionCost, "real");
+            if(card!=null) {
+                Resources productionCost = card.getProductionCost();
+                System.out.print("Production Cost: ");
+                tabs = printResources(productionCost, "real");
 
-            switch (tabs){
-                case 1:
-                    System.out.print("\t\t\t\t");
-                    break;
-                case 2:
-                    System.out.print("\t\t\t");
-                    break;
-                case 3:
-                    System.out.print("\t\t");
-                    break;
+                switch (tabs) {
+                    case 1:
+                        System.out.print("\t\t\t\t");
+                        break;
+                    case 2:
+                        System.out.print("\t\t\t");
+                        break;
+                    case 3:
+                        System.out.print("\t\t");
+                        break;
+                }
             }
         }
 
@@ -1213,22 +1221,25 @@ public class CLI extends View{
         System.out.print("\n");
         for(DevelopmentCard card : cards)
         {
-            Resources productionPower = card.getProductionPower();
-            System.out.print("Production Power: ");
-            tabs = printResources(productionPower, "all");
+            if(card!=null) {
+                Resources productionPower = card.getProductionPower();
+                System.out.print("Production Power: ");
+                tabs = printResources(productionPower, "all");
 
-            switch (tabs){
-                case 1:
-                    System.out.print("\t\t\t\t");
-                    break;
-                case 2:
-                    System.out.print("\t\t");
-                    break;
-                case 3:
-                    System.out.print("\t");
-                    break;
+                switch (tabs) {
+                    case 1:
+                        System.out.print("\t\t\t\t");
+                        break;
+                    case 2:
+                        System.out.print("\t\t");
+                        break;
+                    case 3:
+                        System.out.print("\t");
+                        break;
+                }
             }
         }
+
     }
 
 
