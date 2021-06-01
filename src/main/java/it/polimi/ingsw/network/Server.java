@@ -23,13 +23,15 @@ public class Server {
         rooms=new HashMap<>();
         this.port=port;
 
-        Runtime.getRuntime().addShutdownHook(new Thread(this::closeServer));
 
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.out.println("Can't bind on this port!");
+            return;
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(this::closeServer));
 
         waitForConnections();
     }
