@@ -664,6 +664,30 @@ public class CLI extends View{
     //SUPPORT METHODS
 
     /**
+     * Method that returns resourceTypes associated to number: 1 = GOLD, 2 = SERVANT, 3 = SHIELD, 4 = STONE
+     * @param number number from input that you want to convert in resourceTypes
+     * @return resourceTypes associated to the number passed
+     */
+    private ResourceTypes NumberToResourceType(int number){
+        ResourceTypes resourceType = null;
+        switch (number) {
+            case 1:
+                resourceType = GOLD;
+                break;
+            case 2:
+                resourceType = SERVANT;
+                break;
+            case 3:
+                resourceType = SHIELD;
+                break;
+            case 4:
+                resourceType = STONE;
+                break;
+        }
+        return resourceType;
+    }
+
+    /**
      * Method that sets the game when it is updated. Called by the NetworkHandler if
      * a game object is received
      * @param game the new game received from the server
