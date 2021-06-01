@@ -191,7 +191,7 @@ public class PlayerTurn implements Turn, Serializable {
                         );
                         clientHandler.sendObject(SUCCESS);
                         error = false;
-                    } catch (NegativeResourceValueException | FaithOverflowException e) {
+                    } catch (NegativeResourceValueException | FaithOverflowException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.toString());
                     }
@@ -201,7 +201,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
                         clientHandler.sendObject(SUCCESS);
                         error = false;
-                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException e) {
+                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.toString());
                     }
@@ -213,7 +213,7 @@ public class PlayerTurn implements Turn, Serializable {
                         );
                         clientHandler.sendObject(SUCCESS);
                         error = false;
-                    } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
+                    } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.toString());
                     }
