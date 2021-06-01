@@ -45,7 +45,6 @@ public class CLI extends View{
 
         initializeView();
 
-
         while(!gameUpdated){
             try {
                 synchronized (this) { //FIXME synchronized should be 'this'?
@@ -60,6 +59,20 @@ public class CLI extends View{
 
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
         playerNumber = (int) waitAndGetResponse();
+
+        //Asks the player the resources he wants depending on the playerNumber
+        selectInitialResources();
+
+        //FIXME, it has to be a method that selects the leader cards and than sends them
+        {
+            Integer[] leaders = {1,2};
+            try {
+                networkHandler.sendObject(leaders);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN)
@@ -358,7 +371,7 @@ public class CLI extends View{
     @Override
     public void showFaithTrack() {
         //To add position received from Server
-        int position = game.getTurn(1).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
+        int position = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
         System.out.println("\nFAITH TRACK");
         for(int i =0; i< MAX_POSITION; i++) {
@@ -388,7 +401,7 @@ public class CLI extends View{
         int column;
         int row;
 
-        Market market = game.getTurn(0).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
 
         ResourceTypes[][] marketMatrix;
         ResourceTypes externalResource;
@@ -461,7 +474,7 @@ public class CLI extends View{
     public void showCardDealer() {
         int currentAction;
         ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
-        Stack<DevelopmentCard>[][] cardMatrix = game.getTurn(0).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
+        Stack<DevelopmentCard>[][] cardMatrix = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
 
         refresh();
         System.out.println("CARD DEALER:");
@@ -488,7 +501,7 @@ public class CLI extends View{
 
         try{
             networkHandler.sendObject(BUYCARD);
-            //networkHandler.sendObject(row, column, place); //FIXME Place è il posto sulla plancia
+            //networkHandler.sendObject(row, column, place); //FIXME Place it's the place on the cardBoard
         }catch (IOException e)
         {
             e.printStackTrace();
@@ -514,7 +527,7 @@ public class CLI extends View{
     @Override
     public void showWarehouse() {
         System.out.println("WAREHOUSE");
-        WarehouseDepots warehouseDepots = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
         for(int i = 0; i < warehouseDepots.getNumberLevels(); i++){
             //Warehouse layout
@@ -544,7 +557,7 @@ public class CLI extends View{
      */
     @Override
     public void showStrongbox() {
-        StrongBox strongBox = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
+        StrongBox strongBox = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
         int i = 0;
 
@@ -564,7 +577,7 @@ public class CLI extends View{
      * Method that shows the card Board of a player
      */
     public void showCardBoard() {
-        CardBoard cardBoard = game.getTurn(0).getPlayer().getPersonalBoard().getCardBoard();
+        CardBoard cardBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard();
 
         System.out.println("CARD BOARD");
         if(cardBoard.getDevelopmentCards().size() == 0)
@@ -582,8 +595,8 @@ public class CLI extends View{
         showStrongbox();
         showWarehouse();
 
-        PersonalBoard personalBoard = game.getTurn(0).getPlayer().getPersonalBoard();
-        Resources totalResources = game.getTurn(0).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
+        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
+        Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
 
 
         System.out.println("\n1)Card production");
@@ -732,6 +745,117 @@ public class CLI extends View{
     }
 
 
+    /**
+     * Depending on the number of the player allows the user to
+     * select the initial resources they want and sends them to the server
+     */
+    private void selectInitialResources() {
+        int currentAction, secondCurrentAction, sameChoice;
+        Resources selectedResources = new Resources();
+
+        switch(playerNumber){
+            case 0:
+                break;
+
+            case 1:
+                System.out.println(ANSI_GREEN+"\nYou can have one resource"+RESET);
+                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                currentAction = integerInput("Select resource: ", 1, 4);
+
+                try{
+                    switch (currentAction)
+                    {
+                        case 1:
+                            networkHandler.sendObject(GOLD);
+
+                            break;
+                        case 2:
+                            networkHandler.sendObject(SERVANT);
+                            break;
+                        case 3:
+                            networkHandler.sendObject(SHIELD);
+                            break;
+                        case 4:
+                            networkHandler.sendObject(STONE);
+                            break;
+                    }
+                }catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                break;
+
+            case 2:
+                System.out.println(ANSI_GREEN+"\nYou can have one resource and one faith point"+RESET);
+                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                currentAction = integerInput("Select resource: ", 1, 4);
+                try{
+                    switch (currentAction)
+                    {
+                        case 1:
+                            networkHandler.sendObject(GOLD);
+                            break;
+                        case 2:
+                            networkHandler.sendObject(SERVANT);
+                            break;
+                        case 3:
+                            networkHandler.sendObject(SHIELD);
+                            break;
+                        case 4:
+                            networkHandler.sendObject(STONE);
+                            break;
+                    }
+                }catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+
+            case 3:
+                System.out.println(ANSI_GREEN+"\nYou can have two resources and one faith point"+RESET);
+                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                currentAction = integerInput("Select first resource: ", 1, 4);
+                secondCurrentAction = integerInput("Select second resource: ", 1,4);
+                try{
+                    switch (currentAction)
+                    {
+                        case 1:
+                            networkHandler.sendObject(GOLD);
+                            break;
+                        case 2:
+                            networkHandler.sendObject(SERVANT);
+                            break;
+                        case 3:
+                            networkHandler.sendObject(SHIELD);
+                            break;
+                        case 4:
+                            networkHandler.sendObject(STONE);
+                            break;
+                    }
+                    switch (secondCurrentAction)
+                    {
+                        case 1:
+                            networkHandler.sendObject(GOLD);
+                            break;
+                        case 2:
+                            networkHandler.sendObject(SERVANT);
+                            break;
+                        case 3:
+                            networkHandler.sendObject(SHIELD);
+                            break;
+                        case 4:
+                            networkHandler.sendObject(STONE);
+                            break;
+                    }
+
+                }catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
 
     /**
      * It prints out an ArrayList of cards one by one in the same line
