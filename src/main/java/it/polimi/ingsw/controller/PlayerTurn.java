@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;
@@ -80,12 +81,11 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
                 case BUYCARD:
                     error = buyDevelopmentCard();
+                    clientHandler.sendGame();
                     break;
             }
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
-
-        clientHandler.sendGame();
 
         error=true;
         while((action== ACTIVATELEADER || action==DISCARDLEADER) && error && leaderAction){
@@ -190,6 +190,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         error = false;
                     } catch (NegativeResourceValueException | FaithOverflowException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
@@ -200,6 +201,7 @@ public class PlayerTurn implements Turn, Serializable {
                     try {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         error = false;
                     } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
@@ -212,6 +214,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         error = false;
                     } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);

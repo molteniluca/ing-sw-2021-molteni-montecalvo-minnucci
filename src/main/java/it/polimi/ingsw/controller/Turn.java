@@ -5,8 +5,9 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.exceptions.WinException;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public interface Turn {
+public interface Turn extends Serializable {
     static final long serialVersionUID = 6732146736278436271L;
 
     void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException;

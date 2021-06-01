@@ -181,9 +181,9 @@ public class PersonalBoard implements Serializable {
      * @param output The resource in output
      */
     public void produce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
-        if(deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).set(resource2,1)))){
+        if(deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))))){
             try {
-                deposit.removeResources(handleDiscount(new Resources().set(resource1,1).set(resource2,1)));
+                deposit.removeResources(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
             } catch (NegativeResourceValueException e) {
                 e.printStackTrace();
             }
@@ -377,7 +377,7 @@ public class PersonalBoard implements Serializable {
     /* This section handles the same turn production */
 
     private Resources availableResources;
-    private Stream<ExtraProduction> availableProductions;
+    private ArrayList<ExtraProduction> availableProductions;
     private boolean prod1;
     private boolean[] prod2;
 
@@ -385,7 +385,7 @@ public class PersonalBoard implements Serializable {
      * This method initializes the production
      */
     public void initProduce() {
-        availableProductions = this.getLeaderBoard().getProductionEffects().stream();
+        availableProductions = this.getLeaderBoard().getProductionEffects();
         availableResources = deposit.getTotalResources();
         prod1 = true;
         prod2 = new boolean[]{true, true, true};
@@ -400,8 +400,8 @@ public class PersonalBoard implements Serializable {
         if(checkProduce(resource1,output)){
             ExtraProduction match;
             try {
-                 match = availableProductions.filter(extraProduction -> extraProduction.getProductionCost()==resource1).findFirst().get();
-                 availableProductions=availableProductions.filter(extraProduction -> extraProduction != match);
+                 match = availableProductions.stream().filter(extraProduction -> extraProduction.getProductionCost()==resource1).findFirst().get();
+                 availableProductions.remove(match);
                 try {
                     availableResources = availableResources.sub(new Resources().set(resource1,1));
                     produce(resource1,output);
@@ -423,9 +423,9 @@ public class PersonalBoard implements Serializable {
      * @param output The resource in output
      */
     public void enqueueProduce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
-        if(availableResources.isSubPositive(handleDiscount(new Resources().set(resource1,1).set(resource2,1)))&& prod1){
+        if(availableResources.isSubPositive(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))))&& prod1){
             try {
-                availableResources = availableResources.sub(handleDiscount(new Resources().set(resource1,1).set(resource2,1)));
+                availableResources = availableResources.sub(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
             } catch (NegativeResourceValueException e) {
                 e.printStackTrace();
             }
