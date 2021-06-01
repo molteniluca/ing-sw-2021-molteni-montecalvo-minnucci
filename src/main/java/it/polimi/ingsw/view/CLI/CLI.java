@@ -38,6 +38,7 @@ public class CLI extends View{
     private NetworkHandler networkHandler;
     private Game game;
     private boolean gameUpdated = false;
+    private boolean actionDone = false; //says if a main action (produce, market, cardDealer) is already done
     private int playerNumber; //the number of the player received before GAMESTARTED
 
     @Override
@@ -75,8 +76,10 @@ public class CLI extends View{
 
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
-            if(waitAndGetResponse() == TURNBEGIN)
+            if(waitAndGetResponse() == TURNBEGIN) {
+                actionDone = false;
                 showHomepage();
+            }
         }
 
     }
@@ -390,7 +393,6 @@ public class CLI extends View{
         System.out.print("\n");
     }
 
-
     /**
      * Method that prints the market matrix and the external resource
      * the player is not important because the general board is shared
@@ -407,7 +409,7 @@ public class CLI extends View{
         ResourceTypes externalResource;
 
         //Prints the market matrix
-        while(currentAction != 0) {
+        while(currentAction!=0) {
             refresh();
             showLegend();
 
@@ -431,38 +433,47 @@ public class CLI extends View{
             showWarehouse();
 
             //Asks the user if it wants to buy a column or a row
-            System.out.println("\n1) Buy column");
-            System.out.println("2) Buy row");
-            System.out.println("0) Exit");
+            if(!actionDone) {
+                System.out.println("\n1) Buy column");
+                System.out.println("2) Buy row");
+                System.out.println("0) Exit");
 
-            currentAction = integerInput("Select action: ", 0, 2);
+                currentAction = integerInput("Select action: ", 0, 2);
 
-            switch (currentAction) {
-                case 1:
-                    column = integerInput("Chose column: ", 0, market.COLUMNS-1);
-                    try {
-                        networkHandler.sendObject(BUYCOLUMN);
-                        networkHandler.sendObject(column);
-                        networkHandler.sendObject(-1); //null effect index
-                    }catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
+                switch (currentAction) {
+                    case 1:
+                        column = integerInput("Chose column: ", 0, market.COLUMNS - 1);
+                        try {
+                            networkHandler.sendObject(BUYCOLUMN);
+                            networkHandler.sendObject(column);
+                            networkHandler.sendObject(-1); //null effect index
+                            market.buyColumn(column); //modify the local copy of the market in order to see the action
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        actionDone = true;
+                        break;
+                    case 2:
+                        row = integerInput("Chose row: ", 0, market.ROWS - 1);
+                        try {
+                            networkHandler.sendObject(BUYROW);
+                            networkHandler.sendObject(row);
+                            networkHandler.sendObject(-1); //null effect index
+                            market.buyRow(row); //modify the local copy of the market in order to see the action
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        actionDone = true;
+                        break;
+                    case 0:
+                        break;
+                }
+            }
 
-                    break;
-                case 2:
-                    row = integerInput("Chose row: ", 0, market.ROWS-1);
-                    try {
-                        networkHandler.sendObject(BUYROW);
-                        networkHandler.sendObject(row);
-                        networkHandler.sendObject(-1); //null effect index
-                    }catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 0:
-                    break;
+            else {
+                System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
+                System.out.println("0) Exit");
+                integerInput("Select action: ", 0, 0);
             }
         }
     }
@@ -494,30 +505,36 @@ public class CLI extends View{
         System.out.println();
         showLegend();
         //Asks the user if it wants to buy a column or a row
-        System.out.println("\n1) Buy card");
-        System.out.println("0) Exit");
-        currentAction = integerInput("Select action: ", 0, 1);
+        if(!actionDone) {
+            System.out.println("\n1) Buy card");
+            System.out.println("0) Exit");
+            currentAction = integerInput("Select action: ", 0, 1);
+
+            try {
+                networkHandler.sendObject(BUYCARD);
+                //networkHandler.sendObject(row, column, place); //FIXME Place it's the place on the cardBoard
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-        try{
-            networkHandler.sendObject(BUYCARD);
-            //networkHandler.sendObject(row, column, place); //FIXME Place it's the place on the cardBoard
-        }catch (IOException e)
+            switch (currentAction) {
+
+                case 1:
+                    int row = integerInput("Chose row: ", 0, 2);
+                    int column = integerInput("Chose column: ", 0, 3);
+                    actionDone = true;
+                    break;
+                case 0:
+                    break;
+            }
+        }
+        else
         {
-            e.printStackTrace();
+            System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
+            System.out.println("0) Exit");
+            integerInput("Select action: ", 0, 0);
         }
-
-
-        switch (currentAction) {
-
-            case 1:
-                int row = integerInput("Chose row: ", 0, 2);
-                int column = integerInput("Chose column: ", 0, 3);
-                break;
-            case 0:
-                break;
-        }
-
 
     }
 
@@ -598,42 +615,49 @@ public class CLI extends View{
         PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
         Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
 
+        if(!actionDone) {
+            System.out.println("\n1)Card production");
+            System.out.println("2)Base production");
+            System.out.println("3)Leader card production"); //FIXME appears only if the player has a particular leader card
+            System.out.println("0)Exit");
+            currentAction = integerInput("Select action: ", 0, 3);
 
-        System.out.println("\n1)Card production");
-        System.out.println("2)Base production");
-        System.out.println("3)Leader card production"); //FIXME appears only if the player has a particular leader card
-        System.out.println("0)Exit");
-        currentAction = integerInput("Select action: ", 0, 3);
+            //networkHandler.sendObject(PRODUCTION);
 
-        //networkHandler.sendObject(PRODUCTION);
-
-        switch (currentAction) {
-            case 1:
-                int currentCard;
-                currentCard = integerInput("Select card: ", 0, 3);
-                //FIXME send resources and check if the production is possible
-                break;
-            case 2:
-                int firstResource, secondResource, productionResult;
-                System.out.println(ANSI_GREEN+"\nYou can produce one generic resource (except faith) using 2 resources"+RESET);
-                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-                firstResource = integerInput("Select first resource: ", 1,4);
-                secondResource = integerInput("Select second resource: ",1,4);
-                productionResult = integerInput("Select production result: ",1,4);
-                //FIXME send resources and than check if you can produce
-                break;
-            case 3:
-                //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
-                //FIXME only if the player has one or two leader cards with the extraProduction effect
-                System.out.println("Leader card effect, NOT IMPLEMENTED YET");
-                System.out.println("1)Activate leader effect one");
-                System.out.println("2)Activate leader effect two");
-                integerInput("Select action: ", 0,2);
-                //FIXME send action and receive effects
-                break;
-            case 0:
-                break;
+            switch (currentAction) {
+                case 1:
+                    int currentCard;
+                    currentCard = integerInput("Select card: ", 0, 3);
+                    //FIXME send resources and check if the production is possible
+                    break;
+                case 2:
+                    int firstResource, secondResource, productionResult;
+                    System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
+                    System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                    firstResource = integerInput("Select first resource: ", 1, 4);
+                    secondResource = integerInput("Select second resource: ", 1, 4);
+                    productionResult = integerInput("Select production result: ", 1, 4);
+                    //FIXME send resources and than check if you can produce
+                    break;
+                case 3:
+                    //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
+                    //FIXME only if the player has one or two leader cards with the extraProduction effect
+                    System.out.println("Leader card effect, NOT IMPLEMENTED YET");
+                    System.out.println("1)Activate leader effect one");
+                    System.out.println("2)Activate leader effect two");
+                    integerInput("Select action: ", 0, 2);
+                    //FIXME send action and receive effects
+                    break;
+                case 0:
+                    break;
+            }
         }
+        else {
+            System.out.println(ANSI_GREEN+"You already did a basic action"+RESET);
+            System.out.println("0) Exit");
+            integerInput("Select action: ", 0, 0);
+        }
+
     }
 
 
@@ -679,6 +703,7 @@ public class CLI extends View{
                 "                                                                                                                                                                                        \n" + RESET);
     }
 
+
     /**
      * Method that prints the resources given
      * @param resources the resources that has to be printed
@@ -713,6 +738,7 @@ public class CLI extends View{
         System.out.print("\b\b"); //FIXME erase the last comma and the last space but does not work in terminal
         return printedResources;
     }
+
 
     /**
      * Method that associates a ResourceType to a ColoredResources
@@ -753,6 +779,7 @@ public class CLI extends View{
         int currentAction, secondCurrentAction, sameChoice;
         Resources selectedResources = new Resources();
 
+        refresh();
         switch(playerNumber){
             case 0:
                 break;
@@ -856,6 +883,7 @@ public class CLI extends View{
                 break;
         }
     }
+
 
     /**
      * It prints out an ArrayList of cards one by one in the same line
@@ -978,6 +1006,7 @@ public class CLI extends View{
 
         return value;
     }
+
 
     /**
      * It notifies the user about a wrong input
