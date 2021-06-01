@@ -71,14 +71,9 @@ public class WarehouseDepotsTest extends TestCase {
             assert true;
         }
 
-        try {
-            wd.moveToLevel(1,ResourceTypes.SERVANT,1);
-        } catch (TypeNotChangeableException | NegativeResourceValueException | LevelTooSmallException e) {
-            e.printStackTrace();
-        }
 
 
-        assert wd.getResources().equals(new Resources().set(ResourceTypes.GOLD,2).set(ResourceTypes.SERVANT,1).set(ResourceTypes.STONE,2));
+        assert wd.getResources().equals(new Resources().set(ResourceTypes.GOLD,2).set(ResourceTypes.STONE,2));
 
 
     }
