@@ -189,6 +189,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
+                        clientHandler.sendObject(SUCCESS);
                         error = false;
                     } catch (NegativeResourceValueException | FaithOverflowException e) {
                         clientHandler.sendObject(ERROR);
@@ -198,6 +199,7 @@ public class PlayerTurn implements Turn, Serializable {
                 case PROD2:
                     try {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
+                        clientHandler.sendObject(SUCCESS);
                         error = false;
                     } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException e) {
                         clientHandler.sendObject(ERROR);
@@ -209,6 +211,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
+                        clientHandler.sendObject(SUCCESS);
                         error = false;
                     } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
                         clientHandler.sendObject(ERROR);
