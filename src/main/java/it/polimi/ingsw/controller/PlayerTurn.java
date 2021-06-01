@@ -299,6 +299,7 @@ public class PlayerTurn implements Turn, Serializable {
                 while(true) {
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        clientHandler.sendObject(SUCCESS);
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -314,6 +315,7 @@ public class PlayerTurn implements Turn, Serializable {
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
+                        clientHandler.sendObject(SUCCESS);
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -329,6 +331,7 @@ public class PlayerTurn implements Turn, Serializable {
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).set(clientHandler.receiveObject(ResourceTypes.class), 1));
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
+                        clientHandler.sendObject(SUCCESS);
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -347,6 +350,7 @@ public class PlayerTurn implements Turn, Serializable {
         player.getPersonalBoard().getLeaderBoard().selectLeaders(clientHandler.receiveObject(Integer[].class));
         clientHandler.sendGame();
 
+        clientHandler.sendObject(SUCCESS);
         clientHandler.sendObject(GAMESTARTED);
     }
 

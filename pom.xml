@@ -41,6 +41,11 @@
       <artifactId>gson-extras</artifactId>
       <version>0.2.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>15.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -58,7 +63,6 @@
           <target>11</target>
         </configuration>
       </plugin>
-
 
 
       <!--Jar Plugin-->
