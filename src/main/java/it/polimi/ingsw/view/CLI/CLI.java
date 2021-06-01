@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
 import it.polimi.ingsw.model.cards.LeaderCard;
+import it.polimi.ingsw.model.cards.specialAbility.SpecialAbility;
 import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
 import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
 import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
@@ -19,9 +20,7 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.*;
 
 import java.io.*;
@@ -72,10 +71,10 @@ public class CLI extends View{
 
         //FIXME, it has to be a method that selects the leader cards and than sends them
         {
-            Integer[] leaders = {1,2};
+            Integer[] leaders = {0,2};
             try {
                 networkHandler.sendObject(leaders);
-               // if(waitAndGetResponse()!=SUCCESS)
+                // if(waitAndGetResponse()!=SUCCESS)
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -145,7 +144,7 @@ public class CLI extends View{
                     showProduce();
                     break;
                 case 4:
-                    //showLeaderCards();
+                    showLeaderCards();
                     break;
                 case 5:
                     try {
@@ -323,7 +322,7 @@ public class CLI extends View{
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-         }
+        }
 
         try {
             networkHandler = new NetworkHandler(serverAddress,serverPort,this);
@@ -358,7 +357,7 @@ public class CLI extends View{
             }
             catch (NumberFormatException e) //NameAlreadyPresentException
             {
-               wrongInput();
+                wrongInput();
             }
 
             catch (IOException e)
@@ -458,7 +457,6 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYCOLUMN);
                             networkHandler.sendObject(column);
                             networkHandler.sendObject(-1); //null effect index
-                            market.buyColumn(column); //modify the local copy of the market in order to see the action
                             resourcesFromMarket = market.buyColumn(column);
                             showSwapArea(resourcesFromMarket);
 
@@ -473,7 +471,8 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYROW);
                             networkHandler.sendObject(row);
                             networkHandler.sendObject(-1); //null effect index
-                            market.buyRow(row); //modify the local copy of the market in order to see the action
+                            resourcesFromMarket = market.buyRow(row); //modify the local copy of the market
+                            showSwapArea(resourcesFromMarket);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -492,9 +491,11 @@ public class CLI extends View{
         }
     }
 
+
+
     /**
      * Method that helps player to organize resources gotten from market in warehouse
-     * @param resourcesFromMarket
+     * @param resourcesFromMarket the resources obtained from the market
      */
     public void showSwapArea(Resources resourcesFromMarket){
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
@@ -512,9 +513,9 @@ public class CLI extends View{
         System.out.print("\n\n");
 
         while(resourcesFromMarket.getTotalResourceNumber() !=0 || exit) {
-            System.out.printf("Now you have: ");
+            System.out.print("Now you have: ");
             printResources(resourcesFromMarket, "real");
-            System.out.printf("\n\n");
+            System.out.print("\n\n");
             showWarehouse(warehouseDepots);
 
             System.out.println("1) Place resources");
@@ -522,7 +523,7 @@ public class CLI extends View{
             System.out.println("0) Exit");
 
             currentAction = integerInput("Select action: ", 0, 2);
-            System.out.printf("\n");
+            System.out.print("\n");
 
             switch (currentAction) {
                 case 0:
@@ -531,7 +532,7 @@ public class CLI extends View{
                         System.out.println("Are you sure you want to exit? Every unallocated resource would be lost and for each unallocated resource other players move one step forward in their faith track (y/n)");
                         try {
                             currentString = input.readLine();
-                            currentString.toLowerCase();
+                            currentString = currentString.toLowerCase();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -540,7 +541,7 @@ public class CLI extends View{
 
                     if(currentString.equals("y"))
                         exit = true;
-                    //FIXME add faithtrack step for other player if resourceFromMarket != empty
+                    //FIXME add faithTrack step for other player if resourceFromMarket != empty
                     break;
                 case 1:
                     do {
@@ -588,6 +589,20 @@ public class CLI extends View{
                             e.printStackTrace();
                         }
 
+
+                        try{
+                            networkHandler.sendObject(MOVETOLEVEL);
+                            networkHandler.sendObject(level);
+                            networkHandler.sendObject(resourceTypesToMove);
+                            networkHandler.sendObject(numResToMove);
+                           // if(waitAndGetResponse()!=SUCCESS)
+                             //   System.out.println(ANSI_RED+"ERROR"+RESET);
+                        }catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
                         resourceMovedCorrectly();
                         break;
                     }
@@ -618,13 +633,21 @@ public class CLI extends View{
                         e.printStackTrace();
                     }
 
+                    try{
+                        networkHandler.sendObject(MOVETOSWAP);
+                        networkHandler.sendObject(level);
+                        //if(waitAndGetResponse()!=SUCCESS)
+                          //  System.out.println(ANSI_RED+"ERROR"+RESET);
+                    }catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+
                     resourceMovedCorrectly();
                     break;
 
             }
         }
-
-
     }
 
 
@@ -734,7 +757,7 @@ public class CLI extends View{
         Resources res = strongBox.getResources();
         int i = 0;
 
-        System.out.println("\nSTRONGBOX");
+        System.out.println("\n\nSTRONGBOX");
         for (ResourceTypes resourceTypes: ResourceTypes.values()) {
             if(i == 2)
                 System.out.println();
@@ -756,7 +779,7 @@ public class CLI extends View{
         if(cardBoard.getDevelopmentCards().size() == 0)
             System.out.println(ANSI_GREEN+"There are no development cards"+RESET);
         else
-            printDevelopmentCards(cardBoard.getDevelopmentCards());
+            printDevelopmentCards(Arrays.asList(cardBoard.getUpperDevelopmentCards()));
     }
 
 
@@ -779,10 +802,10 @@ public class CLI extends View{
         Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
 
         if(!actionDone) {
-            System.out.println("\n1)Base production ");
-            System.out.println("2)Card production");
-            System.out.println("3)Leader card production"); //FIXME appears only if the player has a particular leader card
-            System.out.println("0)Exit");
+            System.out.println("\n1) Base production ");
+            System.out.println("2) Card production");
+            System.out.println("3) Leader card production"); //FIXME appears only if the player has a particular leader card
+            System.out.println("0) Exit");
             currentAction = integerInput("Select action: ", 0, 3);
 
             try{
@@ -801,7 +824,7 @@ public class CLI extends View{
                         networkHandler.sendObject(numberToResourceType(firstResource));
                         networkHandler.sendObject(numberToResourceType(secondResource));
                         networkHandler.sendObject(numberToResourceType(productionResult));
-
+                        networkHandler.sendObject(ENDPRODUCTION);
                         if (waitAndGetResponse() == ERROR) {
                             System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
                         }
@@ -813,7 +836,7 @@ public class CLI extends View{
                         networkHandler.sendObject(PROD2);
                         currentCard = integerInput("Select card (0,1,2): ", 0, 2);
                         networkHandler.sendObject(currentCard);
-
+                        networkHandler.sendObject(ENDPRODUCTION);
                         if (waitAndGetResponse() == ERROR) {
                             System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
                         }
@@ -849,6 +872,51 @@ public class CLI extends View{
     }
 
 
+    /**
+     * Method that shows the leader cards in the hand of an user
+     * and asks wat to do with them, discard or play. It also sands
+     * the answer to the server
+     */
+    private void showLeaderCards() {
+        int currentAction;
+
+        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
+
+        refresh();
+        System.out.println("LEADER CARDS");
+
+        printLeaderCards(leaderBoard.getLeaderCardsInHand());
+
+        System.out.println("\n1) Play leader");
+        System.out.println("2) Discard leader");
+        System.out.println("0) Exit");
+        currentAction = integerInput("Select action: ", 0,leaderInHand.size()-1);
+
+        try{
+            switch (currentAction) {
+                case 0:
+                    break;
+                case 1:
+                    networkHandler.sendObject(ACTIVATELEADER);
+                    currentAction = integerInput("Select card: ",0,leaderInHand.size()-1);
+                    networkHandler.sendObject(currentAction);
+                    break;
+                case 2:
+                    networkHandler.sendObject(DISCARDLEADER);
+                    currentAction = integerInput("Select card: ", 0,leaderInHand.size()-1);
+                    break;
+            }
+
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
     //SUPPORT METHODS
 
@@ -857,7 +925,7 @@ public class CLI extends View{
      * @param number number from input that you want to convert in resourceTypes
      * @return resourceTypes associated to the number passed
      */
-    private ResourceTypes numberToResourceType(int number){
+    private ResourceTypes numberToResourceType(int number) {
         ResourceTypes resourceType = null;
         switch (number) {
             case 1:
@@ -880,7 +948,7 @@ public class CLI extends View{
     /**
      * Method that prints the end of swap section
      */
-    private void resourceMovedCorrectly(){
+    private void resourceMovedCorrectly() {
         String currentString = null;
         do {
             System.out.println("\nResources moved correctly, press enter to continue...");
@@ -1070,8 +1138,8 @@ public class CLI extends View{
      * It prints out an ArrayList of cards one by one in the same line
      * @param cards the array of cards that as to be printed
      */
-    private void printDevelopmentCards(ArrayList<DevelopmentCard> cards) {
-        int tabs; //the number of tabs used for formatiing
+    private void printDevelopmentCards(List<DevelopmentCard> cards) {
+        int tabs; //the number of tabs used for formatting
 
         //Type of the card
         System.out.print("\n");
@@ -1163,6 +1231,30 @@ public class CLI extends View{
         }
     }
 
+
+    private void printLeaderCards(ArrayList<LeaderCard> cards) {
+        int tabs;
+        Resources resourceRequirements;
+        DevelopmentCardRequirement levelRequirements;
+        ArrayList<DevelopmentCardRequirement> colorLevelRequirements;
+        SpecialAbility specialAbility;
+
+        System.out.print("\n");
+        for(LeaderCard card : cards)
+        {
+            resourceRequirements = card.getResourceRequirements();
+            levelRequirements = card.getDevelopmentCardRequirementWithLevel();
+            colorLevelRequirements = (ArrayList<DevelopmentCardRequirement>) card.getDevelopmentCardRequirementOnlyColor();
+            specialAbility = card.getSpecialAbility();
+
+            if(resourceRequirements!=null) {
+                System.out.print("Requirements: ");
+                printResources(resourceRequirements, "real");
+                System.out.print("\t\t\t");
+            }
+        }
+
+    }
 
     /**
      * Method that returns a correct integer input for a particular request
