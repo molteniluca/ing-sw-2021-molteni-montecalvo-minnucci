@@ -10,7 +10,6 @@ import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;

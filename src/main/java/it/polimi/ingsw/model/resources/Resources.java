@@ -156,10 +156,12 @@ public class Resources implements Serializable {
      * This method gets and removes the faith from the resource values
      * @return The faith
      */
-    public int getEraseFaith(){
-        int faith=this.resourceMap.get(FAITH);
-        this.set(FAITH,0);
-        return faith;
+    public Resources eraseFaith(){
+        Resources nofaith = new Resources();
+        for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) {
+            nofaith.set(res,this.getResourceNumber(res));
+        }
+        return nofaith;
     }
 
     /**

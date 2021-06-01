@@ -37,7 +37,7 @@ public class Game implements Serializable {
      * @param playerNames The name of each player
      * @param id The game room id for debugging reasons
      */
-    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id, WaitingRoom waitingRoom) throws IOException {
+    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id, WaitingRoom waitingRoom) {
         int playerCount=0;
         this.numPlayers=numPlayers;
         this.id = id;
@@ -118,7 +118,7 @@ public class Game implements Serializable {
      */
     private void singlePlayerGame() throws IOException {
         while(!gameEnded){
-            for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
+            for(currentPlayer = 0; currentPlayer < 2; currentPlayer++){
                 try {
                     turns.get(currentPlayer).beginTurn();
                 } catch (FaithOverflowException e) {
