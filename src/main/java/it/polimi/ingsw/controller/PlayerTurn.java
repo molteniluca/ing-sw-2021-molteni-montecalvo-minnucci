@@ -116,9 +116,9 @@ public class PlayerTurn implements Turn, Serializable {
             switch (clientHandler.receiveMessage()){
                 case MOVETOLEVEL:
                     try {
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(clientHandler.receiveObject(int.class),
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(clientHandler.receiveObject(Integer.class),
                                 clientHandler.receiveObject(ResourceTypes.class),
-                                clientHandler.receiveObject(int.class)
+                                clientHandler.receiveObject(Integer.class)
                         );
                     } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException e) {
                         clientHandler.sendObject(ERROR);
@@ -127,7 +127,7 @@ public class PlayerTurn implements Turn, Serializable {
                     clientHandler.sendGame();
                     break;
                 case MOVETOSWAP:
-                    player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(int.class));
+                    player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(Integer.class));
                     clientHandler.sendGame();
                     break;
                 case DROPRESOURCES:
@@ -146,7 +146,7 @@ public class PlayerTurn implements Turn, Serializable {
      */
     public boolean discardLeader() throws IOException{
         try {
-            player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(int.class));
+            player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(Integer.class));
             return true;
         }catch (IndexOutOfBoundsException e){
             return false;
