@@ -668,7 +668,7 @@ public class CLI extends View{
      * @param number number from input that you want to convert in resourceTypes
      * @return resourceTypes associated to the number passed
      */
-    private ResourceTypes NumberToResourceType(int number){
+    private ResourceTypes numberToResourceType(int number){
         ResourceTypes resourceType = null;
         switch (number) {
             case 1:
@@ -685,6 +685,22 @@ public class CLI extends View{
                 break;
         }
         return resourceType;
+    }
+
+    /**
+     * Method that prints the end of swap section
+     */
+    private void resourceMovedCorrectly(){
+        String currentString = null;
+        do {
+            System.out.println("\nResources moved correctly, press enter to continue...");
+            try {
+                currentString = input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        while (!"".equals(currentString));
     }
 
     /**
