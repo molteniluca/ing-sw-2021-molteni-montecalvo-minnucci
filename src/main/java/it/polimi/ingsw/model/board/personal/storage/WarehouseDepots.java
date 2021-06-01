@@ -80,6 +80,17 @@ public class WarehouseDepots implements Serializable {
         return sum;
     }
 
+    /**
+     * Method that gets the resources contained in one specific warehouse level
+     * @param level The level from where you get resources
+     * @return New Resources with resources contained in the warehouse level required.
+     */
+    public Resources getResources(int level){
+        Resources resources = new Resources();
+        resources.add(warehouseDepots.get(level).getResources());
+        return resources;
+    }
+
     public int getNumberLevels(){
         return warehouseDepots.size();
     }
