@@ -14,7 +14,6 @@ public class LeaderCard extends Card implements Serializable {
     private Resources resourceRequirements;
     private DevelopmentCardRequirement developmentCardRequirementWithLevel;
     private List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor;
-    private boolean isActive;
     private final SpecialAbility specialAbility;
 
     /**
@@ -27,7 +26,6 @@ public class LeaderCard extends Card implements Serializable {
     public LeaderCard(int victoryPoint, String image, Resources resourceRequirements, SpecialAbility specialAbility) {
         super(victoryPoint, image);
         this.resourceRequirements = resourceRequirements;
-        this.isActive = false;
         this.specialAbility = specialAbility;
     }
 
@@ -41,7 +39,6 @@ public class LeaderCard extends Card implements Serializable {
     public LeaderCard(int victoryPoint, String image,  DevelopmentCardRequirement developmentCardRequirementWithLevel, SpecialAbility specialAbility) {
         super(victoryPoint, image);
         this.developmentCardRequirementWithLevel = developmentCardRequirementWithLevel;
-        this.isActive = false;
         this.specialAbility = specialAbility;
     }
 
@@ -55,7 +52,6 @@ public class LeaderCard extends Card implements Serializable {
     public LeaderCard(int victoryPoint, String image, List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor, SpecialAbility specialAbility) {
         super(victoryPoint, image);
         this.developmentCardRequirementOnlyColor = developmentCardRequirementOnlyColor;
-        this.isActive = false;
         this.specialAbility = specialAbility;
     }
 
@@ -67,20 +63,12 @@ public class LeaderCard extends Card implements Serializable {
         return specialAbility;
     }
 
-    /**
-     * Getter of effect activation
-     * @return true if LeaderCard's effect is active, else false
-     */
-    public boolean isActive() {
-        return isActive;
-    }
 
     /**
      * Setter of effect activation
      * @param active boolean activator of LeaderCard's effect
      */
     public void setActive(boolean active) {
-        isActive = active;
     }
 
     /**

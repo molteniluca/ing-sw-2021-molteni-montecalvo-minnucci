@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class Server {
     private final HashMap<String,WaitingRoom> rooms;
     public int port;
+    private ServerSocket serverSocket;
 
     /**
      * The constructor
@@ -22,20 +23,23 @@ public class Server {
         rooms=new HashMap<>();
         this.port=port;
 
+        Runtime.getRuntime().addShutdownHook(new Thread(this::closeServer));
+
         try {
-            waitForConnection(new ServerSocket(port));
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.out.println("Can't bind on this port!");
         }
+
+        waitForConnections();
     }
 
     /**
      * This method waits for a new connection and hands it to the accept connection method
-     * @param serverSocket The socket of the server
      */
-    private void waitForConnection(ServerSocket serverSocket){
+    private void waitForConnections(){
         printDebug("Server started");
-        while(true){
+        while(!serverSocket.isClosed()){
             try {
                 acceptConnection(serverSocket.accept());
             } catch (IOException e) {
@@ -50,6 +54,22 @@ public class Server {
      */
     private void acceptConnection(Socket client){
         new ClientHandler(client,rooms).start();
+    }
+
+
+    private void closeServer() {
+        printDebug("Server closing...");
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            printDebug("Exception:" + e.getMessage());
+        }
+
+        for(WaitingRoom wr : rooms.values()){
+            wr.closeAll();
+        }
+
+        printDebug("Bye!");
     }
 
     /**

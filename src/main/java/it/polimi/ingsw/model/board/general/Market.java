@@ -149,8 +149,7 @@ public class Market implements Serializable {
         ResourceTypes tmp = externalResource; //temporary variable used for swapping
         externalResource = marketMatrix[row][0]; //set the external resource with the first element of the row
 
-        for (int i = 0; i < COLUMNS-1; i++)
-            marketMatrix[row][i] = marketMatrix[row][i + 1];
+        System.arraycopy(marketMatrix[row], 1, marketMatrix[row], 0, COLUMNS - 1);
 
         marketMatrix[row][COLUMNS - 1] = tmp; //set the last element of the row with the previous value of externalResource
     }

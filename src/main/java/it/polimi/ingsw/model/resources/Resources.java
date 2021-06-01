@@ -157,11 +157,11 @@ public class Resources implements Serializable {
      * @return The faith
      */
     public Resources eraseFaith(){
-        Resources nofaith = new Resources();
+        Resources noFaith = new Resources();
         for (ResourceTypes res : EnumSet.of(GOLD,STONE,SHIELD,SERVANT)) {
-            nofaith.set(res,this.getResourceNumber(res));
+            noFaith.set(res,this.getResourceNumber(res));
         }
-        return nofaith;
+        return noFaith;
     }
 
     /**
@@ -174,17 +174,5 @@ public class Resources implements Serializable {
             total+=this.resourceMap.get(res);
         }
         return total;
-    }
-
-    /**
-     * This method checks whether a resource is empty
-     * @return True if empty and false if not
-     */
-    public boolean isEmpty(){
-        int total=0;
-        for (ResourceTypes res : ResourceTypes.values()) {
-            total+=this.resourceMap.get(res);
-        }
-        return total==0;
     }
 }

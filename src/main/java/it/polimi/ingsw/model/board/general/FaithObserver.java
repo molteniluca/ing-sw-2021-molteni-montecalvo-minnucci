@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.resources.Resources;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

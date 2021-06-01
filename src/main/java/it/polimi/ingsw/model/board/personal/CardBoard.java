@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.board.personal;
 
-import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException;
 import it.polimi.ingsw.model.exceptions.WinException;
@@ -22,20 +21,6 @@ public class CardBoard implements Serializable {
         for (int i=0;i<3;i++) {
             productionCards[i]=new ArrayList<>();
         }
-    }
-
-    public int getNumberOfCards() {
-        return numberOfCards;
-    }
-
-    /**
-     * Removes a card in a specified place
-     * @param place The place where to remove the card
-     * @return The removed card
-     * @throws IndexOutOfBoundsException In case there are no cards in the specified place
-     */
-    public Card removeCard(int place) throws IndexOutOfBoundsException{
-        return productionCards[place].remove(productionCards[place].size()-1);
     }
 
     /**

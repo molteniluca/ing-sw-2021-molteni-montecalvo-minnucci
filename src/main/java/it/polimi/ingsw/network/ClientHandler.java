@@ -20,7 +20,6 @@ public class ClientHandler extends Thread{
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
     private String id=null;
-    private HeartbeatThreadServer heartbeatThreadServer = null;
 
     /**
      * Constructor of the class
@@ -43,8 +42,6 @@ public class ClientHandler extends Thread{
         try {
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
-
-            heartbeatThreadServer = new HeartbeatThreadServer(this);
 
             command = receiveObject(NetworkMessages.class);
 
@@ -135,7 +132,7 @@ public class ClientHandler extends Thread{
                 id = randomizeId();
             waitingRooms.put(id,new WaitingRoom(numPlayers,id));
 
-            printDebug("New game ID:"+id+"\tPlayers:"+((Integer)numPlayers));
+            printDebug("New game ID:"+id+"\tPlayers:"+(numPlayers));
 
             sendObject(SUCCESS);
             sendObject(id);

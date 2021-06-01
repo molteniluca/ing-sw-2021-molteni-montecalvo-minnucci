@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model.board.general;
 
-import it.polimi.ingsw.model.resources.Resources;
-
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 public class GeneralBoard implements Serializable {
@@ -18,13 +15,7 @@ public class GeneralBoard implements Serializable {
     public GeneralBoard(){
         CardDealer temp;
         market = new Market();
-        try {
-            temp = new CardDealer();
-        } catch (FileNotFoundException e) {
-            temp = null;
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        temp = new CardDealer();
         cardDealer = temp;
         this.faithObserver = new FaithObserver();
     }

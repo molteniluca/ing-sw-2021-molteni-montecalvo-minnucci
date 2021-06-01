@@ -129,9 +129,7 @@ public class WarehouseDepots implements Serializable {
 
                 try {
                     l.removeResources(num, l.getResourceType());
-                } catch (LevelTooSmallException e) {
-                    e.printStackTrace();
-                } catch (TypeNotChangeableException e) {
+                } catch (LevelTooSmallException | TypeNotChangeableException e) {
                     e.printStackTrace();
                 }
                 sub = sub.sub(new Resources().set(l.getResourceType(), num));

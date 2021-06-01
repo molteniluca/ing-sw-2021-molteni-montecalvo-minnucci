@@ -7,28 +7,25 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.resources.Resources;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 
 public class CardDealer implements Serializable {
     private static final long serialVersionUID = 6732146736278436296L;
-    private Stack<DevelopmentCard>[][] cardMatrix; //STACK
-    private final int ROWS = 3;
-    private final int COLUMNS = 4;
+    private final Stack<DevelopmentCard>[][] cardMatrix; //STACK
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 4;
 
     /**
      * Creates and populates the CardDealer using DevelopmentCards obtained from the Json file Cards
-     * @throws FileNotFoundException in case there is no file
      */
     @SuppressWarnings("unchecked")
-    public CardDealer() throws FileNotFoundException{
+    public CardDealer(){
         //Can't define Arrays of typed lists
         //Read from the JsonFile of cards
         Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("json/developmentCards.json")));
+        JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("json/developmentCards.json"))));
         List<DevelopmentCard> data = gson.fromJson(reader,  new TypeToken<ArrayList<DevelopmentCard>>(){}.getType());
 
 

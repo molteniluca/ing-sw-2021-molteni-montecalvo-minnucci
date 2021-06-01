@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.network.NetworkMessages;
-import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -22,11 +21,9 @@ public class PlayerTurn implements Turn, Serializable {
     private static final long serialVersionUID = 6732146736278436272L;
     private final Player player;
     private final transient ClientHandler clientHandler;
-    private final transient WaitingRoom waitingRoom;
     private final transient int playerNum;
 
-    public PlayerTurn(Player player, ClientHandler clientHandler, WaitingRoom waitingRoom, int playerNum){
-        this.waitingRoom = waitingRoom;
+    public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum){
         this.player = player;
         this.clientHandler = clientHandler;
         this.playerNum = playerNum;
@@ -288,10 +285,6 @@ public class PlayerTurn implements Turn, Serializable {
         }
     }
 
-    public ClientHandler getClientHandler() {
-        return clientHandler;
-    }
-
     /**
      * Game setup for this player
      * @throws IOException In case the communication with the client goes wrong
@@ -368,7 +361,7 @@ public class PlayerTurn implements Turn, Serializable {
     }
 
     /**
-     * Ends the game for this plaer
+     * Ends the game for this player
      * @param winner True if this player is winner and false if not
      * @throws IOException In case the communication with the client goes wrong
      */

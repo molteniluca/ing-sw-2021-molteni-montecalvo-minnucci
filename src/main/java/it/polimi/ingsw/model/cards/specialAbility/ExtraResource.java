@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.cards.specialAbility;
 
 import it.polimi.ingsw.model.resources.ResourceTypes;
-import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.Serializable;
 

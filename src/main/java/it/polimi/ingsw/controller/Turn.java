@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public interface Turn extends Serializable {
-    static final long serialVersionUID = 6732146736278436271L;
+    long serialVersionUID = 6732146736278436271L;
 
     void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException;
 

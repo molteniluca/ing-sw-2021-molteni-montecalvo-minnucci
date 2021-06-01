@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.exceptions.WinException;
 import it.polimi.ingsw.network.ClientHandler;
-import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.*;
 import java.time.LocalTime;
@@ -37,7 +36,7 @@ public class Game implements Serializable {
      * @param playerNames The name of each player
      * @param id The game room id for debugging reasons
      */
-    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id, WaitingRoom waitingRoom) {
+    public Game(int numPlayers, ArrayList<ClientHandler> clients, ArrayList<String> playerNames, String id) {
         int playerCount=0;
         this.numPlayers=numPlayers;
         this.id = id;
@@ -53,19 +52,21 @@ public class Game implements Serializable {
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom, playerCount));
+            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount));
             playerCount++;
         }
 
         for(int i=0; i<inkwellPlayer; i++){
             players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i),waitingRoom, playerCount));
+            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount));
             playerCount++;
         }
 
         if(numPlayers==1){
             turns.add(new SelfPlayingTurn(generalBoard));
         }
+
+        printDebug("Game created");
     }
 
     public int getCurrentPlayer() {

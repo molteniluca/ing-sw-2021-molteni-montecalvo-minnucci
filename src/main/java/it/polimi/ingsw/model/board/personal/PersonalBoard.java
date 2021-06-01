@@ -14,8 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
-import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 
 public class PersonalBoard implements Serializable {
     private static final long serialVersionUID = 6732146736278436290L;
@@ -118,31 +116,7 @@ public class PersonalBoard implements Serializable {
      */
     public void produce(int cardIndex) throws UnusableCardException, FaithOverflowException {
         DevelopmentCard card = cardBoard.getUpperDevelopmentCards()[cardIndex];
-        if(Arrays.asList(cardBoard.getUpperDevelopmentCards()).contains(card)){
-            if(checkProduce(card)){
-                Resources cost=handleDiscount(card.getProductionCost());
-
-                try {
-                    deposit.removeResources(cost);
-                } catch (NegativeResourceValueException e) {
-                    e.printStackTrace();
-                }
-
-                this.faithTrack.incrementPosition(card.getProductionPower().getResourceNumber(ResourceTypes.FAITH));
-
-                try {
-                    deposit.getStrongBox().addResource(card.getProductionPower().eraseFaith());
-                } catch (FaithNotAllowedException e) {
-                    e.printStackTrace();
-                }
-            }
-            else{
-                throw new UnusableCardException("Can't use the card, there are not enough resources");
-            }
-        }
-        else{
-            throw new UnusableCardException("Can't use cards not in the visible area of the board");
-        }
+        produce(card);
     }
 
     /**
@@ -167,11 +141,10 @@ public class PersonalBoard implements Serializable {
      * This method checks whether you can produce using this production
      * @param resource1 The first resource in input
      * @param resource2 The second resource in input
-     * @param output The resource in output
      * @return True if possible and false if not
      */
-    public boolean checkProduce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output){
-        return deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).set(resource2,1)));
+    public boolean checkProduce(ResourceTypes resource1, ResourceTypes resource2){
+        return deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
     }
 
     /**
@@ -181,7 +154,7 @@ public class PersonalBoard implements Serializable {
      * @param output The resource in output
      */
     public void produce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
-        if(deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))))){
+        if(checkProduce(resource1,resource2)){
             try {
                 deposit.removeResources(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
             } catch (NegativeResourceValueException e) {
@@ -205,10 +178,9 @@ public class PersonalBoard implements Serializable {
     /**
      * Checks if the leader effect is active and if you have enough resources to make this production
      * @param resource1 The input resource
-     * @param output The output resource
      * @return True if possible and false if not
      */
-    public boolean checkProduce(ResourceTypes resource1, ResourceTypes output){
+    public boolean checkProduce(ResourceTypes resource1){
         return this.getLeaderBoard().getProductionEffects().stream().anyMatch(extraProduction -> extraProduction.getProductionCost()==resource1) &&
                 deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1)));
     }
@@ -291,7 +263,7 @@ public class PersonalBoard implements Serializable {
         if(effect==null){
             effect=new ExtraResource(ResourceTypes.BLANK);
         }
-        res.eraseFaith();
+        res=res.eraseFaith();
         res=handleBlank(res,effect);
         try {
             this.deposit.getWarehouseDepots().addResourceSwap(res);
@@ -398,21 +370,18 @@ public class PersonalBoard implements Serializable {
      * @param output The output resource
      */
     public void enqueueProduce(ResourceTypes resource1, ResourceTypes output) throws UnusableCardException, NegativeResourceValueException, FaithOverflowException {
-        if(checkProduce(resource1,output)){
-            ExtraProduction match;
-            try {
-                 match = availableProductions.stream().filter(extraProduction -> extraProduction.getProductionCost()==resource1).findFirst().get();
-                 availableProductions.remove(match);
+        if(checkProduce(resource1)){
+            ExtraProduction match = availableProductions.stream().filter(extraProduction -> extraProduction.getProductionCost()==resource1).findFirst().orElse(null);
+            if(match!=null){
+                availableProductions.remove(match);
                 try {
                     availableResources = availableResources.sub(new Resources().set(resource1,1));
                     produce(resource1,output);
                 } catch (NegativeResourceValueException e) {
                     throw new NegativeResourceValueException("Can't produce, not enough resources");
                 }
-            }catch( NoSuchElementException e){
+            }else
                 throw new UnusableCardException("Can't produce using this card");
-            }
-
         }else
             throw new UnusableCardException("Can't produce using this card");
     }

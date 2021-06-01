@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import java.io.Serializable;
 
 /**
- * This class represents a Lorenzo il Magnifico's turn
+ * This class represents a Lorenzo The Magnificent turn
  */
 public class SelfPlayingTurn implements Turn, Serializable {
     private static final long serialVersionUID = 6732146736278436273L;
