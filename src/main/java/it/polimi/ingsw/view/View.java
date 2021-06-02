@@ -1,12 +1,14 @@
 package it.polimi.ingsw.view;
 
 
-
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
+import it.polimi.ingsw.network.NetworkMessages;
 
 import java.util.LinkedList;
 import java.util.Queue;
+
+import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 public abstract class View extends Thread{
     public final Queue<Object> messages = new LinkedList<>(); //List of received messages
@@ -31,6 +33,9 @@ public abstract class View extends Thread{
     public abstract void showStrongbox();
 
     public void notifyResponse(Object o){
+        if(o.getClass()== NetworkMessages.class)
+            if(o==SUCCESS)
+                gameUpdated=false;
         messages.add(o);
         synchronized (this) {
             this.notify();
@@ -51,12 +56,13 @@ public abstract class View extends Thread{
      * Suspend the view thread in wait for a new game object
      */
     protected void waitForUpdatedGame() {
-        gameUpdated=false;
         while (!gameUpdated){
-            try{
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            synchronized (this){
+                try{
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
