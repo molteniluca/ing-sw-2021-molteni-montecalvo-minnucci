@@ -64,9 +64,12 @@ public class WarehouseDepots implements Serializable {
      * @throws NegativeResourceValueException In case the requested resources are not in the swap area
      */
     public void moveToLevel(int level, ResourceTypes resourceTypes, int number) throws TypeNotChangeableException, LevelTooSmallException, NegativeResourceValueException {
-        Level l=warehouseDepots.get(level);
-        l.addResources(number,resourceTypes);
-        swapDeposit = swapDeposit.sub(new Resources().set(resourceTypes,number));
+        if(number<=0) {
+            Level l = warehouseDepots.get(level);
+            l.addResources(number, resourceTypes);
+            swapDeposit = swapDeposit.sub(new Resources().set(resourceTypes, number));
+        }else
+            throw new NegativeResourceValueException("Trying to move " + number + " resources to a level");
     }
 
     /**
