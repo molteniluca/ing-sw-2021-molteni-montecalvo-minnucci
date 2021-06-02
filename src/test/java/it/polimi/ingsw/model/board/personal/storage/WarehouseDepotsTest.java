@@ -31,7 +31,7 @@ public class WarehouseDepotsTest extends TestCase {
         }
 
         assert wd.getResources().getResourceNumber(ResourceTypes.GOLD)==2;
-        if (wd.removeFromSwap().getResourceNumber(ResourceTypes.GOLD) != 2) throw new AssertionError();
+        if (wd.removeFromSwap().getResourceNumber(ResourceTypes.GOLD) != 0) throw new AssertionError();
 
         wd.moveToSwap(3);
 

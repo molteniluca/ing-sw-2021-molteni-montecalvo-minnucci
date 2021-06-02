@@ -66,7 +66,7 @@ public class WarehouseDepots implements Serializable {
     public void moveToLevel(int level, ResourceTypes resourceTypes, int number) throws TypeNotChangeableException, LevelTooSmallException, NegativeResourceValueException {
         Level l=warehouseDepots.get(level);
         l.addResources(number,resourceTypes);
-        swapDeposit.sub(new Resources().set(resourceTypes,number));
+        swapDeposit = swapDeposit.sub(new Resources().set(resourceTypes,number));
     }
 
     /**
