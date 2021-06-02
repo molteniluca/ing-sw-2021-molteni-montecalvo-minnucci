@@ -42,12 +42,13 @@ public class CLI extends View{
     private boolean gameUpdated = false;
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) is already done
     private int playerNumber; //the number of the player received before GAMESTARTED
-    private Object message;
 
     @Override
     public void run(){
 
+        Object message;
         initializeView();
+
 
         while(!gameUpdated){
             try {
@@ -490,7 +491,7 @@ public class CLI extends View{
     /**
      * Method that helps player to organize resources gotten from market in warehouse
      */
-    public void showSwapArea(){
+    public void showSwapArea() {
         Resources resourcesFromMarket;
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
         ResourceTypes resourceTypesToMove = null;
@@ -784,6 +785,12 @@ public class CLI extends View{
         showStrongbox();
         showWarehouse(warehouseDepots);
 
+        try {
+            networkHandler.sendObject(PRODUCTION);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         while (currentAction!=0) {
             if (!actionDone) {
                 System.out.println("\n1) Base production ");
@@ -793,8 +800,6 @@ public class CLI extends View{
                 currentAction = integerInput("Select action: ", 0, 3);
 
                 try {
-                    if(currentAction != 0)
-                        networkHandler.sendObject(PRODUCTION);
 
                     switch (currentAction) {
                         //Base production
@@ -893,7 +898,7 @@ public class CLI extends View{
         System.out.println("\n1) Play leader");
         System.out.println("2) Discard leader");
         System.out.println("0) Exit");
-        currentAction = integerInput("Select action: ", 0,leaderInHand.size()-1);
+        currentAction = integerInput("Select action: ", 0,2);
 
         try{
             switch (currentAction) {
@@ -907,6 +912,7 @@ public class CLI extends View{
                 case 2:
                     networkHandler.sendObject(DISCARDLEADER);
                     currentAction = integerInput("Select card: ", 0,leaderInHand.size()-1);
+                    networkHandler.sendObject(currentAction);
                     break;
             }
 
@@ -916,9 +922,14 @@ public class CLI extends View{
         }
     }
 
+
+    /**
+     * Method that allows the user to chose two leader cards at
+     * the beginning of the game
+     */
     private void choseLeaderCards() {
         Integer[] chose= new Integer[2];
-        Object message;
+        Object message; //the message received
 
         LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
 
@@ -926,15 +937,15 @@ public class CLI extends View{
 
         printLeaderCards(leaderCardsInHand);
 
-        chose[0] = integerInput("Select first leader: ", 1,4);
-        chose[1] = integerInput("Select second leader: ", 1,4);
+        chose[0] = integerInput("Select first leader: ", 0,3);
+        chose[1] = integerInput("Select second leader: ", 0,3);
 
         try
         {
             networkHandler.sendObject(chose);
-            this.message = waitAndGetResponse();
-            if(this.message != SUCCESS)
-                System.out.println(this.message);
+            message = waitAndGetResponse();
+            if(message != SUCCESS)
+                System.out.println(message);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -1150,7 +1161,7 @@ public class CLI extends View{
 
     /**
      * It prints out an ArrayList of cards one by one in the same line
-     * @param cards the array of cards that as to be printed
+     * @param cards the array of cards that has to be printed
      */
     private void printDevelopmentCards(List<DevelopmentCard> cards) {
         int tabs; //the number of tabs used for formatting
@@ -1257,6 +1268,10 @@ public class CLI extends View{
     }
 
 
+    /**
+     * It prinst out an ArraList of LeaderCards in different lines
+     * @param cards the array of cards that has to be printed
+     */
     private void printLeaderCards(ArrayList<LeaderCard> cards) {
         Resources resourceRequirements;
         DevelopmentCardRequirement levelRequirements;
