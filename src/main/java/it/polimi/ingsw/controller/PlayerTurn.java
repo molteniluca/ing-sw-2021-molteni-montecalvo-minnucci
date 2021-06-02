@@ -47,11 +47,11 @@ public class PlayerTurn implements Turn, Serializable {
 
         NetworkMessages action = clientHandler.receiveObject(NetworkMessages.class);
 
-        while((action == DISCARDLEADER || action == ACTIVATELEADER)  && error){
+        while((action == DISCARDLEADER || action == ACTIVATELEADER)){
             if(action == ACTIVATELEADER)
-                error = activateLeader();
+                error&=activateLeader();
             else
-                error = discardLeader();
+                error&=discardLeader();
             if(!error)
                 leaderAction=false;
             action = clientHandler.receiveObject(NetworkMessages.class);
@@ -81,14 +81,11 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
 
-        error=true;
-        while((action== ACTIVATELEADER || action==DISCARDLEADER) && error && leaderAction){
+        while((action == DISCARDLEADER || action == ACTIVATELEADER) && leaderAction){
             if(action == ACTIVATELEADER)
-                error = activateLeader();
+                activateLeader();
             else
-                error = discardLeader();
-            if(!error)
-                leaderAction=false;
+                discardLeader();
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
 
