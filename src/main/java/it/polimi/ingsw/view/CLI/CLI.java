@@ -916,11 +916,14 @@ public class CLI extends View{
                     networkHandler.sendObject(ACTIVATELEADER);
                     currentAction = integerInput("Select card: ",0,leaderInHand.size()-1);
                     networkHandler.sendObject(currentAction);
+                    isSuccessReceived();
                     break;
+
                 case 2:
                     networkHandler.sendObject(DISCARDLEADER);
                     currentAction = integerInput("Select card: ", 0,leaderInHand.size()-1);
                     networkHandler.sendObject(currentAction);
+                    isSuccessReceived();
                     break;
             }
 
