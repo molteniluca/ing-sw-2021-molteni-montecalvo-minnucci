@@ -25,6 +25,7 @@ public class SelfPlayingTurn implements Turn, Serializable {
     public void startGame(){
     }
 
+
     public int getVictoryPoints(){
         return lorenzo.getVictoryPoints();
     }

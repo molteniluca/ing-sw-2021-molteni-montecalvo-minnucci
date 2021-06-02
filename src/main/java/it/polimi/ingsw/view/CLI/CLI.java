@@ -19,6 +19,7 @@ import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
+import javafx.beans.binding.ObjectBinding;
 
 import java.util.*;
 import java.util.regex.*;
@@ -168,7 +169,7 @@ public class CLI extends View{
     @Override
     public void welcomeInfo() {
         refresh();
-        printTitle();
+        printMainTitle();
     }
 
     /**
@@ -184,7 +185,7 @@ public class CLI extends View{
         NetworkMessages command;
 
         refresh();
-        printTitle();
+        printMainTitle();
 
         do{
             try {
@@ -718,6 +719,7 @@ public class CLI extends View{
 
     }
 
+
     /**
      * Method that shows the WareHouse of a player
      */
@@ -747,6 +749,7 @@ public class CLI extends View{
             }
         }
     }
+
 
     /**
      * Method that shows the strongbox of a player
@@ -812,6 +815,7 @@ public class CLI extends View{
                 networkHandler.sendObject(PRODUCTION);
 
                 switch (currentAction) {
+                    //Base production
                     case 1:
                         int firstResource, secondResource, productionResult;
                         networkHandler.sendObject(PROD1);
@@ -825,24 +829,28 @@ public class CLI extends View{
                         networkHandler.sendObject(numberToResourceType(secondResource));
                         networkHandler.sendObject(numberToResourceType(productionResult));
                         networkHandler.sendObject(ENDPRODUCTION);
+                        actionDone = true;
                         if (waitAndGetResponse() == ERROR) {
                             System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
                         }
 
                         break;
 
+                    //Development card production
                     case 2:
                         int currentCard;
                         networkHandler.sendObject(PROD2);
                         currentCard = integerInput("Select card (0,1,2): ", 0, 2);
                         networkHandler.sendObject(currentCard);
                         networkHandler.sendObject(ENDPRODUCTION);
+                        actionDone = true;
                         if (waitAndGetResponse() == ERROR) {
                             System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
                         }
 
                         break;
 
+                    //leader card production
                     case 3:
                         networkHandler.sendObject(PROD3);
                         //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
@@ -987,7 +995,7 @@ public class CLI extends View{
     /**
      * Method that prints the title of the game in ASCIIArt
      */
-    private void printTitle() {
+    private void printMainTitle() {
         System.out.println(ANSI_YELLOW +
                 "888b     d888                   888                                            .d888      8888888b.                            d8b                                                      \n" +
                 "8888b   d8888                   888                                           d88P\"       888   Y88b                           Y8P                                                      \n" +
@@ -1247,7 +1255,7 @@ public class CLI extends View{
         int tabs;
         Resources resourceRequirements;
         DevelopmentCardRequirement levelRequirements;
-        ArrayList<DevelopmentCardRequirement> colorLevelRequirements;
+        List<DevelopmentCardRequirement> colorRequirements;
         SpecialAbility specialAbility;
 
         System.out.print("\n");
@@ -1255,16 +1263,75 @@ public class CLI extends View{
         {
             resourceRequirements = card.getResourceRequirements();
             levelRequirements = card.getDevelopmentCardRequirementWithLevel();
-            colorLevelRequirements = (ArrayList<DevelopmentCardRequirement>) card.getDevelopmentCardRequirementOnlyColor();
+            colorRequirements = card.getDevelopmentCardRequirementOnlyColor();
             specialAbility = card.getSpecialAbility();
 
+            System.out.print("Requirements: ");
             if(resourceRequirements!=null) {
-                System.out.print("Requirements: ");
                 printResources(resourceRequirements, "real");
                 System.out.print("\t\t\t");
             }
-        }
 
+            if(levelRequirements!=null)
+            {
+                switch (levelRequirements.getType())
+                {
+                    case 'b':
+                        System.out.print(ANSI_BLUE + "🁢"+ RESET);
+                        break;
+                    case 'g':
+                        System.out.print(ANSI_GREEN + "🁢" + RESET);
+                        break;
+                    case 'p':
+                        System.out.print(ANSI_PURPLE + "🁢" + RESET);
+                        break;
+                    case 'y':
+                        System.out.print(ANSI_YELLOW+ "🁢" +RESET);
+                        break;
+                }
+                System.out.print("level " + levelRequirements.getLevel());
+            }
+
+
+            if(colorRequirements!=null)
+            {
+                ArrayList<Character> tmpType = new ArrayList<>();
+                ArrayList<Character> tmp2Type;
+
+                for(DevelopmentCardRequirement cardRequirement: colorRequirements)
+                    tmpType.add(cardRequirement.getType());
+
+                tmp2Type = new ArrayList<>(tmpType);
+
+                Set<Character> set = new HashSet<>(tmpType);
+                tmpType.clear();
+                tmpType.addAll(set);
+
+
+                for(Character car1 : tmpType)
+                {
+                    switch (car1)
+                    {
+                        case 'b':
+                            System.out.print(ANSI_BLUE + "🁢" + RESET);
+                            break;
+                        case 'g':
+                            System.out.print(ANSI_GREEN + "🁢" + RESET);
+                            break;
+                        case 'p':
+                            System.out.print(ANSI_PURPLE + "🁢" + RESET);
+                            break;
+                        case 'y':
+                            System.out.print(ANSI_YELLOW+ "🁢" +RESET);
+                            break;
+                    }
+                    System.out.print(Collections.frequency(tmp2Type, car1) + " ");
+
+                }
+            }
+
+            System.out.print("\n");
+        }
     }
 
     /**
