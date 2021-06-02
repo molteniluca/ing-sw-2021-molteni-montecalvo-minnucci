@@ -17,8 +17,8 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
-import javax.swing.*;
 import java.util.*;
+import java.util.List;
 import java.util.regex.*;
 
 import java.io.*;
@@ -78,6 +78,7 @@ public class CLI extends View{
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN) {
+                waitForUpdatedGame();
                 actionDone = false;
                 showHomepage();
             }
@@ -451,8 +452,7 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYCOLUMN);
                             networkHandler.sendObject(column);
                             networkHandler.sendObject(-1); //null effect index
-                            waitAndGetResponse();
-                            waitForUpdatedGame();
+                            isSuccessReceived();
                             showSwapArea();
 
                         } catch (IOException e) {
@@ -466,8 +466,7 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYROW);
                             networkHandler.sendObject(row);
                             networkHandler.sendObject(-1); //null effect index
-                            waitAndGetResponse();
-                            waitForUpdatedGame();
+                            isSuccessReceived();
                             showSwapArea();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -952,9 +951,7 @@ public class CLI extends View{
         try
         {
             networkHandler.sendObject(chose);
-            message = waitAndGetResponse();
-            if(message != SUCCESS)
-                System.out.println(message);
+            isSuccessReceived();
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -964,6 +961,30 @@ public class CLI extends View{
 
 
     //SUPPORT METHODS
+
+    /**
+     * Method that receives a message and check if it is a success or an error.
+     * If it receives a success also wait for the game update, if an error is received error message is printed
+     * @return true or false depending on the message received: SUCCESS --> true, ERROR --> false
+     */
+    private boolean isSuccessReceived() {
+        Object message;
+
+        message = waitAndGetResponse();
+
+        if(message == ERROR)
+        {
+            message = waitAndGetResponse(); //receive the error message
+            System.out.print(ANSI_RED);
+            System.out.print(message+RESET); //prints the error message
+            return false;
+        }
+
+        if(message == SUCCESS)
+            waitForUpdatedGame();
+
+        return true;
+    }
 
     /**
      * Method that returns resourceTypes associated to number: 1 = GOLD, 2 = SERVANT, 3 = SHIELD, 4 = STONE
