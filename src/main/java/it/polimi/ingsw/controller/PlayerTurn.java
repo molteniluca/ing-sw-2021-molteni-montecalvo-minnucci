@@ -297,15 +297,16 @@ public class PlayerTurn implements Turn, Serializable {
             case 1:
                 while(true) {
                     try {
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        ResourceTypes res1 = clientHandler.receiveObject(ResourceTypes.class);
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(res1, 1));
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame();
-                        handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (FaithOverflowException e) {
+                    } catch (LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
                         e.printStackTrace();
                     }
                 }
@@ -313,16 +314,17 @@ public class PlayerTurn implements Turn, Serializable {
             case 2:
                 while(true) {
                     try {
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        ResourceTypes res1 = clientHandler.receiveObject(ResourceTypes.class);
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(res1, 1));
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame();
-                        handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (FaithOverflowException e) {
+                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
                         e.printStackTrace();
                     }
                 }
@@ -330,16 +332,19 @@ public class PlayerTurn implements Turn, Serializable {
             case 3:
                 while(true) {
                     try {
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).add(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1)));
+                        ResourceTypes res1 = clientHandler.receiveObject(ResourceTypes.class);
+                        ResourceTypes res2 = clientHandler.receiveObject(ResourceTypes.class);
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(res1, 1).add(new Resources().set(res2, 1)));
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(2,res2,1);
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame();
-                        handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (FaithOverflowException e) {
+                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
                         e.printStackTrace();
                     }
                 }
