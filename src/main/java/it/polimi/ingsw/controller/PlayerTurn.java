@@ -299,6 +299,7 @@ public class PlayerTurn implements Turn, Serializable {
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -315,6 +316,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1));
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -331,6 +333,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).add(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1)));
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame();
                         handleSwap();
                         break;
                     } catch (FaithNotAllowedException e) {
@@ -344,12 +347,16 @@ public class PlayerTurn implements Turn, Serializable {
             default:
                 break;
         }
-        clientHandler.sendGame();
 
-        player.getPersonalBoard().getLeaderBoard().selectLeaders(clientHandler.receiveObject(Integer[].class));
-        clientHandler.sendGame();
+        try {
+            player.getPersonalBoard().getLeaderBoard().selectLeaders(clientHandler.receiveObject(Integer[].class));
+            clientHandler.sendObject(SUCCESS);
+            clientHandler.sendGame();
+        }catch (IndexOutOfBoundsException e){
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject(e.getMessage());
+        }
 
-        clientHandler.sendObject(SUCCESS);
         clientHandler.sendObject(GAMESTARTED);
     }
 

@@ -546,6 +546,12 @@ public class CLI extends View{
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                            if(waitAndGetResponse()==SUCCESS){
+                                exit=true;
+                            }else if(waitAndGetResponse()==ERROR){
+                                exit=false;
+                                System.out.println(waitAndGetResponse());
+                            }
                         }
                     break;
                 case 1:
