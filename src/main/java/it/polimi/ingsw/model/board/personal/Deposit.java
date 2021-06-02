@@ -42,9 +42,10 @@ public class Deposit implements Serializable {
      * @throws NegativeResourceValueException In case in the swap area there are more resources than the ones to be removed
      */
     public void removeResources(Resources resources) throws NegativeResourceValueException {
-        Resources diff = resources.sub(warehouseDepots.getResources());
-        strongBox.removeResource(diff);
-        warehouseDepots.removeResources(resources.sub(diff));
+        Resources neg = resources.negativeSubValues(warehouseDepots.getResources());
+        Resources diff = warehouseDepots.getResources().sub(neg);
+        warehouseDepots.removeResources(diff);
+        strongBox.removeResource(resources.sub(diff));
     }
 
     /**
