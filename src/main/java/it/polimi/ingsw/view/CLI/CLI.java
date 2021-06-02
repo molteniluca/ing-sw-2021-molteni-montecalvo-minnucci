@@ -5,9 +5,6 @@ import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.SpecialAbility;
-import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.CardBoard;
@@ -19,7 +16,6 @@ import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
-import javafx.beans.binding.ObjectBinding;
 
 import java.util.*;
 import java.util.regex.*;
@@ -72,21 +68,9 @@ public class CLI extends View{
         selectInitialResources();
 
         waitForUpdatedGame();
-        showSwapArea();
 
-        //FIXME, it has to be a method that selects the leader cards and than sends them
-        {
-            Integer[] leaders = {0,2};
-            try {
-                networkHandler.sendObject(leaders);
-                message = waitAndGetResponse();
-                 if(message != SUCCESS)
-                     System.out.println(message);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        choseLeaderCards();
 
         waitForUpdatedGame();
         System.out.println(waitAndGetResponse()); //gamestarted
@@ -153,7 +137,7 @@ public class CLI extends View{
                     showProduce();
                     break;
                 case 4:
-                    showLeaderCards();
+                    showLeaderBoard();
                     break;
                 case 5:
                     try {
@@ -895,7 +879,7 @@ public class CLI extends View{
      * and asks wat to do with them, discard or play. It also sands
      * the answer to the server
      */
-    private void showLeaderCards() {
+    private void showLeaderBoard() {
         int currentAction;
 
         LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
@@ -932,7 +916,31 @@ public class CLI extends View{
         }
     }
 
+    private void choseLeaderCards() {
+        Integer[] chose= new Integer[2];
+        Object message;
 
+        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+
+        ArrayList<LeaderCard> leaderCardsInHand = leaderBoard.getLeaderCardsInHand();
+
+        printLeaderCards(leaderCardsInHand);
+
+        chose[0] = integerInput("Select first leader: ", 1,4);
+        chose[1] = integerInput("Select second leader: ", 1,4);
+
+        try
+        {
+            networkHandler.sendObject(chose);
+            this.message = waitAndGetResponse();
+            if(this.message != SUCCESS)
+                System.out.println(this.message);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
 
     //SUPPORT METHODS
@@ -1136,17 +1144,6 @@ public class CLI extends View{
                     e.printStackTrace();
                 }
                 break;
-        }
-
-
-        if(playerNumber>0) {
-            try {
-                networkHandler.sendObject(DROPRESOURCES);
-                if (waitAndGetResponse() != SUCCESS)
-                    System.out.println(ANSI_RED + "Error" + RESET);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
