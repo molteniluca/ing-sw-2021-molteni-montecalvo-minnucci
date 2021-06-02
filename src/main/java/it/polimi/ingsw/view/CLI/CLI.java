@@ -498,7 +498,7 @@ public class CLI extends View{
      * Method that helps player to organize resources gotten from market in warehouse
      * @param resourcesFromMarket the resources obtained from the market
      */
-    public void showSwapArea(Resources resourcesFromMarket){
+    public void showSwapArea(Resources resourcesFromMarket) {
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
         ResourceTypes resourceTypesToMove = null;
         Resources resTmp = new Resources();
@@ -685,15 +685,15 @@ public class CLI extends View{
             currentAction = integerInput("Select action: ", 0, 1);
 
             try {
-                networkHandler.sendObject(BUYCARD);
-
                 switch (currentAction) {
 
                     case 1:
+
                         int row = integerInput("Chose row: ", 0, 2);
                         int column = integerInput("Chose column: ", 0, 3);
                         int place = integerInput("Where do you want to place the card: ", 0, 2);
 
+                        networkHandler.sendObject(BUYCARD);
                         networkHandler.sendObject(row);
                         networkHandler.sendObject(column);
                         networkHandler.sendObject(place);
@@ -1252,7 +1252,6 @@ public class CLI extends View{
 
 
     private void printLeaderCards(ArrayList<LeaderCard> cards) {
-        int tabs;
         Resources resourceRequirements;
         DevelopmentCardRequirement levelRequirements;
         List<DevelopmentCardRequirement> colorRequirements;
@@ -1303,10 +1302,9 @@ public class CLI extends View{
 
                 tmp2Type = new ArrayList<>(tmpType);
 
-                Set<Character> set = new HashSet<>(tmpType);
+                Set<Character> set = new HashSet<>(tmpType); //used to remove every duplicated object
                 tmpType.clear();
                 tmpType.addAll(set);
-
 
                 for(Character car1 : tmpType)
                 {
@@ -1329,8 +1327,9 @@ public class CLI extends View{
 
                 }
             }
-
             System.out.print("\n");
+
+            //FIXME Prints the special ability
         }
     }
 
