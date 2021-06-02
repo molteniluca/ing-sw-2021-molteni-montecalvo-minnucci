@@ -411,7 +411,6 @@ public class CLI extends View{
         int currentAction = -1;
         int column;
         int row;
-        Resources resourcesFromMarket;
 
         Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
 
@@ -458,8 +457,9 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYCOLUMN);
                             networkHandler.sendObject(column);
                             networkHandler.sendObject(-1); //null effect index
-                            resourcesFromMarket = market.buyColumn(column);
-                            showSwapArea(resourcesFromMarket);
+                            waitAndGetResponse();
+                            waitForUpdatedGame();
+                            showSwapArea();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -472,8 +472,9 @@ public class CLI extends View{
                             networkHandler.sendObject(BUYROW);
                             networkHandler.sendObject(row);
                             networkHandler.sendObject(-1); //null effect index
-                            resourcesFromMarket = market.buyRow(row); //modify the local copy of the market
-                            showSwapArea(resourcesFromMarket);
+                            waitAndGetResponse();
+                            waitForUpdatedGame();
+                            showSwapArea();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -496,24 +497,20 @@ public class CLI extends View{
 
     /**
      * Method that helps player to organize resources gotten from market in warehouse
-     * @param resourcesFromMarket the resources obtained from the market
      */
-    public void showSwapArea(Resources resourcesFromMarket) {
+    public void showSwapArea(){
+        Resources resourcesFromMarket;
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
         ResourceTypes resourceTypesToMove = null;
-        Resources resTmp = new Resources();
         boolean exit = false;
 
         refresh();
         System.out.println("SWAP AREA\n");
 
-        System.out.println("\nYou get from market: ");
-        WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-        printResources(resourcesFromMarket, "real");
+        while(!(game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() ==0 || exit)) {
+            WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+            resourcesFromMarket = warehouseDepots.getSwapDeposit();
 
-        System.out.print("\n\n");
-
-        while(resourcesFromMarket.getTotalResourceNumber() !=0 || exit) {
             System.out.print("Now you have: ");
             printResources(resourcesFromMarket, "real");
             System.out.print("\n\n");
@@ -543,6 +540,13 @@ public class CLI extends View{
                     if(currentString.equals("y"))
                         exit = true;
                     //FIXME add faithTrack step for other player if resourceFromMarket != empty
+                        if(resourcesFromMarket.getTotalResourceNumber() > 0) {
+                            try {
+                                networkHandler.sendObject(DROPRESOURCES);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     break;
                 case 1:
                     do {
@@ -553,8 +557,13 @@ public class CLI extends View{
                     while (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1);
 
                     if (warehouseDepots.getResourceTypeLevel(level) == null) {
-                        tmp = integerInput("Which type of resource?\n1) " + ColoredResources.GOLD + "\n2) " + ColoredResources.SERVANT + "\n3) " + ColoredResources.SHIELD + "\n4) " + ColoredResources.STONE + "\n", 1, 4);
-                        resourceTypesToMove = numberToResourceType(tmp);
+                        do {
+                            tmp = integerInput("Which type of resource?\n1) " + ColoredResources.GOLD + "\n2) " + ColoredResources.SERVANT + "\n3) " + ColoredResources.SHIELD + "\n4) " + ColoredResources.STONE + "\n", 1, 4);
+
+                            resourceTypesToMove = numberToResourceType(tmp);
+                            if(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0)
+                                wrongInput();
+                        }while(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0);
                     } else
                         resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
 
@@ -571,33 +580,12 @@ public class CLI extends View{
                         else
                             numResToMove = numResToAdd;
 
-                        try {
-                            warehouseDepots.moveToLevel(level, resourceTypesToMove, numResToMove);
-                        } catch (TypeNotChangeableException e) {
-                            e.printStackTrace();
-                        } catch (LevelTooSmallException e) {
-                            e.printStackTrace();
-                        } catch (NegativeResourceValueException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        resTmp.set(resourceTypesToMove, numResToMove);
-                        try {
-                            resourcesFromMarket = resourcesFromMarket.sub(resTmp);
-                            //
-                        } catch (NegativeResourceValueException e) {
-                            e.printStackTrace();
-                        }
-
-
                         try{
                             networkHandler.sendObject(MOVETOLEVEL);
                             networkHandler.sendObject(level);
                             networkHandler.sendObject(resourceTypesToMove);
                             networkHandler.sendObject(numResToMove);
-                           // if(waitAndGetResponse()!=SUCCESS)
-                             //   System.out.println(ANSI_RED+"ERROR"+RESET);
+                            waitAndGetResponse();
                         }catch (IOException e)
                         {
                             e.printStackTrace();
@@ -621,24 +609,11 @@ public class CLI extends View{
                     if (level == -1)
                         break;
 
-                    resourcesFromMarket = resourcesFromMarket.add(warehouseDepots.getResources(level));
-
-                    resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
-                    numResToMove = warehouseDepots.getResourcesNumber(level); //max number possible of resources to move
-
-                    resTmp.set(resourceTypesToMove, numResToMove);
-
-                    try {
-                        warehouseDepots.removeResources(resTmp);
-                    } catch (NegativeResourceValueException e) {
-                        e.printStackTrace();
-                    }
-
                     try{
+                        warehouseDepots.moveToSwap(1);
                         networkHandler.sendObject(MOVETOSWAP);
                         networkHandler.sendObject(level);
-                        //if(waitAndGetResponse()!=SUCCESS)
-                          //  System.out.println(ANSI_RED+"ERROR"+RESET);
+                        waitAndGetResponse();
                     }catch (IOException e)
                     {
                         e.printStackTrace();
@@ -648,6 +623,7 @@ public class CLI extends View{
                     break;
 
             }
+            waitForUpdatedGame();
         }
     }
 
@@ -725,28 +701,34 @@ public class CLI extends View{
      */
     @Override
     public void showWarehouse(WarehouseDepots warehouseDepots) {
+        int k;
         System.out.println("WAREHOUSE");
 
-        for(int i = 0; i < warehouseDepots.getNumberLevels(); i++){
-            //Warehouse layout
+        for(int i = 1; i <= warehouseDepots.getNumberLevels(); i++){//For different levels
+            //Warehouse layout from left side of screen for each level
 
-            if(i == 0)
-                System.out.print("\t");
-            else if(i == 1 || i > 2) {
-                if(i == 3)
+            if(i == 1)
+                System.out.print("    ");
+            else if(i == 2 || i > 3) {
+                if(i == 4)
                     System.out.println("Extra deposit");
                 System.out.print("  ");
             }
 
+
             //Warehouse Resources printed
-            if(warehouseDepots.getResourceTypeLevel(i) != null)
-                System.out.println(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i).toString()));
+            if(warehouseDepots.getResourceTypeLevel(i-1) != null) {
+                for (k = 1; k <= warehouseDepots.getResourcesNumber(i-1); k++)
+                    System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i-1).toString()) + " ");
+                for (int l = warehouseDepots.getResourcesNumber(i-1); l < i; l++)
+                    System.out.print(BLANK + " ");
+            }
             else {
-                for (int j = 0; j <= i; j++) {
+                for (int j = 1; j <= i; j++) {
                     System.out.print(BLANK + " ");
                 }
-                System.out.print("\n");
             }
+            System.out.print("\n");
         }
     }
 
