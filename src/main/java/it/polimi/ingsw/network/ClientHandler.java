@@ -45,6 +45,8 @@ public class ClientHandler extends Thread{
 
             command = receiveObject(NetworkMessages.class);
 
+            new HeartbeatThreadServer(this);
+
             if(command == CREATEGAME){
                 createGame(receiveObject(Integer.class));
             }else if(command == JOINGAME){
