@@ -12,7 +12,7 @@ import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 public abstract class View extends Thread{
     public final Queue<Object> messages = new LinkedList<>(); //List of received messages
-    protected boolean gameUpdated=false;
+    protected boolean gameUpdatedNetMess =false;
 
     public abstract void initializeView();
 
@@ -35,7 +35,7 @@ public abstract class View extends Thread{
     public void notifyResponse(Object o){
         if(o.getClass()== NetworkMessages.class)
             if(o==SUCCESS)
-                gameUpdated=false;
+                gameUpdatedNetMess =false;
         messages.add(o);
         synchronized (this) {
             this.notify();
@@ -44,7 +44,7 @@ public abstract class View extends Thread{
 
     public void notifyNewGame(Game game){
         updateObjects(game);
-        gameUpdated=true;
+        gameUpdatedNetMess =true;
         synchronized (this) {
             this.notify();
         }
@@ -56,7 +56,7 @@ public abstract class View extends Thread{
      * Suspend the view thread in wait for a new game object
      */
     protected void waitForUpdatedGame() {
-        while (!gameUpdated){
+        while (!gameUpdatedNetMess){
             synchronized (this){
                 try{
                     this.wait();
