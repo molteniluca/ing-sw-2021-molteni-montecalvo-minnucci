@@ -17,6 +17,7 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -591,6 +592,7 @@ public class CLI extends View{
                         }
 
 
+
                         resourceMovedCorrectly();
                         break;
                     }
@@ -723,9 +725,12 @@ public class CLI extends View{
                     System.out.print(BLANK + " ");
             }
             else {
-                for (int j = 1; j <= i; j++) {
-                    System.out.print(BLANK + " ");
-                }
+                if(0 < i && i < 4) {
+                    for (int j = 1; j <= i; j++)
+                        System.out.print(BLANK + " ");
+                }else
+                    for (int j = 1; j <= 2; j++)
+                        System.out.println(BLANK + " ");
             }
             System.out.print("\n");
         }
