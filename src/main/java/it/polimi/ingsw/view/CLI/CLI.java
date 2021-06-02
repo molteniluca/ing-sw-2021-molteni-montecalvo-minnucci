@@ -46,6 +46,7 @@ public class CLI extends View{
     private boolean gameUpdated = false;
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) is already done
     private int playerNumber; //the number of the player received before GAMESTARTED
+    private Object message;
 
     @Override
     public void run(){
@@ -70,17 +71,24 @@ public class CLI extends View{
         //Asks the player the resources he wants depending on the playerNumber
         selectInitialResources();
 
+        waitForUpdatedGame();
+        showSwapArea();
+
         //FIXME, it has to be a method that selects the leader cards and than sends them
         {
             Integer[] leaders = {0,2};
             try {
                 networkHandler.sendObject(leaders);
-                // if(waitAndGetResponse()!=SUCCESS)
+                message = waitAndGetResponse();
+                 if(message != SUCCESS)
+                     System.out.println(message);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        waitForUpdatedGame();
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN) {
@@ -779,90 +787,104 @@ public class CLI extends View{
      * and sands the choice to the server
      */
     private void showProduce() {
-        int currentAction;
+        int currentAction = -1;
+        Object message;
+
+        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
+        WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        CardBoard cardBoard = personalBoard.getCardBoard();
+        Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
 
         refresh();
         showCardBoard();
         showStrongbox();
-
-        WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
         showWarehouse(warehouseDepots);
 
-        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
-        CardBoard cardBoard = personalBoard.getCardBoard();
-        Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
+        while (currentAction!=0) {
+            if (!actionDone) {
+                System.out.println("\n1) Base production ");
+                System.out.println("2) Card production");
+                System.out.println("3) Leader card production"); //FIXME appears only if the player has a particular leader card
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 3);
 
-        if(!actionDone) {
-            System.out.println("\n1) Base production ");
-            System.out.println("2) Card production");
-            System.out.println("3) Leader card production"); //FIXME appears only if the player has a particular leader card
-            System.out.println("0) Exit");
-            currentAction = integerInput("Select action: ", 0, 3);
+                try {
+                    if(currentAction != 0)
+                        networkHandler.sendObject(PRODUCTION);
 
-            try{
-                networkHandler.sendObject(PRODUCTION);
+                    switch (currentAction) {
+                        //Base production
+                        case 1:
+                            int firstResource, secondResource, productionResult;
+                            networkHandler.sendObject(PROD1);
+                            System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
+                            System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                            firstResource = integerInput("Select first resource: ", 1, 4);
+                            secondResource = integerInput("Select second resource: ", 1, 4);
+                            productionResult = integerInput("Select production result: ", 1, 4);
 
-                switch (currentAction) {
-                    //Base production
-                    case 1:
-                        int firstResource, secondResource, productionResult;
-                        networkHandler.sendObject(PROD1);
-                        System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
-                        System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-                        firstResource = integerInput("Select first resource: ", 1, 4);
-                        secondResource = integerInput("Select second resource: ", 1, 4);
-                        productionResult = integerInput("Select production result: ", 1, 4);
+                            networkHandler.sendObject(numberToResourceType(firstResource));
+                            networkHandler.sendObject(numberToResourceType(secondResource));
+                            networkHandler.sendObject(numberToResourceType(productionResult));
+                            //networkHandler.sendObject(ENDPRODUCTION);
 
-                        networkHandler.sendObject(numberToResourceType(firstResource));
-                        networkHandler.sendObject(numberToResourceType(secondResource));
-                        networkHandler.sendObject(numberToResourceType(productionResult));
-                        networkHandler.sendObject(ENDPRODUCTION);
-                        actionDone = true;
-                        if (waitAndGetResponse() == ERROR) {
-                            System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
-                        }
+                            message = waitAndGetResponse();
 
-                        break;
+                            if (message == SUCCESS) {
+                                waitForUpdatedGame();
+                            }
+                            else {
+                                message = waitAndGetResponse();
+                                System.out.println(message);
+                                //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
+                            }
+                            break;
 
-                    //Development card production
-                    case 2:
-                        int currentCard;
-                        networkHandler.sendObject(PROD2);
-                        currentCard = integerInput("Select card (0,1,2): ", 0, 2);
-                        networkHandler.sendObject(currentCard);
-                        networkHandler.sendObject(ENDPRODUCTION);
-                        actionDone = true;
-                        if (waitAndGetResponse() == ERROR) {
-                            System.out.println(ANSI_RED + "You don't have enough resources activate this production power" + RESET);
-                        }
+                        //Development card production
+                        case 2:
+                            int currentCard;
+                            networkHandler.sendObject(PROD2);
+                            currentCard = integerInput("Select card (0,1,2): ", 0, 2);
+                            networkHandler.sendObject(currentCard);
 
-                        break;
+                            message = waitAndGetResponse();
 
-                    //leader card production
-                    case 3:
-                        networkHandler.sendObject(PROD3);
-                        //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
-                        //FIXME only if the player has one or two leader cards with the extraProduction effect
-                        System.out.println("Leader card effect, NOT IMPLEMENTED YET");
-                        System.out.println("1)Activate leader effect one");
-                        System.out.println("2)Activate leader effect two");
-                        integerInput("Select action: ", 0, 2);
-                        //FIXME send action and receive effects
-                        break;
-                    case 0:
-                        break;
+                            if (message == SUCCESS) {
+                                waitForUpdatedGame();
+                            }
+                            else {
+                                message = waitAndGetResponse(); //Wait for the string that describes the error
+                                System.out.println(message);
+                                //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
+                            }
+                            break;
+
+                        //leader card production
+                        case 3:
+                            networkHandler.sendObject(PROD3);
+                            //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
+                            //FIXME only if the player has one or two leader cards with the extraProduction effect
+                            System.out.println("Leader card effect, NOT IMPLEMENTED YET");
+                            System.out.println("1)Activate leader effect one");
+                            System.out.println("2)Activate leader effect two");
+                            integerInput("Select action: ", 0, 2);
+                            //FIXME send action and receive effects
+                            break;
+                        case 0:
+                            actionDone = true;
+                            networkHandler.sendObject(ENDPRODUCTION);
+                            break;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-            }catch (IOException e)
-            {
-                e.printStackTrace();
+            } else {
+                System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 0);
             }
-
-        }
-        else {
-            System.out.println(ANSI_GREEN+"You already did a basic action"+RESET);
-            System.out.println("0) Exit");
-            integerInput("Select action: ", 0, 0);
         }
 
     }
@@ -908,7 +930,6 @@ public class CLI extends View{
         {
             e.printStackTrace();
         }
-
     }
 
 
