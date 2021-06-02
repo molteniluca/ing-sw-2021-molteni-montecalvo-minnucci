@@ -145,6 +145,8 @@ public class PlayerTurn implements Turn, Serializable {
             clientHandler.sendGame();
             return true;
         }catch (IndexOutOfBoundsException e){
+            clientHandler.sendObject(ERROR);
+            clientHandler.sendObject(e.getMessage());
             return false;
         }
     }
