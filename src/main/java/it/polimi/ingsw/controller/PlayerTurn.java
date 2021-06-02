@@ -200,7 +200,7 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame();
                         error = false;
-                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | NullPointerException e) {
+                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | IndexOutOfBoundsException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.toString());
                     }
@@ -276,7 +276,7 @@ public class PlayerTurn implements Turn, Serializable {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             return false;
-        } catch (IncompatibleCardLevelException | NegativeResourceValueException e) {
+        } catch (IncompatibleCardLevelException | NegativeResourceValueException | IndexOutOfBoundsException e) {
             clientHandler.sendObject(ERROR);
             clientHandler.sendObject(e.toString());
             return true;
@@ -325,7 +325,7 @@ public class PlayerTurn implements Turn, Serializable {
             case 3:
                 while(true) {
                     try {
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).set(clientHandler.receiveObject(ResourceTypes.class), 1));
+                        player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1).add(new Resources().set(clientHandler.receiveObject(ResourceTypes.class), 1)));
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
                         handleSwap();
