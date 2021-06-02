@@ -719,19 +719,23 @@ public class CLI extends View{
 
             //Warehouse Resources printed
             if(warehouseDepots.getResourceTypeLevel(i-1) != null) {
-                for (k = 1; k <= warehouseDepots.getResourcesNumber(i-1); k++)
-                    System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i-1).toString()) + " ");
-                for (int l = warehouseDepots.getResourcesNumber(i-1); l < i; l++)
-                    System.out.print(BLANK + " ");
+                if(0 < i && i < 4) {
+                    for (k = 1; k <= warehouseDepots.getResourcesNumber(i - 1); k++)
+                        System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i - 1).toString()) + " ");
+                    for (int l = warehouseDepots.getResourcesNumber(i - 1); l < i; l++)
+                        System.out.print(BLANK + " ");
+                }
+                else{
+                    for (int j = 1; j <= 2; j++)
+                        System.out.print(BLANK + " ");
+                    System.out.print(ColorCLI.ANSI_GREEN + warehouseDepots.getResourceTypeLevel(i-1).toString() + RESET);
+                }
             }
             else {
-                if(0 < i && i < 4) {
-                    for (int j = 1; j <= i; j++)
-                        System.out.print(BLANK + " ");
-                }else
-                    for (int j = 1; j <= 2; j++)
-                        System.out.println(BLANK + " ");
+                for (int j = 1; j <= i; j++)
+                    System.out.print(BLANK + " ");
             }
+
             System.out.print("\n");
         }
     }
