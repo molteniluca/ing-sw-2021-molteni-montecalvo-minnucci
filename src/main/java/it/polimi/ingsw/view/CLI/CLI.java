@@ -17,7 +17,6 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
 import java.util.regex.*;
@@ -79,6 +78,12 @@ public class CLI extends View{
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN) {
+                try {
+                    System.out.print(ANSI_GREEN+"\rIt's your turn, press enter to start"+RESET);
+                    input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 waitForUpdatedGame();
                 actionDone = false;
                 showHomepage();
@@ -118,7 +123,6 @@ public class CLI extends View{
             showCardBoard();
             showStrongbox();
 
-
             WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             showWarehouse(warehouseDepots);
 
@@ -151,6 +155,7 @@ public class CLI extends View{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        System.out.print(ANSI_GREEN+"Waiting for players ... "+RESET);
                     }
                     else
                     {
