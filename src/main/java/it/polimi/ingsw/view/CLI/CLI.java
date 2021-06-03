@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
 import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.model.cards.specialAbility.SpecialAbility;
+import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.CardBoard;
@@ -17,6 +17,7 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
 import java.util.regex.*;
@@ -47,7 +48,6 @@ public class CLI extends View{
     @Override
     public void run(){
 
-        Object message;
         initializeView();
 
 
@@ -674,10 +674,8 @@ public class CLI extends View{
                         networkHandler.sendObject(column);
                         networkHandler.sendObject(place);
 
-                        if(waitAndGetResponse() == ERROR)
-                            System.out.println(ANSI_RED+"You don't have enough resources to build this card"+RESET);
+                        actionDone = isSuccessReceived();
 
-                        actionDone = true;
                         break;
                     case 0:
                         break;
@@ -825,6 +823,9 @@ public class CLI extends View{
                             networkHandler.sendObject(numberToResourceType(productionResult));
                             //networkHandler.sendObject(ENDPRODUCTION);
 
+                            isSuccessReceived();
+
+                            /*
                             message = waitAndGetResponse();
 
                             if (message == SUCCESS) {
@@ -835,6 +836,8 @@ public class CLI extends View{
                                 System.out.println(message);
                                 //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
                             }
+
+                             */
                             break;
 
                         //Development card production
@@ -843,6 +846,9 @@ public class CLI extends View{
                             networkHandler.sendObject(PROD2);
                             currentCard = integerInput("Select card (0,1,2): ", 0, 2);
                             networkHandler.sendObject(currentCard);
+                            isSuccessReceived();
+
+                            /*
 
                             message = waitAndGetResponse();
 
@@ -854,6 +860,8 @@ public class CLI extends View{
                                 System.out.println(message);
                                 //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
                             }
+
+                             */
                             break;
 
                         //leader card production
@@ -899,7 +907,7 @@ public class CLI extends View{
         ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
 
         refresh();
-        System.out.println("LEADER CARDS");
+        //System.out.println("LEADER CARDS");
 
         printLeaderCards(leaderBoard.getLeaderCardsInHand());
 
@@ -949,7 +957,13 @@ public class CLI extends View{
         printLeaderCards(leaderCardsInHand);
 
         chose[0] = integerInput("Select first leader (1-4): ", 1,4) - 1;
-        chose[1] = integerInput("Select second leader (1-4): ", 1,4) - 1;
+
+        do {
+            chose[1] = integerInput("Select second leader (1-4): ", 1, 4)-1;
+            if(chose[0].equals(chose[1]))
+                System.out.println(ANSI_GREEN+"\nYou already selected this card\n"+RESET);
+        }while(chose[0].equals(chose[1]));
+
 
         try
         {
@@ -1073,14 +1087,14 @@ public class CLI extends View{
     /**
      * Method that prints the resources given
      * @param resources the resources that has to be printed
-     * @param modality the wat of printing that resources:
+     * @param mod the way of printing that resources:
      * 'real' prints only shield, stone, gold and servant
      * 'all' prints also faith and blank
      */
-    private int printResources(Resources resources, String modality) {
+    private int printResources(Resources resources, String mod) {
         int printedResources=0;
 
-        if(modality.equals("real")) {
+        if(mod.equals("real")) {
             for (ResourceTypes res : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) //Only real resources are counted
             {
                 int amount = resources.getResourceNumber(res);
@@ -1091,7 +1105,7 @@ public class CLI extends View{
             }
         }
 
-        if(modality.equals("all")){
+        if(mod.equals("all")){
             for (ResourceTypes res :ResourceTypes.values()) //Only real resources are counted
             {
                 int amount = resources.getResourceNumber(res);
@@ -1311,7 +1325,9 @@ public class CLI extends View{
         List<DevelopmentCardRequirement> colorRequirements;
         SpecialAbility specialAbility;
 
-        System.out.print("\n");
+        System.out.println("LEADER CARDS");
+        showLegend();
+        System.out.println(ANSI_BLUE + "🁢" + RESET+ "1 : Color and number of a development card\n");
         for(LeaderCard card : cards)
         {
             resourceRequirements = card.getResourceRequirements();
@@ -1319,10 +1335,11 @@ public class CLI extends View{
             colorRequirements = card.getDevelopmentCardRequirementOnlyColor();
             specialAbility = card.getSpecialAbility();
 
-            System.out.print("Requirements: ");
+            System.out.print(ANSI_BOLD+"Requirements: "+RESET);
+
             if(resourceRequirements!=null) {
                 printResources(resourceRequirements, "real");
-                System.out.print("\t\t\t");
+                System.out.print("\t  ");
             }
 
             if(levelRequirements!=null)
@@ -1342,7 +1359,7 @@ public class CLI extends View{
                         System.out.print(ANSI_YELLOW+ "🁢" +RESET);
                         break;
                 }
-                System.out.print("level " + levelRequirements.getLevel());
+                System.out.print("level " + levelRequirements.getLevel()+"");
             }
 
 
@@ -1377,13 +1394,26 @@ public class CLI extends View{
                             System.out.print(ANSI_YELLOW+ "🁢" +RESET);
                             break;
                     }
-                    System.out.print(Collections.frequency(tmp2Type, car1) + " ");
+                    System.out.print(Collections.frequency(tmp2Type, car1) + "  ");
 
                 }
             }
-            System.out.print("\n");
 
-            //FIXME Prints the special ability
+            System.out.print(ANSI_BOLD+"  Special ability: "+RESET);
+
+            if(specialAbility.getClass() == Discount.class)
+                System.out.print("Discount: your development cards will cost 1 " +((Discount) specialAbility).getResourceDiscount().toString() + " less");
+
+            if(specialAbility.getClass() == ExtraDeposit.class)
+                System.out.print("Extra deposit: you can have 2 extra "+ ((ExtraDeposit) specialAbility).getResourceType().toString()+ " deposits");
+
+            if(specialAbility.getClass() == ExtraProduction.class)
+                System.out.print("Extra production: you can use 1 "+((ExtraProduction) specialAbility).getProductionCost()+" to produce 1 resource and 1 faith point");
+
+            if(specialAbility.getClass() == ExtraResource.class)
+                System.out.print("Extra resource: all the BLANK resources you get from market will become "+((ExtraResource) specialAbility).getResource());
+
+            System.out.print("\n");
         }
     }
 
