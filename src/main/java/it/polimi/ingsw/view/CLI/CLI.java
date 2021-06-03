@@ -70,7 +70,7 @@ public class CLI extends View{
 
         waitForUpdatedGame();
 
-
+        refresh();
         choseLeaderCards();
 
         waitForUpdatedGame();
@@ -79,7 +79,7 @@ public class CLI extends View{
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN) {
                 try {
-                    System.out.print(ANSI_GREEN+"\rIt's your turn, press enter to start"+RESET);
+                    System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
                     input.readLine();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -112,7 +112,7 @@ public class CLI extends View{
      */
     @Override
     public void showHomepage() {
-        //gameUpdated = false;
+
         int currentAction = -1;
 
 
@@ -159,10 +159,10 @@ public class CLI extends View{
                     }
                     else
                     {
-                        System.out.println(ANSI_GREEN+"You need to do at least one action before ending a turn"+RESET);
+                        System.out.println(ANSI_GREEN+"You need to do at least one action before ending a turn, press enter to continue"+RESET);
                         try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
+                            input.readLine();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                         currentAction = -1;
@@ -507,7 +507,6 @@ public class CLI extends View{
     }
 
 
-
     /**
      * Method that helps player to organize resources gotten from market in warehouse
      */
@@ -685,9 +684,9 @@ public class CLI extends View{
 
                     case 1:
 
-                        int row = integerInput("Chose row (1-3): ", 1, 3) - 1;
+                        int row = 3 - integerInput("Chose level (1-3): ", 1, 3);
                         int column = integerInput("Chose column (1-4): ", 1, 4) - 1;
-                        int place = integerInput("Where do you want to place the card (1-3): ", 1, 3) - 1;
+                        int place = integerInput("Where do you want to place the card in your card board(1-3): ", 1, 3) - 1;
 
                         networkHandler.sendObject(BUYCARD);
                         networkHandler.sendObject(row);
@@ -942,14 +941,14 @@ public class CLI extends View{
                     break;
                 case 1:
                     networkHandler.sendObject(ACTIVATELEADER);
-                    currentAction = integerInput("Select card: ",0,leaderInHand.size()-1);
+                    currentAction = integerInput("Select card: ",1,leaderInHand.size())-1;
                     networkHandler.sendObject(currentAction);
                     isSuccessReceived();
                     break;
 
                 case 2:
                     networkHandler.sendObject(DISCARDLEADER);
-                    currentAction = integerInput("Select card: ", 0,leaderInHand.size()-1);
+                    currentAction = integerInput("Select card: ", 1,leaderInHand.size())-1;
                     networkHandler.sendObject(currentAction);
                     isSuccessReceived();
                     break;
@@ -1013,7 +1012,15 @@ public class CLI extends View{
         {
             message = waitAndGetResponse(); //receive the error message
             System.out.print(ANSI_RED);
-            System.out.print(message+RESET); //prints the error message
+            System.out.println(message); //prints the error message
+            System.out.println("Press enter to continue "+RESET);
+
+            try {
+                input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return false;
         }
 
