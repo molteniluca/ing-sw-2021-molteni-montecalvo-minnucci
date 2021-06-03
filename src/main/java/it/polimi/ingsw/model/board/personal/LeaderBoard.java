@@ -65,22 +65,18 @@ public class LeaderBoard implements Serializable {
      * This method discards a leader card
      * @param leader LeaderCard to be discarded
      */
-    public void discardLeader (LeaderCard leader){
+    public void discardLeader (LeaderCard leader) throws FaithOverflowException {
         leaderCardsInHand.remove(leader);
         victoryPoints++;
 
-        try {
-            personalBoard.getFaithTrack().incrementPosition(1);
-        } catch (FaithOverflowException e) {
-            e.printStackTrace();
-        }
+        personalBoard.getFaithTrack().incrementPosition(1);
     }
 
     /**
      * This method discards a leader card
      * @param leaderIndex LeaderCard index to be discarded
      */
-    public void discardLeader (int leaderIndex) throws IndexOutOfBoundsException{
+    public void discardLeader (int leaderIndex) throws IndexOutOfBoundsException, FaithOverflowException {
         discardLeader(leaderCardsInHand.get(leaderIndex));
     }
 

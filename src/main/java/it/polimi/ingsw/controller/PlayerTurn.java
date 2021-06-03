@@ -135,7 +135,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    public boolean discardLeader() throws IOException{
+    public boolean discardLeader() throws IOException, FaithOverflowException {
         try {
             player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
