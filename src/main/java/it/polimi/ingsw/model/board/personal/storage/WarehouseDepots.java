@@ -139,4 +139,13 @@ public class WarehouseDepots implements Serializable {
             }
         }
     }
+
+    /**
+     * Method that get the level requested
+     * @param level the number of level
+     * @return the level needed
+     */
+    public Level getLevel(int level){
+        return warehouseDepots.get(level);
+    }
 }

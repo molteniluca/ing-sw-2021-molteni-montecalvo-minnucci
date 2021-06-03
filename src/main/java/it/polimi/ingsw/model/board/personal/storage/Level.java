@@ -97,4 +97,8 @@ public class Level implements Serializable {
         this.setResourceType(resourceType);
         this.setResourceNumber(this.resourceNumber - resourceNumber);
     }
+
+    public boolean getFixedResource() {
+        return fixedResource;
+    }
 }

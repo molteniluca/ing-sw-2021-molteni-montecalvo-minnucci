@@ -17,7 +17,6 @@ import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
 import java.util.regex.*;
@@ -535,7 +534,7 @@ public class CLI extends View{
                 case 0:
                     String currentString = null;
                     do {
-                        System.out.println("Are you sure you want to exit? Every unallocated resource would be lost and for each unallocated resource other players move one step forward in their faith track (y/n)");
+                        System.out.println(ANSI_GREEN + "Are you sure you want to exit? \nEvery unallocated resource would be lost and \nfor each unallocated resource other players move one step forward in their faith track (y/n)" + RESET);
                         try {
                             currentString = input.readLine();
                             currentString = currentString.toLowerCase();
@@ -547,7 +546,6 @@ public class CLI extends View{
 
                     if(currentString.equals("y"))
                         exit = true;
-                    //FIXME add faithTrack step for other player if resourceFromMarket != empty
                     if(resourcesFromMarket.getTotalResourceNumber() > 0) {
                         try {
                             networkHandler.sendObject(DROPRESOURCES);
@@ -564,13 +562,18 @@ public class CLI extends View{
                     break;
                 case 1:
                     do {
-                        level = integerInput("On which level? (1-" + warehouseDepots.getNumberLevels() + "): ", 1, warehouseDepots.getNumberLevels()) - 1;
+                        level = integerInput("On which level? (1-" + warehouseDepots.getNumberLevels() + "): ", 0, warehouseDepots.getNumberLevels()) - 1;
+                        if (level == -1)
+                            break;
                         if (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1)
-                            System.out.println("\nYou selected a full level, please select another one");
+                            System.out.println("\nYou selected a full level, please select another one or 0 to quit");
                     }
                     while (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1);
 
-                    if (warehouseDepots.getResourceTypeLevel(level) == null) {
+                    if (level == -1)
+                        break;
+
+                    if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).getFixedResource()) {
                         do {
                             tmp = integerInput("Which type of resource?\n1) " + ColoredResources.GOLD + "\n2) " + ColoredResources.SERVANT + "\n3) " + ColoredResources.SHIELD + "\n4) " + ColoredResources.STONE + "\n", 1, 4);
 
@@ -581,7 +584,7 @@ public class CLI extends View{
                     } else
                         resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
 
-                    if (warehouseDepots.getResourceTypeLevel(level) == null || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
+                    if (warehouseDepots.getResourcesNumber(level) == 0 || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
                         numResOccupied = warehouseDepots.getResourcesNumber(level);
 
                         if (0 <= level && level < 3)
@@ -599,13 +602,14 @@ public class CLI extends View{
                             networkHandler.sendObject(level);
                             networkHandler.sendObject(resourceTypesToMove);
                             networkHandler.sendObject(numResToMove);
-                            waitAndGetResponse();
                         }catch (IOException e)
                         {
                             e.printStackTrace();
                         }
-
-
+                        if (waitAndGetResponse() == ERROR){
+                            System.out.println(waitAndGetResponse());//probably player tries to put res with different type in the same level
+                            break;
+                        }
 
                         resourceMovedCorrectly();
                         break;
@@ -628,10 +632,13 @@ public class CLI extends View{
                         warehouseDepots.moveToSwap(1);
                         networkHandler.sendObject(MOVETOSWAP);
                         networkHandler.sendObject(level);
-                        waitAndGetResponse();
                     }catch (IOException e)
                     {
                         e.printStackTrace();
+                    }
+                    if (waitAndGetResponse() == ERROR) {
+                        System.out.println(waitAndGetResponse());
+                        break;
                     }
 
                     resourceMovedCorrectly();
@@ -680,7 +687,19 @@ public class CLI extends View{
 
                     case 1:
 
-                        int row = integerInput("Chose row (1-3): ", 1, 3) - 1;
+                        int level = integerInput("Chose development card level (1-3): ", 1, 3);
+                        int row = -1; //it will generate error if row does not change
+                        switch (level){
+                            case 1:
+                                row = 2;
+                                break;
+                            case 2:
+                                row = 1;
+                                break;
+                            case 3:
+                                row = 0;
+                                break;
+                        }
                         int column = integerInput("Chose column (1-4): ", 1, 4) - 1;
                         int place = integerInput("Where do you want to place the card (1-3): ", 1, 3) - 1;
 
@@ -730,23 +749,17 @@ public class CLI extends View{
 
 
             //Warehouse Resources printed
-            if(warehouseDepots.getResourceTypeLevel(i-1) != null) {
-                if(0 < i && i < 4) {
-                    for (k = 1; k <= warehouseDepots.getResourcesNumber(i - 1); k++)
-                        System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i - 1).toString()) + " ");
-                    for (int l = warehouseDepots.getResourcesNumber(i - 1); l < i; l++)
-                        System.out.print(BLANK + " ");
-                }
-                else{
-                    for (int j = 1; j <= 2; j++)
-                        System.out.print(BLANK + " ");
-                    System.out.print(ColorCLI.ANSI_GREEN + warehouseDepots.getResourceTypeLevel(i-1).toString() + RESET);
-                }
-            }
-            else {
-                for (int j = 1; j <= i; j++)
-                    System.out.print(BLANK + " ");
-            }
+            for (k = 1; k <= warehouseDepots.getResourcesNumber(i - 1); k++)
+                System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i - 1).toString()) + " ");
+
+            int j;
+            j = (0 < i && i < 4) ? i : 2;
+
+            for (int l = warehouseDepots.getResourcesNumber(i - 1); l < j; l++)
+                System.out.print(BLANK + " ");
+
+            if (i > 3)
+                System.out.print(ColorCLI.ANSI_GREEN + warehouseDepots.getResourceTypeLevel(i-1).toString() + RESET);
 
             System.out.print("\n");
         }
@@ -937,14 +950,14 @@ public class CLI extends View{
                     break;
                 case 1:
                     networkHandler.sendObject(ACTIVATELEADER);
-                    currentAction = integerInput("Select card: ",0,leaderInHand.size()-1);
+                    currentAction = integerInput("Select card: ",1,leaderInHand.size()) - 1;
                     networkHandler.sendObject(currentAction);
                     isSuccessReceived();
                     break;
 
                 case 2:
                     networkHandler.sendObject(DISCARDLEADER);
-                    currentAction = integerInput("Select card: ", 0,leaderInHand.size()-1);
+                    currentAction = integerInput("Select card: ", 1,leaderInHand.size()) - 1;
                     networkHandler.sendObject(currentAction);
                     isSuccessReceived();
                     break;
@@ -1331,7 +1344,7 @@ public class CLI extends View{
 
 
     /**
-     * It prinst out an ArraList of LeaderCards in different lines
+     * It prints out an ArrayList of LeaderCards in different lines
      * @param cards the array of cards that has to be printed
      */
     private void printLeaderCards(ArrayList<LeaderCard> cards) {
