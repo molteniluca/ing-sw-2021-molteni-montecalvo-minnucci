@@ -665,9 +665,9 @@ public class CLI extends View{
 
                     case 1:
 
-                        int row = integerInput("Chose row: ", 0, 2);
-                        int column = integerInput("Chose column: ", 0, 3);
-                        int place = integerInput("Where do you want to place the card: ", 0, 2);
+                        int row = integerInput("Chose row (1-3): ", 1, 3) - 1;
+                        int column = integerInput("Chose column (1-4): ", 1, 4) - 1;
+                        int place = integerInput("Where do you want to place the card (1-3): ", 1, 3) - 1;
 
                         networkHandler.sendObject(BUYCARD);
                         networkHandler.sendObject(row);
@@ -948,8 +948,8 @@ public class CLI extends View{
 
         printLeaderCards(leaderCardsInHand);
 
-        chose[0] = integerInput("Select first leader: ", 0,3);
-        chose[1] = integerInput("Select second leader: ", 0,3);
+        chose[0] = integerInput("Select first leader (1-4): ", 1,4) - 1;
+        chose[1] = integerInput("Select second leader (1-4): ", 1,4) - 1;
 
         try
         {
