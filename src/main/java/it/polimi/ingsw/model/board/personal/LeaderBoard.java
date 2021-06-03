@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.cards.specialAbility.Discount;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraDeposit;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraProduction;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
+import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.UnusableCardException;
 import it.polimi.ingsw.model.resources.Resources;
 
@@ -67,6 +68,12 @@ public class LeaderBoard implements Serializable {
     public void discardLeader (LeaderCard leader){
         leaderCardsInHand.remove(leader);
         victoryPoints++;
+
+        try {
+            personalBoard.getFaithTrack().incrementPosition(1);
+        } catch (FaithOverflowException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

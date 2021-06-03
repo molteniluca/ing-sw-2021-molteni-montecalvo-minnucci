@@ -75,6 +75,7 @@ public class CLI extends View{
         choseLeaderCards();
 
         waitForUpdatedGame();
+
         System.out.println(waitAndGetResponse()); //gamestarted
         while(true) {
             if(waitAndGetResponse() == TURNBEGIN) {
@@ -117,6 +118,7 @@ public class CLI extends View{
             showCardBoard();
             showStrongbox();
 
+
             WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             showWarehouse(warehouseDepots);
 
@@ -143,11 +145,24 @@ public class CLI extends View{
                     showLeaderBoard();
                     break;
                 case 5:
-                    try {
-                        networkHandler.sendObject(TURNEND);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(actionDone) {
+                        try {
+                            networkHandler.sendObject(TURNEND);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    else
+                    {
+                        System.out.println(ANSI_GREEN+"You need to do at least one action before ending a turn"+RESET);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        currentAction = -1;
+                    }
+
                     break;
                 case 0:
                     System.exit(0);
@@ -494,7 +509,7 @@ public class CLI extends View{
     public void showSwapArea() {
         Resources resourcesFromMarket;
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
-        ResourceTypes resourceTypesToMove = null;
+        ResourceTypes resourceTypesToMove;
         boolean exit = false;
 
         refresh();
@@ -533,19 +548,19 @@ public class CLI extends View{
                     if(currentString.equals("y"))
                         exit = true;
                     //FIXME add faithTrack step for other player if resourceFromMarket != empty
-                        if(resourcesFromMarket.getTotalResourceNumber() > 0) {
-                            try {
-                                networkHandler.sendObject(DROPRESOURCES);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if(waitAndGetResponse()==SUCCESS){
-                                exit=true;
-                            }else if(waitAndGetResponse()==ERROR){
-                                exit=false;
-                                System.out.println(waitAndGetResponse());
-                            }
+                    if(resourcesFromMarket.getTotalResourceNumber() > 0) {
+                        try {
+                            networkHandler.sendObject(DROPRESOURCES);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                        if(waitAndGetResponse()==SUCCESS){
+                            exit=true;
+                        }else if(waitAndGetResponse()==ERROR){
+                            exit=false;
+                            System.out.println(waitAndGetResponse());
+                        }
+                    }
                     break;
                 case 1:
                     do {
