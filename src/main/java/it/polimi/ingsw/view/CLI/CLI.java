@@ -193,8 +193,18 @@ public class CLI extends View{
                     break;
 
                 case 0:
-                    System.exit(0);
-                    break;
+                    System.out.print("\nAre you sure you want to exit the game? (y/n): ");
+                    try {
+                        if(input.readLine().trim().equals("y")) {
+                            System.exit(0);
+                            break;
+                        }
+                        else
+                            currentAction = -1;
+                            break;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }
@@ -750,7 +760,7 @@ public class CLI extends View{
     @Override
     public void showWarehouse(WarehouseDepots warehouseDepots) {
         int k;
-        System.out.println("WAREHOUSE");
+        System.out.println("\nWAREHOUSE");
 
         for(int i = 1; i <= warehouseDepots.getNumberLevels(); i++){//For different levels
             //Warehouse layout from left side of screen for each level
@@ -823,19 +833,16 @@ public class CLI extends View{
      */
     private void showProduce() {
         int currentAction = -1;
-        int upperLimit = 1;
+        //int upperLimit;
 
         WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
-        refresh();
-        showCardBoard();
-        showStrongbox();
-        showWarehouse(warehouseDepots);
 
-        while(currentAction !=0)
-        {
+       do {
+            //upperLimit = 0;
             ArrayList<ExtraProduction> extraProductionEffect = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
 
+            /*
             if(actionDone && actionLeaderDone)
             {
                 System.out.print(ANSI_GREEN+"You already did a basic and a leader action, press enter to continue "+RESET);
@@ -854,32 +861,103 @@ public class CLI extends View{
                 System.out.println("2) Card production");
                 upperLimit = 2;
             }
+            else
+                System.out.println(ANSI_GREEN+"You already did a basic action"+RESET);
 
             if(extraProductionEffect.size()>0 && !actionLeaderDone)
             {
-                if(upperLimit!=1)
+                if(upperLimit!=0) {
                     upperLimit = 3;
-
-                System.out.println(upperLimit+") Leader card production");
+                    System.out.println(upperLimit + ") Leader card production");
+                }
+                else
+                    System.out.println(++upperLimit+ ") Leader card production");
 
             }
 
             System.out.println("0) Exit");
             currentAction = integerInput("Select action: ", 0, upperLimit);
 
+             */
+
+            refresh();
+            showCardBoard();
+            showStrongbox();
+            showWarehouse(warehouseDepots);
+
+
+            //FIXME could be better with less controls, problems with the normal production when actionDone = true
+
+            if(!actionDone && !actionLeaderDone)
+            {
+                System.out.println("\n1) Base production ");
+                System.out.println("2) Card production");
+                if(extraProductionEffect.size()>0) {
+                    System.out.println("3) Leader card production");
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 3);
+                }
+                else {
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 2);
+                }
+            }
+
+            if(!actionDone && actionLeaderDone)
+            {
+                System.out.println("\n1) Base production ");
+                System.out.println("2) Card production");
+                if(extraProductionEffect.size()>0)
+                    System.out.println("You already did you leader production");
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 2);
+            }
+
+            if (actionDone && !actionLeaderDone )
+            {
+                if(extraProductionEffect.size() > 0) {
+                    System.out.println(ANSI_GREEN+"\nYou already did a basic action"+RESET);
+                    System.out.println("\n1) Leader card production");
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 1);
+                }
+                else{
+                    System.out.println(ANSI_GREEN+"\nYou already did a basic action"+RESET);
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 0);
+                }
+            }
+
+            if(actionDone && actionLeaderDone)
+            {
+                System.out.print(ANSI_GREEN+"You already did a basic and a leader action, press enter to continue "+RESET);
+                try {
+                    input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+
 
             try {
                 switch (currentAction) {
                     case 1:
                         int firstResource, secondResource, productionResult;
-                        networkHandler.sendObject(PRODUCTION);
-                        networkHandler.sendObject(PROD1);
+
                         System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
                         System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-                        firstResource = integerInput("Select first resource: ", 1, 4);
-                        secondResource = integerInput("Select second resource: ", 1, 4);
-                        productionResult = integerInput("Select production result: ", 1, 4);
 
+
+                        firstResource = integerInput("Select first resource (0 to exit): ", 1, 4);
+                        secondResource = integerInput("Select second resource (0 to exit): ", 1, 4);
+                        productionResult = integerInput("Select production result (0 to exit): ", 1, 4);
+
+                        if(firstResource == 0 || secondResource == 0 || productionResult == 0)
+                            break;
+
+                        networkHandler.sendObject(PRODUCTION);
+                        networkHandler.sendObject(PROD1);
                         networkHandler.sendObject(numberToResourceType(firstResource));
                         networkHandler.sendObject(numberToResourceType(secondResource));
                         networkHandler.sendObject(numberToResourceType(productionResult));
@@ -890,10 +968,16 @@ public class CLI extends View{
 
                     case 2:
                         int currentCard;
+
+                        currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 1, 3) - 1;
+
+                        if(currentCard == -1)
+                            break;
+
                         networkHandler.sendObject(PRODUCTION);
                         networkHandler.sendObject(PROD2);
-                        currentCard = integerInput("Select card (1,2,3): ", 1, 3) - 1;
                         networkHandler.sendObject(currentCard);
+
                         actionDone = isSuccessReceived();
                         networkHandler.sendObject(ENDPRODUCTION);
                         break;
@@ -948,7 +1032,7 @@ public class CLI extends View{
                 e.printStackTrace();
             }
 
-        }
+        }while(currentAction!=0);
     }
 
 
@@ -980,10 +1064,19 @@ public class CLI extends View{
             showLegend();
             System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
 
-            System.out.println("\n1) Play leader");
-            System.out.println("2) Discard leader");
-            System.out.println("0) Exit");
-            currentAction = integerInput("Select action: ", 0, 2);
+
+            if(leaderInHand.size()>0) {
+                System.out.println("\n1) Play leader");
+                System.out.println("2) Discard leader");
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 2);
+            }
+            else{
+                System.out.println(ANSI_GREEN+"\nYou activated all you leader cards"+RESET);
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 0);
+            }
+
 
             try {
                 switch (currentAction) {
