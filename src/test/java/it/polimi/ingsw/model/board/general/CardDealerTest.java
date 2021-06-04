@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.board.general;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.exceptions.NoCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
@@ -57,24 +58,24 @@ public class CardDealerTest {
      * Checks if type, level and victory point of every card are correct
      */
     @Test
-    public void testdrawCard_Type_Level_VictoryPoint() {
+    public void testdrawCard_Type_Level_VictoryPoint() throws NoCardException {
 
         for (char type: cardType) {
-            for (int i=12; i>8; i--) {
+            for (int i=12; i>9; i--) {
                 developmentCard = cardDealer.drawCard(0, cardType.indexOf(type));
                 assertEquals(developmentCard.getLevel(), 3);
                 assertEquals(developmentCard.getType(), type);
                 assertEquals(developmentCard.getVictoryPoint(), i);
             }
 
-            for (int i=8; i>4; i--){
+            for (int i=8; i>5; i--){
                 developmentCard = cardDealer.drawCard(1, cardType.indexOf(type));
                 assertEquals(developmentCard.getLevel(), 2);
                 assertEquals(developmentCard.getType(), type);
                 assertEquals(developmentCard.getVictoryPoint(), i);
             }
 
-            for (int i=4; i>0; i--) {
+            for (int i=4; i>1; i--) {
                 developmentCard = cardDealer.drawCard(2, cardType.indexOf(type));
                 assertEquals(developmentCard.getLevel(), 1);
                 assertEquals(developmentCard.getType(), type);
@@ -89,7 +90,7 @@ public class CardDealerTest {
      * Checks if cost, productionCost and productionPower are correct
      */
     @Test
-    public void testdrawCard_Resources(){
+    public void testdrawCard_Resources() throws NoCardException {
         Resources cost, productionCost, productionPower; //parameters of development card
 
         //creates and set the resources to check a particular card
@@ -152,9 +153,9 @@ public class CardDealerTest {
      * Checks the launched exceptions
      */
     @Test
-    public void testdrawCard_Exception(){
+    public void testdrawCard_Exception() throws NoCardException {
         //draws more than 4 times the same cell of the matrix in card dealer in order to empty the stack
-        exception.expect(EmptyStackException.class);
+        exception.expect(NoCardException.class);
         for (int i=0; i<6; i++)
             developmentCard = cardDealer.drawCard(0,0);
 

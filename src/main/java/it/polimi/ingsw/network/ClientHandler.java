@@ -132,7 +132,7 @@ public class ClientHandler extends Thread{
             String id = randomizeId();
             while(waitingRooms.containsKey(id))
                 id = randomizeId();
-            waitingRooms.put(id,new WaitingRoom(numPlayers,id));
+            waitingRooms.put(id,new WaitingRoom(numPlayers,id,waitingRooms));
 
             printDebug("New game ID:"+id+"\tPlayers:"+(numPlayers));
 

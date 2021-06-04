@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.resources.Resources;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EmptyStackException;
 
 public class PersonalBoard implements Serializable {
     private static final long serialVersionUID = 6732146736278436290L;
@@ -288,7 +287,7 @@ public class PersonalBoard implements Serializable {
      * @param column Column of the card dealer
      * @param place Where to place the card in the personal dashboard
      */
-    public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException {
+    public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, NoCardException {
         if(checkDrawCard(row,column)){
             this.deposit.removeResources(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
             this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column),place);

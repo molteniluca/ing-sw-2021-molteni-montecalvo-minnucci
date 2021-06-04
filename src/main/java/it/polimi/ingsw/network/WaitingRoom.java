@@ -6,6 +6,7 @@ import it.polimi.ingsw.network.exceptions.FullRoomException;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class represents a waiting room where all the sockets hang before the game starts
@@ -15,6 +16,7 @@ public class WaitingRoom extends Thread{
     private final String id;
     private final ArrayList<ClientHandler> clients = new ArrayList<>();
     private final ArrayList<String> clientsNames = new ArrayList<>();
+    private final HashMap<String,WaitingRoom> waitingRooms;
     private Game game=null;
     private boolean connectionsClosed=false;
 
@@ -22,9 +24,10 @@ public class WaitingRoom extends Thread{
      * The constructor of the class
      * @param numPlayers The number of players in this game
      */
-    public WaitingRoom(int numPlayers, String id) {
+    public WaitingRoom(int numPlayers, String id, HashMap<String,WaitingRoom> waitingRooms) {
         this.id = id;
         this.numPlayers=numPlayers;
+        this.waitingRooms=waitingRooms;
     }
 
     public Game getGame() {
@@ -35,11 +38,14 @@ public class WaitingRoom extends Thread{
         try {
             game=new Game(numPlayers, clients, clientsNames, id);
             game.startGame();
+            printDebug("Closing all connections, the game has ended");
         } catch (IOException e) {
             printDebug("Socket error, a client has disconnected: " + e.getMessage());
             game.setGameEnded(true);
-            closeAll();
         }
+
+        closeAll();
+        waitingRooms.remove(id);
     }
 
     /**

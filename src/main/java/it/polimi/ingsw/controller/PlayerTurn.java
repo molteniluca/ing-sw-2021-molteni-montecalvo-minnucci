@@ -9,7 +9,6 @@ import it.polimi.ingsw.network.NetworkMessages;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.EmptyStackException;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;
 
@@ -38,7 +37,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the client disconnects
      */
     @Override
-    public void beginTurn() throws IOException, FaithOverflowException, WinException, EmptyStackException {
+    public void beginTurn() throws IOException, FaithOverflowException, WinException, NoCardException {
         boolean leaderAction = true;
         boolean error = true;
         clientHandler.sendObject(TURNBEGIN);
@@ -272,7 +271,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean buyDevelopmentCard() throws IOException, WinException, EmptyStackException {
+    private boolean buyDevelopmentCard() throws IOException, WinException, NoCardException {
         try {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
