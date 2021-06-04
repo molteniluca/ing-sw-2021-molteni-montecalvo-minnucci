@@ -74,7 +74,7 @@ public class PersonalBoard implements Serializable {
     public void produce(DevelopmentCard card) throws UnusableCardException, FaithOverflowException {
         if(Arrays.asList(cardBoard.getUpperDevelopmentCards()).contains(card)){
             if(checkProduce(card)){
-                Resources cost=handleDiscount(card.getProductionCost());
+                Resources cost=card.getProductionCost();
 
                 try {
                     deposit.removeResources(cost);
@@ -105,7 +105,7 @@ public class PersonalBoard implements Serializable {
      * @return True if you can produce and false if not
      */
     public boolean checkProduce(DevelopmentCard card){
-        return deposit.checkRemoveResource(handleDiscount(card.getProductionCost()));
+        return deposit.checkRemoveResource(card.getProductionCost());
     }
 
     /**
@@ -124,7 +124,7 @@ public class PersonalBoard implements Serializable {
      * @param cost The cost of the production
      * @return The new cost
      */
-    private Resources handleDiscount(Resources cost){
+    public Resources handleDiscount(Resources cost){
         for (Discount r:this.leaderBoard.getDiscountEffects()) {
             if(cost.isSubPositive(new Resources().set(r.getResourceDiscount(),1))){
                 try {
@@ -144,7 +144,7 @@ public class PersonalBoard implements Serializable {
      * @return True if possible and false if not
      */
     public boolean checkProduce(ResourceTypes resource1, ResourceTypes resource2){
-        return deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
+        return deposit.checkRemoveResource(new Resources().set(resource1,1).add(new Resources().set(resource2,1)));
     }
 
     /**
@@ -156,7 +156,7 @@ public class PersonalBoard implements Serializable {
     public void produce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
         if(checkProduce(resource1,resource2)){
             try {
-                deposit.removeResources(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
+                deposit.removeResources(new Resources().set(resource1,1).add(new Resources().set(resource2,1)));
             } catch (NegativeResourceValueException e) {
                 e.printStackTrace();
             }
@@ -182,7 +182,7 @@ public class PersonalBoard implements Serializable {
      */
     public boolean checkProduce(ResourceTypes resource1){
         return this.getLeaderBoard().getProductionEffects().stream().anyMatch(extraProduction -> extraProduction.getProductionCost()==resource1) &&
-                deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1)));
+                deposit.checkRemoveResource(new Resources().set(resource1,1));
     }
 
     /**
@@ -192,8 +192,8 @@ public class PersonalBoard implements Serializable {
      */
     public void produce(ResourceTypes resource1, ResourceTypes output) throws FaithOverflowException, NegativeResourceValueException, UnusableCardException {
         if(this.getLeaderBoard().getProductionEffects().stream().anyMatch(extraProduction -> extraProduction.getProductionCost()==resource1)){
-            if(deposit.checkRemoveResource(handleDiscount(new Resources().set(resource1,1)))){
-                this.deposit.removeResources(handleDiscount(new Resources().set(resource1,1)));
+            if(deposit.checkRemoveResource(new Resources().set(resource1,1))){
+                this.deposit.removeResources(new Resources().set(resource1,1));
 
                 if(output==ResourceTypes.FAITH)
                     faithTrack.incrementPosition(1);
@@ -290,7 +290,7 @@ public class PersonalBoard implements Serializable {
      */
     public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException {
         if(checkDrawCard(row,column)){
-            this.deposit.removeResources(generalBoard.getCardDealer().getCost(row,column));
+            this.deposit.removeResources(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
             this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column),place);
         }else{
             throw new NegativeResourceValueException("Can't draw the development card, not enough resources");
@@ -303,7 +303,7 @@ public class PersonalBoard implements Serializable {
      * @param column Column of the card dealer
      */
     public boolean checkDrawCard(int row, int column){
-        return deposit.checkRemoveResource(generalBoard.getCardDealer().getCost(row,column));
+        return deposit.checkRemoveResource(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
     }
 
     /**
@@ -393,9 +393,9 @@ public class PersonalBoard implements Serializable {
      * @param output The resource in output
      */
     public void enqueueProduce(ResourceTypes resource1, ResourceTypes resource2, ResourceTypes output) throws NegativeResourceValueException, FaithOverflowException {
-        if(availableResources.isSubPositive(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))))&& prod1){
+        if(availableResources.isSubPositive(new Resources().set(resource1,1).add(new Resources().set(resource2,1)))&& prod1){
             try {
-                availableResources = availableResources.sub(handleDiscount(new Resources().set(resource1,1).add(new Resources().set(resource2,1))));
+                availableResources = availableResources.sub(new Resources().set(resource1,1).add(new Resources().set(resource2,1)));
             } catch (NegativeResourceValueException e) {
                 e.printStackTrace();
             }
@@ -417,7 +417,7 @@ public class PersonalBoard implements Serializable {
         if(prod2[cardIndex]) {
             DevelopmentCard card = cardBoard.getUpperDevelopmentCards()[cardIndex];
             if (checkProduce(card)) {
-                Resources cost = handleDiscount(card.getProductionCost());
+                Resources cost = card.getProductionCost();
                 if (availableResources.isSubPositive(cost)) {
                     try {
                         availableResources = availableResources.sub(cost);

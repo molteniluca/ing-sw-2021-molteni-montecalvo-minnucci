@@ -33,11 +33,11 @@ public abstract class View extends Thread{
     public abstract void showStrongbox();
 
     public void notifyResponse(Object o){
+        synchronized (this) {
         if(o.getClass()== NetworkMessages.class)
             if(o==SUCCESS)
                 gameUpdatedNetMess =false;
-        messages.add(o);
-        synchronized (this) {
+            messages.add(o);
             this.notify();
         }
     }
@@ -73,15 +73,15 @@ public abstract class View extends Thread{
      * @return the message or the object received
      */
     protected Object waitAndGetResponse() {
-        while(messages.size()==0){
-            synchronized (this){
-                try{
+        synchronized (this) {
+            while (messages.size() == 0) {
+                try {
                     this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            return messages.remove();
         }
-        return messages.remove();
     }
 }

@@ -76,13 +76,13 @@ public class PersonalBoardTest {
 
         try {
             personalBoard.produce(personalBoard.getCardBoard().getUpperDevelopmentCards()[0]);
-            assert true;
-        } catch (UnusableCardException | FaithOverflowException e) {
             assert false;
+        } catch (UnusableCardException | FaithOverflowException e) {
+            assert true;
         }
 
-        assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.STONE,1));
-        assert personalBoard.getFaithTrack().getPosition()==1;
+        assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1));
+        assert personalBoard.getFaithTrack().getPosition()==0;
     }
 
     @Test
@@ -107,15 +107,7 @@ public class PersonalBoardTest {
             e.printStackTrace();
         }
 
-
-        try {
-            personalBoard.produce(ResourceTypes.SERVANT,ResourceTypes.SHIELD,ResourceTypes.FAITH);
-        } catch (NegativeResourceValueException | FaithOverflowException e) {
-            assert false;
-        }
-
-        assert personalBoard.getDeposit().getTotalResources().equals(new Resources());
-        assert personalBoard.getFaithTrack().getPosition()==1;
+        assert personalBoard.handleDiscount(new Resources().set(ResourceTypes.SHIELD,2).set(ResourceTypes.STONE,1)).equals(new Resources().set(ResourceTypes.SHIELD,1).set(ResourceTypes.STONE,1));
     }
 
     @Test
@@ -147,13 +139,7 @@ public class PersonalBoardTest {
         }
         Resources res=personalBoard.getDeposit().getTotalResources();
 
-        try {
-            personalBoard.produce(ResourceTypes.SHIELD,ResourceTypes.SHIELD);
-        } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException e) {
-            assert false;
-        }
-
-        assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.SHIELD,1));
+        assert personalBoard.getDeposit().getTotalResources().equals(new Resources());
     }
 
     @Test
