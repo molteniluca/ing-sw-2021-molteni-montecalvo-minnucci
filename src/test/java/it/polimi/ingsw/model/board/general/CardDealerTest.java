@@ -74,6 +74,7 @@ public class CardDealerTest {
                 assertEquals(developmentCard.getVictoryPoint(), i);
             }
 
+            exception.expect(NotEnoughCardException.class);
             for (int i=4; i>0; i--) {
                 developmentCard = cardDealer.drawCard(2, cardType.indexOf(type));
                 assertEquals(developmentCard.getLevel(), 1);
@@ -154,8 +155,8 @@ public class CardDealerTest {
     @Test
     public void testdrawCard_Exception() throws NotEnoughCardException {
         //draws more than 4 times the same cell of the matrix in card dealer in order to empty the stack
-        exception.expect(NotEnoughCardException.class);
-        for (int i=0; i<4; i++)
+        exception.expect(EmptyStackException.class);
+        for (int i=0; i<6; i++)
             developmentCard = cardDealer.drawCard(0,0);
 
         //try drawing a card out of bounds

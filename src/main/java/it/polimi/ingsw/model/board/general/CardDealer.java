@@ -134,12 +134,12 @@ public class CardDealer implements Serializable {
      */
     public DevelopmentCard drawCard(int row, int column) throws IndexOutOfBoundsException, EmptyStackException, NotEnoughCardException {
         DevelopmentCard card = this.cardMatrix[row][column].pop();
-        for(int i=0; i<ROWS; i++){
-            if(this.cardMatrix[row][column].isEmpty()){
-                throw new NotEnoughCardException("Not Enough Cards in CardDealer!");
+        for(int i=0; i<ROWS; i++) {
+            if (!this.cardMatrix[i][column].isEmpty()) {
+                return card;
             }
         }
-        return card;
+        throw new NotEnoughCardException("Not Enough Cards in CardDealer!");
     }
 
 
