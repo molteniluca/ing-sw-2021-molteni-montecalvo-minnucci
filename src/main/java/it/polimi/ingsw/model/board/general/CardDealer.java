@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.exceptions.NoCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.resources.Resources;
 
@@ -133,10 +132,13 @@ public class CardDealer implements Serializable {
      * @throws IndexOutOfBoundsException in case one between the provided row and column is out of bounds
      * @throws EmptyStackException if the stack is empty
      */
-    public DevelopmentCard drawCard(int row, int column) throws IndexOutOfBoundsException, NoCardException {
+    public DevelopmentCard drawCard(int row, int column) throws IndexOutOfBoundsException, EmptyStackException, NotEnoughCardException {
         DevelopmentCard card = this.cardMatrix[row][column].pop();
-        if(cardMatrix[row][column].empty())
-            throw new NoCardException("There are no more cards in this place, the game ends");
+        for(int i=0; i<ROWS; i++){
+            if(this.cardMatrix[row][column].isEmpty()){
+                throw new NotEnoughCardException("Not Enough Cards in CardDealer!");
+            }
+        }
         return card;
     }
 

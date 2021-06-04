@@ -10,7 +10,6 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.NoCardException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.exceptions.WinException;
 import it.polimi.ingsw.network.ClientHandler;
@@ -127,7 +126,7 @@ public class Game implements Serializable {
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(currentPlayer==0);
-                } catch (NotEnoughCardException | NoCardException e) {
+                } catch (NotEnoughCardException e) {
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(false);
@@ -149,7 +148,7 @@ public class Game implements Serializable {
             for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
                 try {
                     turns.get(currentPlayer).beginTurn();
-                } catch (FaithOverflowException | WinException | NoCardException | NotEnoughCardException e) {
+                } catch (FaithOverflowException | WinException | NotEnoughCardException e) {
                     gameEnded=true;
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                 }
