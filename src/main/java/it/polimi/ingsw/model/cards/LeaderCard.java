@@ -63,14 +63,6 @@ public class LeaderCard extends Card implements Serializable {
         return specialAbility;
     }
 
-
-    /**
-     * Setter of effect activation
-     * @param active boolean activator of LeaderCard's effect
-     */
-    public void setActive(boolean active) {
-    }
-
     /**
      * Getter of resourceRequirements
      * @return resource required to use LeaderCard
@@ -117,11 +109,12 @@ public class LeaderCard extends Card implements Serializable {
         }
         else if(getDevelopmentCardRequirementOnlyColor()!=null){
             for (char color: colors) {
-                if ((cards.stream().filter(x -> (x.getType() == color)).count()) < developmentCardRequirementOnlyColor.stream().filter(x -> x.getType() == color).count()) {
-                    break;
-                }
-                return true;
+                int coloredCardsInHands = (int) cards.stream().filter(x -> (x.getType() == color)).count();
+                int coloredCardsNeeded = (int) developmentCardRequirementOnlyColor.stream().filter(x -> x.getType() == color).count();
+                if (coloredCardsInHands < coloredCardsNeeded)
+                    return false;
             }
+            return true;
         }
         return false;
     }
