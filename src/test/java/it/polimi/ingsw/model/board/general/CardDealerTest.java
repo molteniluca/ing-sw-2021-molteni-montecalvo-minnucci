@@ -39,7 +39,7 @@ public class CardDealerTest {
      * Checks if the returned cost is correct
      */
     @Test
-    public void testgetCost() {
+    public void testGetCost() {
         Resources cost = new Resources();
         cost.set(ResourceTypes.SHIELD, 2);
         cost.set(ResourceTypes.GOLD, 2);
@@ -52,6 +52,7 @@ public class CardDealerTest {
         assertTrue(cardDealer.getCost(1,3).equals(cost));
 
     }
+
 
     /**
      * Checks if type, level and victory point of every card are correct

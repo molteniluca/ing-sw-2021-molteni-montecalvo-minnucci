@@ -10,7 +10,7 @@ public enum ColorCLI {
     ANSI_PURPLE("\u001B[35m", "Purple"),
     ANSI_WHITE("\u001B[97m", "White"),
     ANSI_BLACK("\u001B[30m", "Black"),
-    ANSI_GRAY("\u001B[37m", "Gray"),
+    ANSI_GRAY("\u001B[90m", "Gray"),
     ANSI_BOLD("\033[1m", "Bold");
 
 

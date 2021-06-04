@@ -61,6 +61,10 @@ public class LeaderBoard implements Serializable {
         return leaderCardsInHand;
     }
 
+    public ArrayList<LeaderCard> getLeaderCards () {
+        return leaderCards;
+    }
+
     /**
      * This method discards a leader card
      * @param leader LeaderCard to be discarded

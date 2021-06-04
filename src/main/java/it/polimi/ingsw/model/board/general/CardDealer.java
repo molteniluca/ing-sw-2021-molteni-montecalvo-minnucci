@@ -96,7 +96,7 @@ public class CardDealer implements Serializable {
         }
 
         /*
-        //Shuffles the single stacks
+        //Shuffles all the single stacks
         for (int i=0; i<ROWS; i++) {
             for (int k=0; k<COLUMNS; k++) {
                 Collections.shuffle(this.cardMatrix[i][k]);

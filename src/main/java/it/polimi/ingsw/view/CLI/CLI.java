@@ -41,11 +41,14 @@ public class CLI extends View{
     private NetworkHandler networkHandler;
     private Game game;
     private boolean gameUpdated = false;
+    private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) is already done
+    private boolean actionLeaderDone = false; //says if the player did a leader action (production)
     private int playerNumber; //the number of the player received before GAMESTARTED
 
+
     @Override
-    public void run(){
+    public void run() {
 
         initializeView();
 
@@ -75,8 +78,8 @@ public class CLI extends View{
 
         waitForUpdatedGame();
 
-        System.out.println(waitAndGetResponse()); //gamestarted
-        while(true) {
+        System.out.println(waitAndGetResponse()); //game started
+        while(winOrLose < 0) {
             if(waitAndGetResponse() == TURNBEGIN) {
                 try {
                     System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
@@ -86,9 +89,28 @@ public class CLI extends View{
                 }
                 waitForUpdatedGame();
                 actionDone = false;
+                actionLeaderDone = false;
                 showHomepage();
             }
         }
+
+        if(winOrLose == 1) {
+            refresh();
+            System.out.println("CONGRATULATIONS, YOU WON");
+        }
+        else {
+            refresh();
+            System.out.println("You lose :(");
+        }
+
+        System.out.println("Press enter to close the game ");
+        try {
+            input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        networkHandler.closeConnection();
+        System.exit(0);
 
     }
 
@@ -133,7 +155,7 @@ public class CLI extends View{
             System.out.println("5) End turn");
             System.out.println("0) Exit game");
 
-            currentAction = integerInput("Select action: ", 0, 5);
+            currentAction = integerInput("\nSelect action: ", 0, 5);
 
             switch (currentAction) {
                 case 1:
@@ -157,9 +179,9 @@ public class CLI extends View{
                         }
                         System.out.print(ANSI_GREEN+"Waiting for players ... "+RESET);
                     }
-                    else
+                    if(!actionDone)
                     {
-                        System.out.println(ANSI_GREEN+"You need to do at least one action before ending a turn, press enter to continue"+RESET);
+                        System.out.print(ANSI_GREEN+"You need to do at least one action before ending a turn, press enter to continue "+RESET);
                         try {
                             input.readLine();
                         } catch (IOException e) {
@@ -169,6 +191,7 @@ public class CLI extends View{
                     }
 
                     break;
+
                 case 0:
                     System.exit(0);
                     break;
@@ -800,119 +823,132 @@ public class CLI extends View{
      */
     private void showProduce() {
         int currentAction = -1;
-        Object message;
+        int upperLimit = 1;
 
-        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
         WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-        CardBoard cardBoard = personalBoard.getCardBoard();
-        Resources totalResources = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
 
         refresh();
         showCardBoard();
         showStrongbox();
         showWarehouse(warehouseDepots);
 
-        try {
-            networkHandler.sendObject(PRODUCTION);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        while(currentAction !=0)
+        {
+            ArrayList<ExtraProduction> extraProductionEffect = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
 
-        while (currentAction!=0) {
-            if (!actionDone) {
-                System.out.println("\n1) Base production ");
-                System.out.println("2) Card production");
-                System.out.println("3) Leader card production"); //FIXME appears only if the player has a particular leader card
-                System.out.println("0) Exit");
-                currentAction = integerInput("Select action: ", 0, 3);
-
+            if(actionDone && actionLeaderDone)
+            {
+                System.out.print(ANSI_GREEN+"You already did a basic and a leader action, press enter to continue "+RESET);
                 try {
-
-                    switch (currentAction) {
-                        //Base production
-                        case 1:
-                            int firstResource, secondResource, productionResult;
-                            networkHandler.sendObject(PROD1);
-                            System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
-                            System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-                            firstResource = integerInput("Select first resource: ", 1, 4);
-                            secondResource = integerInput("Select second resource: ", 1, 4);
-                            productionResult = integerInput("Select production result: ", 1, 4);
-
-                            networkHandler.sendObject(numberToResourceType(firstResource));
-                            networkHandler.sendObject(numberToResourceType(secondResource));
-                            networkHandler.sendObject(numberToResourceType(productionResult));
-                            //networkHandler.sendObject(ENDPRODUCTION);
-
-                            isSuccessReceived();
-
-                            /*
-                            message = waitAndGetResponse();
-
-                            if (message == SUCCESS) {
-                                waitForUpdatedGame();
-                            }
-                            else {
-                                message = waitAndGetResponse();
-                                System.out.println(message);
-                                //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
-                            }
-
-                             */
-                            break;
-
-                        //Development card production
-                        case 2:
-                            int currentCard;
-                            networkHandler.sendObject(PROD2);
-                            currentCard = integerInput("Select card (0,1,2): ", 0, 2);
-                            networkHandler.sendObject(currentCard);
-                            isSuccessReceived();
-
-                            /*
-
-                            message = waitAndGetResponse();
-
-                            if (message == SUCCESS) {
-                                waitForUpdatedGame();
-                            }
-                            else {
-                                message = waitAndGetResponse(); //Wait for the string that describes the error
-                                System.out.println(message);
-                                //System.out.println(ANSI_RED + "You don't have enough resources to activate this production power" + RESET);
-                            }
-
-                             */
-                            break;
-
-                        //leader card production
-                        case 3:
-                            networkHandler.sendObject(PROD3);
-                            //game.getTurn(0).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects();
-                            //FIXME only if the player has one or two leader cards with the extraProduction effect
-                            System.out.println("Leader card effect, NOT IMPLEMENTED YET");
-                            System.out.println("1)Activate leader effect one");
-                            System.out.println("2)Activate leader effect two");
-                            integerInput("Select action: ", 0, 2);
-                            //FIXME send action and receive effects
-                            break;
-                        case 0:
-                            actionDone = true;
-                            networkHandler.sendObject(ENDPRODUCTION);
-                            break;
-                    }
-
+                    input.readLine();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            } else {
-                System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
-                System.out.println("0) Exit");
-                currentAction = integerInput("Select action: ", 0, 0);
+                break;
             }
-        }
 
+
+            if(!actionDone)
+            {
+                System.out.println("\n1) Base production ");
+                System.out.println("2) Card production");
+                upperLimit = 2;
+            }
+
+            if(extraProductionEffect.size()>0 && !actionLeaderDone)
+            {
+                if(upperLimit!=1)
+                    upperLimit = 3;
+
+                System.out.println(upperLimit+") Leader card production");
+
+            }
+
+            System.out.println("0) Exit");
+            currentAction = integerInput("Select action: ", 0, upperLimit);
+
+
+            try {
+                switch (currentAction) {
+                    case 1:
+                        int firstResource, secondResource, productionResult;
+                        networkHandler.sendObject(PRODUCTION);
+                        networkHandler.sendObject(PROD1);
+                        System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
+                        System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+                        firstResource = integerInput("Select first resource: ", 1, 4);
+                        secondResource = integerInput("Select second resource: ", 1, 4);
+                        productionResult = integerInput("Select production result: ", 1, 4);
+
+                        networkHandler.sendObject(numberToResourceType(firstResource));
+                        networkHandler.sendObject(numberToResourceType(secondResource));
+                        networkHandler.sendObject(numberToResourceType(productionResult));
+
+                        actionDone = isSuccessReceived();
+                        networkHandler.sendObject(ENDPRODUCTION);
+                        break;
+
+                    case 2:
+                        int currentCard;
+                        networkHandler.sendObject(PRODUCTION);
+                        networkHandler.sendObject(PROD2);
+                        currentCard = integerInput("Select card (1,2,3): ", 1, 3) - 1;
+                        networkHandler.sendObject(currentCard);
+                        actionDone = isSuccessReceived();
+                        networkHandler.sendObject(ENDPRODUCTION);
+                        break;
+
+                    case 3:
+                        int currentLeader, currentResource;
+
+
+                        ArrayList<LeaderCard> activeLeaders = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();
+                        //FIXME also prints the other leader cards, not only the extra production ones
+
+                        if (activeLeaders.size() > 0) {
+                            System.out.println("\nACTIVE LEADER CARDS");
+                            printLeaderCards(activeLeaders);
+                            System.out.println("\n1)Activate leader effect one");
+
+
+                        if (extraProductionEffect.size() > 1)
+                            System.out.println("2)Activate leader effect two");
+
+                        }
+
+                        else
+                            System.out.println(ANSI_GREEN+"There are no active leader cards"+RESET);
+
+
+                        currentLeader = integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
+
+                        if(currentLeader == -1)
+                            break;
+
+
+                        networkHandler.sendObject(PRODUCTION);
+                        networkHandler.sendObject(PROD3);
+                        System.out.println("\nYou can produce one of the following resources:");
+                        System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
+                        currentResource = integerInput("Select resource: ", 1,4);
+
+                        networkHandler.sendObject(extraProductionEffect.get(currentLeader).getProductionCost());
+                        networkHandler.sendObject(numberToResourceType(currentResource));
+
+                        actionLeaderDone = isSuccessReceived();
+                        networkHandler.sendObject(ENDPRODUCTION);
+                        break;
+
+                    case 0:
+                        break;
+
+                }
+            }catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 
@@ -926,40 +962,68 @@ public class CLI extends View{
 
         LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
         ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
+        ArrayList<LeaderCard> activeLeader = leaderBoard.getLeaderCards();
 
         refresh();
-        //System.out.println("LEADER CARDS");
 
-        printLeaderCards(leaderBoard.getLeaderCardsInHand());
+        if(leaderInHand.size()>0 || activeLeader.size()>0) {
+            if (leaderInHand.size() > 0)
+                System.out.println("LEADER CARDS IN HAND");
 
-        System.out.println("\n1) Play leader");
-        System.out.println("2) Discard leader");
-        System.out.println("0) Exit");
-        currentAction = integerInput("Select action: ", 0,2);
+            printLeaderCards(leaderBoard.getLeaderCardsInHand());
 
-        try{
-            switch (currentAction) {
-                case 0:
-                    break;
-                case 1:
-                    networkHandler.sendObject(ACTIVATELEADER);
-                    currentAction = integerInput("Select card: ",1,leaderInHand.size()) - 1;
-                    networkHandler.sendObject(currentAction);
-                    isSuccessReceived();
-                    break;
+            if (activeLeader.size() > 0)
+                System.out.println("\nACTIVE LEADER CARDS");
+            printLeaderCards(activeLeader);
 
-                case 2:
-                    networkHandler.sendObject(DISCARDLEADER);
-                    currentAction = integerInput("Select card: ", 1,leaderInHand.size()) - 1;
-                    networkHandler.sendObject(currentAction);
-                    isSuccessReceived();
-                    break;
+            System.out.println();
+            showLegend();
+            System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
+
+            System.out.println("\n1) Play leader");
+            System.out.println("2) Discard leader");
+            System.out.println("0) Exit");
+            currentAction = integerInput("Select action: ", 0, 2);
+
+            try {
+                switch (currentAction) {
+
+                    case 1:
+                        currentAction = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
+                        if (currentAction == -1)
+                            break;
+                        networkHandler.sendObject(ACTIVATELEADER);
+                        networkHandler.sendObject(currentAction);
+                        isSuccessReceived();
+                        break;
+
+                    case 2:
+                        currentAction = integerInput("Select card (0 to exit): ", 1, leaderInHand.size()) - 1;
+                        if (currentAction == -1)
+                            break;
+                        networkHandler.sendObject(DISCARDLEADER);
+                        networkHandler.sendObject(currentAction);
+                        isSuccessReceived();
+                        break;
+
+                    case 0:
+                        break;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        }catch (IOException e)
-        {
-            e.printStackTrace();
         }
+        else
+        {
+            System.out.print(ANSI_GREEN+"You discarded all your leader cards, press enter to continue "+RESET);
+            try {
+                input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -975,6 +1039,8 @@ public class CLI extends View{
 
         ArrayList<LeaderCard> leaderCardsInHand = leaderBoard.getLeaderCardsInHand();
 
+        System.out.println("LEADER CARDS"); showLegend();
+        System.out.println(ANSI_BLUE + "🁢" + RESET+ "1 : Color and number of a development card\n");
         printLeaderCards(leaderCardsInHand);
 
         chose[0] = integerInput("Select first leader (1-4): ", 1,4) - 1;
@@ -1086,9 +1152,17 @@ public class CLI extends View{
         gameUpdated = true;
     }
 
-    @Override
-    protected void notifyEndGame(boolean youWon) {
 
+    /**
+     * Method that notifies the ending of a game
+     * @param youWon says if the user is the winner or not
+     */
+    @Override
+    protected synchronized void notifyEndGame(boolean youWon) {
+        if(youWon)
+            winOrLose = 1;
+        else
+            winOrLose = 0;
     }
 
 
@@ -1359,9 +1433,9 @@ public class CLI extends View{
         List<DevelopmentCardRequirement> colorRequirements;
         SpecialAbility specialAbility;
 
-        System.out.println("LEADER CARDS");
-        showLegend();
-        System.out.println(ANSI_BLUE + "🁢" + RESET+ "1 : Color and number of a development card\n");
+        //System.out.println("LEADER CARDS");
+        //showLegend();
+        //System.out.println(ANSI_BLUE + "🁢" + RESET+ "1 : Color and number of a development card\n");
         for(LeaderCard card : cards)
         {
             resourceRequirements = card.getResourceRequirements();
