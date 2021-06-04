@@ -1086,6 +1086,11 @@ public class CLI extends View{
         gameUpdated = true;
     }
 
+    @Override
+    protected void notifyEndGame(boolean youWon) {
+
+    }
+
 
     /**
      * It clears the screen printing a clear character

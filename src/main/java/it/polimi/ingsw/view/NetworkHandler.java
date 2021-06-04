@@ -43,9 +43,18 @@ public class NetworkHandler extends Thread{
             try {
                 read = in.readObject();
                 if(read.getClass() == NetworkMessages.class) {
-                    if (read == HEARTBEAT) {
-                        read = null;
-                        continue;
+                    switch((NetworkMessages)read) {
+                        case HEARTBEAT:
+                            read = null;
+                            continue;
+                        case YOUWON:
+                            read=null;
+                            view.notifyEndGame(true);
+                            continue;
+                        case YOULOST:
+                            read=null;
+                            view.notifyEndGame(false);
+                            continue;
                     }
                 }
                 if(read.getClass() == Game.class) {

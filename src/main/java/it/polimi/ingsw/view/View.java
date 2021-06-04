@@ -84,4 +84,6 @@ public abstract class View extends Thread{
             return messages.remove();
         }
     }
+
+    protected abstract void notifyEndGame(boolean youWon);
 }

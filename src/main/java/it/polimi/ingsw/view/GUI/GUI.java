@@ -60,4 +60,9 @@ public class GUI extends View {
     public void updateObjects(Game game) {
 
     }
+
+    @Override
+    protected void notifyEndGame(boolean youWon) {
+
+    }
 }
