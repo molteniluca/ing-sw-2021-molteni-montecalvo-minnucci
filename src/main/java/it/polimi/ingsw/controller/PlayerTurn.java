@@ -219,6 +219,8 @@ public class PlayerTurn implements Turn, Serializable {
                 case ENDPRODUCTION:
                     clientHandler.sendObject(SUCCESS);
                     return error;
+                case PRODUCTION:
+                    continue;
                 default:
                     clientHandler.sendObject(ERROR);
                     clientHandler.sendObject("Expecting a production action");
@@ -377,7 +379,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the communication with the client goes wrong
      */
     public void endGame(boolean winner) throws IOException {
-        clientHandler.sendObject(GAMEENDED);
+        clientHandler.sendGame();
         if(winner){
             clientHandler.sendObject(YOUWON);
         }else{
