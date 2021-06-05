@@ -242,7 +242,7 @@ public class PlayerTurn implements Turn, Serializable {
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame();
             return false;
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | YouMustPlayLeaderException e) {
             clientHandler.sendObject(ERROR);
             clientHandler.sendObject(e.getMessage());
             return true;

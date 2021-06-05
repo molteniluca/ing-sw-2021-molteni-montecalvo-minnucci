@@ -228,9 +228,12 @@ public class PersonalBoard implements Serializable {
      * @param column The column to be bought
      * @param effectIndex The effect index (-1 for none)
      */
-    public void buyColumn(int column, int effectIndex) throws FaithOverflowException, IndexOutOfBoundsException {
+    public void buyColumn(int column, int effectIndex) throws FaithOverflowException, IndexOutOfBoundsException, YouMustPlayLeaderException {
         if(effectIndex==-1){
-            buyColumn(column,null);
+            if(leaderBoard.getExtraResource().isEmpty())
+                buyColumn(column,null);
+            else
+                throw new YouMustPlayLeaderException("You must apply the leader effect if you have one");
         }else{
             buyColumn(column,leaderBoard.getExtraResource().get(effectIndex));
         }
