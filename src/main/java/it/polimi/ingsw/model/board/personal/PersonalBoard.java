@@ -262,12 +262,12 @@ public class PersonalBoard implements Serializable {
     }
 
     private void handleFaithAndStore(ExtraResource effect, Resources res) throws FaithOverflowException {
-        this.faithTrack.incrementPosition(res.getResourceNumber(ResourceTypes.FAITH));
         if(effect==null){
             effect=new ExtraResource(ResourceTypes.BLANK);
         }
-        res=res.eraseFaith();
         res=handleBlank(res,effect);
+        this.faithTrack.incrementPosition(res.getResourceNumber(ResourceTypes.FAITH));
+        res=res.eraseFaith();
         try {
             this.deposit.getWarehouseDepots().addResourceSwap(res);
         } catch (FaithNotAllowedException e) {
