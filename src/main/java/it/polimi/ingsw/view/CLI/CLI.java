@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
+import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.CardBoard;
@@ -745,9 +746,27 @@ public class CLI extends View{
 
                     case 1:
 
-                        int row = 3 - integerInput("Chose level (1-3): ", 1, 3);
-                        int column = integerInput("Chose column (1-4): ", 1, 4) - 1;
-                        int place = integerInput("Where do you want to place the card in your card board(1-3): ", 1, 3) - 1;
+                        int row = 3 - integerInput("Chose level (1-3, 0 to exit): ", 0, 3);
+                        if(row == 3)
+                            break;
+
+                        int column = integerInput("Chose column (1-4, 0 to exit): ", 0, 4) - 1;
+                        if(column == -1)
+                            break;
+
+                        int place = integerInput("Where do you want to place the card in your card board (1-3, 0 to exit)? ", 0, 3) - 1;
+                        if(place == -1)
+                            break;
+
+                        try
+                        {
+                            cardMatrix[row][column].peek();
+                        }catch (EmptyStackException e)
+                        {
+                            System.out.print(ANSI_RED+"There are no more development cards in the selected cell, press enter to continue "+RESET);
+                            input.readLine();
+                            break;
+                        }
 
                         networkHandler.sendObject(BUYCARD);
                         networkHandler.sendObject(row);
@@ -902,12 +921,19 @@ public class CLI extends View{
                                 System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
 
 
-                                firstResource = integerInput("Select first resource (0 to exit): ", 1, 4);
-                                secondResource = integerInput("Select second resource (0 to exit): ", 1, 4);
-                                productionResult = integerInput("Select production result (0 to exit): ", 1, 4);
-
-                                if (firstResource == 0 || secondResource == 0 || productionResult == 0)
+                                firstResource = integerInput("Select first resource (0 to exit): ", 0, 4);
+                                if(firstResource == 0)
                                     break;
+
+
+                                secondResource = integerInput("Select second resource (0 to exit): ", 0, 4);
+                                if(secondResource == 0)
+                                    break;
+
+                                productionResult = integerInput("Select production result (0 to exit): ", 0, 4);
+                                if(productionResult == 0)
+                                    break;
+
 
                                 networkHandler.sendObject(PRODUCTION);
                                 networkHandler.sendObject(PROD1);
@@ -929,7 +955,7 @@ public class CLI extends View{
                             if(!temporaryAction2) {
                                 int currentCard;
 
-                                currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 1, 3) - 1;
+                                currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 0, 3) - 1;
 
                                 if (currentCard == -1)
                                     break;
@@ -1073,7 +1099,7 @@ public class CLI extends View{
                         break;
 
                     case 2:
-                        currentAction = integerInput("Select card (0 to exit): ", 1, leaderInHand.size()) - 1;
+                        currentAction = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
                         if (currentAction == -1)
                             break;
                         networkHandler.sendObject(DISCARDLEADER);
