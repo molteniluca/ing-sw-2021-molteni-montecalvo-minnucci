@@ -719,7 +719,13 @@ public class CLI extends View{
         {
             for(int j = 0; j<4; j++)
             {
-                currentLine.add(cardMatrix[i][j].peek());
+                try {
+                    currentLine.add(cardMatrix[i][j].peek());
+                }
+                catch (EmptyStackException e)
+                {
+                    currentLine.add(null);
+                }
             }
             printDevelopmentCards(currentLine);
             currentLine.clear();
@@ -846,7 +852,7 @@ public class CLI extends View{
      * and sands the choice to the server
      */
     private void showProduce() {
-        int currentAction = -1;
+        int currentAction;
         int upperLimit;
         //three boolean values because every single production can fail but if one of them succeed an a basic action is done
         boolean temporaryAction1 = false;
@@ -867,7 +873,10 @@ public class CLI extends View{
             showStrongbox();
             showWarehouse(warehouseDepots);
             System.out.println("\nACTIVE LEADER CARDS");
-            printLeaderCards(activeLeaders);
+            if(activeLeaders.size()>0)
+                printLeaderCards(activeLeaders);
+            else
+                System.out.println(ANSI_GREEN+"There are no active leader cards"+RESET);
             System.out.println();
 
             if(!actionDone)
@@ -1385,7 +1394,7 @@ public class CLI extends View{
      * @param cards the array of cards that has to be printed
      */
     private void printDevelopmentCards(List<DevelopmentCard> cards) {
-        int tabs; //the number of tabs used for formatting
+        int tabs; //the number of tabs used to format the table
 
         //Type of the card
         System.out.print("\n");
@@ -1397,7 +1406,7 @@ public class CLI extends View{
                         System.out.print("Type: " + ANSI_BLUE + "Blue" + RESET + "\t\t\t\t\t\t\t");
                         break;
                     case 'g':
-                        System.out.print("Type: " + ANSI_GREEN + "Green" + RESET + "\t\t\t\t\t\t\t");
+                        System.out.print("Type: " + ANSI_GREEN + "Green" + RESET + "\t\t\t\t\t\t\t"); //33
                         break;
                     case 'p':
                         System.out.print("Type: " + ANSI_PURPLE + "Purple" + RESET + "\t\t\t\t\t\t");
@@ -1407,7 +1416,10 @@ public class CLI extends View{
                         break;
                 }
             }
+            else
+                System.out.print("\t\t\t\t\t\t\t\t\t ");
         }
+
         //Level of the card
         System.out.print("\n");
         for (DevelopmentCard card : cards)
@@ -1415,6 +1427,8 @@ public class CLI extends View{
             if(card!=null) {
                 System.out.print("Level: " + card.getLevel() + "\t\t\t\t\t\t\t");
             }
+            else
+                System.out.print("\t\t\t\t\t\t\t\t\t");
         }
 
         //Cost of the card
@@ -1437,7 +1451,8 @@ public class CLI extends View{
                         break;
                 }
             }
-
+            else
+                System.out.print("\tNO CARDS   \t\t\t\t\t\t");
         }
 
         //Production cost
@@ -1461,6 +1476,8 @@ public class CLI extends View{
                         break;
                 }
             }
+            else
+                System.out.print("   \t\t\t\t\t\t\t\t\t");
         }
 
         //Production power
@@ -1484,6 +1501,8 @@ public class CLI extends View{
                         break;
                 }
             }
+            else
+                System.out.print("   \t\t\t\t\t\t\t\t\t");
         }
 
     }
@@ -1622,5 +1641,4 @@ public class CLI extends View{
     private void wrongInput() {
         System.out.println(ANSI_RED+"Wrong input, retry"+RESET);
     }
-
 }
