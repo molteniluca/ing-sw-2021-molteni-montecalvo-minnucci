@@ -42,8 +42,8 @@ public class CLI extends View{
     private Game game;
     private boolean gameUpdated = false;
     private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
-    private boolean actionDone = false; //says if a main action (produce, market, cardDealer) is already done
-    private boolean actionLeaderDone = false; //says if the player did a leader action (production)
+    private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
+    private boolean singlePlayer = false; //says if a player is playing alone
     private int playerNumber; //the number of the player received before GAMESTARTED
 
 
@@ -89,7 +89,6 @@ public class CLI extends View{
                 }
                 waitForUpdatedGame();
                 actionDone = false;
-                actionLeaderDone = false;
                 showHomepage();
             }
         }
@@ -177,7 +176,18 @@ public class CLI extends View{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        System.out.print(ANSI_GREEN+"Waiting for players ... "+RESET);
+
+                        if(singlePlayer)
+                        {
+                            System.out.print(ANSI_GREEN+"Lorenzo the magnifying glass is playing "+RESET); //FIXME change name
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else
+                            System.out.print(ANSI_GREEN+"Waiting for players ... "+RESET);
                     }
                     if(!actionDone)
                     {
@@ -275,6 +285,10 @@ public class CLI extends View{
                         System.out.println(ANSI_RED+"Insert at least one player"+RESET);
 
                 } while((numberOfPlayers<=0) || (numberOfPlayers >= 5));
+
+
+                if(numberOfPlayers == 1)
+                    singlePlayer = true;
 
                 networkHandler.sendObject(CREATEGAME);
                 networkHandler.sendObject(numberOfPlayers);
@@ -833,206 +847,165 @@ public class CLI extends View{
      */
     private void showProduce() {
         int currentAction = -1;
-        //int upperLimit;
+        int upperLimit;
+        //three boolean values because every single production can fail but if one of them succeed an a basic action is done
+        boolean temporaryAction1 = false;
+        boolean temporaryAction2 = false;
+        boolean temporaryAction3 = false;
 
         WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
+        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        ArrayList<LeaderCard> activeLeaders = leaderBoard.getLeaderCards();
 
-       do {
-            //upperLimit = 0;
+        do {
+            upperLimit = 2;
             ArrayList<ExtraProduction> extraProductionEffect = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
-
-            /*
-            if(actionDone && actionLeaderDone)
-            {
-                System.out.print(ANSI_GREEN+"You already did a basic and a leader action, press enter to continue "+RESET);
-                try {
-                    input.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-
-
-            if(!actionDone)
-            {
-                System.out.println("\n1) Base production ");
-                System.out.println("2) Card production");
-                upperLimit = 2;
-            }
-            else
-                System.out.println(ANSI_GREEN+"You already did a basic action"+RESET);
-
-            if(extraProductionEffect.size()>0 && !actionLeaderDone)
-            {
-                if(upperLimit!=0) {
-                    upperLimit = 3;
-                    System.out.println(upperLimit + ") Leader card production");
-                }
-                else
-                    System.out.println(++upperLimit+ ") Leader card production");
-
-            }
-
-            System.out.println("0) Exit");
-            currentAction = integerInput("Select action: ", 0, upperLimit);
-
-             */
 
             refresh();
             showCardBoard();
             showStrongbox();
             showWarehouse(warehouseDepots);
+            System.out.println("\nACTIVE LEADER CARDS");
+            printLeaderCards(activeLeaders);
+            System.out.println();
 
-
-            //FIXME could be better with less controls, problems with the normal production when actionDone = true
-
-            if(!actionDone && !actionLeaderDone)
+            if(!actionDone)
             {
-                System.out.println("\n1) Base production ");
-                System.out.println("2) Card production");
-                if(extraProductionEffect.size()>0) {
-                    System.out.println("3) Leader card production");
-                    System.out.println("0) Exit");
-                    currentAction = integerInput("Select action: ", 0, 3);
-                }
-                else {
-                    System.out.println("0) Exit");
-                    currentAction = integerInput("Select action: ", 0, 2);
-                }
-            }
-
-            if(!actionDone && actionLeaderDone)
-            {
-                System.out.println("\n1) Base production ");
+                System.out.println("\n1) Base production");
                 System.out.println("2) Card production");
                 if(extraProductionEffect.size()>0)
-                    System.out.println("You already did you leader production");
+                {
+                    System.out.println("3) Leader card production");
+                    upperLimit++;
+                }
+
                 System.out.println("0) Exit");
-                currentAction = integerInput("Select action: ", 0, 2);
-            }
+                currentAction = integerInput("Select action: ", 0, upperLimit);
 
-            if (actionDone && !actionLeaderDone )
-            {
-                if(extraProductionEffect.size() > 0) {
-                    System.out.println(ANSI_GREEN+"\nYou already did a basic action"+RESET);
-                    System.out.println("\n1) Leader card production");
-                    System.out.println("0) Exit");
-                    currentAction = integerInput("Select action: ", 0, 1);
-                }
-                else{
-                    System.out.println(ANSI_GREEN+"\nYou already did a basic action"+RESET);
-                    System.out.println("0) Exit");
-                    currentAction = integerInput("Select action: ", 0, 0);
-                }
-            }
-
-            if(actionDone && actionLeaderDone)
-            {
-                System.out.print(ANSI_GREEN+"You already did a basic and a leader action, press enter to continue "+RESET);
                 try {
-                    input.readLine();
-                } catch (IOException e) {
+                    switch (currentAction) {
+                        case 1:
+                            if(!temporaryAction1) {
+                                int firstResource, secondResource, productionResult;
+
+                                System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
+                                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
+
+
+                                firstResource = integerInput("Select first resource (0 to exit): ", 1, 4);
+                                secondResource = integerInput("Select second resource (0 to exit): ", 1, 4);
+                                productionResult = integerInput("Select production result (0 to exit): ", 1, 4);
+
+                                if (firstResource == 0 || secondResource == 0 || productionResult == 0)
+                                    break;
+
+                                networkHandler.sendObject(PRODUCTION);
+                                networkHandler.sendObject(PROD1);
+                                networkHandler.sendObject(numberToResourceType(firstResource));
+                                networkHandler.sendObject(numberToResourceType(secondResource));
+                                networkHandler.sendObject(numberToResourceType(productionResult));
+
+                                temporaryAction1 = isSuccessReceived();
+                            }
+                            else
+                            {
+                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
+                                input.readLine();
+                            }
+
+                            break;
+
+                        case 2:
+                            if(!temporaryAction2) {
+                                int currentCard;
+
+                                currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 1, 3) - 1;
+
+                                if (currentCard == -1)
+                                    break;
+
+                                networkHandler.sendObject(PRODUCTION);
+                                networkHandler.sendObject(PROD2);
+                                networkHandler.sendObject(currentCard);
+
+                                //FIXME exception if there is non card in the specified position, should just print an error message, fix CardDealer
+
+                                temporaryAction2 = isSuccessReceived();
+                            }
+                            else
+                            {
+                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
+                                input.readLine();
+                            }
+                            break;
+
+                        case 3:
+                            if(!temporaryAction3) {
+                                int currentLeader, currentResource;
+
+                                //FIXME also prints the other leader cards, not only the extra production ones
+
+                                if (activeLeaders.size() > 0) {
+                                    System.out.println("\nACTIVE LEADER CARDS");
+                                    printLeaderCards(activeLeaders);
+                                    System.out.println("\n1)Activate leader effect one");
+
+
+                                    if (extraProductionEffect.size() > 1)
+                                        System.out.println("2)Activate leader effect two");
+
+                                } else
+                                    System.out.println(ANSI_GREEN + "There are no active leader cards" + RESET);
+
+
+                                currentLeader = integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
+
+                                if (currentLeader == -1)
+                                    break;
+
+
+                                networkHandler.sendObject(PRODUCTION);
+                                networkHandler.sendObject(PROD3);
+                                System.out.println(ANSI_GREEN + "\nYou can produce one of the following resources:" + RESET);
+                                System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
+                                currentResource = integerInput("Select resource: ", 1, 4);
+
+                                networkHandler.sendObject(extraProductionEffect.get(currentLeader).getProductionCost());
+                                networkHandler.sendObject(numberToResourceType(currentResource));
+
+                                temporaryAction3 = isSuccessReceived();
+                            }
+                            else
+                            {
+                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
+                                input.readLine();
+                            }
+                            break;
+
+                        case 0:
+                            if(temporaryAction1 || temporaryAction2 || temporaryAction3){
+                                actionDone = true;
+                                networkHandler.sendObject(ENDPRODUCTION);
+                            }
+                            break;
+
+                    }
+                }catch (IOException e)
+                {
                     e.printStackTrace();
                 }
-                break;
+            }
+
+            else{
+                System.out.println(ANSI_GREEN+"You already did a basic action"+RESET);
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action : ", 0, 0);
             }
 
 
-            try {
-                switch (currentAction) {
-                    case 1:
-                        int firstResource, secondResource, productionResult;
+        }while(currentAction != 0);
 
-                        System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
-                        System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-
-
-                        firstResource = integerInput("Select first resource (0 to exit): ", 1, 4);
-                        secondResource = integerInput("Select second resource (0 to exit): ", 1, 4);
-                        productionResult = integerInput("Select production result (0 to exit): ", 1, 4);
-
-                        if(firstResource == 0 || secondResource == 0 || productionResult == 0)
-                            break;
-
-                        networkHandler.sendObject(PRODUCTION);
-                        networkHandler.sendObject(PROD1);
-                        networkHandler.sendObject(numberToResourceType(firstResource));
-                        networkHandler.sendObject(numberToResourceType(secondResource));
-                        networkHandler.sendObject(numberToResourceType(productionResult));
-
-                        actionDone = isSuccessReceived();
-                        networkHandler.sendObject(ENDPRODUCTION);
-                        break;
-
-                    case 2:
-                        int currentCard;
-
-                        currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 1, 3) - 1;
-
-                        if(currentCard == -1)
-                            break;
-
-                        networkHandler.sendObject(PRODUCTION);
-                        networkHandler.sendObject(PROD2);
-                        networkHandler.sendObject(currentCard);
-
-                        actionDone = isSuccessReceived();
-                        networkHandler.sendObject(ENDPRODUCTION);
-                        break;
-
-                    case 3:
-                        int currentLeader, currentResource;
-
-
-                        ArrayList<LeaderCard> activeLeaders = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();
-                        //FIXME also prints the other leader cards, not only the extra production ones
-
-                        if (activeLeaders.size() > 0) {
-                            System.out.println("\nACTIVE LEADER CARDS");
-                            printLeaderCards(activeLeaders);
-                            System.out.println("\n1)Activate leader effect one");
-
-
-                        if (extraProductionEffect.size() > 1)
-                            System.out.println("2)Activate leader effect two");
-
-                        }
-
-                        else
-                            System.out.println(ANSI_GREEN+"There are no active leader cards"+RESET);
-
-
-                        currentLeader = integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
-
-                        if(currentLeader == -1)
-                            break;
-
-
-                        networkHandler.sendObject(PRODUCTION);
-                        networkHandler.sendObject(PROD3);
-                        System.out.println("\nYou can produce one of the following resources:");
-                        System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
-                        currentResource = integerInput("Select resource: ", 1,4);
-
-                        networkHandler.sendObject(extraProductionEffect.get(currentLeader).getProductionCost());
-                        networkHandler.sendObject(numberToResourceType(currentResource));
-
-                        actionLeaderDone = isSuccessReceived();
-                        networkHandler.sendObject(ENDPRODUCTION);
-                        break;
-
-                    case 0:
-                        break;
-
-                }
-            }catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-        }while(currentAction!=0);
     }
 
 
@@ -1072,7 +1045,7 @@ public class CLI extends View{
                 currentAction = integerInput("Select action: ", 0, 2);
             }
             else{
-                System.out.println(ANSI_GREEN+"\nYou activated all you leader cards"+RESET);
+                System.out.println(ANSI_GREEN+"\nYou activated or discarded all you leader cards"+RESET);
                 System.out.println("0) Exit");
                 currentAction = integerInput("Select action: ", 0, 0);
             }
@@ -1161,7 +1134,7 @@ public class CLI extends View{
 
     /**
      * Method that receives a message and check if it is a success or an error.
-     * If it receives a success also wait for the game update, if an error is received error message is printed
+     * If  a success is received it also waits for the game update, if an error is received error message is printed
      * @return true or false depending on the message received: SUCCESS --> true, ERROR --> false
      */
     private boolean isSuccessReceived() {
