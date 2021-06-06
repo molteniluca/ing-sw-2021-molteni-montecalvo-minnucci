@@ -396,6 +396,7 @@ public class CLI extends View{
         }
     }
 
+
     /**
      * Method that asks the nickname and sends it to thw server
      */
@@ -432,6 +433,7 @@ public class CLI extends View{
         }while(!correctInput);
     }
 
+
     /**
      * It shows the legend of the CLI associating every
      * resource to a colored circle
@@ -439,6 +441,7 @@ public class CLI extends View{
     private void showLegend() {
         System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + ColoredResources.GOLD +" Shield:" + ColoredResources.SHIELD + " Servant:" + ColoredResources.SERVANT + " Stone:" + ColoredResources.STONE+"\n");
     }
+
 
     /**
      * Method that prints out the faith track of a user
@@ -448,7 +451,8 @@ public class CLI extends View{
         //To add position received from Server
         int position = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
-        System.out.println("\nFAITH TRACK");
+        printTitle("\nFAITH TRACK");
+
         for(int i =0; i< MAX_POSITION; i++) {
             if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || i>=19) {
                 System.out.print(ColorCLI.ANSI_YELLOW);
@@ -465,6 +469,7 @@ public class CLI extends View{
         System.out.print("\n");
     }
 
+
     /**
      * Method that prints the market matrix and the external resource
      * the player is not important because the general board is shared
@@ -472,25 +477,34 @@ public class CLI extends View{
      */
     public void showMarket() {
         int currentAction = -1;
+        int extraResourceIndex; //null effect index
         int column;
         int row;
 
         Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        ArrayList<ExtraResource> extraResources  = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
 
         ResourceTypes[][] marketMatrix;
         ResourceTypes externalResource;
 
-        //Prints the market matrix
+
         while(currentAction != 0) {
+
+            extraResourceIndex = -1;
+
             refresh();
             showLegend();
 
             marketMatrix = market.getMarketMatrix();
             externalResource = market.getExternalResource();
-            System.out.println(RESET + "\nMARKET:");
+
+            printTitle("\nMARKET");
+
             System.out.print("\t\t\t   ");
             System.out.println(selectResourceColor(externalResource) + ": external resource");
 
+            //Prints the market matrix
             for (int i = 0; i < market.ROWS; i++) {
                 for (int j = 0; j < market.COLUMNS; j++) {
                     System.out.print(selectResourceColor(marketMatrix[i][j]) + "\t");
@@ -516,10 +530,22 @@ public class CLI extends View{
                 switch (currentAction) {
                     case 1:
                         column = integerInput("Chose column: ", 0, market.COLUMNS - 1);
+
+                        if(extraResources.size() > 0)
+                        {
+                            System.out.println("\nACTIVE LEADER CARDS");
+                            printLeaderCards(leaderBoard.getLeaderCards());
+                            extraResourceIndex = 0;
+
+                            if(extraResources.size() == 2)
+                                extraResourceIndex = integerInput("Which leader effect do you want to apply (1-2) ?", 1,2)-1;
+                        }
+
                         try {
                             networkHandler.sendObject(BUYCOLUMN);
                             networkHandler.sendObject(column);
-                            networkHandler.sendObject(-1); //null effect index
+                            networkHandler.sendObject(extraResourceIndex);
+
                             isSuccessReceived();
                             showSwapArea();
 
@@ -528,12 +554,24 @@ public class CLI extends View{
                         }
                         actionDone = true;
                         break;
+
                     case 2:
                         row = integerInput("Chose row: ", 0, market.ROWS - 1);
+
+                        if(extraResources.size() > 0)
+                        {
+                            System.out.println("\nACTIVE LEADER CARDS");
+                            printLeaderCards(leaderBoard.getLeaderCards());
+                            extraResourceIndex = 0;
+
+                            if(extraResources.size() == 2)
+                                extraResourceIndex = integerInput("Which leader effect do you want to apply (1-2) ?", 1,2)-1;
+                        }
+
                         try {
                             networkHandler.sendObject(BUYROW);
                             networkHandler.sendObject(row);
-                            networkHandler.sendObject(-1); //null effect index
+                            networkHandler.sendObject(extraResourceIndex);
                             isSuccessReceived();
                             showSwapArea();
                         } catch (IOException e) {
@@ -541,6 +579,7 @@ public class CLI extends View{
                         }
                         actionDone = true;
                         break;
+
                     case 0:
                         break;
                 }
@@ -708,88 +747,91 @@ public class CLI extends View{
      * the card dealer is a common object
      */
     public void showCardDealer() {
-        int currentAction;
+        int currentAction = -1;
         ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
         Stack<DevelopmentCard>[][] cardMatrix = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
 
-        refresh();
-        System.out.println("CARD DEALER");
+        do {
+            refresh();
+            printTitle("CARD DEALER");
 
-
-        for(int i = 0; i <= 2; i++)
-        {
-            for(int j = 0; j<4; j++)
-            {
-                try {
-                    currentLine.add(cardMatrix[i][j].peek());
+            //Prints the card dealer line by line
+            for (int i = 0; i <= 2; i++) {
+                for (int j = 0; j < 4; j++) {
+                    try {
+                        currentLine.add(cardMatrix[i][j].peek());
+                    } catch (EmptyStackException e) {
+                        currentLine.add(null);
+                    }
                 }
-                catch (EmptyStackException e)
-                {
-                    currentLine.add(null);
-                }
+                printDevelopmentCards(currentLine);
+                currentLine.clear();
+                System.out.print("\n");
             }
-            printDevelopmentCards(currentLine);
-            currentLine.clear();
+
+            System.out.println();
+
+            //separate the card dealer from the card board
+            for (int i = 0; i < 70; i++)
+                System.out.print("= "); //there must be a space
+
+
             System.out.print("\n");
-        }
+            showCardBoard();
+            System.out.print("\n\n");
+            showLegend();
 
-        System.out.println();
-        showLegend();
-        //Asks the user if it wants to buy a column or a row
-        if(!actionDone) {
-            System.out.println("\n1) Buy card");
-            System.out.println("0) Exit");
-            currentAction = integerInput("Select action: ", 0, 1);
+            //Asks the user if it wants to buy a column or a row
+            if (!actionDone) {
+                System.out.println("\n1) Buy card");
+                System.out.println("0) Exit");
+                currentAction = integerInput("Select action: ", 0, 1);
 
-            try {
-                switch (currentAction) {
+                try {
+                    switch (currentAction) {
 
-                    case 1:
+                        case 1:
 
-                        int row = 3 - integerInput("Chose level (1-3, 0 to exit): ", 0, 3);
-                        if(row == 3)
+                            int row = 3 - integerInput("Chose level (1-3, 0 to exit): ", 0, 3);
+                            if (row == 3)
+                                continue;
+
+                            int column = integerInput("Chose column (1-4, 0 to exit): ", 0, 4) - 1;
+                            if (column == -1)
+                                continue;
+
+                            int place = integerInput("Where do you want to place the card in your card board (1-3, 0 to exit)? ", 0, 3) - 1;
+                            if (place == -1)
+                                continue;
+
+                            try {
+                                cardMatrix[row][column].peek();
+                            } catch (EmptyStackException e) {
+                                System.out.print(ANSI_RED + "There are no more development cards in the selected cell, press enter to continue " + RESET);
+                                input.readLine();
+                                continue;
+                            }
+
+                            networkHandler.sendObject(BUYCARD);
+                            networkHandler.sendObject(row);
+                            networkHandler.sendObject(column);
+                            networkHandler.sendObject(place);
+
+                            actionDone = isSuccessReceived();
+
                             break;
-
-                        int column = integerInput("Chose column (1-4, 0 to exit): ", 0, 4) - 1;
-                        if(column == -1)
+                        case 0:
                             break;
-
-                        int place = integerInput("Where do you want to place the card in your card board (1-3, 0 to exit)? ", 0, 3) - 1;
-                        if(place == -1)
-                            break;
-
-                        try
-                        {
-                            cardMatrix[row][column].peek();
-                        }catch (EmptyStackException e)
-                        {
-                            System.out.print(ANSI_RED+"There are no more development cards in the selected cell, press enter to continue "+RESET);
-                            input.readLine();
-                            break;
-                        }
-
-                        networkHandler.sendObject(BUYCARD);
-                        networkHandler.sendObject(row);
-                        networkHandler.sendObject(column);
-                        networkHandler.sendObject(place);
-
-                        actionDone = isSuccessReceived();
-
-                        break;
-                    case 0:
-                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
+                System.out.println("0) Exit");
+                integerInput("Select action: ", 0, 0);
             }
-        }
-        else
-        {
-            System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
-            System.out.println("0) Exit");
-            integerInput("Select action: ", 0, 0);
-        }
-
+        }while (currentAction !=0 );
     }
 
 
@@ -799,7 +841,7 @@ public class CLI extends View{
     @Override
     public void showWarehouse(WarehouseDepots warehouseDepots) {
         int k;
-        System.out.println("\nWAREHOUSE");
+        printTitle("\nWAREHOUSE");
 
         for(int i = 1; i <= warehouseDepots.getNumberLevels(); i++){//For different levels
             //Warehouse layout from left side of screen for each level
@@ -840,7 +882,8 @@ public class CLI extends View{
         Resources res = strongBox.getResources();
         int i = 0;
 
-        System.out.println("\n\nSTRONGBOX");
+        printTitle("\n\nSTRONGBOX");
+
         for (ResourceTypes resourceTypes: ResourceTypes.values()) {
             if(i == 2)
                 System.out.println();
@@ -858,9 +901,9 @@ public class CLI extends View{
     public void showCardBoard() {
         CardBoard cardBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard();
 
-        System.out.println("CARD BOARD");
+        printTitle("CARD BOARD");
         if(cardBoard.getDevelopmentCards().size() == 0)
-            System.out.println(ANSI_GREEN+"There are no development cards"+RESET);
+            System.out.println(ANSI_GREEN+"\nThere are no development cards"+RESET);
         else
             printDevelopmentCards(Arrays.asList(cardBoard.getUpperDevelopmentCards()));
     }
@@ -923,16 +966,16 @@ public class CLI extends View{
 
                                 firstResource = integerInput("Select first resource (0 to exit): ", 0, 4);
                                 if(firstResource == 0)
-                                    break;
+                                    continue;
 
 
                                 secondResource = integerInput("Select second resource (0 to exit): ", 0, 4);
                                 if(secondResource == 0)
-                                    break;
+                                    continue;
 
                                 productionResult = integerInput("Select production result (0 to exit): ", 0, 4);
                                 if(productionResult == 0)
-                                    break;
+                                    continue;
 
 
                                 networkHandler.sendObject(PRODUCTION);
@@ -954,17 +997,23 @@ public class CLI extends View{
                         case 2:
                             if(!temporaryAction2) {
                                 int currentCard;
+                                DevelopmentCard[] developmentCards = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
 
                                 currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 0, 3) - 1;
 
                                 if (currentCard == -1)
-                                    break;
+                                    continue;
+
+                                if(developmentCards[currentCard] == null)
+                                {
+                                    System.out.print(ANSI_RED+"There is no development card in the selected position, press enter to continue "+RESET);
+                                    input.readLine();
+                                    continue;
+                                }
 
                                 networkHandler.sendObject(PRODUCTION);
                                 networkHandler.sendObject(PROD2);
                                 networkHandler.sendObject(currentCard);
-
-                                //FIXME exception if there is non card in the specified position, should just print an error message, fix CardDealer
 
                                 temporaryAction2 = isSuccessReceived();
                             }
@@ -979,10 +1028,10 @@ public class CLI extends View{
                             if(!temporaryAction3) {
                                 int currentLeader, currentResource;
 
-                                //FIXME also prints the other leader cards, not only the extra production ones
-
+                                System.out.println("\nACTIVE LEADER CARDS");
                                 if (activeLeaders.size() > 0) {
-                                    System.out.println("\nACTIVE LEADER CARDS");
+                                    //System.out.println("\nACTIVE LEADER CARDS");
+                                //FIXME shows all leader cards, not only the ones with the extra production effect
                                     printLeaderCards(activeLeaders);
                                     System.out.println("\n1)Activate leader effect one");
 
@@ -997,7 +1046,7 @@ public class CLI extends View{
                                 currentLeader = integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
 
                                 if (currentLeader == -1)
-                                    break;
+                                    continue;
 
 
                                 networkHandler.sendObject(PRODUCTION);
@@ -1199,6 +1248,7 @@ public class CLI extends View{
         return true;
     }
 
+
     /**
      * Method that returns resourceTypes associated to number: 1 = GOLD, 2 = SERVANT, 3 = SHIELD, 4 = STONE
      * @param number number from input that you want to convert in resourceTypes
@@ -1277,7 +1327,7 @@ public class CLI extends View{
 
 
     /**
-     * Method that prints the title of the game in ASCIIArt
+     * Method that prints the main title of the game in ASCIIArt
      */
     private void printMainTitle() {
         System.out.println(ANSI_YELLOW +
@@ -1290,6 +1340,15 @@ public class CLI extends View{
                 "888   \"   888 888  888      X88 Y88b. Y8b.     888          X88      Y88..88P 888         888  T88b Y8b.     888  888 888  888 888      X88      X88 888  888 888  888 Y88b.   Y8b.     \n" +
                 "888       888 \"Y888888  88888P'  \"Y888 \"Y8888  888      88888P'       \"Y88P\"  888         888   T88b \"Y8888  888  888 \"Y888888 888  88888P'  88888P' \"Y888888 888  888  \"Y8888P \"Y8888  \n" +
                 "                                                                                                                                                                                        \n" + RESET);
+    }
+
+
+    /**
+     * Method the print the title od a section
+     * @param title the string that has to be printed
+     */
+    private void printTitle(String title) {
+        System.out.println(RESET+ANSI_BOLD+title+RESET);
     }
 
 
@@ -1421,6 +1480,7 @@ public class CLI extends View{
      */
     private void printDevelopmentCards(List<DevelopmentCard> cards) {
         int tabs; //the number of tabs used to format the table
+        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
 
         //Type of the card
         System.out.print("\n");
@@ -1462,7 +1522,7 @@ public class CLI extends View{
         for(DevelopmentCard card : cards)
         {
             if(card!=null) {
-                Resources cost = card.getCost();
+                Resources cost = personalBoard.handleDiscount(card.getCost());
                 System.out.print("Cost: ");
                 tabs = printResources(cost, "real");
                 switch (tabs) {
@@ -1635,6 +1695,7 @@ public class CLI extends View{
             System.out.print("\n");
         }
     }
+
 
     /**
      * Method that returns a correct integer input for a particular request
