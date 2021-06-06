@@ -829,7 +829,7 @@ public class CLI extends View{
             } else {
                 System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
                 System.out.println("0) Exit");
-                integerInput("Select action: ", 0, 0);
+                currentAction = integerInput("Select action: ", 0, 0);
             }
         }while (currentAction !=0 );
     }
@@ -1099,80 +1099,84 @@ public class CLI extends View{
      * the answer to the server
      */
     private void showLeaderBoard() {
-        int currentAction;
+        int currentAction = -1;
+        int currentCard;
 
-        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
-        ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
-        ArrayList<LeaderCard> activeLeader = leaderBoard.getLeaderCards();
+        do {
+            refresh();
+            LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+            ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
+            ArrayList<LeaderCard> activeLeader = leaderBoard.getLeaderCards();
 
-        refresh();
+            if (leaderInHand.size() > 0 || activeLeader.size() > 0) {
+                if (leaderInHand.size() > 0)
+                    printTitle("LEADER CARDS IN HAND");
 
-        if(leaderInHand.size()>0 || activeLeader.size()>0) {
-            if (leaderInHand.size() > 0)
-                System.out.println("LEADER CARDS IN HAND");
+                printLeaderCards(leaderBoard.getLeaderCardsInHand());
 
-            printLeaderCards(leaderBoard.getLeaderCardsInHand());
+                if (activeLeader.size() > 0)
+                    printTitle("\nACTIVE LEADER CARDS\n");
 
-            if (activeLeader.size() > 0)
-                System.out.println("\nACTIVE LEADER CARDS");
-            printLeaderCards(activeLeader);
+                printLeaderCards(activeLeader);
 
-            System.out.println();
-            showLegend();
-            System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
-
-
-            if(leaderInHand.size()>0) {
-                System.out.println("\n1) Play leader");
-                System.out.println("2) Discard leader");
-                System.out.println("0) Exit");
-                currentAction = integerInput("Select action: ", 0, 2);
-            }
-            else{
-                System.out.println(ANSI_GREEN+"\nYou activated or discarded all you leader cards"+RESET);
-                System.out.println("0) Exit");
-                currentAction = integerInput("Select action: ", 0, 0);
-            }
+                System.out.println();
+                showLegend();
+                System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
 
 
-            try {
-                switch (currentAction) {
-
-                    case 1:
-                        currentAction = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
-                        if (currentAction == -1)
-                            break;
-                        networkHandler.sendObject(ACTIVATELEADER);
-                        networkHandler.sendObject(currentAction);
-                        isSuccessReceived();
-                        break;
-
-                    case 2:
-                        currentAction = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
-                        if (currentAction == -1)
-                            break;
-                        networkHandler.sendObject(DISCARDLEADER);
-                        networkHandler.sendObject(currentAction);
-                        isSuccessReceived();
-                        break;
-
-                    case 0:
-                        break;
+                if (leaderInHand.size() > 0) {
+                    System.out.println("\n1) Play leader");
+                    System.out.println("2) Discard leader");
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 2);
+                } else {
+                    System.out.println(ANSI_GREEN + "\nYou activated or discarded all you leader cards" + RESET);
+                    System.out.println("0) Exit");
+                    currentAction = integerInput("Select action: ", 0, 0);
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+
+                try {
+                    switch (currentAction) {
+
+                        case 1:
+                            currentCard = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
+                            if (currentCard == -1)
+                                continue;
+                            networkHandler.sendObject(ACTIVATELEADER);
+                            networkHandler.sendObject(currentCard);
+                            if(!isSuccessReceived())
+                                continue;
+                            break;
+
+                        case 2:
+                            currentCard = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
+                            if (currentCard == -1)
+                                continue;
+                            networkHandler.sendObject(DISCARDLEADER);
+                            networkHandler.sendObject(currentCard);
+                            if(!isSuccessReceived())
+                                continue;
+                            break;
+
+                        case 0:
+                            break;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        else
-        {
-            System.out.print(ANSI_GREEN+"You discarded all your leader cards, press enter to continue "+RESET);
-            try {
-                input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
+            else {
+                System.out.print(ANSI_GREEN + "You discarded all your leader cards, press enter to continue " + RESET);
+                try {
+                    input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             }
-        }
+        }while (currentAction!=0);
 
     }
 
