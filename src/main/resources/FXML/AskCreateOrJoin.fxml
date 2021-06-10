@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<Pane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1368.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GUI">
+   <children>
+      <ImageView fitHeight="793.0" fitWidth="1386.0" layoutX="-11.0" layoutY="-8.0" opacity="0.3" pickOnBounds="true">
+         <image>
+            <Image url="@../images/initialBackground.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="233.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Masters of renaissance" textAlignment="CENTER" wrappingWidth="933.20654296875">
+         <font>
+            <Font name="Zapfino" size="70.0" />
+         </font>
+         <fill>
+            <RadialGradient centerX="0.5280898876404494" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.1393762230873108" green="0.2665042281150818" blue="0.6842105388641357" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.4849624060150376">
+                     <color>
+                        <Color red="0.1393762230873108" green="0.2665042281150818" blue="0.6842105388641357" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.8834586466165413">
+                     <color>
+                        <Color red="1.0" green="0.7809523940086365" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.7809523940086365" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Text>
+      <AnchorPane layoutX="261.0" layoutY="236.0" prefHeight="446.0" prefWidth="855.0">
+         <children>
+            <Button fx:id="printInformation" contentDisplay="CENTER" disable="true" layoutX="534.0" layoutY="270.0" mnemonicParsing="false" onAction="#printInfo" prefHeight="47.0" prefWidth="138.0" text="Print Information" />
+            <Button fx:id="startGameButton" layoutX="346.0" layoutY="343.0" mnemonicParsing="false" onAction="#startGame" prefHeight="47.0" prefWidth="138.0" text="Start game" wrapText="true" />
+            <Text fx:id="wrongInput" fill="RED" layoutX="155.0" layoutY="141.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong input, retry">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Button fx:id="saveInformationButton" contentDisplay="CENTER" layoutX="159.0" layoutY="270.0" mnemonicParsing="false" onAction="#saveInformation" prefHeight="47.0" prefWidth="138.0" text="Save Information" />
+            <TextField fx:id="serverPortText" alignment="CENTER" layoutX="301.0" layoutY="202.0" prefHeight="57.0" prefWidth="227.0" promptText="Server port: 10000" />
+            <TextArea fx:id="resultText" editable="false" layoutX="314.0" layoutY="393.0" prefHeight="79.0" prefWidth="200.0" />
+            <TextField fx:id="serverAddressText" alignment="CENTER" layoutX="304.0" layoutY="116.0" prefHeight="57.0" prefWidth="227.0" promptText="Server address: 127.0.0.1">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </TextField>
+         </children>
+      </AnchorPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</Pane>

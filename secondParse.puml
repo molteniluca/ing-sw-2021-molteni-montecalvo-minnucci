@@ -1,0 +1,661 @@
+@startuml
+
+!define DARKRED
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+class it.polimi.ingsw.network.WaitingRoom {
+- int numPlayers
+- String id
+- ArrayList<ClientHandler> clients
+- ArrayList<String> clientsNames
+- HashMap<String,WaitingRoom> waitingRooms
+- Game game
+- boolean connectionsClosed
++ <<Create>> WaitingRoom(int,String,HashMap<String,WaitingRoom>)
++ Game getGame()
++ void run()
++ void joinRoom(ClientHandler,String)
++ void closeAll()
+- void printDebug(String)
+- void notifyClients(Object)
+}
+class it.polimi.ingsw.model.board.personal.storage.WarehouseDepots {
+- {static} long serialVersionUID
+- ArrayList<Level> warehouseDepots
+- Resources swapDeposit
++ <<Create>> WarehouseDepots()
++ void addResourceSwap(Resources)
++ Resources removeFromSwap()
++ void moveToSwap(int)
++ void moveToLevel(int,ResourceTypes,int)
++ Resources getResources()
++ Resources getResources(int)
++ int getNumberLevels()
++ ResourceTypes getResourceTypeLevel(int)
++ int getResourcesNumber(int)
++ Resources getSwapDeposit()
++ void addLevel(Level)
++ void removeResources(Resources)
++ Level getLevel(int)
+}
+class it.polimi.ingsw.view.CLI.CLI {
+- {static} int MAX_POSITION
+- BufferedReader input
+- NetworkHandler networkHandler
+- Game game
+- boolean gameUpdated
+- int winOrLose
+- boolean actionDone
+- boolean singlePlayer
+- int playerNumber
++ void run()
++ void initializeView()
++ void showHomepage()
++ void welcomeInfo()
++ void askCreateOrJoin()
++ void askServerInfo()
++ void askNickname()
+- void showLegend()
++ void showFaithTrack()
++ void showMarket()
++ void showSwapArea()
++ void showCardDealer()
++ void showWarehouse(WarehouseDepots)
++ void showStrongbox()
++ void showCardBoard()
+- void showProduce()
+- void showLeaderBoard()
+- void choseLeaderCards()
+- boolean isSuccessReceived()
+- ResourceTypes numberToResourceType(int)
+- void resourceMovedCorrectly()
++ void updateObjects(Game)
+# void notifyEndGame(boolean)
+- void refresh()
+- void printMainTitle()
+- void printTitle(String)
+- int printResources(Resources,String)
+- ColoredResources selectResourceColor(ResourceTypes)
+- void selectInitialResources()
+- void printDevelopmentCards(List<DevelopmentCard>)
+- void printLeaderCards(ArrayList<LeaderCard>)
+- int integerInput(String,int,int)
+- void wrongInput()
+}
+class it.polimi.ingsw.model.board.personal.PersonalBoard {
+- {static} long serialVersionUID
+- FaithTrack faithTrack
+- Deposit deposit
+- CardBoard cardBoard
+- LeaderBoard leaderBoard
+- GeneralBoard generalBoard
+- Resources availableResources
+- ArrayList<ExtraProduction> availableProductions
+- boolean prod1
+- boolean[] prod2
++ <<Create>> PersonalBoard(GeneralBoard,ArrayList<LeaderCard>)
++ FaithTrack getFaithTrack()
++ Deposit getDeposit()
++ CardBoard getCardBoard()
++ GeneralBoard getGeneralBoard()
++ LeaderBoard getLeaderBoard()
++ int getVictoryPoints()
++ void produce(DevelopmentCard)
++ boolean checkProduce(DevelopmentCard)
++ void produce(int)
++ Resources handleDiscount(Resources)
++ boolean checkProduce(ResourceTypes,ResourceTypes)
++ void produce(ResourceTypes,ResourceTypes,ResourceTypes)
++ boolean checkProduce(ResourceTypes)
++ void produce(ResourceTypes,ResourceTypes)
++ void buyColumn(int,ExtraResource)
++ void buyColumn(int,int)
++ void buyRow(int,ExtraResource)
++ void buyRow(int,int)
+- void handleFaithAndStore(ExtraResource,Resources)
+- Resources handleBlank(Resources,ExtraResource)
++ void drawCard(int,int,int)
++ boolean checkDrawCard(int,int)
++ boolean checkPlayLeader(LeaderCard)
++ void playLeader(int)
++ void playLeader(LeaderCard)
++ void dropResources()
++ void initProduce()
++ void enqueueProduce(ResourceTypes,ResourceTypes)
++ void enqueueProduce(ResourceTypes,ResourceTypes,ResourceTypes)
++ void enqueueProduce(int)
+}
+interface it.polimi.ingsw.model.cards.specialAbility.SpecialAbility {
+~ long serialVersionUID
+~ Discount applyDiscount()
+~ ExtraDeposit applyExtraDeposit()
+~ ExtraProduction applyExtraProduction()
+~ ExtraResource applyExtraResource()
+}
+class it.polimi.ingsw.view.NetworkHandler {
+- Socket server
+- ObjectInputStream in
+- ObjectOutputStream out
+- View view
++ <<Create>> NetworkHandler(String,int,View)
++ void run()
+- Object receiveObject()
++ void sendObject(Object)
++ void sendHeartBeat()
++ void closeConnection()
+}
+class it.polimi.ingsw.model.board.personal.LeaderBoard {
+- {static} long serialVersionUID
+- ArrayList<LeaderCard> leaderCards
+- ArrayList<LeaderCard> leaderCardsInHand
+- PersonalBoard personalBoard
+- int victoryPoints
++ <<Create>> LeaderBoard(ArrayList<LeaderCard>,PersonalBoard)
++ void playLeader(LeaderCard,Resources,ArrayList<DevelopmentCard>)
++ boolean checkPlayLeader(LeaderCard,Resources,ArrayList<DevelopmentCard>)
++ ArrayList<LeaderCard> getLeaderCardsInHand()
++ ArrayList<LeaderCard> getLeaderCards()
++ void discardLeader(LeaderCard)
++ void discardLeader(int)
++ void selectLeaders(Integer[])
++ ArrayList<ExtraProduction> getProductionEffects()
++ ArrayList<Discount> getDiscountEffects()
++ ArrayList<ExtraDeposit> getExtraDepositEffects()
++ ArrayList<ExtraResource> getExtraResource()
+- void activateLeaderEffect(LeaderCard)
++ int getVictoryPoint()
+}
+class it.polimi.ingsw.view.exceptions.UnknownIdException {
++ <<Create>> UnknownIdException(String)
+}
+class it.polimi.ingsw.model.cards.specialAbility.ExtraResource {
+- {static} long serialVersionUID
+- ResourceTypes resource
++ <<Create>> ExtraResource(ResourceTypes)
++ ResourceTypes getResource()
++ ExtraResource applyExtraResource()
+}
+class it.polimi.ingsw.controller.PlayerTurn {
+- {static} long serialVersionUID
+- Player player
+- ClientHandler clientHandler
+- int playerNum
++ <<Create>> PlayerTurn(Player,ClientHandler,int)
++ Player getPlayer()
++ void beginTurn()
+- void handleSwap()
++ boolean discardLeader()
+- boolean activateLeader()
+- boolean activateProduction()
+- boolean buyColumn()
+- boolean buyRow()
+- boolean buyDevelopmentCard()
++ void startGame()
++ int getVictoryPoints()
++ void endGame(boolean)
+}
+class it.polimi.ingsw.model.exceptions.YouMustPlayLeaderException {
++ <<Create>> YouMustPlayLeaderException(String)
+}
+class it.polimi.ingsw.network.exceptions.FullRoomException {
++ <<Create>> FullRoomException(String)
+}
+class it.polimi.ingsw.model.Lorenzo {
+- {static} long serialVersionUID
+- FaithTrack faithTrack
+- int positionToken
+- ArrayList<ActionTokens> actionTokens
+- GeneralBoard generalBoard
++ <<Create>> Lorenzo(GeneralBoard)
++ FaithTrack getFaithTrack()
++ void play()
++ int getVictoryPoints()
+}
+class it.polimi.ingsw.model.cards.LeaderCard {
+- {static} long serialVersionUID
+- Resources resourceRequirements
+- DevelopmentCardRequirement developmentCardRequirementWithLevel
+- List<DevelopmentCardRequirement> developmentCardRequirementOnlyColor
+- SpecialAbility specialAbility
++ <<Create>> LeaderCard(int,String,Resources,SpecialAbility)
++ <<Create>> LeaderCard(int,String,DevelopmentCardRequirement,SpecialAbility)
++ <<Create>> LeaderCard(int,String,List<DevelopmentCardRequirement>,SpecialAbility)
++ SpecialAbility getSpecialAbility()
++ Resources getResourceRequirements()
++ DevelopmentCardRequirement getDevelopmentCardRequirementWithLevel()
++ List<DevelopmentCardRequirement> getDevelopmentCardRequirementOnlyColor()
++ boolean checkRequirements(Resources,List<DevelopmentCard>)
+}
+class it.polimi.ingsw.model.cards.specialAbility.ExtraProduction {
+- {static} long serialVersionUID
+- ResourceTypes productionCost
++ <<Create>> ExtraProduction(ResourceTypes)
++ ResourceTypes getProductionCost()
++ ExtraProduction applyExtraProduction()
+}
+class it.polimi.ingsw.model.exceptions.TypeNotChangeableException {
++ <<Create>> TypeNotChangeableException(String)
+}
+class it.polimi.ingsw.controller.Game {
++ {static} long serialVersionUID
+- ArrayList<Turn> turns
+- String id
+- int numPlayers
+- boolean gameEnded
+- int currentPlayer
++ <<Create>> Game(int,ArrayList<ClientHandler>,ArrayList<String>,String)
++ int getCurrentPlayer()
++ void setGameEnded(boolean)
+- ArrayList<LeaderCard>[] getStartingLeaders()
++ void startGame()
+- void singlePlayerGame()
+- void multiplePlayerGame()
+- ArrayList<Integer> getAllVictoryPoints()
+- ArrayList<LeaderCard> getLeadersFromFile()
+- void printDebug(String)
++ PlayerTurn getTurn(int)
+}
+class it.polimi.ingsw.view.GUI.GUI {
++ void run()
++ void initializeView()
++ void welcomeInfo()
++ void askCreateOrJoin()
++ void askServerInfo()
++ void askNickname()
++ void showHomepage()
++ void showFaithTrack()
++ void showWarehouse(WarehouseDepots)
++ void showStrongbox()
++ void updateObjects(Game)
+# void notifyEndGame(boolean)
+}
+class it.polimi.ingsw.model.exceptions.NotEnoughCardException {
++ <<Create>> NotEnoughCardException(String)
+}
+class it.polimi.ingsw.network.ObjectUpdate {
+- {static} long serialVersionUID
+- Object object
+- int player
++ <<Create>> ObjectUpdate(Object,int)
++ int getPlayer()
++ Object getObject()
+}
+class it.polimi.ingsw.network.Server {
+- HashMap<String,WaitingRoom> rooms
++ int port
+- ServerSocket serverSocket
++ <<Create>> Server(int)
+- void waitForConnections()
+- void acceptConnection(Socket)
+- void closeServer()
+- void printDebug(String)
++ {static} void main(String[])
+}
+class it.polimi.ingsw.model.board.general.FaithObserver {
+~ ArrayList<FaithTrack> tracks
++ <<Create>> FaithObserver()
++ void registerTrack(FaithTrack)
++ void notify(int)
++ void dropResources(Resources,FaithTrack)
+}
+class it.polimi.ingsw.view.exceptions.NameAlreadyPresentException {
++ <<Create>> NameAlreadyPresentException(String)
+}
+class it.polimi.ingsw.Main {
++ {static} void main(String[])
++ {static} void server2()
+}
+class it.polimi.ingsw.view.GUI.GUIApplication {
++ void start(Stage)
+}
+class it.polimi.ingsw.controller.SelfPlayingTurn {
+- {static} long serialVersionUID
+- Lorenzo lorenzo
++ <<Create>> SelfPlayingTurn(GeneralBoard)
++ void beginTurn()
++ void startGame()
++ int getVictoryPoints()
++ void endGame(boolean)
+}
+class it.polimi.ingsw.model.board.general.GeneralBoard {
+- {static} long serialVersionUID
+- Market market
+- CardDealer cardDealer
+- FaithObserver faithObserver
++ <<Create>> GeneralBoard()
++ Market getMarket()
++ CardDealer getCardDealer()
++ FaithObserver getFaithObserver()
+}
+class it.polimi.ingsw.model.cards.DevelopmentCardRequirement {
+- {static} long serialVersionUID
+- char type
+- int level
++ <<Create>> DevelopmentCardRequirement(char,int)
++ <<Create>> DevelopmentCardRequirement(char)
++ char getType()
++ int getLevel()
+}
+class it.polimi.ingsw.model.exceptions.FaithNotAllowedException {
++ <<Create>> FaithNotAllowedException(String)
+}
+class it.polimi.ingsw.model.cards.specialAbility.Discount {
+- {static} long serialVersionUID
+- ResourceTypes resourceDiscount
++ <<Create>> Discount(ResourceTypes)
++ ResourceTypes getResourceDiscount()
++ Discount applyDiscount()
+}
+class it.polimi.ingsw.model.board.personal.storage.Level {
+- {static} long serialVersionUID
+- ResourceTypes resourceType
+- int resourceNumber
+- boolean fixedResource
+- int maxResourceNumber
++ <<Create>> Level(int)
++ <<Create>> Level(ResourceTypes,int)
++ int getResourceNumber()
++ ResourceTypes getResourceType()
++ Resources getResources()
++ Resources getResourcesAndErase()
+- void setResourceType(ResourceTypes)
+- void setResourceNumber(int)
++ void addResources(int,ResourceTypes)
++ void removeResources(int,ResourceTypes)
++ boolean getFixedResource()
+}
+class it.polimi.ingsw.model.board.personal.CardBoard {
+- {static} long serialVersionUID
+- ArrayList<DevelopmentCard>[] productionCards
+- int numberOfCards
++ <<Create>> CardBoard()
++ void insertCard(DevelopmentCard,int)
++ ArrayList<DevelopmentCard> getDevelopmentCards()
++ DevelopmentCard[] getUpperDevelopmentCards()
++ int getAllVictoryPoint()
+}
+class it.polimi.ingsw.model.board.personal.Deposit {
+- {static} long serialVersionUID
+- WarehouseDepots warehouseDepots
+- StrongBox strongBox
++ <<Create>> Deposit()
++ WarehouseDepots getWarehouseDepots()
++ StrongBox getStrongBox()
++ Resources getTotalResources()
++ boolean checkRemoveResource(Resources)
++ void removeResources(Resources)
++ int getVictoryPoint()
+}
+class it.polimi.ingsw.model.exceptions.LevelTooSmallException {
++ <<Create>> LevelTooSmallException(String)
+}
+class it.polimi.ingsw.model.exceptions.NegativeResourceValueException {
++ <<Create>> NegativeResourceValueException(String)
+}
+class it.polimi.ingsw.model.exceptions.UnusableCardException {
++ <<Create>> UnusableCardException(String)
+}
+class it.polimi.ingsw.model.board.personal.FaithTrack {
+- {static} long serialVersionUID
+- int[] faithCards
+- int position
+- FaithObserver faithObserver
++ <<Create>> FaithTrack(FaithObserver)
++ int getVictoryPoint()
++ int getPosition()
++ void checkRelationship(int)
++ void incrementPosition(int)
++ int[] getFaithCards()
++ void dropResources(Resources)
+}
+abstract class it.polimi.ingsw.view.View {
++ Queue<Object> messages
+# boolean gameUpdatedNetMess
++ {abstract}void initializeView()
++ {abstract}void welcomeInfo()
++ {abstract}void askCreateOrJoin()
++ {abstract}void askServerInfo()
++ {abstract}void askNickname()
++ {abstract}void showHomepage()
++ {abstract}void showFaithTrack()
++ {abstract}void showWarehouse(WarehouseDepots)
++ {abstract}void showStrongbox()
++ void notifyResponse(Object)
++ void notifyNewGame(Game)
++ {abstract}void updateObjects(Game)
+# void waitForUpdatedGame()
+# Object waitAndGetResponse()
+# {abstract}void notifyEndGame(boolean)
+}
+class it.polimi.ingsw.model.board.general.Market {
+- {static} long serialVersionUID
+- ResourceTypes[][] marketMatrix
++ int ROWS
++ int COLUMNS
+- ResourceTypes externalResource
++ <<Create>> Market()
++ ResourceTypes[][] getMarketMatrix()
++ void setExternalResource(ResourceTypes)
++ ResourceTypes getExternalResource()
++ Resources buyColumn(int)
++ Resources buyRow(int)
+- void pushRow(int)
+- void pushColumn(int)
+}
+class it.polimi.ingsw.view.exceptions.UnknownMessageException {
++ <<Create>> UnknownMessageException(String)
+}
+class it.polimi.ingsw.model.resources.Resources {
+- {static} long serialVersionUID
+- HashMap<ResourceTypes,Integer> resourceMap
++ <<Create>> Resources()
++ Resources set(ResourceTypes,int)
++ Resources add(Resources)
++ Resources sub(Resources)
++ Resources negativeSubValues(Resources)
++ Resources switchBlank(ResourceTypes)
++ boolean isSubPositive(Resources)
++ int getResourceNumber(ResourceTypes)
+- void eraseBlank()
++ boolean equals(Resources)
++ Resources eraseFaith()
++ int getTotalResourceNumber()
+}
+class it.polimi.ingsw.model.cards.DevelopmentCard {
+- {static} long serialVersionUID
+- Resources cost
+- char type
+- int level
+- Resources productionCost
+- Resources productionPower
++ <<Create>> DevelopmentCard(int,String,Resources,char,int,Resources,Resources)
++ Resources getCost()
++ char getType()
++ int getLevel()
++ Resources getProductionCost()
++ Resources getProductionPower()
++ Boolean checkAvailability(Resources)
+}
+class it.polimi.ingsw.view.HeartBeatThreadClient {
+- {static} long interval
+- NetworkHandler networkHandler
++ <<Create>> HeartBeatThreadClient(NetworkHandler)
++ void run()
+}
+class it.polimi.ingsw.model.cards.specialAbility.ExtraDeposit {
+- {static} long serialVersionUID
+- ResourceTypes resourceType
++ <<Create>> ExtraDeposit(ResourceTypes)
++ ResourceTypes getResourceType()
++ ExtraDeposit applyExtraDeposit()
+}
+abstract class it.polimi.ingsw.model.cards.Card {
+- {static} long serialVersionUID
+- int victoryPoint
+- boolean isSelected
+- String image
++ <<Create>> Card(int,String)
++ boolean getIsSelected()
++ void setIsSelected(boolean)
++ int getVictoryPoint()
++ String getImage()
+}
+interface it.polimi.ingsw.controller.Turn {
+~ long serialVersionUID
+~ void beginTurn()
+~ void startGame()
+~ int getVictoryPoints()
+~ void endGame(boolean)
+}
+class it.polimi.ingsw.Client {
++ {static} void main(String[])
+}
+class it.polimi.ingsw.model.exceptions.WinException {
++ <<Create>> WinException(String)
+}
+class it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException {
++ <<Create>> IncompatibleCardLevelException(String)
+}
+class it.polimi.ingsw.model.board.general.CardDealer {
+- {static} long serialVersionUID
+- Stack<DevelopmentCard>[][] cardMatrix
+- {static} int ROWS
+- {static} int COLUMNS
++ <<Create>> CardDealer()
++ Resources getCost(int,int)
++ Stack<DevelopmentCard>[][] getCardMatrix()
++ DevelopmentCard drawCard(int,int)
++ void discardDevelopment(char)
+}
+class it.polimi.ingsw.model.Player {
+- {static} long serialVersionUID
+- String name
+- boolean hasInkwell
+- PersonalBoard personalBoard
++ <<Create>> Player(String,boolean,GeneralBoard,ArrayList<LeaderCard>)
++ String getName()
++ PersonalBoard getPersonalBoard()
++ boolean isHasInkwell()
+}
+class it.polimi.ingsw.network.HeartbeatThreadServer {
+- {static} long interval
+- ClientHandler clientHandler
++ <<Create>> HeartbeatThreadServer(ClientHandler)
++ void run()
+}
+class it.polimi.ingsw.Client2 {
++ {static} void main(String[])
+}
+class it.polimi.ingsw.network.ClientHandler {
+- Socket client
+- HashMap<String,WaitingRoom> waitingRooms
+- Queue<ObjectUpdate> objectUpdates
+- ObjectInputStream in
+- ObjectOutputStream out
+- String id
++ <<Create>> ClientHandler(Socket,HashMap<String,WaitingRoom>)
++ void run()
++ T receiveObject(Class<? extends T>)
++ void sendObject(Object)
+- void createGame(int)
+- void joinGame(String)
+- void printDebug(String)
+- String randomizeId()
++ void sendHeartBeat()
++ void closeConnection()
++ void handleDisconnect()
+- Game getGame()
++ void sendGame()
++ NetworkMessages receiveMessage()
++ WaitingRoom getWaitingRoom()
+- void refreshObjects()
++ void insertUpdate(ObjectUpdate)
+}
+class it.polimi.ingsw.model.board.personal.storage.StrongBox {
+- {static} long serialVersionUID
+- Resources resources
++ <<Create>> StrongBox()
++ Resources getResources()
++ void addResource(Resources)
++ void removeResource(Resources)
+}
+class it.polimi.ingsw.model.exceptions.FaithOverflowException {
++ <<Create>> FaithOverflowException(String)
+}
+
+
+it.polimi.ingsw.network.Thread <|-- it.polimi.ingsw.network.WaitingRoom
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.storage.WarehouseDepots'
+it.polimi.ingsw.view.View <|-- it.polimi.ingsw.view.CLI.CLI
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.PersonalBoard'
+'java.io.Serializable <|-- it.polimi.ingsw.model.cards.specialAbility.SpecialAbility'
+it.polimi.ingsw.view.Thread <|-- it.polimi.ingsw.view.NetworkHandler
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.LeaderBoard'
+it.polimi.ingsw.view.exceptions.Exception <|-- it.polimi.ingsw.view.exceptions.UnknownIdException
+it.polimi.ingsw.model.cards.specialAbility.SpecialAbility <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraResource
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraResource'
+it.polimi.ingsw.controller.Turn <|.. it.polimi.ingsw.controller.PlayerTurn
+'java.io.Serializable <|.. it.polimi.ingsw.controller.PlayerTurn'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.YouMustPlayLeaderException
+it.polimi.ingsw.network.exceptions.Exception <|-- it.polimi.ingsw.network.exceptions.FullRoomException
+'java.io.Serializable <|.. it.polimi.ingsw.model.Lorenzo'
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.LeaderCard'
+it.polimi.ingsw.model.cards.Card <|-- it.polimi.ingsw.model.cards.LeaderCard
+it.polimi.ingsw.model.cards.specialAbility.SpecialAbility <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraProduction
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraProduction'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.TypeNotChangeableException
+'it.polimi.ingsw.controller.Serializable <|.. it.polimi.ingsw.controller.Game'
+it.polimi.ingsw.view.View <|-- it.polimi.ingsw.view.GUI.GUI
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.NotEnoughCardException
+'java.io.Serializable <|.. it.polimi.ingsw.network.ObjectUpdate'
+it.polimi.ingsw.view.exceptions.Exception <|-- it.polimi.ingsw.view.exceptions.NameAlreadyPresentException
+javafx.application.Application <|-- it.polimi.ingsw.view.GUI.GUIApplication
+it.polimi.ingsw.controller.Turn <|.. it.polimi.ingsw.controller.SelfPlayingTurn
+'java.io.Serializable <|.. it.polimi.ingsw.controller.SelfPlayingTurn'
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.general.GeneralBoard'
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.DevelopmentCardRequirement'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.FaithNotAllowedException
+it.polimi.ingsw.model.cards.specialAbility.SpecialAbility <|.. it.polimi.ingsw.model.cards.specialAbility.Discount
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.specialAbility.Discount'
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.storage.Level'
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.CardBoard'
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.Deposit'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.LevelTooSmallException
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.NegativeResourceValueException
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.UnusableCardException
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.FaithTrack'
+it.polimi.ingsw.view.Thread <|-- it.polimi.ingsw.view.View
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.general.Market'
+it.polimi.ingsw.view.exceptions.Exception <|-- it.polimi.ingsw.view.exceptions.UnknownMessageException
+'java.io.Serializable <|.. it.polimi.ingsw.model.resources.Resources'
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.DevelopmentCard'
+it.polimi.ingsw.model.cards.Card <|-- it.polimi.ingsw.model.cards.DevelopmentCard
+java.util.TimerTask <|-- it.polimi.ingsw.view.HeartBeatThreadClient
+it.polimi.ingsw.model.cards.specialAbility.SpecialAbility <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraDeposit
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraDeposit'
+'java.io.Serializable <|.. it.polimi.ingsw.model.cards.Card'
+'java.io.Serializable <|-- it.polimi.ingsw.controller.Turn'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.WinException
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.IncompatibleCardLevelException
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.general.CardDealer'
+'java.io.Serializable <|.. it.polimi.ingsw.model.Player'
+java.util.TimerTask <|-- it.polimi.ingsw.network.HeartbeatThreadServer
+it.polimi.ingsw.network.Thread <|-- it.polimi.ingsw.network.ClientHandler
+'java.io.Serializable <|.. it.polimi.ingsw.model.board.personal.storage.StrongBox'
+it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.FaithOverflowException
+
+/'
+it.polimi.ingsw -down[hidden]--> it.polimi.ingsw.model.resources.Resources
+
+it.polimi.ingsw.model.board.personal -left[hidden]> it.polimi.ingsw.model.cards
+it.polimi.ingsw.model.board.personal -down[hidden]--> it.polimi.ingsw.model.cards.specialAbility
+it.polimi.ingsw.model.board.personal -right[hidden]--> it.polimi.ingsw.model.board.general
+it.polimi.ingsw.model.board.personal -down[hidden]---> it.polimi.ingsw.model.board.personal.storage
+'it.polimi.ingsw.model.cards -down[hidden]--> it.polimi.ingsw.model.cards.specialAbility'
+
+it.polimi.ingsw.model.exceptions.Exception -down[hidden]--> it.polimi.ingsw.view.exceptions.Exception
+it.polimi.ingsw.model.exceptions.Exception -down[hidden]--> it.polimi.ingsw.controller.exceptions.Exception
+
+'it.polimi.ingsw.view.exceptions.Exception -down[hidden]--> it.polimi.ingsw.controller.exceptions.Exception'
+'/
+@enduml

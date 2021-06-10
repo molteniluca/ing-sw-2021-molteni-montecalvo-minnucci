@@ -1030,8 +1030,7 @@ public class CLI extends View{
 
                                 System.out.println("\nACTIVE LEADER CARDS");
                                 if (activeLeaders.size() > 0) {
-                                    //System.out.println("\nACTIVE LEADER CARDS");
-                                //FIXME shows all leader cards, not only the ones with the extra production effect
+                                    //FIXME shows all leader cards, not only the ones with the extra production effect
                                     printLeaderCards(activeLeaders);
                                     System.out.println("\n1)Activate leader effect one");
 
