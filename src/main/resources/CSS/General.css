@@ -9,11 +9,3 @@
     -fx-font-family: 'Myteri Script PERSONAL USE ONLY Regular PERSONAL USE ONLY';
     -fx-text-fill: #451616;
 }
-
-
-.bodyBackground{
-    -fx-background-image: url('initialBackground.png');
-    -fx-background-size: stretch;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
