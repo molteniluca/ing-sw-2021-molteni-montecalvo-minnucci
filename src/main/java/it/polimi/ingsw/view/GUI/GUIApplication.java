@@ -28,7 +28,7 @@ public class GUIApplication extends Application {
         primaryStage.setTitle("Masters Of Renaissance");
 
 
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         //primaryStage.setFullScreen(true);
 
         primaryStage.setMaxWidth(screenBounds.getMaxX());
