@@ -32,6 +32,8 @@ public abstract class View extends Thread{
 
     public abstract void showStrongbox();
 
+    protected abstract boolean isSuccessReceived();
+
     public void notifyResponse(Object o){
         synchronized (this) {
         if(o.getClass()== NetworkMessages.class)

@@ -1224,7 +1224,7 @@ public class CLI extends View{
      * If  a success is received it also waits for the game update, if an error is received error message is printed
      * @return true or false depending on the message received: SUCCESS --> true, ERROR --> false
      */
-    private boolean isSuccessReceived() {
+    protected boolean isSuccessReceived() {
         Object message;
 
         message = waitAndGetResponse();

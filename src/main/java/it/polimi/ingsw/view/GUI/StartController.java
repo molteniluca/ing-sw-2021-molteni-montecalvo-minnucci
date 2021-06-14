@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StartController {
+public class StartController{
 
     private NetworkHandler networkHandler;
 
