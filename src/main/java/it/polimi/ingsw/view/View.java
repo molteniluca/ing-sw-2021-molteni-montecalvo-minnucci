@@ -47,10 +47,6 @@ public abstract class View extends Thread{
 
     public void notifyNewGame(Game game){
         updateObjects(game);
-        gameUpdatedNetMess =true;
-        synchronized (this) {
-            this.notify();
-        }
     }
 
     public abstract void updateObjects(Game game);

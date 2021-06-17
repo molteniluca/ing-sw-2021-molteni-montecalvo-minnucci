@@ -1303,8 +1303,6 @@ public class CLI extends View{
     @Override
     public synchronized void updateObjects(Game game) {
         this.game = game;
-        notify(); //wakes up the thread that was waiting for the game
-        gameUpdated = true;
     }
 
 
@@ -1327,6 +1325,11 @@ public class CLI extends View{
                 game.getTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
                         .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
                 break;
+        }
+        gameUpdatedNetMess =true;
+        gameUpdated = true;
+        synchronized (this) {
+            this.notify();
         }
     }
 

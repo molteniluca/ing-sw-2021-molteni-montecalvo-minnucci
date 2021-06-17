@@ -212,7 +212,6 @@ public class ClientHandler extends Thread{
         printDebug("Invoked disconnect");
         if(getWaitingRoom()!=null) {
             getWaitingRoom().closeAll();
-            getWaitingRoom().interrupt();
             waitingRooms.remove(id);
         }else{
             this.closeConnection();
