@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.network.NetworkMessages;
+import it.polimi.ingsw.network.ObjectUpdate;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -59,6 +60,9 @@ public class NetworkHandler extends Thread{
                 }
                 if(read.getClass() == Game.class) {
                     view.notifyNewGame((Game) read);
+                    read=null;
+                }else if(read.getClass() == ObjectUpdate.class) {
+                    view.notifyNewUpdate((ObjectUpdate) read);
                     read=null;
                 }
             } catch (ClassNotFoundException e) {

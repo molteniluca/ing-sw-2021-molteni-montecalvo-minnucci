@@ -92,7 +92,7 @@ public class WaitingRoom extends Thread{
      * @param o The new objects
      */
     private void notifyClients(Object o){
-        ObjectUpdate objectUpdate=new ObjectUpdate(o,this.game.getCurrentPlayer());
+        ObjectUpdate objectUpdate=new ObjectUpdate(o, null, this.game.getCurrentPlayer());
 
         for(ClientHandler c : clients){
             c.insertUpdate(objectUpdate);

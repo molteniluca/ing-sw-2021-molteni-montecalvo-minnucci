@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class LeaderBoard implements Serializable {
     private static final long serialVersionUID = 6732146736278436289L;
     private final ArrayList<LeaderCard> leaderCards;
-    private ArrayList<LeaderCard> leaderCardsInHand;
+    private transient ArrayList<LeaderCard> leaderCardsInHand;
     private transient final PersonalBoard personalBoard;
     private int victoryPoints = 0;
 
@@ -159,5 +159,9 @@ public class LeaderBoard implements Serializable {
             victoryPoints+=l.getVictoryPoint();
         }
         return victoryPoints;
+    }
+
+    public void setLeaderCardsInHand(ArrayList<LeaderCard> leaderCardsInHand) {
+        this.leaderCardsInHand = leaderCardsInHand;
     }
 }

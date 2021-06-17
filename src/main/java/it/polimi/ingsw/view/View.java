@@ -4,6 +4,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.network.NetworkMessages;
+import it.polimi.ingsw.network.ObjectUpdate;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -88,4 +89,6 @@ public abstract class View extends Thread{
     }
 
     protected abstract void notifyEndGame(boolean youWon);
+
+    public abstract void notifyNewUpdate(ObjectUpdate read);
 }

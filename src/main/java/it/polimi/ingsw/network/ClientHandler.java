@@ -229,10 +229,12 @@ public class ClientHandler extends Thread{
 
     /**
      * Sends the entire game to the client
+     * @param player the player number
      */
-    public void sendGame() throws IOException {
+    public void sendGame(int player) throws IOException {
         Game g=getGame();
         sendObject(g);
+        sendObject(new ObjectUpdate(g.getTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand(),UpdateTypes.LEADERCARDS,player));
     }
 
     /**

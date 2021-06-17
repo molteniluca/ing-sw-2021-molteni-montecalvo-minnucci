@@ -43,7 +43,7 @@ public class PlayerTurn implements Turn, Serializable {
         boolean error = true;
         clientHandler.sendObject(TURNBEGIN);
 
-        clientHandler.sendGame();
+        clientHandler.sendGame(playerNum);
 
         NetworkMessages action = clientHandler.receiveObject(NetworkMessages.class);
 
@@ -126,7 +126,7 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
             }
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
         }
     }
 
@@ -139,7 +139,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
             return true;
         }catch (IndexOutOfBoundsException e){
             clientHandler.sendObject(ERROR);
@@ -158,7 +158,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().playLeader(clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
             return false;
         } catch (UnusableCardException e) {
             clientHandler.sendObject(ERROR);
@@ -186,7 +186,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         error = false;
                     } catch (NegativeResourceValueException | FaithOverflowException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
@@ -197,7 +197,7 @@ public class PlayerTurn implements Turn, Serializable {
                     try {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         error = false;
                     } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | IndexOutOfBoundsException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
@@ -210,7 +210,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         error = false;
                     } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
@@ -240,7 +240,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().buyColumn(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
             return false;
         } catch (IndexOutOfBoundsException | YouMustPlayLeaderException e) {
             clientHandler.sendObject(ERROR);
@@ -259,7 +259,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().buyRow(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
             return false;
         } catch (IndexOutOfBoundsException e) {
             clientHandler.sendObject(ERROR);
@@ -278,7 +278,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
             return false;
         } catch (IncompatibleCardLevelException | NegativeResourceValueException | IndexOutOfBoundsException | EmptyStackException e) {
             clientHandler.sendObject(ERROR);
@@ -292,7 +292,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the communication with the client goes wrong
      */
     public void startGame() throws IOException {
-        clientHandler.sendGame();
+        clientHandler.sendGame(playerNum);
         clientHandler.sendObject(playerNum);
         switch (playerNum){
             case 1:
@@ -302,7 +302,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(res1, 1));
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
@@ -320,7 +320,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
@@ -340,7 +340,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(2,res2,1);
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
-                        clientHandler.sendGame();
+                        clientHandler.sendGame(playerNum);
                         break;
                     } catch (FaithNotAllowedException e) {
                         clientHandler.sendObject(ERROR);
@@ -357,7 +357,7 @@ public class PlayerTurn implements Turn, Serializable {
         try {
             player.getPersonalBoard().getLeaderBoard().selectLeaders(clientHandler.receiveObject(Integer[].class));
             clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame();
+            clientHandler.sendGame(playerNum);
         }catch (IndexOutOfBoundsException e){
             clientHandler.sendObject(ERROR);
             clientHandler.sendObject(e.getMessage());
@@ -380,7 +380,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the communication with the client goes wrong
      */
     public void endGame(boolean winner) throws IOException {
-        clientHandler.sendGame();
+        clientHandler.sendGame(playerNum);
         if(winner){
             clientHandler.sendObject(YOUWON);
         }else{

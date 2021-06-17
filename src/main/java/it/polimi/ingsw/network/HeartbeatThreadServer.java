@@ -16,11 +16,15 @@ public class HeartbeatThreadServer extends TimerTask {
 
     @Override
     public void run() {
-        try {
-            clientHandler.sendHeartBeat();
-        } catch (IOException e) {
-            clientHandler.handleDisconnect();
+        if(clientHandler==null){
             this.cancel();
+        }else {
+            try {
+                clientHandler.sendHeartBeat();
+            } catch (IOException e) {
+                clientHandler.handleDisconnect();
+                this.cancel();
+            }
         }
     }
 }

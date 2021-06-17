@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.network.NetworkMessages;
+import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 import javafx.application.Application;
@@ -139,6 +140,11 @@ public class GUI extends View {
     @Override
     protected void notifyEndGame(boolean youWon) {
 
+    }
+
+    @Override
+    public void notifyNewUpdate(ObjectUpdate read) {
+        
     }
 
 

@@ -15,6 +15,7 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
+import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
@@ -1317,6 +1318,16 @@ public class CLI extends View{
             winOrLose = 1;
         else
             winOrLose = 0;
+    }
+
+    @Override
+    public void notifyNewUpdate(ObjectUpdate read) {
+        switch (read.getUpdateType()){
+            case LEADERCARDS:
+                game.getTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
+                        .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
+                break;
+        }
     }
 
 
