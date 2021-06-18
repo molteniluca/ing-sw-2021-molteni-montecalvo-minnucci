@@ -15,8 +15,8 @@
             <Image url="@../images/marketBoard.png" />
          </image>
       </ImageView>
-      <Button layoutX="207.0" layoutY="443.0" mnemonicParsing="false" onAction="#backHome" text="Back to Home" />
-      <Button layoutX="217.0" layoutY="493.0" mnemonicParsing="false" onAction="#exitGame" text="Exit Game" />
+      <Button fx:id="backHomeButton" layoutX="207.0" layoutY="443.0" mnemonicParsing="false" onAction="#backHome" styleClass="button-shiny-orange" text="Back to Home" />
+      <Button fx:id="exitGameButton" layoutX="217.0" layoutY="493.0" mnemonicParsing="false" onAction="#exitGame" styleClass="button-shiny-orange" text="Exit Game" />
       <GridPane fx:id="marketGrid" layoutX="555.0" layoutY="178.0" prefHeight="230.0" prefWidth="310.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />

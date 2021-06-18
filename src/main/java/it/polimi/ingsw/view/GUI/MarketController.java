@@ -11,24 +11,31 @@ import java.util.ResourceBundle;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
-import it.polimi.ingsw.view.NetworkHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import static it.polimi.ingsw.network.NetworkMessages.*;
-
-public class MarketController extends GUI{
+import javafx.util.Duration;
 
 
+public class MarketController extends GUI implements Initializable {
+
+
+    @FXML // fx:id="backHomeButton"
+    private Button backHomeButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exitGameButton"
+    private Button exitGameButton; // Value injected by FXMLLoader
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -41,6 +48,14 @@ public class MarketController extends GUI{
 
     @FXML //fx:id="externalResource"
     private ImageView externalResource;
+
+    //initializes the images of the marbles
+    private Image blueMarble = new Image("images/blue marble.png");
+    private Image grayMarble = new Image("images/gray Marble.png");
+    private Image purpleMarble = new Image("images/purple Marble.png");
+    private Image redMarble = new Image("images/red Marble.png");
+    private Image whiteMarble = new Image("images/white Marble.png");
+    private Image yellowMarble = new Image("images/yellow Marble.png");
 
 
     @FXML
@@ -68,16 +83,17 @@ public class MarketController extends GUI{
         System.exit(0);
     }
 
-
+/*
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
         System.out.println(playerNumber);
 
 
         Platform.runLater(() -> {
-            Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+            Market market = new Market();//game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
             ResourceTypes[][] marketMatrix = market.getMarketMatrix();
 
             //access to the gridPane in the scene
@@ -94,12 +110,15 @@ public class MarketController extends GUI{
             }
 
             externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
+
         });
 
 
         //updateMarketMatrix();
     }
 
+
+ */
 
     private void updateMarketMatrix() {
         Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
@@ -129,14 +148,6 @@ public class MarketController extends GUI{
      */
     private Image fromResourceToMarbleImage(ResourceTypes resourceTypes)
     {
-        //initialize the images og the marbles
-        Image blueMarble = new Image("images/blue marble.png");
-        Image grayMarble = new Image("images/gray Marble.png");
-        Image purpleMarble = new Image("images/purple Marble.png");
-        Image redMarble = new Image("images/red Marble.png");
-        Image whiteMarble = new Image("images/white Marble.png");
-        Image yellowMarble = new Image("images/yellow Marble.png");
-
         switch (resourceTypes)
         {
             case GOLD:
@@ -160,6 +171,37 @@ public class MarketController extends GUI{
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
+
+        System.out.println(playerNumber);
+
+
+        Platform.runLater(() -> {
+            Market market = new Market();//game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+            ResourceTypes[][] marketMatrix = market.getMarketMatrix();
+
+            //access to the gridPane in the scene
+            //marketGrid = (GridPane) marketScene.lookup("marketGrid");
+
+            for(int i=0; i < market.ROWS; i++)
+            {
+                for(int j=0; j < market.COLUMNS; j++)
+                {
+                    ImageView currentMarble = new ImageView();
+                    currentMarble.setImage(fromResourceToMarbleImage(marketMatrix[i][j]));
+                    marketGrid.add(currentMarble,j,i);
+                }
+            }
+
+            externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
+
+        });
     }
 }
 

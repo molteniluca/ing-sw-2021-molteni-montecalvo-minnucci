@@ -8,31 +8,30 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 public class GUIApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        URL url = ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml");
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        URL url = ClassLoader.getSystemResource("FXML/homePage.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent root = fxmlLoader.load();
 
         Scene scene = new Scene(root);
 
+        /*
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         System.out.println(Screen.getScreens().size());
         System.out.println(screenBounds);
-        //System.exit(0);
-
-        primaryStage.setTitle("Masters Of Renaissance");
-
-
-        primaryStage.setResizable(true);
-        //primaryStage.setFullScreen(true);
-
+        System.exit(0);
         primaryStage.setMaxWidth(screenBounds.getMaxX());
         primaryStage.setMaxHeight(screenBounds.getMaxY());
+         */
+
 
 
         //primaryStage.setX(screenBounds.getWidth());
@@ -45,9 +44,10 @@ public class GUIApplication extends Application {
         //primaryStage.setFullScreenExitKeyCombination(KeyCombination.valueOf("q"));
 
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Masters Of Renaissance");
+        primaryStage.setFullScreen(true);
+        primaryStage.setResizable(false);
 
         primaryStage.show();
-
-
     }
 }
