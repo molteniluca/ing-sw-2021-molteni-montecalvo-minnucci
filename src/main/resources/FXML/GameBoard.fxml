@@ -10,11 +10,11 @@
     <ColumnConstraints percentWidth="100" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints percentHeight="20" />
-    <RowConstraints percentHeight="80" />
+    <RowConstraints percentHeight="30" />
+    <RowConstraints percentHeight="70" />
   </rowConstraints>
    <children>
-      <AnchorPane fx:id="firstAnchorPane" prefHeight="200.0" prefWidth="200.0" styleClass="imagePersonalBoard" stylesheets="@../CSS/stylesheet.css" GridPane.rowIndex="1" />
-      <AnchorPane fx:id="secondAnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #79CBF7;" />
+      <AnchorPane fx:id="secondAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+      <AnchorPane fx:id="firstAnchorPane" prefHeight="596.0" prefWidth="1378.0" />
    </children>
 </GridPane>
