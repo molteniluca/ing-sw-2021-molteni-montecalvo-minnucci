@@ -170,7 +170,6 @@ public class GUI extends View {
         Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
 
 
-
         Scene marketScene = new Scene(marketViewParent);
 
         //gets the stage information
@@ -184,6 +183,24 @@ public class GUI extends View {
         marketStage.setMaximized(true);
         //marketStage.sizeToScene();
         marketStage.show();
+
+    }
+
+    @FXML
+    void showGameBoard(ActionEvent event) throws IOException
+    {
+        Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
+
+
+        Scene gameBoardScene = new Scene(gameBoardViewParent);
+
+        //gets the stage information
+        Stage gameBoardStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+
+        gameBoardStage.setTitle("Game Board");
+        gameBoardStage.setScene(gameBoardScene);
+        gameBoardStage.setMaximized(true);
+        gameBoardStage.show();
 
     }
 
