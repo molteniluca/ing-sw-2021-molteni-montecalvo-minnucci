@@ -42,9 +42,9 @@ import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class GUI extends View {
 
-    protected Game game;
-    protected int playerNumber = 210;
-    protected NetworkHandler networkHandler;
+    protected static Game game;
+    protected static int playerNumber;
+    protected static NetworkHandler networkHandler;
 
     @FXML // fx:id="title"
     private Text title; // Value injected by FXMLLoader
