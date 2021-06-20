@@ -16,6 +16,7 @@ import java.net.URL;
 public class GUIApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         URL url = ClassLoader.getSystemResource("FXML/homePage.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -45,7 +46,8 @@ public class GUIApplication extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Masters Of Renaissance");
-        primaryStage.setFullScreen(true);
+        primaryStage.setWidth(screenBounds.getMaxX());
+        primaryStage.setHeight(screenBounds.getMaxY());
         primaryStage.setResizable(false);
 
         primaryStage.show();

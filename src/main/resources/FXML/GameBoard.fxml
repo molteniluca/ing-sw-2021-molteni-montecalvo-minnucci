@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1079.0" prefWidth="1378.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GameBoardController">
+  <columnConstraints>
+    <ColumnConstraints percentWidth="100" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="30" />
+    <RowConstraints percentHeight="70" />
+  </rowConstraints>
+   <children>
+      <AnchorPane fx:id="secondAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+      <AnchorPane fx:id="firstAnchorPane" prefHeight="596.0" prefWidth="1378.0" />
+   </children>
+</GridPane>

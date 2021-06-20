@@ -42,9 +42,9 @@ import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class GUI extends View {
 
-    protected Game game;
-    protected int playerNumber = 210;
-    protected NetworkHandler networkHandler;
+    protected static Game game;
+    protected static int playerNumber;
+    protected static NetworkHandler networkHandler;
 
     @FXML // fx:id="title"
     private Text title; // Value injected by FXMLLoader
@@ -170,7 +170,6 @@ public class GUI extends View {
         Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
 
 
-
         Scene marketScene = new Scene(marketViewParent);
 
         //gets the stage information
@@ -184,6 +183,25 @@ public class GUI extends View {
         marketStage.setMaximized(true);
         //marketStage.sizeToScene();
         marketStage.show();
+
+    }
+
+    @FXML
+    void showGameBoard(ActionEvent event) throws IOException
+    {
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
+
+        Scene gameBoardScene = new Scene(gameBoardViewParent);
+
+        //gets the stage information
+        Stage gameBoardStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+
+        gameBoardStage.setTitle("Game Board");
+        gameBoardStage.setScene(gameBoardScene);
+        gameBoardStage.setWidth(screenBounds.getMaxX());
+        gameBoardStage.setHeight(screenBounds.getMaxY());
+        gameBoardStage.show();
 
     }
 
@@ -262,7 +280,6 @@ public class GUI extends View {
 
         //marketStage.setTitle("");
         primaryStage.setScene(homeScene);
-        //primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
 
         primaryStage.show();
@@ -271,6 +288,7 @@ public class GUI extends View {
 
     @FXML
     public void startGame(ActionEvent event) throws IOException{
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
 
         Scene createOrJoinScene = new Scene(marketViewParent);
@@ -283,12 +301,8 @@ public class GUI extends View {
 
         primaryStage.setTitle("Masters Of Renaissance");
         primaryStage.setScene(createOrJoinScene);
-        primaryStage.setFullScreen(true);
-        if(!primaryStage.isFullScreen())
-            primaryStage.setFullScreen(true);
-
-        //primaryStage.setMaximized(true);
-        //primaryStage.sizeToScene();
+        primaryStage.setWidth(screenBounds.getMaxX());
+        primaryStage.setHeight(screenBounds.getMaxY());
         primaryStage.show();
 
     }
