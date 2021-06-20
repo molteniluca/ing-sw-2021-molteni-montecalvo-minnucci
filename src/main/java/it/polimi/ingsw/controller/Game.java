@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.exceptions.WinException;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.Server;
 
 import java.io.*;
 import java.time.LocalTime;
@@ -205,7 +206,7 @@ public class Game implements Serializable {
      * @param s The message
      */
     private void printDebug(String s){
-        System.out.println(LocalTime.now().toString().substring(0,14) + "\t\tGame[ID:" + id +"] -> "+s);
+        System.out.println(Server.debugTime() + "\t\tGame[ID:" + id +"] -> "+s);
     }
 
 

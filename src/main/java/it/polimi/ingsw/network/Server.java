@@ -80,7 +80,7 @@ public class Server {
      * @param s The message
      */
     private void printDebug(String s){
-        System.out.println(LocalTime.now().toString().substring(0,14) + "\t\t" + "SERVER -> "+s);
+        System.out.println(debugTime() + "\t\t" + "SERVER -> "+s);
     }
 
     public static void main( String[] args )
@@ -95,5 +95,13 @@ public class Server {
             } else
                 System.out.println("Wrong parameters, '-h' for help");
         }
+    }
+
+    public static String debugTime(){
+        StringBuilder s = new StringBuilder(LocalTime.now().toString());
+        while (s.length()<18){
+            s.append("0");
+        }
+        return s.toString();
     }
 }
