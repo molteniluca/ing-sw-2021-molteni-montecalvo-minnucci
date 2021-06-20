@@ -150,6 +150,7 @@ public class Game implements Serializable {
                     turns.get(currentPlayer).beginTurn();
                 } catch (FaithOverflowException | WinException | NotEnoughCardException e) {
                     gameEnded=true;
+                    turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                 }
             }

@@ -31,4 +31,9 @@ public interface Turn extends Serializable {
      * @param winner True if this player wins and false if not
      */
     void endGame(boolean winner) throws IOException;
+
+    /**
+     * This method is used to force the end of a turn caused by a win
+     */
+    void endTurn() throws IOException;
 }

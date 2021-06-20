@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -31,6 +32,11 @@ public class SelfPlayingTurn implements Turn, Serializable {
     }
 
     public void endGame(boolean winner) {
+    }
+
+    @Override
+    public void endTurn() throws IOException {
+
     }
 
     public Lorenzo getLorenzo(){ return lorenzo;}

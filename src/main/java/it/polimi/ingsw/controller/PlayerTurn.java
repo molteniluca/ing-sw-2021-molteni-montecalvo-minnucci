@@ -388,4 +388,8 @@ public class PlayerTurn implements Turn, Serializable {
         }
     }
 
+    @Override
+    public void endTurn() throws IOException {
+        clientHandler.sendObject(TURNEND);
+    }
 }
