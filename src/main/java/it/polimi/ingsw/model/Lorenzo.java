@@ -20,6 +20,7 @@ public class Lorenzo implements Serializable {
     private int positionToken;
     private final ArrayList<ActionTokens> actionTokens;
     private final GeneralBoard generalBoard;
+    private ActionTokens lastAction;
 
     public Lorenzo(GeneralBoard generalBoard) {
         faithTrack = new FaithTrack(generalBoard.getFaithObserver());
@@ -41,6 +42,7 @@ public class Lorenzo implements Serializable {
      * @throws NotEnoughCardException In case the game has ended
      */
     public void play() throws FaithOverflowException, NotEnoughCardException {
+        lastAction = actionTokens.get(positionToken);
         switch (actionTokens.get(positionToken++)){
             case DOUBLEFAITH:
                 faithTrack.incrementPosition(2);
@@ -63,6 +65,10 @@ public class Lorenzo implements Serializable {
                 positionToken=0;
                 break;
         }
+    }
+
+    public ActionTokens getLastAction() {
+        return lastAction;
     }
 
     /**
