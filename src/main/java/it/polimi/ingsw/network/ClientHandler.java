@@ -233,7 +233,7 @@ public class ClientHandler extends Thread{
     public void sendGame(int player) throws IOException {
         Game g=getGame();
         sendObject(g);
-        sendObject(new ObjectUpdate(g.getTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand(),UpdateTypes.LEADERCARDS,player));
+        sendObject(new ObjectUpdate(g.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand(),UpdateTypes.LEADERCARDS,player));
     }
 
     /**

@@ -32,4 +32,6 @@ public class SelfPlayingTurn implements Turn, Serializable {
 
     public void endGame(boolean winner) {
     }
+
+    public Lorenzo getLorenzo(){ return lorenzo;}
 }

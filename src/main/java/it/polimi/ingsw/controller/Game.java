@@ -208,8 +208,13 @@ public class Game implements Serializable {
     }
 
 
-    public PlayerTurn getTurn(int i)
+    public PlayerTurn getPlayerTurn(int i)
     {
         return (PlayerTurn) turns.get(i);
+    }
+
+    public SelfPlayingTurn getSelfPLayingTurn()
+    {
+        return (SelfPlayingTurn) turns.get(1);
     }
 }

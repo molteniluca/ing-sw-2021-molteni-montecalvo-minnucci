@@ -1,15 +1,13 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.model.board.general.Market;
+import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
-import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 import javafx.animation.Animation;
-import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -24,10 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -133,7 +128,7 @@ public class GUI extends View {
     }
 
     @Override
-    public void showFaithTrack() {
+    public void showFaithTrack(FaithTrack faithTrack) {
 
     }
 
@@ -260,7 +255,7 @@ public class GUI extends View {
         playerNumber = (int) waitAndGetResponse();
         System.out.print(ANSI_GREEN);
         System.out.println(playerNumber);
-        System.out.println(game.getTurn(playerNumber).getPlayer());
+        System.out.println(game.getPlayerTurn(playerNumber).getPlayer());
 
     }
 
@@ -280,6 +275,7 @@ public class GUI extends View {
 
         //marketStage.setTitle("");
         primaryStage.setScene(homeScene);
+        //primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
 
         primaryStage.show();
@@ -321,6 +317,7 @@ public class GUI extends View {
 
     @FXML
     void initialize() {
+
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         if(backgroundImage!=null) {
             backgroundImage.setFitWidth(screenBounds.getMaxX());

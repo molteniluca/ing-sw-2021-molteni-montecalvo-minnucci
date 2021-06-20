@@ -1,11 +1,11 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.CardBoard;
@@ -42,7 +42,7 @@ public class CLI extends View{
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
     private Game game;
-    private boolean gameUpdated = false;
+    //private boolean gameUpdated = false;
     private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
@@ -54,7 +54,8 @@ public class CLI extends View{
 
         initializeView();
 
-
+        waitForUpdatedGame();
+/*
         while(!gameUpdated){
             try {
                 synchronized (this) { //FIXME synchronized should be 'this'?
@@ -66,6 +67,7 @@ public class CLI extends View{
             }
         }
         gameUpdated = false;
+        */
 
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
         playerNumber = (int) waitAndGetResponse();
@@ -84,7 +86,7 @@ public class CLI extends View{
         while(winOrLose < 0) {
             if(waitAndGetResponse() == TURNBEGIN) {
                 try {
-                    System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
+                    System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getPlayerTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
                     input.readLine();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -142,11 +144,19 @@ public class CLI extends View{
         while ((currentAction!=0) && (currentAction !=5)){
             refresh();
             showLegend();
-            showFaithTrack();
+            printTitle("\nFAITH TRACK");
+            showFaithTrack(this.game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack());
+
+            if(singlePlayer)
+            {
+                printTitle("\nLORENZO'S FAITH TRACK");
+                showFaithTrack(this.game.getSelfPLayingTurn().getLorenzo().getFaithTrack());
+            }
+
             showCardBoard();
             showStrongbox();
 
-            WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+            WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             showWarehouse(warehouseDepots);
 
             System.out.println(RESET + "\n1) Show market");
@@ -448,11 +458,11 @@ public class CLI extends View{
      * Method that prints out the faith track of a user
      */
     @Override
-    public void showFaithTrack() {
+    public void showFaithTrack(FaithTrack faithTrack) {
         //To add position received from Server
-        int position = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
 
-        printTitle("\nFAITH TRACK");
+        int position = faithTrack.getPosition();
+
 
         for(int i =0; i< MAX_POSITION; i++) {
             if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || i>=19) {
@@ -482,9 +492,9 @@ public class CLI extends View{
         int column;
         int row;
 
-        Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
-        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
-        ArrayList<ExtraResource> extraResources  = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
+        Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        ArrayList<ExtraResource> extraResources  = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
 
         ResourceTypes[][] marketMatrix;
         ResourceTypes externalResource;
@@ -517,7 +527,7 @@ public class CLI extends View{
             System.out.println(" ↑ \t ↑ \t ↑ \t ↑ \t");
             System.out.println(" 0 \t 1 \t 2 \t 3 \t\n");
 
-            WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+            WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             showWarehouse(warehouseDepots);
 
             //Asks the user if it wants to buy a column or a row
@@ -607,8 +617,8 @@ public class CLI extends View{
         refresh();
         System.out.println("SWAP AREA\n");
 
-        while(!(game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() ==0 || exit)) {
-            WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        while(!(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() ==0 || exit)) {
+            WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             resourcesFromMarket = warehouseDepots.getSwapDeposit();
 
             System.out.print("Now you have: ");
@@ -748,9 +758,9 @@ public class CLI extends View{
      * the card dealer is a common object
      */
     public void showCardDealer() {
-        int currentAction = -1;
+        int currentAction;
         ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
-        Stack<DevelopmentCard>[][] cardMatrix = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
+        Stack<DevelopmentCard>[][] cardMatrix = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
 
         do {
             refresh();
@@ -879,7 +889,7 @@ public class CLI extends View{
      */
     @Override
     public void showStrongbox() {
-        StrongBox strongBox = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
+        StrongBox strongBox = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
         int i = 0;
 
@@ -900,7 +910,7 @@ public class CLI extends View{
      * Method that shows the card Board of a player
      */
     public void showCardBoard() {
-        CardBoard cardBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard();
+        CardBoard cardBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard();
 
         printTitle("CARD BOARD");
         if(cardBoard.getDevelopmentCards().size() == 0)
@@ -922,14 +932,14 @@ public class CLI extends View{
         boolean temporaryAction2 = false;
         boolean temporaryAction3 = false;
 
-        WarehouseDepots warehouseDepots = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
-        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
         ArrayList<LeaderCard> activeLeaders = leaderBoard.getLeaderCards();
 
         do {
             upperLimit = 2;
-            ArrayList<ExtraProduction> extraProductionEffect = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
+            ArrayList<ExtraProduction> extraProductionEffect = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
 
             refresh();
             showCardBoard();
@@ -998,7 +1008,7 @@ public class CLI extends View{
                         case 2:
                             if(!temporaryAction2) {
                                 int currentCard;
-                                DevelopmentCard[] developmentCards = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
+                                DevelopmentCard[] developmentCards = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
 
                                 currentCard = integerInput("Select card (1,2,3) (0 to exit): ", 0, 3) - 1;
 
@@ -1099,12 +1109,12 @@ public class CLI extends View{
      * the answer to the server
      */
     private void showLeaderBoard() {
-        int currentAction = -1;
+        int currentAction;
         int currentCard;
 
         do {
             refresh();
-            LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+            LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
             ArrayList<LeaderCard> leaderInHand = leaderBoard.getLeaderCardsInHand();
             ArrayList<LeaderCard> activeLeader = leaderBoard.getLeaderCards();
 
@@ -1189,7 +1199,7 @@ public class CLI extends View{
         Integer[] chose= new Integer[2];
         Object message; //the message received
 
-        LeaderBoard leaderBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
+        LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
 
         ArrayList<LeaderCard> leaderCardsInHand = leaderBoard.getLeaderCardsInHand();
 
@@ -1249,6 +1259,11 @@ public class CLI extends View{
         if(message == SUCCESS)
             waitForUpdatedGame();
 
+        if(message == TURNEND)
+        {
+            this.interrupt();
+        }
+
         return true;
     }
 
@@ -1303,6 +1318,8 @@ public class CLI extends View{
     @Override
     public synchronized void updateObjects(Game game) {
         this.game = game;
+        //notify(); wakes up the thread that was waiting for the game
+        //gameUpdated = true;
     }
 
 
@@ -1322,12 +1339,11 @@ public class CLI extends View{
     public void notifyNewUpdate(ObjectUpdate read) {
         switch (read.getUpdateType()){
             case LEADERCARDS:
-                game.getTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
+                game.getPlayerTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
                         .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
                 break;
         }
         gameUpdatedNetMess =true;
-        gameUpdated = true;
         synchronized (this) {
             this.notify();
         }
@@ -1497,7 +1513,7 @@ public class CLI extends View{
      */
     private void printDevelopmentCards(List<DevelopmentCard> cards) {
         int tabs; //the number of tabs used to format the table
-        PersonalBoard personalBoard = game.getTurn(playerNumber).getPlayer().getPersonalBoard();
+        PersonalBoard personalBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard();
 
         //Type of the card
         System.out.print("\n");

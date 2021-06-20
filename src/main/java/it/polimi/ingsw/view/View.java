@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
@@ -27,7 +28,7 @@ public abstract class View extends Thread{
 
     public abstract void showHomepage();
 
-    public abstract void showFaithTrack();
+    public abstract void showFaithTrack(FaithTrack faithTrack);
 
     public abstract void showWarehouse(WarehouseDepots warehouseDepots);
 

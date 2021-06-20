@@ -3,11 +3,9 @@
  */
 
 package it.polimi.ingsw.view.GUI;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
@@ -23,9 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 public class MarketController extends GUI implements Initializable {
@@ -121,7 +117,7 @@ public class MarketController extends GUI implements Initializable {
  */
 
     private void updateMarketMatrix() {
-        Market market = game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
         ResourceTypes[][] marketMatrix = market.getMarketMatrix();
 
         //access to the gridPane in the scene
@@ -177,13 +173,14 @@ public class MarketController extends GUI implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
         System.out.println(playerNumber);
 
 
         Platform.runLater(() -> {
-            Market market = new Market();//game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+            Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
             ResourceTypes[][] marketMatrix = market.getMarketMatrix();
 
             //access to the gridPane in the scene
