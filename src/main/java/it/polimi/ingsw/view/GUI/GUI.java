@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.network.NetworkMessages;
@@ -138,7 +139,7 @@ public class GUI extends View {
     }
 
     @Override
-    public void showStrongbox() {
+    public void showStrongbox(int showPlayer) {
 
     }
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.network.NetworkMessages;
@@ -14,7 +15,7 @@ import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 public abstract class View extends Thread{
     public final Queue<Object> messages = new LinkedList<>(); //List of received messages
-    protected boolean gameUpdatedNetMess =false;
+    protected boolean gameUpdated =false;
 
     public abstract void initializeView();
 
@@ -32,7 +33,7 @@ public abstract class View extends Thread{
 
     public abstract void showWarehouse(WarehouseDepots warehouseDepots);
 
-    public abstract void showStrongbox();
+    public abstract void showStrongbox(int showPlayer);
 
     protected abstract boolean isSuccessReceived();
 
@@ -40,7 +41,7 @@ public abstract class View extends Thread{
         synchronized (this) {
         if(o.getClass()== NetworkMessages.class)
             if(o==SUCCESS)
-                gameUpdatedNetMess =false;
+                gameUpdated =false;
             messages.add(o);
             this.notify();
         }
@@ -56,7 +57,7 @@ public abstract class View extends Thread{
      * Suspend the view thread in wait for a new game object
      */
     protected void waitForUpdatedGame() {
-        while (!gameUpdatedNetMess){
+        while (!gameUpdated){
             synchronized (this){
                 try{
                     this.wait();
