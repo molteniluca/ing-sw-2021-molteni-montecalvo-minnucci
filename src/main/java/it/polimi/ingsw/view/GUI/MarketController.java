@@ -46,7 +46,7 @@ public class MarketController extends GUI implements Initializable {
     private ImageView externalResource;
 
     //initializes the images of the marbles
-    private Image blueMarble = new Image("images/blue marble.png");
+    private Image blueMarble = new Image("images/Marble/blue marble.png");
     private Image grayMarble = new Image("images/gray Marble.png");
     private Image purpleMarble = new Image("images/purple Marble.png");
     private Image redMarble = new Image("images/red Marble.png");
