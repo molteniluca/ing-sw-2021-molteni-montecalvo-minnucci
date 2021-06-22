@@ -14,7 +14,7 @@
     <RowConstraints percentHeight="70" />
   </rowConstraints>
    <children>
-      <AnchorPane fx:id="secondAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-      <AnchorPane fx:id="firstAnchorPane" prefHeight="596.0" prefWidth="1378.0" />
+       <AnchorPane fx:id="firstAnchorPane" GridPane.rowIndex="0" />
+      <AnchorPane fx:id="secondAnchorPane" GridPane.rowIndex="1" />
    </children>
 </GridPane>
