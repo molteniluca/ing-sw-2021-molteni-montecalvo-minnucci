@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.LeaderBoard;
 import it.polimi.ingsw.model.cards.DevelopmentCardRequirement;
@@ -42,7 +43,6 @@ public class CLI extends View{
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     private NetworkHandler networkHandler;
     private Game game;
-    //private boolean gameUpdated = false;
     private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
@@ -78,11 +78,16 @@ public class CLI extends View{
         waitForUpdatedGame();
 
         refresh();
+
         choseLeaderCards();
 
         waitForUpdatedGame();
 
-        System.out.println(waitAndGetResponse()); //game started
+
+        System.out.println(ANSI_GREEN+"Waiting  fort players ..."+RESET);
+
+        waitAndGetResponse(); //game started
+
         while(winOrLose < 0) {
             if(waitAndGetResponse() == TURNBEGIN) {
                 try {
@@ -139,13 +144,15 @@ public class CLI extends View{
     public void showHomepage() {
 
         int currentAction = -1;
+        Player player;
 
-
-        while ((currentAction!=0) && (currentAction !=5)){
+        while ((currentAction!=0) && (currentAction !=6)){
+            player = game.getPlayerTurn(playerNumber).getPlayer(); //FIXME maybe showHomepage does not need player as parameter
             refresh();
             showLegend();
+            printName(player);
             printTitle("\nFAITH TRACK");
-            showFaithTrack(this.game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack());
+            showFaithTrack(player.getPersonalBoard().getFaithTrack());
 
             if(singlePlayer)
             {
@@ -153,35 +160,79 @@ public class CLI extends View{
                 showFaithTrack(this.game.getSelfPLayingTurn().getLorenzo().getFaithTrack());
             }
 
-            showCardBoard();
-            showStrongbox();
+            showCardBoard(game.getPlayerTurn(playerNumber).getPlayer());
+            showStrongbox(playerNumber);
 
             WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             showWarehouse(warehouseDepots);
+            if(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards().size()>0) {
+                printTitle("\nACTIVE LEADER CARDS");
+                printLeaderCards(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards());
+            }
 
             System.out.println(RESET + "\n1) Show market");
             System.out.println("2) Show card dealer");
             System.out.println("3) Produce");
             System.out.println("4) Show leader cards");
-            System.out.println("5) End turn");
+            System.out.println("5) Show other players");
+            System.out.println("6) End turn");
             System.out.println("0) Exit game");
 
-            currentAction = integerInput("\nSelect action: ", 0, 5);
+            currentAction = integerInput("\nSelect action: ", 0, 6);
 
             switch (currentAction) {
                 case 1:
                     showMarket();
                     break;
                 case 2:
-                    showCardDealer();
+                    showCardDealer(playerNumber);
                     break;
                 case 3:
-                    showProduce();
+                    showProduce(player);
                     break;
                 case 4:
                     showLeaderBoard();
                     break;
                 case 5:
+                    if(!singlePlayer) {
+                        //SHow other players name except the current player
+                        for(int i =0; i<game.getNumPlayers(); i++)
+                        {
+                            if(i!=playerNumber) {
+                                System.out.println(i + 1 + ") " + game.getPlayerTurn(i).getPlayer().getName());
+                            }
+                        }
+                        int chosePlayer = integerInput("Select player (0 to exit): ", 0, game.getNumPlayers())-1;
+                        if((chosePlayer == -1) || (chosePlayer == playerNumber)){
+                            currentAction = -1;
+                            continue;
+                        }
+
+                        refresh();
+                        printName(game.getPlayerTurn(chosePlayer).getPlayer());
+                        printTitle("\nFAITH TRACK");
+                        showFaithTrack(game.getPlayerTurn(chosePlayer).getPlayer().getPersonalBoard().getFaithTrack());
+                        showCardBoard(game.getPlayerTurn(chosePlayer).getPlayer());
+                        showStrongbox(chosePlayer);
+                        WarehouseDepots warehouseDepotsPlayer = game.getPlayerTurn(chosePlayer).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+                        showWarehouse(warehouseDepotsPlayer);
+
+                        if(game.getPlayerTurn(chosePlayer).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards().size() > 0) {
+                            printTitle("\nACTIVE LEADER CARDS");
+                            printLeaderCards(game.getPlayerTurn(chosePlayer).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards());
+                        }
+                    }
+                    else
+                        System.out.println(ANSI_GREEN+"\nYour are playing against Lorenzo the Magnificent, he does not reveal his secrets"+RESET);
+                    System.out.print(ANSI_GREEN+"\nPress enter to continue "+RESET);
+                    try {
+                        input.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    currentAction = -1;
+                    break;
+                case 6:
                     if(actionDone) {
                         try {
                             networkHandler.sendObject(TURNEND);
@@ -191,7 +242,7 @@ public class CLI extends View{
 
                         if(singlePlayer)
                         {
-                            System.out.print(ANSI_GREEN+"Lorenzo the magnifying glass is playing "+RESET); //FIXME change name
+                            System.out.print(ANSI_GREEN+"Lorenzo the Magnificent is playing "+RESET);
                             try {
                                 Thread.sleep(1500);
                             } catch (InterruptedException e) {
@@ -478,7 +529,7 @@ public class CLI extends View{
         }
         System.out.println(RESET);
         System.out.print("\n");
-    }
+    } //TODO update javadoc
 
 
     /**
@@ -757,10 +808,10 @@ public class CLI extends View{
      * Method that shows the card dealer, the player is not important because
      * the card dealer is a common object
      */
-    public void showCardDealer() {
+    public void showCardDealer(int player) {
         int currentAction;
         ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
-        Stack<DevelopmentCard>[][] cardMatrix = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
+        Stack<DevelopmentCard>[][] cardMatrix = game.getPlayerTurn(player).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
 
         do {
             refresh();
@@ -788,7 +839,7 @@ public class CLI extends View{
 
 
             System.out.print("\n");
-            showCardBoard();
+            showCardBoard(game.getPlayerTurn(player).getPlayer());
             System.out.print("\n\n");
             showLegend();
 
@@ -843,8 +894,7 @@ public class CLI extends View{
                 currentAction = integerInput("Select action: ", 0, 0);
             }
         }while (currentAction !=0 );
-    }
-
+    } //TODO update javadoc
 
     /**
      * Method that shows the WareHouse of a player
@@ -881,15 +931,15 @@ public class CLI extends View{
 
             System.out.print("\n");
         }
-    }
+    } //TODO update javadoc
 
 
     /**
      * Method that shows the strongbox of a player
      */
     @Override
-    public void showStrongbox() {
-        StrongBox strongBox = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
+    public void showStrongbox(int showPlayer) {
+        StrongBox strongBox = game.getPlayerTurn(showPlayer).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
         int i = 0;
 
@@ -903,28 +953,32 @@ public class CLI extends View{
             i++;
         }
         System.out.print("\n");
-    }
+    } //TODO update javadoc
 
 
     /**
      * Method that shows the card Board of a player
      */
-    public void showCardBoard() {
-        CardBoard cardBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard();
+    public void showCardBoard(Player player) {
+        CardBoard cardBoard = player.getPersonalBoard().getCardBoard();
 
         printTitle("CARD BOARD");
+        printDevelopmentCards(Arrays.asList(cardBoard.getUpperDevelopmentCards()));
+        /*
         if(cardBoard.getDevelopmentCards().size() == 0)
             System.out.println(ANSI_GREEN+"\nThere are no development cards"+RESET);
         else
             printDevelopmentCards(Arrays.asList(cardBoard.getUpperDevelopmentCards()));
-    }
+
+         */
+    } //TODO update javadoc
 
 
     /**
      * Method that shows the production options available for a player
      * and sands the choice to the server
      */
-    private void showProduce() {
+    private void showProduce(Player player) {
         int currentAction;
         int upperLimit;
         //three boolean values because every single production can fail but if one of them succeed an a basic action is done
@@ -942,8 +996,8 @@ public class CLI extends View{
             ArrayList<ExtraProduction> extraProductionEffect = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
 
             refresh();
-            showCardBoard();
-            showStrongbox();
+            showCardBoard(player);
+            showStrongbox(playerNumber);
             showWarehouse(warehouseDepots);
             System.out.println("\nACTIVE LEADER CARDS");
             if(activeLeaders.size()>0)
@@ -1100,7 +1154,7 @@ public class CLI extends View{
 
         }while(currentAction != 0);
 
-    }
+    } //TODO update javadoc
 
 
     /**
@@ -1120,7 +1174,7 @@ public class CLI extends View{
 
             if (leaderInHand.size() > 0 || activeLeader.size() > 0) {
                 if (leaderInHand.size() > 0)
-                    printTitle("LEADER CARDS IN HAND");
+                    printTitle("LEADER CARDS IN HAND\n");
 
                 printLeaderCards(leaderBoard.getLeaderCardsInHand());
 
@@ -1329,10 +1383,14 @@ public class CLI extends View{
      */
     @Override
     protected synchronized void notifyEndGame(boolean youWon) {
-        if(youWon)
+        if(youWon) {
+            System.out.println("\nYou won, "+ game.getPlayerTurn(playerNumber).getVictoryPoints());
             winOrLose = 1;
-        else
+        }
+        else {
             winOrLose = 0;
+            System.out.println("\nYou lost"+ game.getPlayerTurn(playerNumber).getVictoryPoints());
+        }
     }
 
     @Override
@@ -1343,7 +1401,7 @@ public class CLI extends View{
                         .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
                 break;
         }
-        gameUpdatedNetMess =true;
+        gameUpdated =true;
         synchronized (this) {
             this.notify();
         }
@@ -1384,6 +1442,15 @@ public class CLI extends View{
         System.out.println(RESET+ANSI_BOLD+title+RESET);
     }
 
+    private void printName(Player player) {
+        for(int i = 0; i<player.getName().length()+12; i++)
+            System.out.print("=");
+        System.out.println("\n"+ANSI_BOLD+player.getName()+RESET+"'s board");
+        if(player.isHasInkwell())
+            System.out.println(ANSI_PURPLE+"First player"+RESET);
+        for(int i = 0; i<player.getName().length()+12; i++)
+            System.out.print("=");
+    }
 
     /**
      * Method that prints the resources given
