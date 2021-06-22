@@ -209,6 +209,7 @@ public class CLI extends View{
                         }
 
                         refresh();
+                        showLegend();
                         printName(game.getPlayerTurn(chosePlayer).getPlayer());
                         printTitle("\nFAITH TRACK");
                         showFaithTrack(game.getPlayerTurn(chosePlayer).getPlayer().getPersonalBoard().getFaithTrack());
@@ -978,6 +979,7 @@ public class CLI extends View{
      * Method that shows the production options available for a player
      * and sands the choice to the server
      */
+    //FIXME after the production there is no update, change PLayer parameter with integer that is the index of player in ArrayList
     private void showProduce(Player player) {
         int currentAction;
         int upperLimit;
