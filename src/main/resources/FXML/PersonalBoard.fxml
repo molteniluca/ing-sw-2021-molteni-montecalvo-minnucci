@@ -97,15 +97,15 @@
           <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
         </rowConstraints>
           <children>
-              <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+              <ImageView fx:id="lev1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets bottom="3.0" />
                </GridPane.margin></ImageView>
-            <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ImageView fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <ImageView fx:id="lev2_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ImageView fx:id="lev2_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <ImageView fx:id="lev3_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ImageView fx:id="lev3_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <ImageView fx:id="lev3_3" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
           </children>
       </GridPane>
       <GridPane layoutX="-11.0" layoutY="36.0" prefHeight="143.0" prefWidth="915.0">
