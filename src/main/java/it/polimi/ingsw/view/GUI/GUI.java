@@ -185,7 +185,6 @@ public class GUI extends View {
     @FXML
     void showGameBoard(ActionEvent event) throws IOException
     {
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
 
         Scene gameBoardScene = new Scene(gameBoardViewParent);
@@ -195,8 +194,6 @@ public class GUI extends View {
 
         gameBoardStage.setTitle("Game Board");
         gameBoardStage.setScene(gameBoardScene);
-        gameBoardStage.setWidth(screenBounds.getMaxX());
-        gameBoardStage.setHeight(screenBounds.getMaxY());
         gameBoardStage.show();
 
     }
@@ -276,7 +273,6 @@ public class GUI extends View {
 
         //marketStage.setTitle("");
         primaryStage.setScene(homeScene);
-        //primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
 
         primaryStage.show();
@@ -298,8 +294,6 @@ public class GUI extends View {
 
         primaryStage.setTitle("Masters Of Renaissance");
         primaryStage.setScene(createOrJoinScene);
-        primaryStage.setWidth(screenBounds.getMaxX());
-        primaryStage.setHeight(screenBounds.getMaxY());
         primaryStage.show();
 
     }

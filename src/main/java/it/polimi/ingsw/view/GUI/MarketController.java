@@ -47,11 +47,11 @@ public class MarketController extends GUI implements Initializable {
 
     //initializes the images of the marbles
     private Image blueMarble = new Image("images/Marble/blue marble.png");
-    private Image grayMarble = new Image("images/gray Marble.png");
-    private Image purpleMarble = new Image("images/purple Marble.png");
-    private Image redMarble = new Image("images/red Marble.png");
-    private Image whiteMarble = new Image("images/white Marble.png");
-    private Image yellowMarble = new Image("images/yellow Marble.png");
+    private Image grayMarble = new Image("images/Marble/gray Marble.png");
+    private Image purpleMarble = new Image("images/Marble/purple Marble.png");
+    private Image redMarble = new Image("images/Marble/red Marble.png");
+    private Image whiteMarble = new Image("images/Marble/white Marble.png");
+    private Image yellowMarble = new Image("images/Marble/yellow Marble.png");
 
 
     @FXML
