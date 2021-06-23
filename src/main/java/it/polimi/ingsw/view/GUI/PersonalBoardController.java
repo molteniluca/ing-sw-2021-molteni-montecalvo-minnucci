@@ -1,8 +1,15 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.resources.Resources;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+
+import javafx.scene.input.MouseEvent;
+
+import java.awt.*;
 
 import static it.polimi.ingsw.view.GUI.GUI.game;
 import static it.polimi.ingsw.view.GUI.GUI.playerNumber;
@@ -19,6 +26,12 @@ public class PersonalBoardController {
     ImageView[] faithImagePosition, faithLorenzoImagePosition;
 
     @FXML
+    GridPane strongBoxGrid;
+
+    @FXML
+    Label goldLabel, servantLabel, shieldLabel, stoneLabel;
+
+    @FXML
     void updateFaithTrack(){
         faithImagePosition[currentFaithPosition].setVisible(false);
         currentFaithPosition = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
@@ -32,7 +45,13 @@ public class PersonalBoardController {
     }
 
     @FXML
-    void updateStrongBox(){}
+    void updateStrongBox(){
+        Resources resStrongBox = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox().getResources();
+        goldLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.GOLD)));
+        servantLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.SERVANT)));
+        shieldLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.SHIELD)));
+        stoneLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.STONE)));
+    }
 
     @FXML
     void updateWarehouse(){}
@@ -45,6 +64,8 @@ public class PersonalBoardController {
         updateStrongBox();//...
     }
 
+
+
     @FXML
     void initialize(){
         //updatePersonalBoard();
@@ -53,4 +74,11 @@ public class PersonalBoardController {
 
     }
 
+    public void showStrongBox(MouseEvent mouseEvent) {
+        strongBoxGrid.setOpacity(1);
+    }
+
+    public void hideStrongBox(MouseEvent mouseEvent) {
+        strongBoxGrid.setOpacity(0);
+    }
 }
