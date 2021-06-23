@@ -108,26 +108,26 @@
       </GridPane>
       <GridPane layoutX="-11.0" layoutY="36.0" prefHeight="143.0" prefWidth="915.0">
         <columnConstraints>
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
-            <ColumnConstraints percentWidth="5" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
+            <ColumnConstraints percentWidth="5.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints percentHeight="33" />
@@ -135,38 +135,375 @@
           <RowConstraints percentHeight="33" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="if0" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ImageView fx:id="if0" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/resources/cross.png" />
-               </image></ImageView>
+               </image>
+               <GridPane.margin>
+                  <Insets left="4.0" />
+               </GridPane.margin></ImageView>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/resources/cross.png" />
-               </image></ImageView>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="13" GridPane.rowIndex="2" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="13" GridPane.rowIndex="1" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="13" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="14" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="15" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="16" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="17" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="18" />
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="19" />
+               </image>
+               <GridPane.margin>
+                  <Insets left="4.0" />
+               </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="4">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="5">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="6">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="7">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="11" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="12" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13" GridPane.rowIndex="2">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13" GridPane.rowIndex="1">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="14">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="15">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="16">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="17">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="18">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="19">
+                <image>
+                    <Image url="@../images/resources/cross.png" />
+                </image>
+                <GridPane.margin>
+                    <Insets left="4.0" />
+                </GridPane.margin></ImageView>
+
+
+
+             <ImageView fx:id="ifl0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="16.0" />
+               </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="3">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="4">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="5">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="6">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="7">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="8" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="11" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="12" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13" GridPane.rowIndex="2">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13" GridPane.rowIndex="1">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="13">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="14">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="15">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="16">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="17">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="18">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
+             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="19">
+                 <image>
+                     <Image url="@../images/FaithTrack/crossBlack.png" />
+                 </image>
+                 <GridPane.margin>
+                     <Insets bottom="5.0" left="16.0" />
+                 </GridPane.margin></ImageView>
          </children>
       </GridPane>
+      <ImageView fx:id="popeFavor1" fitHeight="65.0" fitWidth="65.0" layoutX="234.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="231.0" AnchorPane.topAnchor="96.0">
+         <image>
+            <Image url="@../images/FaithTrack/SquareYellow.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="popeFavor2" fitHeight="65.0" fitWidth="65.0" layoutX="460.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="52.0">
+         <image>
+            <Image url="@../images/FaithTrack/SquareOrange.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="popeFavor3" fitHeight="65.0" fitWidth="65.0" layoutX="470.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="734.0" AnchorPane.topAnchor="94.0">
+         <image>
+            <Image url="@../images/FaithTrack/SquareRed.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
