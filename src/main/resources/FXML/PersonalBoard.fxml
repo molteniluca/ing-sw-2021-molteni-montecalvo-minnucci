@@ -27,56 +27,47 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="slot1_1" fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="10.0" top="110.0" />
                </GridPane.margin>
-               <image>
-                  <Image url="@../images/Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg" />
-               </image>
             </ImageView>
-            <ImageView fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="slot1_2" fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
-               <image>
-                  <Image url="@../images/Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg" />
-               </image>
             </ImageView>
-            <ImageView fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="slot1_3" fitHeight="220.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets bottom="110.0" left="10.0" />
                </GridPane.margin>
-               <image>
-                  <Image url="@../images/Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg" />
-               </image>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="slot2_1" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="12.0" top="110.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="slot2_2" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="12.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="slot2_3" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets bottom="110.0" left="12.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="slot3_1" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="7.0" top="110.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="slot3_2" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="7.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="slot3_3" fitHeight="210.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets bottom="110.0" left="7.0" />
                </GridPane.margin>

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
+import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import javafx.fxml.FXML;
@@ -11,12 +12,14 @@ import javafx.scene.layout.GridPane;
 
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+
 import static it.polimi.ingsw.view.GUI.GUI.game;
 import static it.polimi.ingsw.view.GUI.GUI.playerNumber;
 
 public class PersonalBoardController {
 
-    private int currentFaithPosition, currentLorenzoFaithPosition;
+    private int currentFaithPosition, currentLorenzoFaithPosition, numberOfProductionCard;
 
     @FXML
     ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
@@ -35,6 +38,9 @@ public class PersonalBoardController {
     ImageView lev1, lev2_1, lev2_2, lev3_1, lev3_2, lev3_3;
 
     ImageView[] level2Image, level3Image;
+
+    @FXML
+    ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3;
 
     @FXML
     void updateFaithTrack(){
@@ -89,7 +95,14 @@ public class PersonalBoardController {
 
 
     @FXML
-    void updateProductionCards(){}
+    void updateProductionCards(){
+        ArrayList<DevelopmentCard> developmentCard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getDevelopmentCards();
+        //if(developmentCard.size() != numberOfProductionCard){
+
+
+
+       // }
+    }
 
     void updatePersonalBoard(){
         updateFaithTrack();
