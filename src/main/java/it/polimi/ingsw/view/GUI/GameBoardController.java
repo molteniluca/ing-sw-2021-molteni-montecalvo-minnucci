@@ -16,7 +16,7 @@ public class GameBoardController {
 
     @FXML
     void initialize() throws IOException {
-        newLoadedPaneLeader = FXMLLoader.load(ClassLoader.getSystemResource("FXML/UpperBoard.fxml"));
+        newLoadedPaneLeader = FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
         leaderAnchorPane.getChildren().add(newLoadedPaneLeader);
 
         newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));

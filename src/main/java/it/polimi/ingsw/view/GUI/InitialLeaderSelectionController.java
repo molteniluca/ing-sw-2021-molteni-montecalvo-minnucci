@@ -80,15 +80,7 @@ public class InitialLeaderSelectionController {
             //TODO send leaders to server
 
             //open gameBoard
-            Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
-
-            Scene gameBoardScene = new Scene(gameBoardViewParent);
-
-            Stage gameBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
-            gameBoardStage.setTitle("Game Board");
-            gameBoardStage.setScene(gameBoardScene);
-            gameBoardStage.show();
+            CardDealerController.openGameBoard(actionEvent);
         }
         else {
             lWrongNumberOfLeaders.setOpacity(1);
