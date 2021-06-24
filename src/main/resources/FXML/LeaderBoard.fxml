@@ -18,8 +18,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ImageView fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fx:id="ilh1" fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ilh2" fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <Label layoutX="113.0" layoutY="14.0" style="-fx-background-color: white;" text="Leader Cards in hand" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="7.0" />
@@ -32,10 +32,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ImageView fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ila1" fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ila2" fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" text="Leader Cards in hand" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
+      <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" text="Leader Cards activated" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
    </children>
 </AnchorPane>
