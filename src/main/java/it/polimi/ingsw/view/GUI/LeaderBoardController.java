@@ -24,10 +24,12 @@ public class LeaderBoardController {
          */
 
     }
+
     private void leaderToImageName(LeaderCard leader, ImageView image){
         String temp = "images/Cards/LeaderCards/" + leader.getImage() + ".png";
         image.setImage(new Image(temp));
     }
+
     private void activateLeader(LeaderCard leader, ImageView imageToRemove){
         discardLeader(imageToRemove);
         if (ila1.getImage()==null){
