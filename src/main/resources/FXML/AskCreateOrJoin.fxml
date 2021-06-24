@@ -32,7 +32,7 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </TextField>
-            <Button fx:id="showGameBoardButton" layoutX="452.0" layoutY="343.0" mnemonicParsing="false" onAction="#showGameBoard" prefHeight="47.0" prefWidth="138.0" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Game Board" wrapText="true" />
+            <Button fx:id="showLeaderSelectionButton" layoutX="452.0" layoutY="343.0" mnemonicParsing="false" onAction="#showLeaderSelection" prefHeight="47.0" prefWidth="138.0" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Start" wrapText="true" />
          </children>
          <padding>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />

@@ -306,7 +306,7 @@
 
 
 
-             <ImageView fx:id="ifl0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+             <ImageView fx:id="ifl0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
                  <image>
                      <Image url="@../images/FaithTrack/crossBlack.png" />
                  </image>

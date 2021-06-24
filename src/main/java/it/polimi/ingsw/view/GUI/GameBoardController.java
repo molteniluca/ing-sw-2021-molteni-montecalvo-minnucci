@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
-import java.util.function.ToDoubleBiFunction;
 
 public class GameBoardController {
 

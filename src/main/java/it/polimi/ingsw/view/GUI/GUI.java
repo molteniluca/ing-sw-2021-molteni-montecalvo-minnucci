@@ -183,18 +183,18 @@ public class GUI extends View {
     }
 
     @FXML
-    void showGameBoard(ActionEvent event) throws IOException
+    void showLeaderSelection(ActionEvent event) throws IOException
     {
-        Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
+        Parent leaderSelectionViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/InitialLeaderSelection.fxml"));
 
-        Scene gameBoardScene = new Scene(gameBoardViewParent);
+        Scene leaderSelectionScene = new Scene(leaderSelectionViewParent);
 
         //gets the stage information
-        Stage gameBoardStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Stage leaderSelectionStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 
-        gameBoardStage.setTitle("Game Board");
-        gameBoardStage.setScene(gameBoardScene);
-        gameBoardStage.show();
+        leaderSelectionStage.setTitle("Leader Selection");
+        leaderSelectionStage.setScene(leaderSelectionScene);
+        leaderSelectionStage.show();
 
     }
 
