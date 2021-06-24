@@ -7,50 +7,99 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static it.polimi.ingsw.view.GUI.GUI.game;
+
 public class InitialLeaderSelectionController {
 
+    int numberOfSelectedLeader;
+
     @FXML
-    Label lChooseResource;
+    Label lChooseResource, lWrongNumberOfLeaders;
 
     @FXML
     GridPane gChooseResource;
 
+    @FXML
+    ImageView leader1, leader2, leader3, leader4;
+
+    private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected;
+
 
     @FXML
     void initialize(){
-        //if player can choose resources:
-        lChooseResource.setOpacity(1);
-        gChooseResource.setOpacity(1);
+        //TODO if player is 1:
+        /*
+        lChooseResource.setOpacity(0);
+        gChooseResource.setOpacity(0);
+        gChooseResource.setDisable(true); //check if res could be pressed if 1 player plays.
+
+         */
     }
 
-    public void selectLeaderCard(MouseEvent mouseEvent) {
+    public void selectLeaderCard1(MouseEvent mouseEvent) {
+        isLeader1Selected = selectLeader(leader1, isLeader1Selected);
+    }
 
+    public void selectLeaderCard2(MouseEvent mouseEvent) {
+        isLeader2Selected = selectLeader(leader2, isLeader2Selected);
+    }
+
+    public void selectLeaderCard3(MouseEvent mouseEvent) {
+        isLeader3Selected = selectLeader(leader3, isLeader3Selected);
+    }
+
+    public void selectLeaderCard4(MouseEvent mouseEvent) {
+        isLeader4Selected = selectLeader(leader4, isLeader4Selected);
+    }
+
+    private boolean selectLeader(ImageView leader, boolean isLeaderSelected){
+        if(!isLeaderSelected) {
+            leader.setFitHeight(247.5);
+            leader.setFitWidth(180);
+            isLeaderSelected = true;
+            numberOfSelectedLeader++;
+        }
+        else{
+            leader.setFitHeight(220);
+            leader.setFitWidth(160);
+            isLeaderSelected = false;
+            numberOfSelectedLeader--;
+        }
+        return isLeaderSelected;
     }
 
     public void confirmLeaders(ActionEvent actionEvent) throws IOException {
-        //check two (no less no more) leader cards selected
+        if(numberOfSelectedLeader==2) {
+            //TODO send leaders to server
 
-        //send leaders to server
+            //open gameBoard
+            Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
 
-        //open gameBoard
-        Parent gameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
+            Scene gameBoardScene = new Scene(gameBoardViewParent);
 
-        Scene gameBoardScene = new Scene(gameBoardViewParent);
+            Stage gameBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        Stage gameBoardStage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-
-        gameBoardStage.setTitle("Game Board");
-        gameBoardStage.setScene(gameBoardScene);
-        gameBoardStage.show();
+            gameBoardStage.setTitle("Game Board");
+            gameBoardStage.setScene(gameBoardScene);
+            gameBoardStage.show();
+        }
+        else {
+            lWrongNumberOfLeaders.setOpacity(1);
+        }
     }
 
     public void chooseResource(MouseEvent mouseEvent) {
+        //TODO if num player is 2 or 3, choose one resource and send it to server
+        gChooseResource.setDisable(true);
 
+        //TODO if num player is 4, choose another resource
+        lChooseResource.setText("Choose another resource");
     }
 }

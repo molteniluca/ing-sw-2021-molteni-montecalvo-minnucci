@@ -25,7 +25,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="leader1" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader1" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
@@ -36,17 +36,17 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader2" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader2" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader3" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader3" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader4" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader4" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -63,7 +63,7 @@
             <Font size="24.0" />
          </font>
       </Button>
-      <GridPane fx:id="gChooseResource" layoutX="650.0" layoutY="151.0" opacity="0.0" prefHeight="80.0" prefWidth="422.0" style="-fx-background-color: brown;" styleClass="button-shiny-orange" AnchorPane.leftAnchor="539.0" AnchorPane.rightAnchor="539.0" AnchorPane.topAnchor="200.0">
+      <GridPane fx:id="gChooseResource" gridLinesVisible="true" layoutX="650.0" layoutY="151.0" prefHeight="80.0" prefWidth="422.0" style="-fx-background-color: brown;" styleClass="button-shiny-orange" AnchorPane.leftAnchor="539.0" AnchorPane.rightAnchor="539.0" AnchorPane.topAnchor="200.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -108,9 +108,14 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label fx:id="lChooseResource" alignment="CENTER" layoutX="600.0" layoutY="124.0" opacity="0.0" prefHeight="33.0" prefWidth="301.0" text="Choose one resource" textAlignment="CENTER">
+      <Label fx:id="lChooseResource" alignment="CENTER" layoutX="600.0" layoutY="124.0" prefHeight="33.0" prefWidth="301.0" text="Choose one resource" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lWrongNumberOfLeaders" alignment="CENTER" contentDisplay="CENTER" layoutX="611.0" layoutY="731.0" opacity="0.0" text="You have to pick 2 leaders" textAlignment="CENTER" textFill="RED" underline="true">
+         <font>
+            <Font size="24.0" />
          </font>
       </Label>
    </children>
