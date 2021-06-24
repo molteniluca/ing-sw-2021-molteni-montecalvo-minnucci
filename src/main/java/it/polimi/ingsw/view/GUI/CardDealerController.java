@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,8 +22,8 @@ import static it.polimi.ingsw.view.GUI.GUI.playerNumber;
 
 public class CardDealerController {
 
-    boolean isProdCardSelected[] = new boolean[12];
-    int counter;
+    boolean isProdCardSelected[] = new boolean[12], confirm;
+    int counter, numberOfSelectedCards;
 
     @FXML
     ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
@@ -30,10 +31,12 @@ public class CardDealerController {
     ImageView[] ipc;
 
     @FXML
-    Button bGameBoard;
+    Button bGameBoard, bConfirm;
 
     @FXML
+    Label wrongSelection;
 
+    @FXML
     void initialize() {
         ipc = new ImageView[]{ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4};
         counter = 0;
@@ -60,7 +63,16 @@ public class CardDealerController {
         openGameBoard(actionEvent);
     }
 
-    protected static void openGameBoard(ActionEvent actionEvent) throws IOException {
+    public void openGameBoard(ActionEvent actionEvent) throws IOException {
+        if (numberOfSelectedCards == 0 || confirm) {
+            goToGameBoard(actionEvent);
+        }
+        else {
+            //write "you can only take 1 card"
+        }
+    }
+
+    protected static void goToGameBoard(ActionEvent actionEvent) throws IOException {
         Parent GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
 
         Scene GameBoardScene = new Scene(GameBoardViewParent);
@@ -126,13 +138,31 @@ public class CardDealerController {
 
 
             isProdCardSelected = true;
+            numberOfSelectedCards++;
         }
         else{
             //change layout to unselected/normal layout
 
 
             isProdCardSelected = false;
+            numberOfSelectedCards--;
         }
         return isProdCardSelected;
+    }
+
+    public void confirmCard(ActionEvent actionEvent) {
+        if (numberOfSelectedCards == 1){
+            //if server sends success (enough res to buy card) or no one card is selected
+            /*
+                confirm = true;
+            else {
+                wrongSelection.setText("Not enough resources, select another one or no one to come back");
+            }
+
+             */
+        }
+        else if (numberOfSelectedCards > 1){
+            wrongSelection.setText("You can buy only one card per turn");
+        }
     }
 }

@@ -80,7 +80,7 @@ public class InitialLeaderSelectionController {
             //TODO send leaders to server
 
             //open gameBoard
-            CardDealerController.openGameBoard(actionEvent);
+            CardDealerController.goToGameBoard(actionEvent);
         }
         else {
             lWrongNumberOfLeaders.setOpacity(1);

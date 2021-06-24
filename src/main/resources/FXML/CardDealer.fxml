@@ -70,14 +70,19 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></ImageView>
                   <ImageView fx:id="ipc3_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
+                  <ImageView fx:id="ipc3_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></ImageView>
+                  <ImageView fx:id="ipc3_31" fitHeight="247.5" fitWidth="180.0" layoutX="690.0" layoutY="528.0" onMouseClicked="#buyProductionCard3_3" pickOnBounds="true" preserveRatio="true">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
                </children>
                <opaqueInsets>
                   <Insets />
@@ -97,16 +102,6 @@
                </font>
             </Label>
          </top>
-         <bottom>
-            <Button fx:id="bGameBoard" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#returnToGameBoard" text="Game Board" textAlignment="CENTER" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="20.0" />
-               </BorderPane.margin>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-         </bottom>
          <right>
             <GridPane gridLinesVisible="true" prefHeight="686.0" prefWidth="218.0" BorderPane.alignment="CENTER">
               <columnConstraints>
@@ -218,6 +213,42 @@
                </children>
             </GridPane>
          </right>
+         <bottom>
+            <GridPane prefHeight="47.0" prefWidth="1477.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="bGameBoard" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#returnToGameBoard" text="Game Board" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="40.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="bConfirm" alignment="CENTER" mnemonicParsing="false" onAction="#confirmCard" text="Confirm " GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="wrongSelection" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>
