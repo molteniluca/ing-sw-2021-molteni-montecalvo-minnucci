@@ -2,43 +2,32 @@ package it.polimi.ingsw.view.GUI;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class GameBoardController {
 
     @FXML
-    AnchorPane firstAnchorPane;
+    AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane, marketAnchorPane;
 
-    @FXML
-    AnchorPane secondAnchorPane;
-
-    @FXML
-    AnchorPane upperAnchorPane;
-
-    @FXML
-    AnchorPane personalBoardAnchorPane;
-
-    AnchorPane newLoadedPaneOne;
-    AnchorPane newLoadedPaneTwo;
+    AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton, newLoadedPaneMarket;
 
 
     @FXML
     void initialize() throws IOException {
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        newLoadedPaneOne = FXMLLoader.load(ClassLoader.getSystemResource("FXML/UpperBoard.fxml"));
+        newLoadedPaneLeader = FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
+        leaderAnchorPane.getChildren().add(newLoadedPaneLeader);
 
-        firstAnchorPane.getChildren().add(newLoadedPaneOne);
+        newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
+        personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
 
-        newLoadedPaneTwo = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
+        //TODO ask Francesco how to start market section.
+//        newLoadedPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
+//        marketAnchorPane.getChildren().add(newLoadedPaneMarket);
 
-        secondAnchorPane.getChildren().add(newLoadedPaneTwo);
+        newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
+        buttonAnchorPane.getChildren().add(newLoadedPaneButton);
+
     }
 }

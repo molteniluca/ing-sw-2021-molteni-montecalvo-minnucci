@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.InitialLeaderSelectionController">
+   <children>
+      <GridPane gridLinesVisible="true" layoutX="217.0" layoutY="506.0" prefHeight="267.0" prefWidth="920.0" style="-fx-background-color: brown;" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" AnchorPane.leftAnchor="290.0" AnchorPane.rightAnchor="290.0" AnchorPane.topAnchor="450.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="leader1" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+               <image>
+                  <Image url="@../images/Cards/LeaderCards/Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="leader2" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="leader3" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="leader4" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </GridPane>
+      <Label alignment="CENTER" layoutX="600.0" layoutY="382.0" prefHeight="33.0" prefWidth="301.0" text="Choose two leader cards" textAlignment="CENTER" AnchorPane.bottomAnchor="485.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="599.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="bConfirm" layoutX="682.0" layoutY="778.0" mnemonicParsing="false" onAction="#confirmLeaders" text="CONFIRM" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="682.0" AnchorPane.rightAnchor="681.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <GridPane fx:id="gChooseResource" gridLinesVisible="true" layoutX="650.0" layoutY="151.0" prefHeight="80.0" prefWidth="422.0" style="-fx-background-color: brown;" styleClass="button-shiny-orange" AnchorPane.leftAnchor="539.0" AnchorPane.rightAnchor="539.0" AnchorPane.topAnchor="200.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#chooseResource" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../images/resources/gold.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#chooseResource" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../images/resources/servant.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#chooseResource" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../images/resources/shield.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#chooseResource" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../images/resources/stone.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+      </GridPane>
+      <Label fx:id="lChooseResource" alignment="CENTER" layoutX="600.0" layoutY="124.0" prefHeight="33.0" prefWidth="301.0" text="Choose one resource" textAlignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lWrongNumberOfLeaders" alignment="CENTER" contentDisplay="CENTER" layoutX="611.0" layoutY="731.0" opacity="0.0" text="You have to pick 2 leaders" textAlignment="CENTER" textFill="RED" underline="true">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
