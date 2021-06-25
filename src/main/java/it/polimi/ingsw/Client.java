@@ -21,9 +21,7 @@ public class Client {
         }
 
         if (choseGui)
-        {
             Application.launch(GUIApplication.class);
-        }
         else {
             view = new CLI();
             view.start();

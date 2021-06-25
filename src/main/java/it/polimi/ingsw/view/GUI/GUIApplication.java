@@ -5,9 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,6 +49,9 @@ public class GUIApplication extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Masters Of Renaissance");
         primaryStage.setResizable(false);
+
+        Image icon = new Image("images/icon.png");
+        primaryStage.getIcons().add(icon);
 
         primaryStage.show();
     }

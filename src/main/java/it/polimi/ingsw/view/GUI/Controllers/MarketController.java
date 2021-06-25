@@ -2,13 +2,14 @@
  * Sample Skeleton for 'Market.fxml' Controller Class
  */
 
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.view.GUI.GUI;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -114,8 +115,7 @@ public class MarketController extends GUI implements Initializable {
     }
 
 
- */
-
+*/
     private void updateMarketMatrix() {
         Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
         ResourceTypes[][] marketMatrix = market.getMarketMatrix();

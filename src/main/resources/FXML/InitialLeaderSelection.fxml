@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.InitialLeaderSelectionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.InitialLeaderSelectionController">
    <children>
       <GridPane gridLinesVisible="true" layoutX="217.0" layoutY="506.0" prefHeight="267.0" prefWidth="920.0" style="-fx-background-color: brown;" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" AnchorPane.leftAnchor="290.0" AnchorPane.rightAnchor="290.0" AnchorPane.topAnchor="450.0">
         <columnConstraints>
@@ -29,9 +29,6 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
-               <image>
-                  <Image url="@../images/Cards/LeaderCards/Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.png" />
-               </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

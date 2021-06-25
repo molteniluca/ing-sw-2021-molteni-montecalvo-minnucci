@@ -36,11 +36,12 @@ import java.util.regex.Pattern;
 import static it.polimi.ingsw.network.NetworkMessages.*;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
-public class GUI extends View {
+public class GUI {
 
     protected static Game game;
     protected static int playerNumber;
     protected static NetworkHandler networkHandler;
+    private GUIView guiView;
 
     @FXML // fx:id="title"
     private Text title; // Value injected by FXMLLoader
@@ -68,96 +69,6 @@ public class GUI extends View {
 
     @FXML // fx:id="wrongInput"
     private Text wrongInput; // Value injected by FXMLLoader
-
-
-
-    @Override
-    public void run() {
-        Application.launch(GUIApplication.class);
-    }
-
-    @Override
-    public void initializeView() {
-
-    }
-
-    @Override
-    protected boolean isSuccessReceived() {
-        Object message;
-
-        message = waitAndGetResponse();
-
-        if(message == ERROR)
-        {
-            message = waitAndGetResponse(); //receive the error message
-            System.out.print(ANSI_RED);
-            System.out.println(message); //prints the error message
-            System.out.println("Press enter to continue ");
-
-            return false;
-        }
-
-        if(message == SUCCESS)
-            waitForUpdatedGame();
-
-        return true;
-    }
-
-    @Override
-    public void welcomeInfo() {
-
-    }
-
-    @Override
-    public void askCreateOrJoin() {
-
-    }
-
-    @Override
-    public void askServerInfo() {
-
-    }
-
-    @Override
-    public void askNickname() {
-
-    }
-
-    @Override
-    public void showHomepage() {
-
-    }
-
-    @Override
-    public void showFaithTrack(FaithTrack faithTrack) {
-
-    }
-
-    @Override
-    public void showWarehouse(WarehouseDepots warehouseDepots) {
-
-    }
-
-    @Override
-    public void showStrongbox(int showPlayer) {
-
-    }
-
-    @Override
-    public synchronized void updateObjects(Game game) {
-        this.game = game;
-        notify();
-    }
-
-    @Override
-    protected void notifyEndGame(boolean youWon) {
-
-    }
-
-    @Override
-    public void notifyNewUpdate(ObjectUpdate read) {
-        
-    }
 
 
     @FXML
@@ -202,7 +113,11 @@ public class GUI extends View {
 
 
     @FXML
-    void saveInformation(ActionEvent event) throws IOException {
+    void saveInformation() throws IOException {
+        guiView = GUIView.singleton();
+        guiView.initializeView();
+        GUIView.singleton().game.getPlayerTurn(playerNumber);
+        /*
         String currentString;
         String serverAddress = "localhost";
         int serverPort = 10000;
@@ -254,6 +169,8 @@ public class GUI extends View {
         System.out.print(ANSI_GREEN);
         System.out.println(playerNumber);
         System.out.println(game.getPlayerTurn(playerNumber).getPlayer());
+
+         */
 
     }
 
