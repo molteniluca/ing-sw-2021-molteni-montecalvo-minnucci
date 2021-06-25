@@ -55,24 +55,11 @@ public class CLI extends View{
         initializeView();
 
         waitForUpdatedGame();
-/*
-        while(!gameUpdated){
-            try {
-                synchronized (this) { //FIXME synchronized should be 'this'?
-                    wait();
-                }
-            }catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        gameUpdated = false;
-        */
 
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
         playerNumber = (int) waitAndGetResponse();
 
-        //Asks the player the resources he wants depending on the playerNumber
+        //Asks to the player the resources it wants depending on playerNumber
         selectInitialResources();
 
         waitForUpdatedGame();
@@ -147,7 +134,7 @@ public class CLI extends View{
         Player player;
 
         while ((currentAction!=0) && (currentAction !=6)){
-            player = game.getPlayerTurn(playerNumber).getPlayer(); //FIXME maybe showHomepage does not need player as parameter
+            player = game.getPlayerTurn(playerNumber).getPlayer();
             refresh();
             showLegend();
             printName(player);
@@ -188,14 +175,14 @@ public class CLI extends View{
                     showCardDealer(playerNumber);
                     break;
                 case 3:
-                    showProduce(player);
+                    showProduce();
                     break;
                 case 4:
                     showLeaderBoard();
                     break;
                 case 5:
                     if(!singlePlayer) {
-                        //SHow other players name except the current player
+                        //Show other players name except the current player
                         for(int i =0; i<game.getNumPlayers(); i++)
                         {
                             if(i!=playerNumber) {
@@ -498,16 +485,8 @@ public class CLI extends View{
 
 
     /**
-     * It shows the legend of the CLI associating every
-     * resource to a colored circle
-     */
-    private void showLegend() {
-        System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + ColoredResources.GOLD +" Shield:" + ColoredResources.SHIELD + " Servant:" + ColoredResources.SERVANT + " Stone:" + ColoredResources.STONE+"\n");
-    }
-
-
-    /**
      * Method that prints out the faith track of a user
+     * @param faithTrack the faith track that has to be shown
      */
     @Override
     public void showFaithTrack(FaithTrack faithTrack) {
@@ -530,7 +509,7 @@ public class CLI extends View{
         }
         System.out.println(RESET);
         System.out.print("\n");
-    } //TODO update javadoc
+    }
 
 
     /**
@@ -806,8 +785,9 @@ public class CLI extends View{
 
 
     /**
-     * Method that shows the card dealer, the player is not important because
-     * the card dealer is a common object
+     *  Method that shows the card dealer
+     * @param player that has to be shown, used to print out the card board when showing
+     *               the card dealer
      */
     public void showCardDealer(int player) {
         int currentAction;
@@ -895,10 +875,12 @@ public class CLI extends View{
                 currentAction = integerInput("Select action: ", 0, 0);
             }
         }while (currentAction !=0 );
-    } //TODO update javadoc
+    }
+
 
     /**
      * Method that shows the WareHouse of a player
+     * @param warehouseDepots the wareHouse that has to be shown
      */
     @Override
     public void showWarehouse(WarehouseDepots warehouseDepots) {
@@ -932,11 +914,12 @@ public class CLI extends View{
 
             System.out.print("\n");
         }
-    } //TODO update javadoc
+    }
 
 
     /**
      * Method that shows the strongbox of a player
+     * @param showPlayer the player that owns the the strongbox that has to be shown
      */
     @Override
     public void showStrongbox(int showPlayer) {
@@ -954,11 +937,12 @@ public class CLI extends View{
             i++;
         }
         System.out.print("\n");
-    } //TODO update javadoc
+    }
 
 
     /**
      * Method that shows the card Board of a player
+     * @param player the player that owns the card board that has to b shown
      */
     public void showCardBoard(Player player) {
         CardBoard cardBoard = player.getPersonalBoard().getCardBoard();
@@ -972,23 +956,22 @@ public class CLI extends View{
             printDevelopmentCards(Arrays.asList(cardBoard.getUpperDevelopmentCards()));
 
          */
-    } //TODO update javadoc
+    }
 
 
     /**
      * Method that shows the production options available for a player
      * and sands the choice to the server
      */
-    //FIXME after the production there is no update, change PLayer parameter with integer that is the index of player in ArrayList
-    private void showProduce(Player player) {
+    private void showProduce() {
         int currentAction;
-        int upperLimit;
-        //three boolean values because every single production can fail but if one of them succeed an a basic action is done
+        int upperLimit; // the limit of integer input while selecting the action, it depends by the presence of leader cards with extra production effects
+        //three boolean values because every single production can fail but if one of them succeed a basic action is done
         boolean temporaryAction1 = false;
         boolean temporaryAction2 = false;
         boolean temporaryAction3 = false;
 
-        WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        WarehouseDepots warehouseDepots;
 
         LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
         ArrayList<LeaderCard> activeLeaders = leaderBoard.getLeaderCards();
@@ -996,9 +979,10 @@ public class CLI extends View{
         do {
             upperLimit = 2;
             ArrayList<ExtraProduction> extraProductionEffect = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
+            warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
             refresh();
-            showCardBoard(player);
+            showCardBoard(game.getPlayerTurn(playerNumber).getPlayer());
             showStrongbox(playerNumber);
             showWarehouse(warehouseDepots);
             System.out.println("\nACTIVE LEADER CARDS");
@@ -1156,7 +1140,7 @@ public class CLI extends View{
 
         }while(currentAction != 0);
 
-    } //TODO update javadoc
+    }
 
 
     /**
@@ -1284,7 +1268,25 @@ public class CLI extends View{
     }
 
 
+
+
+
+
+
     //SUPPORT METHODS
+
+
+
+
+
+    /**
+     * It shows the legend of the CLI associating every
+     * resource to a colored circle
+     */
+    private void showLegend() {
+        System.out.println(RESET+"Legend\tFaith:" + FAITH + " Gold:" + ColoredResources.GOLD +" Shield:" + ColoredResources.SHIELD + " Servant:" + ColoredResources.SERVANT + " Stone:" + ColoredResources.STONE+"\n");
+    }
+
 
     /**
      * Method that receives a message and check if it is a success or an error.
@@ -1444,6 +1446,12 @@ public class CLI extends View{
         System.out.println(RESET+ANSI_BOLD+title+RESET);
     }
 
+
+    /**
+     * Method that prints the name of a player in an ASCIIArt box, using a bold font
+     * It also prints if the player is the first one, depending on the inkWell
+     * @param player tha player that has to be shown
+     */
     private void printName(Player player) {
         for(int i = 0; i<player.getName().length()+12; i++)
             System.out.print("=");
@@ -1453,6 +1461,7 @@ public class CLI extends View{
         for(int i = 0; i<player.getName().length()+12; i++)
             System.out.print("=");
     }
+
 
     /**
      * Method that prints the resources given
