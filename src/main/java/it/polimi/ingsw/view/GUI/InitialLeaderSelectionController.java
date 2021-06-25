@@ -2,15 +2,9 @@ package it.polimi.ingsw.view.GUI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -43,19 +37,19 @@ public class InitialLeaderSelectionController {
          */
     }
 
-    public void selectLeaderCard1(MouseEvent mouseEvent) {
+    public void selectLeaderCard1() {
         isLeader1Selected = selectLeader(leader1, isLeader1Selected);
     }
 
-    public void selectLeaderCard2(MouseEvent mouseEvent) {
+    public void selectLeaderCard2() {
         isLeader2Selected = selectLeader(leader2, isLeader2Selected);
     }
 
-    public void selectLeaderCard3(MouseEvent mouseEvent) {
+    public void selectLeaderCard3() {
         isLeader3Selected = selectLeader(leader3, isLeader3Selected);
     }
 
-    public void selectLeaderCard4(MouseEvent mouseEvent) {
+    public void selectLeaderCard4() {
         isLeader4Selected = selectLeader(leader4, isLeader4Selected);
     }
 
@@ -87,11 +81,15 @@ public class InitialLeaderSelectionController {
         }
     }
 
-    public void chooseResource(MouseEvent mouseEvent) {
+    public void chooseResource() {
         //TODO if num player is 2 or 3, choose one resource and send it to server
         gChooseResource.setDisable(true);
 
-        //TODO if num player is 4, choose another resource
+        //we can add lChoose
+
+        //TODO else if num player is 4, choose another resource
         lChooseResource.setText("Choose another resource");
+        //send res to server
+        gChooseResource.setDisable(true);
     }
 }
