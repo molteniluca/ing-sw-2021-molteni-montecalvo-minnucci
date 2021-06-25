@@ -11,18 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Stack;
-
-import static it.polimi.ingsw.view.GUI.GUI.game;
-import static it.polimi.ingsw.view.GUI.GUI.playerNumber;
 
 public class CardDealerController {
 
-    boolean isProdCardSelected[] = new boolean[12], confirm;
+    boolean[] isProdCardSelected = new boolean[12];
+    boolean confirm;
     int counter, numberOfSelectedCards;
 
     @FXML
@@ -34,7 +30,7 @@ public class CardDealerController {
     Button bGameBoard, bConfirm;
 
     @FXML
-    Label wrongSelection;
+    Label lWrongSelection;
 
     @FXML
     void initialize() {
@@ -69,6 +65,7 @@ public class CardDealerController {
         }
         else {
             //write "you can only take 1 card"
+            lWrongSelection.setText("You can only take 1 card");
         }
     }
 
@@ -84,51 +81,51 @@ public class CardDealerController {
         GameBoardStage.show();
     }
 
-    public void buyProductionCard1_1(MouseEvent mouseEvent) {
+    public void buyProductionCard1_1() {
         isProdCardSelected[0] = selectProductionCard(ipc[0], isProdCardSelected[0]);
     }
 
-    public void buyProductionCard1_2(MouseEvent mouseEvent) {
+    public void buyProductionCard1_2() {
         isProdCardSelected[1] = selectProductionCard(ipc[1], isProdCardSelected[1]);
     }
 
-    public void buyProductionCard1_3(MouseEvent mouseEvent) {
+    public void buyProductionCard1_3() {
         isProdCardSelected[2] = selectProductionCard(ipc[2], isProdCardSelected[2]);
     }
 
-    public void buyProductionCard1_4(MouseEvent mouseEvent) {
+    public void buyProductionCard1_4() {
         isProdCardSelected[3] = selectProductionCard(ipc[3], isProdCardSelected[3]);
     }
 
-    public void buyProductionCard2_1(MouseEvent mouseEvent) {
+    public void buyProductionCard2_1() {
         isProdCardSelected[4] = selectProductionCard(ipc[4], isProdCardSelected[4]);
     }
 
-    public void buyProductionCard2_2(MouseEvent mouseEvent) {
+    public void buyProductionCard2_2() {
         isProdCardSelected[5] = selectProductionCard(ipc[5], isProdCardSelected[5]);
     }
 
-    public void buyProductionCard2_3(MouseEvent mouseEvent) {
+    public void buyProductionCard2_3() {
         isProdCardSelected[6] = selectProductionCard(ipc[6], isProdCardSelected[6]);
     }
 
-    public void buyProductionCard2_4(MouseEvent mouseEvent) {
+    public void buyProductionCard2_4() {
         isProdCardSelected[7] = selectProductionCard(ipc[7], isProdCardSelected[7]);
     }
 
-    public void buyProductionCard3_1(MouseEvent mouseEvent) {
+    public void buyProductionCard3_1() {
         isProdCardSelected[8] = selectProductionCard(ipc[8], isProdCardSelected[8]);
     }
 
-    public void buyProductionCard3_2(MouseEvent mouseEvent) {
+    public void buyProductionCard3_2() {
         isProdCardSelected[9] = selectProductionCard(ipc[9], isProdCardSelected[9]);
     }
 
-    public void buyProductionCard3_3(MouseEvent mouseEvent) {
+    public void buyProductionCard3_3() {
         isProdCardSelected[10] = selectProductionCard(ipc[10], isProdCardSelected[10]);
     }
 
-    public void buyProductionCard3_4(MouseEvent mouseEvent) {
+    public void buyProductionCard3_4() {
         isProdCardSelected[11] = selectProductionCard(ipc[11], isProdCardSelected[11]);
     }
 
@@ -162,7 +159,7 @@ public class CardDealerController {
              */
         }
         else if (numberOfSelectedCards > 1){
-            wrongSelection.setText("You can buy only one card per turn");
+            lWrongSelection.setText("You can buy only one card per turn");
         }
     }
 }
