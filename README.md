@@ -56,7 +56,7 @@ java -jar Server.jar <portNumber>
 ```
 Il programma partirà e sarà eseguito in background sulla porta selezionata. 
 Di default ``portNumber = 10000``. Se verranno forniti parametri sbagliati il server non partirà
-ma mostrerà un messaggio di errore che invita a utilizzare il parametro ``-h`` per ricevere aiuto
+ma mostrerà un messaggio di errore che invita a utilizzare il parametro ``-h`` per ricevere aiuto.
 
 
 ##Componenti del gruppo

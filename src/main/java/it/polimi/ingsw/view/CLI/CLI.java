@@ -49,6 +49,8 @@ public class CLI extends View{
     private int playerNumber; //the number of the player received before GAMESTARTED
 
 
+
+
     @Override
     public void run() {
 
@@ -230,12 +232,13 @@ public class CLI extends View{
 
                         if(singlePlayer)
                         {
-                            System.out.print(ANSI_GREEN+"Lorenzo the Magnificent is playing "+RESET);
+                            System.out.println(ANSI_GREEN+"Lorenzo the Magnificent is playing "+RESET);
                             try {
                                 Thread.sleep(1500);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            System.out.println(ANSI_GREEN+game.getSelfPLayingTurn().getLorenzo().getLastAction().toString()+RESET);
                         }
                         else
                             System.out.print(ANSI_GREEN+"Waiting for players ... "+RESET);
