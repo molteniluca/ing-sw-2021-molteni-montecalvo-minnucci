@@ -15,6 +15,7 @@ import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class GUIView extends View {
+    public static GUIView singleton;
     public Game game;
     NetworkHandler networkHandler;
     int playerNumber;
@@ -103,5 +104,12 @@ public class GUIView extends View {
     @Override
     public void notifyNewUpdate(ObjectUpdate read) {
 
+    }
+
+    public static GUIView singleton(){
+        if(singleton == null){
+            singleton = new GUIView();
+        }
+        return singleton;
     }
 }
