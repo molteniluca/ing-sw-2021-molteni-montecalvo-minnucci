@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.CardDealerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.CardDealerController">
    <children>
       <BorderPane prefHeight="900.0" prefWidth="1500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -30,59 +30,54 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ImageView fx:id="ipc1_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard1_1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc1_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc1_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard1_2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc1_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc1_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard1_3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc1_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc1_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard1_4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc1_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc2_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard2_1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc2_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc2_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard2_2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc2_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc2_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard2_3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc2_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc2_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard2_4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc2_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc3_1" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc3_2" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc3_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_3" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard3_3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <ImageView fx:id="ipc3_4" fitHeight="247.5" fitWidth="180.0" onMouseClicked="#buyProductionCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></ImageView>
-                  <ImageView fx:id="ipc3_31" fitHeight="247.5" fitWidth="180.0" layoutX="690.0" layoutY="528.0" onMouseClicked="#buyProductionCard3_3" pickOnBounds="true" preserveRatio="true">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </ImageView>
                </children>
                <opaqueInsets>
                   <Insets />

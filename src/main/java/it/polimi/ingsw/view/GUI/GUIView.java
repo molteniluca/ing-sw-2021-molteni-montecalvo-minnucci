@@ -3,12 +3,14 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
+import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static it.polimi.ingsw.network.NetworkMessages.CREATEGAME;
 import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
@@ -18,7 +20,7 @@ public class GUIView extends View {
     public static GUIView singleton;
     public Game game;
     NetworkHandler networkHandler;
-    int playerNumber;
+    public int playerNumber;
     
     @Override
     public void initializeView() {
@@ -27,6 +29,7 @@ public class GUIView extends View {
             networkHandler.start();
             networkHandler.sendObject(CREATEGAME);
             networkHandler.sendObject(1);
+            networkHandler.sendObject("Example");
 
 
             NetworkMessages command = (NetworkMessages) waitAndGetResponse();
@@ -103,7 +106,16 @@ public class GUIView extends View {
 
     @Override
     public void notifyNewUpdate(ObjectUpdate read) {
-
+        switch (read.getUpdateType()){
+            case LEADERCARDS:
+                game.getPlayerTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
+                        .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
+                break;
+        }
+        gameUpdated =true;
+        synchronized (this) {
+            this.notify();
+        }
     }
 
     public static GUIView singleton(){
