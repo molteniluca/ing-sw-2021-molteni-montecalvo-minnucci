@@ -1,27 +1,19 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
-import it.polimi.ingsw.controller.Game;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.board.personal.FaithTrack;
-import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
-import it.polimi.ingsw.network.NetworkMessages;
-import it.polimi.ingsw.network.ObjectUpdate;
-import it.polimi.ingsw.view.GUI.Controllers.GenericController;
-import it.polimi.ingsw.view.NetworkHandler;
-import it.polimi.ingsw.view.View;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -31,11 +23,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static it.polimi.ingsw.network.NetworkMessages.*;
-import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class AskCreateOrJoinController extends GenericController {
     @FXML // fx:id="title"
@@ -64,6 +55,9 @@ public class AskCreateOrJoinController extends GenericController {
 
     @FXML // fx:id="wrongInput"
     private Text wrongInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="comboBox"
+    private ComboBox<Integer> comboBox; // Value injected by FXMLLoader
 
 
     @FXML
@@ -164,7 +158,6 @@ public class AskCreateOrJoinController extends GenericController {
 
     @FXML
     void initialize() {
-
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         if(backgroundImage!=null) {
             backgroundImage.setFitWidth(screenBounds.getMaxX());
@@ -195,6 +188,7 @@ public class AskCreateOrJoinController extends GenericController {
         translateTransition.setAutoReverse(true);
         translateTransition.setByX(250);
 
+        comboBox.getItems().addAll(1,2,3,4);
         //translateTransition1.play();
     }
 }
