@@ -105,6 +105,7 @@ public abstract class View extends Thread {
         }
     }
 
+
     public void setInitialResources(ResourceTypes res1) throws IOException {
         networkHandler.sendObject(res1);
     }
