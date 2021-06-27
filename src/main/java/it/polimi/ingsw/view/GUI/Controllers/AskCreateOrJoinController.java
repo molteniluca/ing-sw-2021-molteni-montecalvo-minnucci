@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI;
+package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.Player;
@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 import javafx.animation.Animation;
@@ -36,9 +37,7 @@ import java.util.regex.Pattern;
 import static it.polimi.ingsw.network.NetworkMessages.*;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
-public class GUI {
-    private GUIView guiView;
-
+public class AskCreateOrJoinController extends GenericController {
     @FXML // fx:id="title"
     private Text title; // Value injected by FXMLLoader
 
@@ -68,30 +67,9 @@ public class GUI {
 
 
     @FXML
-    void showMarket(ActionEvent event) throws IOException
-    {
-        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
-
-
-        Scene marketScene = new Scene(marketViewParent);
-
-        //gets the stage information
-        Stage marketStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-
-        //access to the gridPane in the scene
-        //marketGrid = (GridPane) marketScene.lookup("marketGrid");
-
-        marketStage.setTitle("Market");
-        marketStage.setScene(marketScene);
-        marketStage.setMaximized(true);
-        //marketStage.sizeToScene();
-        marketStage.show();
-
-    }
-
-    @FXML
     void showLeaderSelection(ActionEvent event) throws IOException
     {
+        saveInformation();
         Parent leaderSelectionViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/InitialLeaderSelection.fxml"));
 
         Scene leaderSelectionScene = new Scene(leaderSelectionViewParent);
@@ -110,15 +88,9 @@ public class GUI {
 
     @FXML
     void saveInformation() throws IOException {
-        guiView = GUIView.singleton();
 
-        guiView.startConnection("127.0.0.1",10000);
-        guiView.createGame(1);
-        guiView.sendNikname("IO");
-
-        /*
         String currentString;
-        String serverAddress = "localhost";
+        String serverAddress = "127.0.0.1";
         int serverPort = 10000;
 
         String regexNumberIp = "([0-9]|[1-9][0-9]|[1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5])";
@@ -142,42 +114,12 @@ public class GUI {
 
         }
 
-        networkHandler = new NetworkHandler(serverAddress,serverPort,this);
-        networkHandler.start();
+        guiView.startConnection(serverAddress,serverPort);
 
-        //serverPort = Integer.parseInt(serverPortText.getText());
-
-
-
-        //TODO now is hardcoded but the user will chose the following options
-        networkHandler.sendObject(CREATEGAME);
-        networkHandler.sendObject(1); //number of players
-        NetworkMessages command = (NetworkMessages) waitAndGetResponse();
-
-        if(command == SUCCESS) {
-            String roomId = (String) waitAndGetResponse();
-            System.out.println("\nYou created a game successfully, your room id is " + ANSI_PURPLE + roomId);
-        }
-        else
-            System.out.println(ANSI_RED+"Something went wrong, exiting");
-
-        networkHandler.sendObject("Pollo"); //nickname
-
-        waitForUpdatedGame();
-        playerNumber = (int) waitAndGetResponse();
-        System.out.print(ANSI_GREEN);
-        System.out.println(playerNumber);
-        System.out.println(game.getPlayerTurn(playerNumber).getPlayer());
-
-         */
-
+        guiView.createGame(1);
+        guiView.sendNikname("IO");
+        guiView.waitForUpdatedGame();
     }
-
-    @FXML
-    void printInfo(ActionEvent event) {
-        resultText.setText("Pollo");
-    }
-
 
     public void backHome(ActionEvent actionEvent) throws IOException {
         Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));

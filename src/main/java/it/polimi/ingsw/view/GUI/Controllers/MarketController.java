@@ -2,11 +2,9 @@ package it.polimi.ingsw.view.GUI.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import it.polimi.ingsw.controller.Game;
+
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
-import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.GUIView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
