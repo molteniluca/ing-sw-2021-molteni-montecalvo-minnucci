@@ -60,6 +60,7 @@ public class AskCreateOrJoinController extends GenericController {
     private ComboBox<Integer> comboBox; // Value injected by FXMLLoader
 
 
+
     @FXML
     void showLeaderSelection(ActionEvent event) throws IOException
     {

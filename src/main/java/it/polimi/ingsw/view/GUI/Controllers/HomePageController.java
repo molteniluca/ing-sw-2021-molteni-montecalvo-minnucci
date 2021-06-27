@@ -60,11 +60,15 @@ public class HomePageController extends GenericController {
 
     @FXML
     void initialize() {
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+
         if(backgroundImage!=null) {
-            backgroundImage.setFitWidth(screenBounds.getMaxX());
-            backgroundImage.setFitHeight(screenBounds.getMaxY());
+            //the background image has dimensions a little big bigger than the stage so there are to white borders during the animation
+            backgroundImage.setFitWidth(1510);
+            backgroundImage.setFitHeight(910);
         }
+
+
+
 
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(10), backgroundImage);
 
