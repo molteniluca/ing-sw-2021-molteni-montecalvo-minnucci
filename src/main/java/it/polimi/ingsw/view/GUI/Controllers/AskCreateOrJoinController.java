@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.Controllers;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -48,8 +47,6 @@ public class AskCreateOrJoinController extends GenericController {
 
         guiView.joinGame(gameId.getText());
         waitForPlayers(nameJoin.getText(), actionEvent);
-
-        loadGame(actionEvent);
     }
 
     private void waitForPlayers(String name, ActionEvent event){

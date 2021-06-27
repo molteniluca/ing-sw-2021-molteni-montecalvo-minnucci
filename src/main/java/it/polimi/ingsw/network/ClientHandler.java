@@ -90,6 +90,12 @@ public class ClientHandler extends Thread{
         while(read==null){
             try {
                 read = in.readObject();
+                if (read == null){
+                    sendObject(ERROR);
+                    sendObject("Unexpected object, expecting:"+c.toString()+", but got null");
+                    printDebug("Unexpected object, expecting:"+c+", but got null");
+                    continue;
+                }
                 if(read.getClass() == NetworkMessages.class) {
                     if (read == HEARTBEAT) {
                         read = null;
