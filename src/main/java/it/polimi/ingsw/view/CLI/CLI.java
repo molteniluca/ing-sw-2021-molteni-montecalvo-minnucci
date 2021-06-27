@@ -443,7 +443,7 @@ public class CLI extends View{
                 System.out.print("Please enter your name: ");
                 nickname = input.readLine();
 
-                sendNikname(nickname);
+                sendNickname(nickname);
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
                 System.out.println("\nWaiting for players ...");

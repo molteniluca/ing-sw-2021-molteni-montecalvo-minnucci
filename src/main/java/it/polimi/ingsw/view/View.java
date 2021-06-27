@@ -188,7 +188,7 @@ public abstract class View extends Thread {
         networkHandler.sendObject(extraResourceIndex);
     }
 
-    public void sendNikname(String nickname) throws IOException {
+    public void sendNickname(String nickname) throws IOException {
         networkHandler.sendObject(nickname);
     }
 
