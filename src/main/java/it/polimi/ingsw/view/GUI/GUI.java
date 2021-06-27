@@ -115,7 +115,11 @@ public class GUI {
     @FXML
     void saveInformation() throws IOException {
         guiView = GUIView.singleton();
-        guiView.initializeView();
+
+        guiView.startConnection("127.0.0.1",10000);
+        guiView.createGame(1);
+        guiView.sendNikname("IO");
+
         GUIView.singleton().game.getPlayerTurn(playerNumber);
         /*
         String currentString;

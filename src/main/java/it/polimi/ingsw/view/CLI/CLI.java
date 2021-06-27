@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.CLI;
 
-import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.board.personal.LeaderBoard;
@@ -17,7 +16,6 @@ import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.network.ObjectUpdate;
-import it.polimi.ingsw.view.NetworkHandler;
 import it.polimi.ingsw.view.View;
 
 import java.util.*;
@@ -41,12 +39,9 @@ public class CLI extends View{
 
     private static final int MAX_POSITION = 25;
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    private NetworkHandler networkHandler;
-    private Game game;
     private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
-    private int playerNumber; //the number of the player received before GAMESTARTED
 
 
 
@@ -106,16 +101,14 @@ public class CLI extends View{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        networkHandler.closeConnection();
+        closeConnection();
         System.exit(0);
-
     }
 
 
     /**
      * Initialize the view and performs basilar operations
      */
-    @Override
     public void initializeView() {
         welcomeInfo();
 
@@ -129,7 +122,6 @@ public class CLI extends View{
     /**
      * Method that shows the personalBoard of the user
      */
-    @Override
     public void showHomepage() {
 
         int currentAction = -1;
@@ -225,7 +217,7 @@ public class CLI extends View{
                 case 6:
                     if(actionDone) {
                         try {
-                            networkHandler.sendObject(TURNEND);
+                            endTurn();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -278,7 +270,6 @@ public class CLI extends View{
      * It clears the screen and then prints the initial
      * information like the title of the game
      */
-    @Override
     public void welcomeInfo() {
         refresh();
         printMainTitle();
@@ -288,7 +279,6 @@ public class CLI extends View{
      * Method that asks the user if it wants to create a new game or join
      * an already existing game, than send the answer to the server
      */
-    @Override
     public void askCreateOrJoin() {
         int currentAction = -1;
         int numberOfPlayers;
@@ -344,8 +334,7 @@ public class CLI extends View{
                 if(numberOfPlayers == 1)
                     singlePlayer = true;
 
-                networkHandler.sendObject(CREATEGAME);
-                networkHandler.sendObject(numberOfPlayers);
+                createGame(numberOfPlayers);
 
                 command = (NetworkMessages) waitAndGetResponse();
 
@@ -366,9 +355,7 @@ public class CLI extends View{
                     if(roomId.length() !=5)
                         System.out.println(ANSI_RED+"Room id must be 5 characters long, retry"+RESET);
                 }while(roomId.length() !=5);
-
-                networkHandler.sendObject(JOINGAME);
-                networkHandler.sendObject(roomId);
+                joinGame(roomId);
             }
 
         }catch (IOException  e)
@@ -384,7 +371,6 @@ public class CLI extends View{
      * It asks the user information about the server. And than
      * creates the networkHandler with the given info
      */
-    @Override
     public void askServerInfo() {
         String currentString;
         String serverAddress = "localhost";
@@ -442,8 +428,7 @@ public class CLI extends View{
         }
 
         try {
-            networkHandler = new NetworkHandler(serverAddress,serverPort,this);
-            networkHandler.start();
+            startConnection(serverAddress,serverPort);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -453,7 +438,6 @@ public class CLI extends View{
     /**
      * Method that asks the nickname and sends it to thw server
      */
-    @Override
     public void askNickname() {
         String nickname;
         boolean correctInput = false;
@@ -464,9 +448,9 @@ public class CLI extends View{
                 System.out.print("Please enter your name: ");
                 nickname = input.readLine();
 
+                sendNikname(nickname);
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
-                networkHandler.sendObject(nickname);
                 System.out.println("\nWaiting for players ...");
                 /*
                Send nickname and receive ack or nack from the server if name is already taken
@@ -491,7 +475,6 @@ public class CLI extends View{
      * Method that prints out the faith track of a user
      * @param faithTrack the faith track that has to be shown
      */
-    @Override
     public void showFaithTrack(FaithTrack faithTrack) {
         //To add position received from Server
 
@@ -587,9 +570,7 @@ public class CLI extends View{
                         }
 
                         try {
-                            networkHandler.sendObject(BUYCOLUMN);
-                            networkHandler.sendObject(column);
-                            networkHandler.sendObject(extraResourceIndex);
+                            marketBuyColumn(column,extraResourceIndex);
 
                             isSuccessReceived();
                             showSwapArea();
@@ -614,9 +595,7 @@ public class CLI extends View{
                         }
 
                         try {
-                            networkHandler.sendObject(BUYROW);
-                            networkHandler.sendObject(row);
-                            networkHandler.sendObject(extraResourceIndex);
+                            marketBuyRow(row,extraResourceIndex);
                             isSuccessReceived();
                             showSwapArea();
                         } catch (IOException e) {
@@ -685,7 +664,7 @@ public class CLI extends View{
                         exit = true;
                     if(resourcesFromMarket.getTotalResourceNumber() > 0) {
                         try {
-                            networkHandler.sendObject(DROPRESOURCES);
+                            swapDropResources();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -735,10 +714,7 @@ public class CLI extends View{
                             numResToMove = numResToAdd;
 
                         try{
-                            networkHandler.sendObject(MOVETOLEVEL);
-                            networkHandler.sendObject(level);
-                            networkHandler.sendObject(resourceTypesToMove);
-                            networkHandler.sendObject(numResToMove);
+                            swapMoveToLevel(level,resourceTypesToMove,numResToMove);
                         }catch (IOException e)
                         {
                             e.printStackTrace();
@@ -767,8 +743,7 @@ public class CLI extends View{
 
                     try{
                         warehouseDepots.moveToSwap(1);
-                        networkHandler.sendObject(MOVETOSWAP);
-                        networkHandler.sendObject(level);
+                        swapMoveToSwap(level);
                     }catch (IOException e)
                     {
                         e.printStackTrace();
@@ -858,10 +833,7 @@ public class CLI extends View{
                                 continue;
                             }
 
-                            networkHandler.sendObject(BUYCARD);
-                            networkHandler.sendObject(row);
-                            networkHandler.sendObject(column);
-                            networkHandler.sendObject(place);
+                            marketBuyCard(row,column,place);
 
                             actionDone = isSuccessReceived();
 
@@ -885,7 +857,6 @@ public class CLI extends View{
      * Method that shows the WareHouse of a player
      * @param warehouseDepots the wareHouse that has to be shown
      */
-    @Override
     public void showWarehouse(WarehouseDepots warehouseDepots) {
         int k;
         printTitle("\nWAREHOUSE");
@@ -924,7 +895,6 @@ public class CLI extends View{
      * Method that shows the strongbox of a player
      * @param showPlayer the player that owns the the strongbox that has to be shown
      */
-    @Override
     public void showStrongbox(int showPlayer) {
         StrongBox strongBox = game.getPlayerTurn(showPlayer).getPlayer().getPersonalBoard().getDeposit().getStrongBox();
         Resources res = strongBox.getResources();
@@ -1031,12 +1001,7 @@ public class CLI extends View{
                                 if(productionResult == 0)
                                     continue;
 
-
-                                networkHandler.sendObject(PRODUCTION);
-                                networkHandler.sendObject(PROD1);
-                                networkHandler.sendObject(numberToResourceType(firstResource));
-                                networkHandler.sendObject(numberToResourceType(secondResource));
-                                networkHandler.sendObject(numberToResourceType(productionResult));
+                                productionProd1(numberToResourceType(firstResource),numberToResourceType(secondResource),numberToResourceType(productionResult));
 
                                 temporaryAction1 = isSuccessReceived();
                             }
@@ -1065,10 +1030,7 @@ public class CLI extends View{
                                     continue;
                                 }
 
-                                networkHandler.sendObject(PRODUCTION);
-                                networkHandler.sendObject(PROD2);
-                                networkHandler.sendObject(currentCard);
-
+                                productionProd2(currentCard);
                                 temporaryAction2 = isSuccessReceived();
                             }
                             else
@@ -1102,15 +1064,11 @@ public class CLI extends View{
                                     continue;
 
 
-                                networkHandler.sendObject(PRODUCTION);
-                                networkHandler.sendObject(PROD3);
                                 System.out.println(ANSI_GREEN + "\nYou can produce one of the following resources:" + RESET);
                                 System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
                                 currentResource = integerInput("Select resource: ", 1, 4);
 
-                                networkHandler.sendObject(extraProductionEffect.get(currentLeader).getProductionCost());
-                                networkHandler.sendObject(numberToResourceType(currentResource));
-
+                                productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),numberToResourceType(currentResource));
                                 temporaryAction3 = isSuccessReceived();
                             }
                             else
@@ -1123,7 +1081,7 @@ public class CLI extends View{
                         case 0:
                             if(temporaryAction1 || temporaryAction2 || temporaryAction3){
                                 actionDone = true;
-                                networkHandler.sendObject(ENDPRODUCTION);
+                                endProduction();
                             }
                             break;
 
@@ -1196,8 +1154,7 @@ public class CLI extends View{
                             currentCard = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
                             if (currentCard == -1)
                                 continue;
-                            networkHandler.sendObject(ACTIVATELEADER);
-                            networkHandler.sendObject(currentCard);
+                            activateLeader(currentCard);
                             if(!isSuccessReceived())
                                 continue;
                             break;
@@ -1206,8 +1163,7 @@ public class CLI extends View{
                             currentCard = integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
                             if (currentCard == -1)
                                 continue;
-                            networkHandler.sendObject(DISCARDLEADER);
-                            networkHandler.sendObject(currentCard);
+                            discardLeader(currentCard);
                             if(!isSuccessReceived())
                                 continue;
                             break;
@@ -1261,7 +1217,7 @@ public class CLI extends View{
 
         try
         {
-            networkHandler.sendObject(chose);
+            chooseLeader(chose);
             isSuccessReceived();
         } catch (IOException e)
         {
@@ -1372,19 +1328,6 @@ public class CLI extends View{
 
 
     /**
-     * Method that sets the game when it is updated. Called by the NetworkHandler if
-     * a game object is received
-     * @param game the new game received from the server
-     */
-    @Override
-    public synchronized void updateObjects(Game game) {
-        this.game = game;
-        //notify(); wakes up the thread that was waiting for the game
-        //gameUpdated = true;
-    }
-
-
-    /**
      * Method that notifies the ending of a game
      * @param youWon says if the user is the winner or not
      */
@@ -1399,21 +1342,6 @@ public class CLI extends View{
             System.out.println("\nYou lost"+ game.getPlayerTurn(playerNumber).getVictoryPoints());
         }
     }
-
-    @Override
-    public void notifyNewUpdate(ObjectUpdate read) {
-        switch (read.getUpdateType()){
-            case LEADERCARDS:
-                game.getPlayerTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
-                        .setLeaderCardsInHand((ArrayList<LeaderCard>) read.getObject());
-                break;
-        }
-        gameUpdated =true;
-        synchronized (this) {
-            this.notify();
-        }
-    }
-
 
     /**
      * It clears the screen printing a clear character
@@ -1551,7 +1479,7 @@ public class CLI extends View{
                 currentAction = integerInput("Select resource: ", 1, 4);
 
                 try{
-                    networkHandler.sendObject(numberToResourceType(currentAction));
+                    setInitialResources(numberToResourceType(currentAction));
                 }catch (IOException e)
                 {
                     e.printStackTrace();
@@ -1564,7 +1492,7 @@ public class CLI extends View{
                 System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
                 currentAction = integerInput("Select resource: ", 1, 4);
                 try{
-                    networkHandler.sendObject(numberToResourceType(currentAction));
+                    setInitialResources(numberToResourceType(currentAction));
                 }catch (IOException e)
                 {
                     e.printStackTrace();
@@ -1577,8 +1505,7 @@ public class CLI extends View{
                 currentAction = integerInput("Select first resource: ", 1, 4);
                 secondCurrentAction = integerInput("Select second resource: ", 1,4);
                 try{
-                    networkHandler.sendObject(numberToResourceType(currentAction));
-                    networkHandler.sendObject(numberToResourceType(secondCurrentAction));
+                    setInitialResources(numberToResourceType(currentAction),numberToResourceType(secondCurrentAction));
                 }catch (IOException e)
                 {
                     e.printStackTrace();
