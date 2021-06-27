@@ -17,7 +17,7 @@
    <children>
        <AnchorPane fx:id="leaderAnchorPane" GridPane.rowIndex="0" />
       <AnchorPane fx:id="personalBoardAnchorPane" GridPane.rowIndex="1" />
-      <AnchorPane fx:id="marketAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <AnchorPane fx:id="marketPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <AnchorPane fx:id="buttonAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
    </children>
 </GridPane>
