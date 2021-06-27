@@ -6,18 +6,14 @@ import java.util.ResourceBundle;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 
 public class MarketController extends GenericController implements Initializable {
@@ -40,6 +36,14 @@ public class MarketController extends GenericController implements Initializable
     @FXML //fx:id="externalResource"
     private ImageView externalResource;
 
+    @FXML
+    private ImageView ig0_0,ig0_1, ig0_2, ig0_3, ig1_0, ig1_1, ig1_2, ig1_3, ig2_0, ig2_1, ig2_2, ig2_3;
+
+    @FXML
+    private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
+
+    private RadioButton[] radioButtons;
+/*
     //initializes the images of the marbles
     private final Image blueMarble = new Image("images/Marble/blue marble.png");
     private final Image grayMarble = new Image("images/Marble/gray marble.png");
@@ -47,116 +51,8 @@ public class MarketController extends GenericController implements Initializable
     private final Image redMarble = new Image("images/Marble/red marble.png");
     private final Image whiteMarble = new Image("images/Marble/white marble.png");
     private final Image yellowMarble = new Image("images/Marble/yellow marble.png");
+ */
 
-
-    @FXML
-    public void backHome(ActionEvent actionEvent) throws IOException {
-        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
-
-        Scene homeScene = new Scene(marketViewParent);
-
-        //gets the stage information
-        Stage primaryStage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-
-        //marketStage.setTitle("");
-        primaryStage.setScene(homeScene);
-        //primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-
-        primaryStage.show();
-    }
-
-
-
-    @FXML
-    public void exitGame(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
-    }
-
-/*
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-
-        assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
-
-        System.out.println(playerNumber);
-
-
-        Platform.runLater(() -> {
-            Market market = new Market();//game.getTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
-            ResourceTypes[][] marketMatrix = market.getMarketMatrix();
-
-            //access to the gridPane in the scene
-            //marketGrid = (GridPane) marketScene.lookup("marketGrid");
-
-            for(int i=0; i < market.ROWS; i++)
-            {
-                for(int j=0; j < market.COLUMNS; j++)
-                {
-                    ImageView currentMarble = new ImageView();
-                    currentMarble.setImage(fromResourceToMarbleImage(marketMatrix[i][j]));
-                    marketGrid.add(currentMarble,j,i);
-                }
-            }
-
-            externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
-
-        });
-
-
-        //updateMarketMatrix();
-    }
-
-
-*/
-    private void updateMarketMatrix() {
-        Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
-        ResourceTypes[][] marketMatrix = market.getMarketMatrix();
-
-        //access to the gridPane in the scene
-        //marketGrid = (GridPane) marketScene.lookup("marketGrid");
-
-        for(int i=0; i < market.ROWS; i++)
-        {
-            for(int j=0; j < market.COLUMNS; j++)
-            {
-                ImageView currentMarble = new ImageView();
-                currentMarble.setImage(fromResourceToMarbleImage(marketMatrix[i][j]));
-                marketGrid.add(currentMarble,j,i);
-            }
-        }
-
-        externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
-    }
-
-
-    /**
-     * Method that associates a resource type to a marbleImage
-     * @param resourceTypes the resource type that has to be showed
-     * @return the image associated at the resourceType
-     */
-    private Image fromResourceToMarbleImage(ResourceTypes resourceTypes)
-    {
-        switch (resourceTypes)
-        {
-            case GOLD:
-                return yellowMarble;
-
-            case SERVANT:
-                return purpleMarble;
-
-            case SHIELD:
-                return blueMarble;
-
-            case STONE:
-                return grayMarble;
-
-            case FAITH:
-                return redMarble;
-        }
-        return whiteMarble;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -165,27 +61,63 @@ public class MarketController extends GenericController implements Initializable
 
         System.out.println(guiView.playerNumber);
 
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        radioButtons = new RadioButton[]{rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3};
+        for (int i = 0; i < 6; i++) {
+            radioButtons[i].setToggleGroup(toggleGroup);
+        }
 
         Platform.runLater(() -> {
-            Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
-            ResourceTypes[][] marketMatrix = market.getMarketMatrix();
-
-            //access to the gridPane in the scene
-            //marketGrid = (GridPane) marketScene.lookup("marketGrid");
-
-            for(int i=0; i < market.ROWS; i++)
-            {
-                for(int j=0; j < market.COLUMNS; j++)
-                {
-                    ImageView currentMarble = new ImageView();
-                    currentMarble.setImage(fromResourceToMarbleImage(marketMatrix[i][j]));
-                    marketGrid.add(currentMarble,j,i);
-                }
-            }
-
-            externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
-
+            updateMarketMatrix();
         });
+    }
+
+    private void updateMarketMatrix() {
+        Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        ResourceTypes[][] marketMatrix = market.getMarketMatrix();
+
+        ImageView[][] gridMarbles;
+        gridMarbles = new ImageView[][]{{ig0_0, ig0_1, ig0_2, ig0_3},{ ig1_0, ig1_1, ig1_2, ig1_3},{ ig2_0, ig2_1, ig2_2, ig2_3}};
+
+        for(int i=0; i < market.ROWS; i++)
+        {
+            for(int j=0; j < market.COLUMNS; j++)
+            {
+                gridMarbles[i][j].setImage(new Image(fromResourceToMarbleImage(marketMatrix[i][j])));
+            }
+        }
+
+        externalResource.setImage(new Image(fromResourceToMarbleImage(market.getExternalResource())));
+    }
+
+
+    /**
+     * Method that associates a resource type to a marbleImage
+     * @param resourceTypes the resource type that has to be showed
+     * @return the image associated at the resourceType
+     */
+    private String fromResourceToMarbleImage(ResourceTypes resourceTypes)
+    {
+        String imageName = "images/Marble/";
+        switch (resourceTypes)
+        {
+            case GOLD:
+                return imageName + "yellow marble.png";
+
+            case SERVANT:
+                return imageName + "purple marble.png";
+
+            case SHIELD:
+                return imageName + "blue marble.png";
+
+            case STONE:
+                return imageName + "gray marble.png";
+
+            case FAITH:
+                return imageName + "red marble.png";
+        }
+        return imageName + "white marble.png";
     }
 }
 

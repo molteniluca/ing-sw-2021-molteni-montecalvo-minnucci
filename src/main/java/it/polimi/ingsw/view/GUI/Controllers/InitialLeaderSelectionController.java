@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
     private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
-    private ResourceTypes resourceTypes, temp;
+    private ResourceTypes temp;
 
     @FXML
     Label lChooseResource, lWrongNumberOfLeaders;
@@ -27,6 +27,9 @@ public class InitialLeaderSelectionController extends GenericController{
 
     @FXML
     ImageView leader1, leader2, leader3, leader4;
+
+    @FXML
+    ImageView iGold, iServant, iShield, iStone; //i = image
 
     ImageView[] leadersImage;
 
@@ -88,7 +91,6 @@ public class InitialLeaderSelectionController extends GenericController{
             leader.setFitWidth(180);
             isLeaderSelected = true;
             numberOfSelectedLeader++;
-
         }
         else{
             leader.setFitHeight(220);
@@ -102,7 +104,7 @@ public class InitialLeaderSelectionController extends GenericController{
     public void confirmLeaders(ActionEvent actionEvent) throws IOException {
         if(numberOfSelectedLeader==2) {
             //TODO send leaders to server
-            Integer numberOfLeaderToSend[] = new Integer[2];
+            Integer[] numberOfLeaderToSend = new Integer[2];
             boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
             int k = 0;
             for (int j = 0; j < 4; j++) {
@@ -123,15 +125,15 @@ public class InitialLeaderSelectionController extends GenericController{
     }
 
     public void chooseResource(MouseEvent mouseEvent) {
-        resourceTypes = null;
+        ResourceTypes resourceTypes = null;
         ImageView imageView = (ImageView) mouseEvent.getSource();
-        if (imageView.getImage().getUrl().equals("/images/resources/gold.png"))
+        if (imageView == iGold)
             resourceTypes = ResourceTypes.GOLD;
-        else if (imageView.getImage().getUrl().equals("/images/resources/servant.png"))
+        else if (imageView == iServant)
             resourceTypes = ResourceTypes.SERVANT;
-        else if (imageView.getImage().getUrl().equals("/images/resources/shield.png"))
+        else if (imageView == iShield)
             resourceTypes = ResourceTypes.SHIELD;
-        else if (imageView.getImage().getUrl().equals("/images/resources/stone.png"))
+        else if (imageView == iStone)
             resourceTypes = ResourceTypes.STONE;
 
         switch(guiView.playerNumber){
