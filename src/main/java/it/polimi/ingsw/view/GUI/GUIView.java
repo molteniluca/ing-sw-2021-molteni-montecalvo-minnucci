@@ -8,7 +8,7 @@ public class GUIView extends View {
     public static GUIView singleton;
 
     @Override
-    protected boolean isSuccessReceived() {
+    public boolean isSuccessReceived() {
         return false;
     }
 

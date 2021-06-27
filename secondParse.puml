@@ -255,7 +255,7 @@ class it.polimi.ingsw.controller.Game {
 - void printDebug(String)
 + PlayerTurn getTurn(int)
 }
-class it.polimi.ingsw.view.GUI.GUI {
+class it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController {
 + void run()
 + void initializeView()
 + void welcomeInfo()
@@ -605,7 +605,7 @@ it.polimi.ingsw.model.cards.specialAbility.SpecialAbility <|.. it.polimi.ingsw.m
 'java.io.Serializable <|.. it.polimi.ingsw.model.cards.specialAbility.ExtraProduction'
 it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.TypeNotChangeableException
 'it.polimi.ingsw.controller.Serializable <|.. it.polimi.ingsw.controller.Game'
-it.polimi.ingsw.view.View <|-- it.polimi.ingsw.view.GUI.GUI
+it.polimi.ingsw.view.View <|-- it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController
 it.polimi.ingsw.model.exceptions.Exception <|-- it.polimi.ingsw.model.exceptions.NotEnoughCardException
 'java.io.Serializable <|.. it.polimi.ingsw.network.ObjectUpdate'
 it.polimi.ingsw.view.exceptions.Exception <|-- it.polimi.ingsw.view.exceptions.NameAlreadyPresentException

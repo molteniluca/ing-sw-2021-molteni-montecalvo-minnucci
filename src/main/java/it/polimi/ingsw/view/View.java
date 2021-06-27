@@ -57,7 +57,7 @@ public abstract class View extends Thread {
     /**
      * Suspend the view thread in wait for a new game object
      */
-    protected void waitForUpdatedGame() {
+    public void waitForUpdatedGame() {
         while (!gameUpdated) {
             synchronized (this) {
                 try {
