@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ButtonBoardController {
+public class ButtonBoardController extends GenericController{
     @FXML
     Button bMarket, bCardDealer, bProduce, bLeaders, bOtherPlayers, bEndTurn;
 
