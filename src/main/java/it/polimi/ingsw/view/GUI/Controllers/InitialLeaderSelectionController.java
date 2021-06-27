@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
-import it.polimi.ingsw.view.GUI.GUIView;
+import it.polimi.ingsw.model.resources.ResourceTypes;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
     private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
+    private ResourceTypes resourceTypes, temp;
 
     @FXML
     Label lChooseResource, lWrongNumberOfLeaders;
@@ -87,6 +88,7 @@ public class InitialLeaderSelectionController extends GenericController{
             leader.setFitWidth(180);
             isLeaderSelected = true;
             numberOfSelectedLeader++;
+
         }
         else{
             leader.setFitHeight(220);
@@ -100,6 +102,17 @@ public class InitialLeaderSelectionController extends GenericController{
     public void confirmLeaders(ActionEvent actionEvent) throws IOException {
         if(numberOfSelectedLeader==2) {
             //TODO send leaders to server
+            Integer numberOfLeaderToSend[] = new Integer[2];
+            boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
+            int k = 0;
+            for (int j = 0; j < 4; j++) {
+                if (isLeaderSelected[j]){
+                    numberOfLeaderToSend[k] = j;
+                    k++;
+                }
+            }
+            guiView.chooseLeader(numberOfLeaderToSend);
+            guiView.waitForUpdatedGame();
 
             //open gameBoard
             CardDealerController.goToGameBoard(actionEvent);
@@ -110,18 +123,16 @@ public class InitialLeaderSelectionController extends GenericController{
     }
 
     public void chooseResource(MouseEvent mouseEvent) {
-        int numResSelected = -1, temp;
+        resourceTypes = null;
         ImageView imageView = (ImageView) mouseEvent.getSource();
         if (imageView.getImage().getUrl().equals("/images/resources/gold.png"))
-            numResSelected = 1;
+            resourceTypes = ResourceTypes.GOLD;
         else if (imageView.getImage().getUrl().equals("/images/resources/servant.png"))
-            numResSelected = 2;
+            resourceTypes = ResourceTypes.SERVANT;
         else if (imageView.getImage().getUrl().equals("/images/resources/shield.png"))
-            numResSelected = 3;
+            resourceTypes = ResourceTypes.SHIELD;
         else if (imageView.getImage().getUrl().equals("/images/resources/stone.png"))
-            numResSelected = 4;
-
-        //TODO send with networkHandler.sendObject(numberToResourceType(numResSelected)); to the server in switch
+            resourceTypes = ResourceTypes.STONE;
 
         switch(guiView.playerNumber){
             case 1:
@@ -129,45 +140,30 @@ public class InitialLeaderSelectionController extends GenericController{
             case 2:
                 gChooseResource.setDisable(true);
 
-                /*
                 try{
-                    networkHandler.sendObject(numberToResourceType(numResSelected));
+                    guiView.setInitialResources(resourceTypes);
                 }catch (IOException e)
                 {
                     e.printStackTrace();
                 }
-
-                 */
 
                 break;
-                /*
-                try{
-                    networkHandler.sendObject(numberToResourceType(numResSelected));
-                }catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-
-                 */
 
             case 3:
                 if (!isSecondResourceChosen){
-                    temp = numResSelected;
+                    temp = resourceTypes;
                     isSecondResourceChosen = true;
                     lChooseResource.setText("Choose another resource");
                 }
                 else {
-                /*
+
                 try{
-                    networkHandler.sendObject(numberToResourceType(temp));
-                    networkHandler.sendObject(numberToResourceType(numResSelected));
+                    guiView.setInitialResources(temp, resourceTypes);
                 }catch (IOException e)
                 {
                     e.printStackTrace();
                 }
 
-
-                 */
                     gChooseResource.setDisable(true);
                 }
 
