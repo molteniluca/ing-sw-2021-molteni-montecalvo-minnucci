@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="776.0" prefWidth="1368.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.MarketController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.MarketController">
    <children>
-      <ImageView fitHeight="733.0" fitWidth="665.0" layoutX="400.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="435.0" fitWidth="381.0" layoutX="114.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="114.0">
          <image>
             <Image url="@../images/marketBoard.png" />
          </image>
       </ImageView>
-      <Button fx:id="backHomeButton" layoutX="207.0" layoutY="443.0" mnemonicParsing="false" onAction="#backHome" styleClass="button-shiny-orange" text="Back to Home" />
-      <Button fx:id="exitGameButton" layoutX="217.0" layoutY="493.0" mnemonicParsing="false" onAction="#exitGame" styleClass="button-shiny-orange" text="Exit Game" />
-      <GridPane fx:id="marketGrid" layoutX="555.0" layoutY="178.0" prefHeight="230.0" prefWidth="310.0">
+      <GridPane fx:id="marketGrid" layoutX="198.0" layoutY="286.0" prefHeight="117.0" prefWidth="169.0" AnchorPane.leftAnchor="198.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
@@ -29,8 +29,38 @@
           <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
         </rowConstraints>
+         <children>
+            <ImageView fx:id="ig0_0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig0_1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig0_2" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig0_3" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig1_0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig1_1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig1_2" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig1_3" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig2_0" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig2_1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig2_2" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ig2_3" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+         </children>
       </GridPane>
-      <ImageView fx:id="externalResource" fitHeight="56.0" fitWidth="56.0" layoutX="820.0" layoutY="112.0" />
+      <ImageView fx:id="externalResource" fitHeight="35.0" fitWidth="35.0" layoutX="359.0" layoutY="242.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="245.0" />
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="56.0" prefWidth="98.0">
+         <children>
+            <RadioButton fx:id="rb1_1" mnemonicParsing="false" text="Level 1" />
+            <RadioButton fx:id="rb1_2" mnemonicParsing="false" text="Level 2" />
+            <RadioButton fx:id="rb1_3" mnemonicParsing="false" text="Level 3" />
+         </children>
+      </VBox>
+      <Button layoutX="98.0" layoutY="31.0" mnemonicParsing="false" text="Take resources" />
+      <Button layoutX="327.0" layoutY="30.0" mnemonicParsing="false" text="Place resources" />
+      <VBox layoutX="234.0" layoutY="14.0" prefHeight="56.0" prefWidth="98.0">
+         <children>
+            <RadioButton fx:id="rb2_1" mnemonicParsing="false" text="Level 1" />
+            <RadioButton fx:id="rb2_2" mnemonicParsing="false" text="Level 2" />
+            <RadioButton fx:id="rb2_3" mnemonicParsing="false" text="Level 3" />
+         </children>
+      </VBox>
 
    </children>
-</Pane>
+</AnchorPane>

@@ -10,14 +10,9 @@ import java.io.IOException;
 public class GameBoardController extends GenericController{
 
     @FXML
-    AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane;
+    AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane, marketAnchorPane;
 
-    @FXML
-    Pane marketPane;
-
-    AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton;
-
-    Pane newLoadedPaneMarket;
+    AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton, newLoadedAnchorPaneMarket;
 
 
     @FXML
@@ -28,9 +23,9 @@ public class GameBoardController extends GenericController{
         newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
 
-        //TODO ask Francesco how to start market section.
-        newLoadedPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
-        marketPane.getChildren().add(newLoadedPaneMarket);
+
+        newLoadedAnchorPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
+        marketAnchorPane.getChildren().add(newLoadedAnchorPaneMarket);
 
         newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
         buttonAnchorPane.getChildren().add(newLoadedPaneButton);
