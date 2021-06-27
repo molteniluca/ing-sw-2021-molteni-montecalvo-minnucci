@@ -41,17 +41,17 @@ public class MarketController extends GenericController implements Initializable
     private ImageView externalResource;
 
     //initializes the images of the marbles
-    private Image blueMarble = new Image("images/Marble/blue marble.png");
-    private Image grayMarble = new Image("images/Marble/gray marble.png");
-    private Image purpleMarble = new Image("images/Marble/purple marble.png");
-    private Image redMarble = new Image("images/Marble/red marble.png");
-    private Image whiteMarble = new Image("images/Marble/white marble.png");
-    private Image yellowMarble = new Image("images/Marble/yellow marble.png");
+    private final Image blueMarble = new Image("images/Marble/blue marble.png");
+    private final Image grayMarble = new Image("images/Marble/gray marble.png");
+    private final Image purpleMarble = new Image("images/Marble/purple marble.png");
+    private final Image redMarble = new Image("images/Marble/red marble.png");
+    private final Image whiteMarble = new Image("images/Marble/white marble.png");
+    private final Image yellowMarble = new Image("images/Marble/yellow marble.png");
 
 
     @FXML
     public void backHome(ActionEvent actionEvent) throws IOException {
-        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
+        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
 
         Scene homeScene = new Scene(marketViewParent);
 
