@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.board.personal.storage;
 
-import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
-import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import junit.framework.TestCase;
@@ -26,7 +23,7 @@ public class WarehouseDepotsTest extends TestCase {
 
         try {
             wd.moveToLevel(3,ResourceTypes.GOLD,2);
-        } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException e) {
+        } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException | ResourceTypeAlreadyPresentException e) {
             e.printStackTrace();
         }
 
@@ -61,6 +58,8 @@ public class WarehouseDepotsTest extends TestCase {
             assert true;
         } catch (LevelTooSmallException | NegativeResourceValueException e) {
             e.printStackTrace();
+        } catch (ResourceTypeAlreadyPresentException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -69,8 +68,9 @@ public class WarehouseDepotsTest extends TestCase {
             e.printStackTrace();
         } catch (LevelTooSmallException e) {
             assert true;
+        } catch (ResourceTypeAlreadyPresentException e) {
+            e.printStackTrace();
         }
-
 
 
         assert wd.getResources().equals(new Resources().set(ResourceTypes.GOLD,2).set(ResourceTypes.STONE,2));

@@ -108,7 +108,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(Integer.class)
                         );
-                    } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException | IndexOutOfBoundsException e) {
+                    } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException | IndexOutOfBoundsException | ResourceTypeAlreadyPresentException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
                     }
@@ -309,6 +309,8 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(e.getMessage());
                     } catch (LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
                         e.printStackTrace();
+                    } catch (ResourceTypeAlreadyPresentException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;
@@ -327,6 +329,8 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(e.getMessage());
                     } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
                         e.printStackTrace();
+                    } catch (ResourceTypeAlreadyPresentException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;
@@ -336,8 +340,12 @@ public class PlayerTurn implements Turn, Serializable {
                         ResourceTypes res1 = clientHandler.receiveObject(ResourceTypes.class);
                         ResourceTypes res2 = clientHandler.receiveObject(ResourceTypes.class);
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(res1, 1).add(new Resources().set(res2, 1)));
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1,res1,1);
-                        player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(2,res2,1);
+                        if(res1==res2){
+                            player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1, res2, 2);
+                        }else {
+                            player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(0, res1, 1);
+                            player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToLevel(1, res2, 1);
+                        }
                         player.getPersonalBoard().getFaithTrack().incrementPosition(1);
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
@@ -346,6 +354,8 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
                     } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
+                        e.printStackTrace();
+                    } catch (ResourceTypeAlreadyPresentException e) {
                         e.printStackTrace();
                     }
                 }

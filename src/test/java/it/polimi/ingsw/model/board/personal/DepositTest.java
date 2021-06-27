@@ -1,20 +1,16 @@
 package it.polimi.ingsw.model.board.personal;
 
-import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
-import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.Resources;
 import org.junit.Test;
 
-import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
-import static it.polimi.ingsw.model.resources.ResourceTypes.SHIELD;
+import static it.polimi.ingsw.model.resources.ResourceTypes.*;
 import static org.junit.Assert.*;
 
 public class DepositTest {
 
     @Test
-    public void removeResources() throws FaithNotAllowedException, LevelTooSmallException, NegativeResourceValueException, TypeNotChangeableException {
+    public void removeResources() throws FaithNotAllowedException, LevelTooSmallException, NegativeResourceValueException, TypeNotChangeableException, ResourceTypeAlreadyPresentException {
         Deposit d= new Deposit();
 
         d.getStrongBox().addResource(new Resources().set(SHIELD, 1));
@@ -28,7 +24,6 @@ public class DepositTest {
         }
 
         d.getWarehouseDepots().moveToLevel(2,SHIELD,3);
-        d.getWarehouseDepots().moveToLevel(0,SHIELD,1);
         d.getWarehouseDepots().moveToLevel(1,SERVANT,2);
 
         try {
@@ -38,7 +33,7 @@ public class DepositTest {
             assert false;
         }
 
-        assert d.getTotalResources().equals(new Resources().set(SHIELD,1));
+        assert d.getTotalResources().equals(new Resources());
 
         try {
             d.removeResources(new Resources().set(SHIELD,5).set(SERVANT,2));

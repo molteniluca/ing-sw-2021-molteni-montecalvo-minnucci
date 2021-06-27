@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.board.personal.storage;
 
-import it.polimi.ingsw.model.exceptions.FaithNotAllowedException;
-import it.polimi.ingsw.model.exceptions.LevelTooSmallException;
-import it.polimi.ingsw.model.exceptions.NegativeResourceValueException;
-import it.polimi.ingsw.model.exceptions.TypeNotChangeableException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 
@@ -62,8 +59,15 @@ public class WarehouseDepots implements Serializable {
      * @throws TypeNotChangeableException In case the level is a fixed type level
      * @throws LevelTooSmallException In case the level has no space left for this resources
      * @throws NegativeResourceValueException In case the requested resources are not in the swap area
+     * @throws ResourceTypeAlreadyPresentException In case there is already a level with this type
      */
-    public void moveToLevel(int level, ResourceTypes resourceTypes, int number) throws TypeNotChangeableException, LevelTooSmallException, NegativeResourceValueException {
+    public void moveToLevel(int level, ResourceTypes resourceTypes, int number) throws TypeNotChangeableException, LevelTooSmallException, NegativeResourceValueException, ResourceTypeAlreadyPresentException {
+        for (Level l: warehouseDepots) {
+            if(l.getResourceType()==resourceTypes && !l.isFixedResource() && !l.equals(warehouseDepots.get(level))){
+                throw new ResourceTypeAlreadyPresentException("Can't use a resource type on multiple levels");
+            }
+        }
+
         if(number>0) {
             Level l = warehouseDepots.get(level);
             l.addResources(number, resourceTypes);
