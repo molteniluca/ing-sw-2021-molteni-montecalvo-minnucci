@@ -54,6 +54,14 @@ public class CardBoard implements Serializable {
     }
 
     /**
+     * Method that returns all the development cards in a board
+     * @return The matrix containing all the development cards
+     */
+    public ArrayList<DevelopmentCard>[] getDevelopmentCardsMatrix(){
+        return productionCards;
+    }
+
+    /**
      * Method that gets the visible development cards
      * @return The array of size 3 of the visible cards
      */

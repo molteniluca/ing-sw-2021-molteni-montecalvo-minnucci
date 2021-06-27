@@ -20,6 +20,10 @@ public class ButtonBoardController extends GenericController{
 
     }
 
+    public void endTurn() throws IOException {
+        guiView.endTurn();
+    }
+
     public void openCardDealer(ActionEvent actionEvent) throws IOException {
         Parent cardDealerViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/CardDealer.fxml"));
 

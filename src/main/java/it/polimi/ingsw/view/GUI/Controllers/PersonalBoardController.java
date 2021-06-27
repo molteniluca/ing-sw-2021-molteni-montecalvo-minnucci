@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+
 public class PersonalBoardController extends GenericController{
     private int currentFaithPosition, currentLorenzoFaithPosition;
     private int slotPosition[] = new int[3];
@@ -36,7 +38,7 @@ public class PersonalBoardController extends GenericController{
     @FXML
     ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3;
 
-    ImageView[] slot1, slot2, slot3;
+    ImageView[][] slots;
 
     @FXML
     void updateFaithTrack(){
@@ -93,26 +95,25 @@ public class PersonalBoardController extends GenericController{
 
     @FXML
     void updateProductionCards(){
-        DevelopmentCard[] developmentCard = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
+        ArrayList<DevelopmentCard>[] developmentCard = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getCardBoard().getDevelopmentCardsMatrix();
 
-        for (int i = 0; i < 3; i++) {
-            if (developmentCard[i] != null) {
-                //updateSlotImage(i, );
+        for(int k=0;k<3;k++){
+            for (int i = 0; i < 3; i++) {
+                if (developmentCard[i].size() > k) {
+                    updateSlotImage(k,i, developmentCard[i].get(k));
+                }
             }
         }
-
     }
 
-    /*private void updateSlotImage(int slot){
+    private void updateSlotImage(int level,int slot, DevelopmentCard developmentCard){
         //FIXME !!!!
-        if(slot1[slot].getImage()==null) {
-            String nameImage = developmentCard[slot].getImage();
-            slot1[slot1position].setImage(new Image(nameImage));
+        if(slots[level][slot].getImage()==null) {
+            String nameImage = developmentCard.getImage();
+            slots[level][slot].setImage(new Image("images/Cards/DevelopmentCards/" +nameImage+"-1.png"));
             slotPosition[slot]++;
         }
     }
-
-     */
 
     void updatePersonalBoard(){
         updateFaithTrack();
@@ -129,9 +130,7 @@ public class PersonalBoardController extends GenericController{
         faithLorenzoImagePosition = new ImageView[]{ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24};
         level2Image = new ImageView[]{lev2_1, lev2_2};
         level3Image = new ImageView[]{lev3_1, lev3_2, lev3_3};
-        slot1 = new ImageView[]{slot1_1, slot1_2, slot1_3};
-        slot2 = new ImageView[]{slot2_1, slot2_2, slot2_3};
-        slot3 = new ImageView[]{slot3_1, slot3_2, slot3_3};
+        slots = new ImageView[][]{{slot1_1, slot1_2, slot1_3},{slot2_1, slot2_2, slot2_3},{slot3_1, slot3_2, slot3_3}};
 
 
         updatePersonalBoard();

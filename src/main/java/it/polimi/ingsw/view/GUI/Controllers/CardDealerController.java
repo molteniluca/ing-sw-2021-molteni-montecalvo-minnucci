@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,8 @@ public class CardDealerController extends GenericController{
     boolean[][] isProdCardSelected = new boolean[3][4];
     boolean confirm;
     int counter, numberOfSelectedCards;
+    int row;
+    int column;
 
     @FXML
     ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
@@ -32,6 +35,9 @@ public class CardDealerController extends GenericController{
 
     @FXML
     Button bGameBoard, bConfirm;
+
+    @FXML // fx:id="comboBox"
+    private ComboBox<Integer> comboBox;
 
     @FXML
     Label lWrongSelection;
@@ -51,6 +57,7 @@ public class CardDealerController extends GenericController{
             }
         }
         setColumnRowIndexes();
+        comboBox.getItems().addAll(1,2,3);
     }
 
     private void setColumnRowIndexes(){
@@ -94,8 +101,8 @@ public class CardDealerController extends GenericController{
     }
 
     public void buyProductionCard(MouseEvent event) {
-        int column = GridPane.getColumnIndex((Node) event.getSource());
-        int row = GridPane.getRowIndex((Node) event.getSource());
+        column = GridPane.getColumnIndex((Node) event.getSource());
+        row = GridPane.getRowIndex((Node) event.getSource());
         isProdCardSelected[row][column] = selectProductionCard(ipc[row][column], isProdCardSelected[row][column]);
     }
 
@@ -117,13 +124,14 @@ public class CardDealerController extends GenericController{
         return isProdCardSelected;
     }
 
-    public void confirmCard(ActionEvent actionEvent) {
+    public void confirmCard(ActionEvent actionEvent) throws IOException {
         if (numberOfSelectedCards == 1){
+            guiView.marketBuyCard(row,column,comboBox.getValue()-1);
             //if server sends success (enough res to buy card) or no one card is selected
-            if (true) //FIXME when server messages work
+            if (guiView.isSuccessReceived()) //FIXME when server messages work
                 confirm = true;
             else {
-                lWrongSelection.setText("Not enough resources, select another one or no one to come back");
+                lWrongSelection.setText(guiView.waitAndGetResponse().toString());
             }
         }
         else if (numberOfSelectedCards > 1){
