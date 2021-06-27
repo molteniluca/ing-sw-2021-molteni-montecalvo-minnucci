@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,6 +17,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 public class AskCreateOrJoinController extends GenericController {
     @FXML // fx:id="serverAddressText"
@@ -34,18 +39,42 @@ public class AskCreateOrJoinController extends GenericController {
     @FXML // fx:id="comboBox"
     private ComboBox<Integer> comboBox; // Value injected by FXMLLoader
 
-
+    @FXML // fx:id="serverResponse"
+    private Text serverResponse; // Value injected by FXMLLoader
 
     @FXML
     public void joinGame(ActionEvent actionEvent) throws IOException {
         connectToServer();
 
         guiView.joinGame(gameId.getText());
-        guiView.sendNickname(nameJoin.getText());
-        guiView.waitForUpdatedGame();
+        waitForPlayers(nameJoin.getText(), actionEvent);
 
         loadGame(actionEvent);
     }
+
+    private void waitForPlayers(String name, ActionEvent event){
+        Task task = new Task<Void>() {
+            @Override public Void call() {
+                try {
+                    guiView.sendNickname(name);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                guiView.waitForUpdatedGame();
+                Platform.runLater(() -> {
+                    try {
+                        loadGame(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(task).start();
+    }
+
 
     @FXML
     void createGame(ActionEvent event) throws IOException
@@ -53,11 +82,11 @@ public class AskCreateOrJoinController extends GenericController {
         connectToServer();
 
         guiView.createGame(comboBox.getValue());
-        guiView.sendNickname(nameCreate.getText());
-
-        guiView.waitForUpdatedGame();
-
-        loadGame(event);
+        if(guiView.waitAndGetResponse()==SUCCESS) {
+            serverResponse.setText("Game id=" + guiView.waitAndGetResponse());
+            waitForPlayers(nameCreate.getText(),event);
+        }else
+            serverResponse.setText("Error");
     }
 
     private void loadGame(ActionEvent event) throws IOException {

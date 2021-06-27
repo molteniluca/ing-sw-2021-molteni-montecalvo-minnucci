@@ -34,7 +34,7 @@ public abstract class View extends Thread {
                 if (o == SUCCESS)
                     gameUpdated = false;
             messages.add(o);
-            this.notify();
+            this.notifyAll();
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class View extends Thread {
      *
      * @return the message or the object received
      */
-    protected Object waitAndGetResponse() {
+    public Object waitAndGetResponse() {
         synchronized (this) {
             while (messages.size() == 0) {
                 try {

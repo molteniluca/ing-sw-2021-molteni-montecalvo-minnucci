@@ -103,6 +103,11 @@
             </RadialGradient>
          </fill>
       </Text>
+      <Text fx:id="serverResponse" layoutX="56.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1319.0">
+         <font>
+            <Font size="300.0" />
+         </font>
+      </Text>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />
