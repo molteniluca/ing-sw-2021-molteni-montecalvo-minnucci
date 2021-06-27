@@ -37,6 +37,7 @@ public class AskCreateOrJoinController extends GenericController {
     private ComboBox<Integer> comboBox; // Value injected by FXMLLoader
 
 
+
     @FXML
     public void joinGame(ActionEvent actionEvent) throws IOException {
         connectToServer();
