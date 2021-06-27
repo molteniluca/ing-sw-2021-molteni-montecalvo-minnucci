@@ -21,7 +21,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="bMarket" alignment="CENTER" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Buy Resources" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button fx:id="bMarket" alignment="CENTER" mnemonicParsing="false" onAction="#openMarket" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Buy Resources" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>

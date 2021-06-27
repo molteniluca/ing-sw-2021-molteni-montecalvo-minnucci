@@ -14,9 +14,7 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class InitialLeaderSelectionController {
-
-    GUIView guiView;
+public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
     private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
 
@@ -34,7 +32,6 @@ public class InitialLeaderSelectionController {
 
     @FXML
     void initialize(){
-        guiView = GUIView.singleton();
         leadersImage = new ImageView[]{leader1, leader2, leader3, leader4};
         ArrayList<LeaderCard> leaderCards = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
         for (LeaderCard leaders: leaderCards) {

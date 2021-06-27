@@ -37,10 +37,6 @@ import static it.polimi.ingsw.network.NetworkMessages.*;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 
 public class GUI {
-
-    protected static Game game;
-    protected static int playerNumber;
-    protected static NetworkHandler networkHandler;
     private GUIView guiView;
 
     @FXML // fx:id="title"
@@ -115,8 +111,11 @@ public class GUI {
     @FXML
     void saveInformation() throws IOException {
         guiView = GUIView.singleton();
-        guiView.initializeView();
-        GUIView.singleton().game.getPlayerTurn(playerNumber);
+
+        guiView.startConnection("127.0.0.1",10000);
+        guiView.createGame(1);
+        guiView.sendNikname("IO");
+
         /*
         String currentString;
         String serverAddress = "localhost";
@@ -220,12 +219,6 @@ public class GUI {
         Platform.exit();
         System.exit(0);
     }
-
-    public Game getGame()
-    {
-        return game;
-    }
-
 
     @FXML
     void initialize() {

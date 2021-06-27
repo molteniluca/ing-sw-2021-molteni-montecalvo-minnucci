@@ -19,12 +19,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Stack;
 
-public class CardDealerController {
+public class CardDealerController extends GenericController{
 
     boolean[][] isProdCardSelected = new boolean[3][4];
     boolean confirm;
     int counter, numberOfSelectedCards;
-    GUIView guiView;
 
     @FXML
     ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
@@ -42,7 +41,6 @@ public class CardDealerController {
 
     @FXML
     void initialize() {
-        guiView = GUIView.singleton();
         ipc = new ImageView[][]{{ipc1_1, ipc1_2, ipc1_3, ipc1_4},{ ipc2_1, ipc2_2, ipc2_3, ipc2_4},{ ipc3_1, ipc3_2, ipc3_3, ipc3_4}};
         counter = 0;
 

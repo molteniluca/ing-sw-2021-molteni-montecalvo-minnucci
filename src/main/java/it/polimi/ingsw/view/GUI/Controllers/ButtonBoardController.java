@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ButtonBoardController {
+public class ButtonBoardController extends GenericController{
     @FXML
     Button bMarket, bCardDealer, bProduce, bLeaders, bOtherPlayers, bEndTurn;
 
@@ -28,6 +28,18 @@ public class ButtonBoardController {
         Stage cardDealerStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
         cardDealerStage.setTitle("Game Board");
+        cardDealerStage.setScene(cardDealerScene);
+        cardDealerStage.show();
+    }
+
+    public void openMarket(ActionEvent actionEvent) throws IOException {
+        Parent cardDealerViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
+
+        Scene cardDealerScene = new Scene(cardDealerViewParent);
+
+        Stage cardDealerStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        cardDealerStage.setTitle("Market");
         cardDealerStage.setScene(cardDealerScene);
         cardDealerStage.show();
     }

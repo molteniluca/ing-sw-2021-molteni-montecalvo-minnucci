@@ -1,7 +1,3 @@
-/**
- * Sample Skeleton for 'Market.fxml' Controller Class
- */
-
 package it.polimi.ingsw.view.GUI.Controllers;
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +6,7 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.GUIView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,8 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 
-public class MarketController extends GUI implements Initializable {
-
+public class MarketController extends GenericController implements Initializable {
 
     @FXML // fx:id="backHomeButton"
     private Button backHomeButton; // Value injected by FXMLLoader
@@ -48,11 +44,11 @@ public class MarketController extends GUI implements Initializable {
 
     //initializes the images of the marbles
     private Image blueMarble = new Image("images/Marble/blue marble.png");
-    private Image grayMarble = new Image("images/Marble/gray Marble.png");
-    private Image purpleMarble = new Image("images/Marble/purple Marble.png");
-    private Image redMarble = new Image("images/Marble/red Marble.png");
-    private Image whiteMarble = new Image("images/Marble/white Marble.png");
-    private Image yellowMarble = new Image("images/Marble/yellow Marble.png");
+    private Image grayMarble = new Image("images/Marble/gray marble.png");
+    private Image purpleMarble = new Image("images/Marble/purple marble.png");
+    private Image redMarble = new Image("images/Marble/red marble.png");
+    private Image whiteMarble = new Image("images/Marble/white marble.png");
+    private Image yellowMarble = new Image("images/Marble/yellow marble.png");
 
 
     @FXML
@@ -117,7 +113,7 @@ public class MarketController extends GUI implements Initializable {
 
 */
     private void updateMarketMatrix() {
-        Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
         ResourceTypes[][] marketMatrix = market.getMarketMatrix();
 
         //access to the gridPane in the scene
@@ -164,23 +160,16 @@ public class MarketController extends GUI implements Initializable {
         return whiteMarble;
     }
 
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
-        System.out.println(playerNumber);
+        System.out.println(guiView.playerNumber);
 
 
         Platform.runLater(() -> {
-            Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+            Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
             ResourceTypes[][] marketMatrix = market.getMarketMatrix();
 
             //access to the gridPane in the scene

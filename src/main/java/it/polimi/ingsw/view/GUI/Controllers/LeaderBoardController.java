@@ -8,15 +8,13 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
-public class LeaderBoardController {
-    GUIView guiView;
+public class LeaderBoardController extends GenericController{
 
     @FXML
     ImageView ilh1, ilh2, ila1, ila2;
 
     @FXML
     void initialize(){
-        guiView = GUIView.singleton();
         ArrayList<LeaderCard> leaders = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
         leaderToImageName(leaders.get(0), ilh1);
         leaderToImageName(leaders.get(1), ilh2);
