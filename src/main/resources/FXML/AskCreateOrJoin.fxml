@@ -51,7 +51,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="showLeaderSelectionButton1" layoutX="50.0" layoutY="108.0" mnemonicParsing="false" onAction="#createGame" prefHeight="47.0" prefWidth="138.0" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Join" wrapText="true" />
+                              <Button fx:id="showLeaderSelectionButton1" layoutX="50.0" layoutY="108.0" mnemonicParsing="false" onAction="#joinGame" prefHeight="47.0" prefWidth="138.0" styleClass="button-shiny-orange" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Join" wrapText="true" />
                               <TextField fx:id="gameId" layoutX="34.0" layoutY="24.0" />
                               <TextField fx:id="nameJoin" layoutX="34.0" layoutY="73.0" />
                               <Text layoutX="36.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game ID" />

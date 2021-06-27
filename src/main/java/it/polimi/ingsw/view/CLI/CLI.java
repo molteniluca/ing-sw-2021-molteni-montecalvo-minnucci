@@ -48,7 +48,6 @@ public class CLI extends View{
         waitForUpdatedGame();
 
         //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
-        playerNumber = (int) waitAndGetResponse();
 
         //Asks to the player the resources it wants depending on playerNumber
         selectInitialResources();

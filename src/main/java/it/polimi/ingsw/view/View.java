@@ -190,6 +190,7 @@ public abstract class View extends Thread {
 
     public void sendNickname(String nickname) throws IOException {
         networkHandler.sendObject(nickname);
+        playerNumber = (int) waitAndGetResponse();
     }
 
     public void startConnection(String serverAddress, int serverPort) throws IOException {
