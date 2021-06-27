@@ -1,5 +1,4 @@
 package it.polimi.ingsw.view.GUI.Controllers;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -13,6 +12,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 
@@ -40,18 +40,15 @@ public class MarketController extends GenericController implements Initializable
     private ImageView ig0_0,ig0_1, ig0_2, ig0_3, ig1_0, ig1_1, ig1_2, ig1_3, ig2_0, ig2_1, ig2_2, ig2_3;
 
     @FXML
+    private ImageView iav1, iav2, iav3, iav4, iah1, iah2, iah3; //i= image, a= arrow, v= vertical, h= horizontal
+    private ImageView[] arrows;
+
+    @FXML
     private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
 
     private RadioButton[] radioButtons;
-/*
-    //initializes the images of the marbles
-    private final Image blueMarble = new Image("images/Marble/blue marble.png");
-    private final Image grayMarble = new Image("images/Marble/gray marble.png");
-    private final Image purpleMarble = new Image("images/Marble/purple marble.png");
-    private final Image redMarble = new Image("images/Marble/red marble.png");
-    private final Image whiteMarble = new Image("images/Marble/white marble.png");
-    private final Image yellowMarble = new Image("images/Marble/yellow marble.png");
- */
+
+    int column = -1, row = -1;
 
 
     @Override
@@ -67,6 +64,8 @@ public class MarketController extends GenericController implements Initializable
         for (int i = 0; i < 6; i++) {
             radioButtons[i].setToggleGroup(toggleGroup);
         }
+
+        arrows = new ImageView[]{iav1, iav2, iav3, iav4, iah1, iah2, iah3};
 
         Platform.runLater(() -> {
             updateMarketMatrix();
@@ -118,6 +117,35 @@ public class MarketController extends GenericController implements Initializable
                 return imageName + "red marble.png";
         }
         return imageName + "white marble.png";
+    }
+
+    public void chooseRowColumn(MouseEvent mouseEvent) {
+        String tempString = mouseEvent.getPickResult().getIntersectedNode().getId();
+        ImageView tempImageView = stringIdToImageView(tempString);
+        if (tempImageView.getOpacity()!=1) {
+            tempImageView.setOpacity(1);
+            if (tempImageView.getId().charAt(2) == 'h')
+                row = (int) tempImageView.getId().charAt(3) - 49;
+            else
+                column = (int) tempImageView.getId().charAt(3) -49;
+        }
+        else {
+            tempImageView.setOpacity(0);
+            if (tempImageView.getId().charAt(2) == 'h')
+                row = -1;
+            else
+                column = -1;
+        }
+        //TODO Francesco, why columns don't change their layout?
+    }
+
+    private ImageView stringIdToImageView(String string){
+        ImageView image = null;
+        for (ImageView iArrows: arrows) {
+            if (iArrows.getId().equals(string))
+                image = iArrows;
+        }
+        return image;
     }
 }
 

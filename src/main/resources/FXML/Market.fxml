@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.Image?>
@@ -16,8 +17,11 @@
          <image>
             <Image url="@../images/marketBoard.png" />
          </image>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
       </ImageView>
-      <GridPane fx:id="marketGrid" layoutX="198.0" layoutY="286.0" prefHeight="117.0" prefWidth="169.0" AnchorPane.leftAnchor="198.0">
+      <GridPane fx:id="marketGrid" layoutX="205.0" layoutY="290.0" prefHeight="113.0" prefWidth="162.0" AnchorPane.leftAnchor="205.0" AnchorPane.rightAnchor="198.0" AnchorPane.topAnchor="290.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
@@ -44,7 +48,7 @@
             <ImageView fx:id="ig2_3" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <ImageView fx:id="externalResource" fitHeight="35.0" fitWidth="35.0" layoutX="359.0" layoutY="242.0" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="245.0" />
+      <ImageView fx:id="externalResource" fitHeight="35.0" fitWidth="35.0" layoutX="359.0" layoutY="242.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="243.0" />
       <VBox layoutX="14.0" layoutY="14.0" prefHeight="56.0" prefWidth="98.0">
          <children>
             <RadioButton fx:id="rb1_1" mnemonicParsing="false" text="Level 1" />
@@ -61,6 +65,62 @@
             <RadioButton fx:id="rb2_3" mnemonicParsing="false" text="Level 3" />
          </children>
       </VBox>
+      <ImageView fx:id="iav1" fitHeight="61.0" fitWidth="29.0" layoutX="216.0" layoutY="439.0" onMouseClicked="#chooseRowColumn" pickOnBounds="true" visible="false">
+         <image>
+            <Image url="@../images/yellowArrowVertical.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iav3" fitHeight="58.0" fitWidth="27.0" layoutX="294.0" layoutY="442.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowVertical.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iav4" fitHeight="59.0" fitWidth="27.0" layoutX="332.0" layoutY="442.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowVertical.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iah1" fitHeight="29.0" fitWidth="44.0" layoutX="406.0" layoutY="288.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowHorizontal.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iah2" fitHeight="31.0" fitWidth="45.0" layoutX="406.0" layoutY="325.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowHorizontal.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iah3" fitHeight="31.0" fitWidth="44.0" layoutX="406.0" layoutY="364.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowHorizontal.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="iav2" fitHeight="61.0" fitWidth="29.0" layoutX="255.0" layoutY="440.0" onMouseClicked="#chooseRowColumn" opacity="0.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/yellowArrowVertical.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
 
    </children>
 </AnchorPane>
