@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI.Controllers;
+package it.polimi.ingsw.view.GUI.Controllers.Board;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import it.polimi.ingsw.view.CLI.ColoredResources;
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,9 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
-import static it.polimi.ingsw.network.NetworkMessages.ERROR;
-import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 
 public class MarketController extends GenericController implements Initializable {
@@ -361,6 +358,11 @@ public class MarketController extends GenericController implements Initializable
     public void placeResources(ActionEvent actionEvent) {
         //TODO update warehouse in PersonalBoard
 
+    }
+
+    @Override
+    public void update() {
+        updateMarketMatrix();
     }
 }
 

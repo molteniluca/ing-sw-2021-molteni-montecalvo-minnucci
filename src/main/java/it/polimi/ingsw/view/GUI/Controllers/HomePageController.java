@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;

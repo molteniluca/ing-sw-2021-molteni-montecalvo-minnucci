@@ -1,7 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.NetworkMessages;
-import it.polimi.ingsw.view.GUI.Controllers.GameBoardController;
+import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import it.polimi.ingsw.view.View;
 
 import static it.polimi.ingsw.network.NetworkMessages.TURNBEGIN;
@@ -91,5 +92,12 @@ public class GUIView extends View {
             return waitAndGetResponse();
         else
             return ret;
+    }
+
+    @Override
+    public void notifyNewUpdate(ObjectUpdate read) {
+        super.notifyNewUpdate(read);
+        if(gameBoardController!=null)
+            gameBoardController.notifyUpdate();
     }
 }

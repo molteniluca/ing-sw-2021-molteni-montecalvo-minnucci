@@ -1,9 +1,10 @@
-package it.polimi.ingsw.view.GUI.Controllers;
+package it.polimi.ingsw.view.GUI.Controllers.Board;
 
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,7 +13,7 @@ import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 
-public class PersonalBoardController extends GenericController{
+public class PersonalBoardController extends GenericController {
     private int currentFaithPosition, currentLorenzoFaithPosition;
     private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
@@ -145,5 +146,10 @@ public class PersonalBoardController extends GenericController{
 
     public void hideStrongBox() {
         strongBoxGrid.setOpacity(0);
+    }
+
+    @Override
+    public void update() {
+        updatePersonalBoard();
     }
 }
