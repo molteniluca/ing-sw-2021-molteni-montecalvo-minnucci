@@ -14,6 +14,8 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.network.NetworkMessages.GAMESTARTED;
+
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
     private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
@@ -103,7 +105,6 @@ public class InitialLeaderSelectionController extends GenericController{
 
     public void confirmLeaders(ActionEvent actionEvent) throws IOException {
         if(numberOfSelectedLeader==2) {
-            //TODO send leaders to server
             Integer[] numberOfLeaderToSend = new Integer[2];
             boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
             int k = 0;
@@ -114,10 +115,13 @@ public class InitialLeaderSelectionController extends GenericController{
                 }
             }
             guiView.chooseLeader(numberOfLeaderToSend);
-            guiView.waitForUpdatedGame();
+            if(guiView.isSuccessReceived()) {
+                if(guiView.waitAndGetResponse()==GAMESTARTED) {
+                    guiView.waitForUpdatedGame();
+                    CardDealerController.goToGameBoard(actionEvent); //open gameBoard
+                }
+            }//FIXME else
 
-            //open gameBoard
-            CardDealerController.goToGameBoard(actionEvent);
         }
         else {
             lWrongNumberOfLeaders.setOpacity(1);
@@ -148,7 +152,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 {
                     e.printStackTrace();
                 }
-
+                guiView.waitAndGetResponse(); //FIXME
                 break;
 
             case 3:
@@ -169,6 +173,7 @@ public class InitialLeaderSelectionController extends GenericController{
                     gChooseResource.setDisable(true);
                 }
 
+                guiView.waitAndGetResponse(); //FIXME
                 break;
         }
     }

@@ -50,8 +50,6 @@ public abstract class View {
      */
     public synchronized void updateObjects(Game game) {
         this.game = game;
-        //notify(); wakes up the thread that was waiting for the game
-        //gameUpdated = true;
     }
 
     /**
@@ -211,4 +209,8 @@ public abstract class View {
     public void endTurn() throws IOException {
         networkHandler.sendObject(TURNEND);
     }
+
+    public abstract void notifyTurnStarted();
+
+    public abstract void notifyTurnEnded();
 }

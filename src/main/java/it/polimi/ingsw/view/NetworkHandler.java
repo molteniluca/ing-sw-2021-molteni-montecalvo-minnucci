@@ -56,6 +56,14 @@ public class NetworkHandler extends Thread{
                             read=null;
                             view.notifyEndGame(false);
                             continue;
+                        case TURNBEGIN:
+                            read=null;
+                            view.notifyTurnStarted();
+                            continue;
+                        case TURNEND:
+                            read=null;
+                            view.notifyTurnEnded();
+                            continue;
                     }
                 }
                 if(read.getClass() == Game.class) {

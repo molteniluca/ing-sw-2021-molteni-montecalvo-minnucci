@@ -128,7 +128,7 @@ public class CardDealerController extends GenericController{
         if (numberOfSelectedCards == 1){
             guiView.marketBuyCard(row,column,comboBox.getValue()-1);
             //if server sends success (enough res to buy card) or no one card is selected
-            if (guiView.isSuccessReceived()) //FIXME when server messages work
+            if (guiView.isSuccessReceived())
                 confirm = true;
             else {
                 lWrongSelection.setText(guiView.waitAndGetResponse().toString());

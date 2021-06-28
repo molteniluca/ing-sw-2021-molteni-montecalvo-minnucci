@@ -1277,6 +1277,16 @@ public class CLI extends View implements Runnable{
         }
     }
 
+    @Override
+    public void notifyTurnStarted() {
+
+    }
+
+    @Override
+    public void notifyTurnEnded() {
+
+    }
+
 
     /**
      * Depending on the number of the player allows the user to
