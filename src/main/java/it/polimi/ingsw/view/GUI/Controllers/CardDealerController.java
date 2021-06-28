@@ -1,13 +1,15 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.view.GUI.GUIView;
+import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -80,25 +82,7 @@ public class CardDealerController extends GenericController{
     }
 
     public void openGameBoard(ActionEvent actionEvent) throws IOException {
-        if (numberOfSelectedCards == 0 || confirm) {
-            goToGameBoard(actionEvent);
-        }
-        else {
-            //write "you can only take 1 card"
-            lWrongSelection.setText("You need to press confirm or select no one card");
-        }
-    }
-
-    protected static void goToGameBoard(ActionEvent actionEvent) throws IOException {
-        Parent GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
-
-        Scene GameBoardScene = new Scene(GameBoardViewParent);
-
-        Stage GameBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
-        GameBoardStage.setTitle("Game Board");
-        GameBoardStage.setScene(GameBoardScene);
-        GameBoardStage.show();
+        GameBoardController.goToGameBoard(actionEvent);
     }
 
     public void buyProductionCard(MouseEvent event) {
@@ -109,15 +93,13 @@ public class CardDealerController extends GenericController{
 
     private boolean selectProductionCard(ImageView ipc, boolean isProdCardSelected){
         if(!isProdCardSelected) {
-            //change layout to selected layout
-
+            //change layout to selected layout TODO
 
             isProdCardSelected = true;
             numberOfSelectedCards++;
         }
         else{
-            //change layout to unselected/normal layout
-
+            //change layout to unselected/normal layout TODO
 
             isProdCardSelected = false;
             numberOfSelectedCards--;
@@ -128,16 +110,23 @@ public class CardDealerController extends GenericController{
     public void confirmCard(ActionEvent actionEvent) throws IOException {
         if (numberOfSelectedCards == 1){
             guiView.marketBuyCard(row,column,comboBox.getValue()-1);
-            //if server sends success (enough res to buy card) or no one card is selected
             if (guiView.isSuccessReceived()) {
-                goToGameBoard(actionEvent);
-            }
-            else {
-                lWrongSelection.setText(guiView.lastErrorMessage);
+                GameBoardController.goToGameBoard(actionEvent);
             }
         }
         else if (numberOfSelectedCards > 1){
-            lWrongSelection.setText("You can buy only one card per turn");
+            showError("You can buy only one card per turn");
         }
+    }
+
+    public void showError(String error) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(error);
+            alert.setContentText("Retry");
+
+            alert.showAndWait();
+        });
     }
 }

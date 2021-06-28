@@ -25,7 +25,7 @@ public class ButtonBoardController extends GenericController {
 
     public void endTurn() throws IOException {
         guiView.endTurn();
-        if(guiView.waitAndGetResponse()==SUCCESS && guiView.game.getNumPlayers()!=1){
+        if(guiView.isSuccessReceived() && guiView.game.getNumPlayers()!=1){
             guiView.notifyTurnEnded();
         }
     }

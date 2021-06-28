@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
-
 public class AskCreateOrJoinController extends GenericController {
     @FXML
     public ProgressIndicator loadAnimation;
@@ -127,14 +125,9 @@ public class AskCreateOrJoinController extends GenericController {
             loadAnimation.setDisable(false);
             loadAnimation.setVisible(true);
             connectToServer();
-            guiView.createGame(comboBox.getValue());
+            serverResponse.setText("Game id=" + guiView.createGameAndGetId(comboBox.getValue()));
             serverResponse.setOpacity(1);
-
-            if(guiView.waitAndGetResponse()==SUCCESS) {
-                serverResponse.setText("Game id = " + guiView.waitAndGetResponse());
-                waitForPlayers(nameCreate.getText(),event);
-            }else
-                serverResponse.setText("Error");
+            waitForPlayers(nameCreate.getText(),event);
         } catch (IOException e) {
             Platform.runLater(() -> {
                 loadAnimation.setDisable(true);

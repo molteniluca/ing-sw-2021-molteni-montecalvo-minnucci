@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
-import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -8,15 +7,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -24,8 +18,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HomePageController extends GenericController {
     @FXML // fx:id="title"
@@ -67,9 +59,6 @@ public class HomePageController extends GenericController {
             backgroundImage.setFitWidth(1510);
             backgroundImage.setFitHeight(910);
         }
-
-
-
 
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(10), backgroundImage);
 

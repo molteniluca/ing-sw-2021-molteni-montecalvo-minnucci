@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,11 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static it.polimi.ingsw.network.NetworkMessages.GAMESTARTED;
 
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
@@ -114,13 +112,11 @@ public class InitialLeaderSelectionController extends GenericController{
                     k++;
                 }
             }
-            guiView.chooseLeader(numberOfLeaderToSend);
-            if(guiView.isSuccessReceived()) {
-                if(guiView.waitAndGetResponse()==GAMESTARTED) {
-                    guiView.waitForUpdatedGame();
-                    CardDealerController.goToGameBoard(actionEvent); //open gameBoard
-                }
-            }//FIXME else
+
+            if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
+                guiView.waitForUpdatedGame();
+                GameBoardController.goToGameBoard(actionEvent); //open gameBoard
+            }
 
         }
         else {
@@ -152,7 +148,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 {
                     e.printStackTrace();
                 }
-                guiView.waitAndGetResponse(); //FIXME
+                guiView.isSuccessReceived();
                 break;
 
             case 3:
@@ -173,7 +169,7 @@ public class InitialLeaderSelectionController extends GenericController{
                     gChooseResource.setDisable(true);
                 }
 
-                guiView.waitAndGetResponse(); //FIXME
+                guiView.isSuccessReceived();
                 break;
         }
     }

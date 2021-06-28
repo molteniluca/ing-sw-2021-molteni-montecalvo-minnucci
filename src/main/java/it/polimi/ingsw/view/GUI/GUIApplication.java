@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,26 +24,6 @@ public class GUIApplication extends Application {
         Parent root = fxmlLoader.load();
 
         Scene scene = new Scene(root);
-
-        /*
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        System.out.println(Screen.getScreens().size());
-        System.out.println(screenBounds);
-        System.exit(0);
-        primaryStage.setMaxWidth(screenBounds.getMaxX());
-        primaryStage.setMaxHeight(screenBounds.getMaxY());
-         */
-
-
-
-        //primaryStage.setX(screenBounds.getWidth());
-
-        //primaryStage.setMaximized(true);
-        //primaryStage.setFullScreen(true);
-        //primaryStage.sizeToScene();
-        //cambio del tasto e del testo  per uscire dallo schermo intero
-        //primaryStage.setFullScreenExitHint("Press q to exit");
-        //primaryStage.setFullScreenExitKeyCombination(KeyCombination.valueOf("q"));
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Masters Of Renaissance");
