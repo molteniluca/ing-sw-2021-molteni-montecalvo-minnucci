@@ -109,7 +109,10 @@ public class PlayerTurn implements Turn, Serializable {
                         );
                     } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException | IndexOutOfBoundsException | ResourceTypeAlreadyPresentException e) {
                         clientHandler.sendObject(ERROR);
-                        clientHandler.sendObject(e.getMessage());
+                        if(e.getMessage()==null)
+                            clientHandler.sendObject("Index not valid!");
+                        else
+                            clientHandler.sendObject(e.getMessage());
                     }
                     break;
                 case MOVETOSWAP:
@@ -117,7 +120,10 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(Integer.class));
                     } catch (IndexOutOfBoundsException e){
                         clientHandler.sendObject(ERROR);
-                        clientHandler.sendObject(e.getMessage());
+                        if(e.getMessage()==null)
+                            clientHandler.sendObject("Index not valid!");
+                        else
+                            clientHandler.sendObject(e.getMessage());
                     }
                     break;
                 case DROPRESOURCES:
@@ -142,7 +148,10 @@ public class PlayerTurn implements Turn, Serializable {
             return true;
         }catch (IndexOutOfBoundsException e){
             clientHandler.sendObject(ERROR);
-            clientHandler.sendObject(e.getMessage());
+            if(e.getMessage()==null)
+                clientHandler.sendObject("Index not valid!");
+            else
+                clientHandler.sendObject(e.getMessage());
             return false;
         }
     }
@@ -189,7 +198,10 @@ public class PlayerTurn implements Turn, Serializable {
                         error = false;
                     } catch (NegativeResourceValueException | FaithOverflowException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
-                        clientHandler.sendObject(e.getMessage());
+                        if(e.getMessage()==null)
+                            clientHandler.sendObject("Index not valid!");
+                        else
+                            clientHandler.sendObject(e.getMessage());
                     }
                     break;
                 case PROD2:
@@ -200,7 +212,10 @@ public class PlayerTurn implements Turn, Serializable {
                         error = false;
                     } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | IndexOutOfBoundsException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
-                        clientHandler.sendObject(e.getMessage());
+                        if(e.getMessage()==null)
+                            clientHandler.sendObject("Index not valid!");
+                        else
+                            clientHandler.sendObject(e.getMessage());
                     }
                     break;
                 case PROD3:
@@ -213,7 +228,10 @@ public class PlayerTurn implements Turn, Serializable {
                         error = false;
                     } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException | NullPointerException e) {
                         clientHandler.sendObject(ERROR);
-                        clientHandler.sendObject(e.getMessage());
+                        if(e.getMessage()==null)
+                            clientHandler.sendObject("Index not valid!");
+                        else
+                            clientHandler.sendObject(e.getMessage());
                     }
                     break;
                 case ENDPRODUCTION:
@@ -243,7 +261,10 @@ public class PlayerTurn implements Turn, Serializable {
             return false;
         } catch (IndexOutOfBoundsException | YouMustPlayLeaderException e) {
             clientHandler.sendObject(ERROR);
-            clientHandler.sendObject(e.getMessage());
+            if(e.getMessage()==null)
+                clientHandler.sendObject("Index not valid!");
+            else
+                clientHandler.sendObject(e.getMessage());
             return true;
         }
     }
@@ -262,7 +283,10 @@ public class PlayerTurn implements Turn, Serializable {
             return false;
         } catch (IndexOutOfBoundsException e) {
             clientHandler.sendObject(ERROR);
-            clientHandler.sendObject(e.getMessage());
+            if(e.getMessage()==null)
+                clientHandler.sendObject("Index not valid!");
+            else
+                clientHandler.sendObject(e.getMessage());
             return true;
         }
     }
@@ -281,7 +305,10 @@ public class PlayerTurn implements Turn, Serializable {
             return false;
         } catch (IncompatibleCardLevelException | NegativeResourceValueException | IndexOutOfBoundsException | EmptyStackException e) {
             clientHandler.sendObject(ERROR);
-            clientHandler.sendObject(e.getMessage());
+            if(e.getMessage()==null)
+                clientHandler.sendObject("Index not valid!");
+            else
+                clientHandler.sendObject(e.getMessage());
             return true;
         }
     }
@@ -369,7 +396,10 @@ public class PlayerTurn implements Turn, Serializable {
             clientHandler.sendGame(playerNum);
         }catch (IndexOutOfBoundsException e){
             clientHandler.sendObject(ERROR);
-            clientHandler.sendObject(e.getMessage());
+            if(e.getMessage()==null)
+                clientHandler.sendObject("Index not valid!");
+            else
+                clientHandler.sendObject(e.getMessage());
         }
 
         clientHandler.sendObject(GAMESTARTED);

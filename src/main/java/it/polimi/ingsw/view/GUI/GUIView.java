@@ -4,6 +4,9 @@ import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.view.GUI.Controllers.GameBoardController;
 import it.polimi.ingsw.view.View;
 
+import static it.polimi.ingsw.network.NetworkMessages.TURNBEGIN;
+import static it.polimi.ingsw.network.NetworkMessages.TURNEND;
+
 
 public class GUIView extends View {
     public static GUIView singleton;
@@ -25,9 +28,9 @@ public class GUIView extends View {
         switch(message){
             case ERROR:
                 lastErrorMessage = (String) waitAndGetResponse(); //receive the error message
+                gameBoardController.showError(lastErrorMessage);
                 return false;
             case SUCCESS:
-            case TURNEND:
                 return true;
             default:
                 return false;
@@ -80,5 +83,13 @@ public class GUIView extends View {
             singleton = new GUIView();
         }
         return singleton;
+    }
+
+    public Object waitAndGetResponse(){
+        Object ret = super.waitAndGetResponse();
+        if(ret==TURNBEGIN || ret==TURNEND)
+            return waitAndGetResponse();
+        else
+            return ret;
     }
 }

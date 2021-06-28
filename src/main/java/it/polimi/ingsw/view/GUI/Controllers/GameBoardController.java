@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameBoardController extends GenericController{
     @FXML
@@ -20,16 +21,17 @@ public class GameBoardController extends GenericController{
 
     AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton, newLoadedAnchorPaneMarket;
 
+    ArrayList<GenericController> controllerArrayList = new ArrayList<>();
 
     @FXML
     void initialize() throws IOException {
         guiView.registerStage(this);
-        newLoadedPaneLeader = FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
+
+        newLoadedPaneLeader =  FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
         leaderAnchorPane.getChildren().add(newLoadedPaneLeader);
 
         newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
-
 
         newLoadedAnchorPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
         marketAnchorPane.getChildren().add(newLoadedAnchorPaneMarket);
@@ -37,6 +39,8 @@ public class GameBoardController extends GenericController{
         newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
         buttonAnchorPane.getChildren().add(newLoadedPaneButton);
         rectangleBlock.setVisible(!guiView.isMyTurn);
+
+        controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
     }
 
     public void startTurn() {
@@ -85,6 +89,18 @@ public class GameBoardController extends GenericController{
             else
                 alert.setHeaderText("You lost, better luck next time!");
             alert.setContentText("Close the game");
+
+            alert.showAndWait();
+        });
+    }
+
+    public void showError(String lastErrorMessage) {
+        Platform.runLater(() -> {
+            rectangleBlock.setVisible(false);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(lastErrorMessage);
+            alert.setContentText("Retry");
 
             alert.showAndWait();
         });

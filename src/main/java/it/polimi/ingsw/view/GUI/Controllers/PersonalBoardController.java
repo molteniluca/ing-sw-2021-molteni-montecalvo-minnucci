@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import it.polimi.ingsw.view.GUI.GUIView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,7 +14,8 @@ import java.util.ArrayList;
 
 public class PersonalBoardController extends GenericController{
     private int currentFaithPosition, currentLorenzoFaithPosition;
-    private int slotPosition[] = new int[3];
+    private int[] slotPosition = new int[3];
+    private static PersonalBoardController personalBoardController;
 
     @FXML
     ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
@@ -46,7 +46,7 @@ public class PersonalBoardController extends GenericController{
         currentFaithPosition = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
-        if(guiView.game.getNumPlayers()==1 && false){
+        if(guiView.game.getNumPlayers()==1 && false){   //TODO why false??
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(false);
             currentLorenzoFaithPosition = guiView.game.getSelfPLayingTurn().getLorenzo().getFaithTrack().getPosition();
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(true);
@@ -124,6 +124,7 @@ public class PersonalBoardController extends GenericController{
 
     @FXML
     void initialize(){
+        personalBoardController=this;
         faithImagePosition = new ImageView[]{if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24};
         faithLorenzoImagePosition = new ImageView[]{ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24};
         level2Image = new ImageView[]{lev2_1, lev2_2};
@@ -132,6 +133,10 @@ public class PersonalBoardController extends GenericController{
 
 
         updatePersonalBoard();
+    }
+
+    public static PersonalBoardController getPersonalBoardController() {
+        return personalBoardController;
     }
 
     public void showStrongBox() {

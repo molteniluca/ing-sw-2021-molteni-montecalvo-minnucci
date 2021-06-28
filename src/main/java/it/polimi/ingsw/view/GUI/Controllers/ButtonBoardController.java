@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
+
 public class ButtonBoardController extends GenericController{
     @FXML
     Button bMarket, bCardDealer, bProduce, bLeaders, bOtherPlayers, bEndTurn;
@@ -22,6 +24,9 @@ public class ButtonBoardController extends GenericController{
 
     public void endTurn() throws IOException {
         guiView.endTurn();
+        if(guiView.waitAndGetResponse()==SUCCESS && guiView.game.getNumPlayers()!=1){
+            guiView.notifyTurnEnded();
+        }
     }
 
     public void openCardDealer(ActionEvent actionEvent) throws IOException {
