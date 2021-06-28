@@ -28,6 +28,7 @@ public class GUIView extends View {
         switch(message){
             case ERROR:
                 lastErrorMessage = (String) waitAndGetResponse(); //receive the error message
+                gameBoardController.showError(lastErrorMessage);
                 return false;
             case SUCCESS:
                 return true;

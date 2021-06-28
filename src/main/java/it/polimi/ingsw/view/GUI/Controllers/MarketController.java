@@ -17,6 +17,8 @@ import javafx.scene.layout.GridPane;
 
 
 public class MarketController extends GenericController implements Initializable {
+    private static MarketController marketController;
+
 
     @FXML // fx:id="backHomeButton"
     private Button backHomeButton; // Value injected by FXMLLoader
@@ -53,6 +55,7 @@ public class MarketController extends GenericController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        marketController = this;
 
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
@@ -146,6 +149,10 @@ public class MarketController extends GenericController implements Initializable
                 image = iArrows;
         }
         return image;
+    }
+
+    public static MarketController getMarketController() {
+        return marketController;
     }
 }
 
