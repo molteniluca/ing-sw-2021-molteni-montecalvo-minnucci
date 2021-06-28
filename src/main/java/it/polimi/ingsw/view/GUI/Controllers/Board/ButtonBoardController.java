@@ -1,5 +1,6 @@
-package it.polimi.ingsw.view.GUI.Controllers;
+package it.polimi.ingsw.view.GUI.Controllers.Board;
 
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
-public class ButtonBoardController extends GenericController{
+public class ButtonBoardController extends GenericController {
     @FXML
     Button bMarket, bCardDealer, bProduce, bLeaders, bOtherPlayers, bEndTurn;
 

@@ -243,7 +243,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboBox" prefWidth="150.0" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Select a place" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </bottom>

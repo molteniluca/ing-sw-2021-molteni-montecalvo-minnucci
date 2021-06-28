@@ -1,19 +1,17 @@
-package it.polimi.ingsw.view.GUI.Controllers;
+package it.polimi.ingsw.view.GUI.Controllers.Board;
 
+import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GameBoardController extends GenericController{
+public class GameBoardController extends GenericController {
     @FXML
     public Rectangle rectangleBlock;
     @FXML
@@ -41,6 +39,7 @@ public class GameBoardController extends GenericController{
         rectangleBlock.setVisible(!guiView.isMyTurn);
 
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
+        controllerArrayList.add(MarketController.getMarketController());
     }
 
     public void startTurn() {
@@ -104,5 +103,11 @@ public class GameBoardController extends GenericController{
 
             alert.showAndWait();
         });
+    }
+
+    public void notifyUpdate() {
+        for (GenericController g : controllerArrayList){
+            g.update();
+        }
     }
 }
