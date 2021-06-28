@@ -35,6 +35,7 @@ public class CLI extends View implements Runnable{
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
     private CliSupporter cliSupporter; //supporter class that makes the CLI thinner
+    private boolean isMyTurn;
 
 
     @Override
@@ -65,17 +66,24 @@ public class CLI extends View implements Runnable{
         waitAndGetResponse(); //game started
 
         while(winOrLose < 0) {
-            if(waitAndGetResponse() == TURNBEGIN) {
+            while(!isMyTurn){
                 try {
-                    System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getPlayerTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
-                    input.readLine();
-                } catch (IOException e) {
+                    synchronized (this) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                waitForUpdatedGame();
-                actionDone = false;
-                showHomepage();
             }
+            try {
+                System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getPlayerTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
+                input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            waitForUpdatedGame();
+            actionDone = false;
+            showHomepage();
         }
 
         if(winOrLose == 1) {
@@ -214,7 +222,7 @@ public class CLI extends View implements Runnable{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
+                        isMyTurn=false;
                         if(singlePlayer)
                         {
                             System.out.println(ANSI_GREEN+"Lorenzo the Magnificent is playing "+RESET);
@@ -1278,13 +1286,15 @@ public class CLI extends View implements Runnable{
     }
 
     @Override
-    public void notifyTurnStarted() {
-
+    public synchronized void notifyTurnStarted() {
+        isMyTurn = true;
+        this.notifyAll();
     }
 
     @Override
-    public void notifyTurnEnded() {
-
+    public synchronized void notifyTurnEnded() {
+        isMyTurn = false;
+        this.notifyAll();
     }
 
     @Override

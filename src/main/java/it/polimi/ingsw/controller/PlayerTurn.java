@@ -94,8 +94,9 @@ public class PlayerTurn implements Turn, Serializable {
             clientHandler.sendObject("You can only end the turn");
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
+        clientHandler.sendObject(SUCCESS);
 
-        clientHandler.sendObject(TURNEND);
+        clientHandler.sendObject(ENDTURN);
     }
 
 
