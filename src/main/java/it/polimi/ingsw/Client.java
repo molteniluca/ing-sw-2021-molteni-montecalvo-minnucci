@@ -8,8 +8,6 @@ import javafx.application.Application;
 public class Client {
 
     public static void main(String[] args) {
-        View view;
-
         boolean choseGui = false;
 
         for (String arg : args) {
@@ -22,8 +20,7 @@ public class Client {
         if (choseGui)
             Application.launch(GUIApplication.class);
         else {
-            view = new CLI();
-            view.start();
+            new Thread(new CLI()).start();
         }
     }
 }

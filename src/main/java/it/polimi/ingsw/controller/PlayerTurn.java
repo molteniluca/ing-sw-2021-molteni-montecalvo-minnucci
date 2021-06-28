@@ -95,7 +95,7 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
 
-        clientHandler.sendObject(SUCCESS);
+        clientHandler.sendObject(TURNEND);
     }
 
 

@@ -61,7 +61,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="bEndTurn" alignment="CENTER" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Turn" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <Button fx:id="bEndTurn" alignment="CENTER" onAction="#endTurn" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Turn" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>

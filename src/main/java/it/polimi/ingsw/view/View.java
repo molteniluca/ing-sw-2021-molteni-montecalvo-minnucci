@@ -14,7 +14,7 @@ import java.util.Queue;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;
 
-public abstract class View extends Thread {
+public abstract class View {
     private NetworkHandler networkHandler;
     public Game game;
     public int playerNumber; //the number of the player received before GAMESTARTED
@@ -50,8 +50,6 @@ public abstract class View extends Thread {
      */
     public synchronized void updateObjects(Game game) {
         this.game = game;
-        //notify(); wakes up the thread that was waiting for the game
-        //gameUpdated = true;
     }
 
     /**
@@ -211,4 +209,8 @@ public abstract class View extends Thread {
     public void endTurn() throws IOException {
         networkHandler.sendObject(TURNEND);
     }
+
+    public abstract void notifyTurnStarted();
+
+    public abstract void notifyTurnEnded();
 }

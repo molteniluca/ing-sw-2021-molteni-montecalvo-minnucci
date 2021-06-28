@@ -108,10 +108,9 @@ public class PersonalBoardController extends GenericController{
 
     private void updateSlotImage(int level,int slot, DevelopmentCard developmentCard){
         //FIXME !!!!
-        if(slots[level][slot].getImage()==null) {
+        if(slots[slot][level].getImage()==null) {
             String nameImage = developmentCard.getImage();
-            slots[level][slot].setImage(new Image("images/Cards/DevelopmentCards/" +nameImage+"-1.png"));
-            slotPosition[slot]++;
+            slots[slot][level].setImage(new Image("images/Cards/DevelopmentCards/" +nameImage+"-1.png"));
         }
     }
 
