@@ -12,15 +12,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
-
 public class ButtonBoardController extends GenericController {
     @FXML
-    Button bMarket, bCardDealer, bProduce, bLeaders, bOtherPlayers, bEndTurn;
+    Button bCardDealer, bProduce, bOtherPlayers, bEndTurn;
 
     @FXML
     void initialize(){
-
+        if(guiView.game.getNumPlayers()==1)
+            bOtherPlayers.setVisible(false);
     }
 
     public void endTurn() throws IOException {
@@ -38,6 +37,18 @@ public class ButtonBoardController extends GenericController {
         Stage cardDealerStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
         cardDealerStage.setTitle("Game Board");
+        cardDealerStage.setScene(cardDealerScene);
+        cardDealerStage.show();
+    }
+
+    public void goToOtherPlayers(ActionEvent actionEvent) throws IOException {
+        Parent cardDealerViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/OtherPlayerBoards.fxml"));
+
+        Scene cardDealerScene = new Scene(cardDealerViewParent);
+
+        Stage cardDealerStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        cardDealerStage.setTitle("Other Players");
         cardDealerStage.setScene(cardDealerScene);
         cardDealerStage.show();
     }

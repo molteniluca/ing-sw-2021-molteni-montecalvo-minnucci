@@ -54,6 +54,8 @@ public class GameBoardController extends GenericController {
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
         controllerArrayList.add(MarketController.getMarketController());
         controllerArrayList.add(LeaderBoardController.getLeaderBoardController());
+        guiView.waitForUpdatedGame();
+        notifyUpdate();
     }
 
     public void startTurn() {

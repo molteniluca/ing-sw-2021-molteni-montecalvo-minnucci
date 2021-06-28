@@ -32,7 +32,6 @@ public class LeaderBoardController extends GenericController {
     @FXML
     void initialize(){
         leaderBoardController=this;
-        update();
     }
 
     private void leaderToImageName(LeaderCard leader, ImageView image){
@@ -44,24 +43,7 @@ public class LeaderBoardController extends GenericController {
 
     @Override
     public void update() {
-        ImageView[] leaderInHandView=new ImageView[]{ilh1,ilh2};
-        ImageView[] leaderActiveView=new ImageView[]{ila1,ila2};
-
-        ArrayList<LeaderCard> leaderCardsInHand = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
-        for(int i=0;i<2;i++){
-            if(i<leaderCardsInHand.size())
-                leaderToImageName(leaderCardsInHand.get(i), leaderInHandView[i]);
-            else
-                leaderToImageName(null,leaderInHandView[i]);
-        }
-
-        ArrayList<LeaderCard> leaderActive = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();
-        for(int i=0;i<2;i++){
-            if(i<leaderActive.size())
-                leaderToImageName(leaderActive.get(i), leaderActiveView[i]);
-            else
-                leaderToImageName(null,leaderActiveView[i]);
-        }
+        update(guiView.playerNumber);
     }
 
     public void discardLeader(ActionEvent actionEvent) throws IOException {
@@ -79,6 +61,29 @@ public class LeaderBoardController extends GenericController {
             leaderSelected=0;
         }else {
             leaderSelected=1;
+        }
+    }
+
+    public void update(int player) {
+        ImageView[] leaderInHandView=new ImageView[]{ilh1,ilh2};
+        ImageView[] leaderActiveView=new ImageView[]{ila1,ila2};
+
+        if(player==guiView.playerNumber){
+            ArrayList<LeaderCard> leaderCardsInHand = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
+            for(int i=0;i<2;i++){
+                if(i<leaderCardsInHand.size())
+                    leaderToImageName(leaderCardsInHand.get(i), leaderInHandView[i]);
+                else
+                    leaderToImageName(null,leaderInHandView[i]);
+            }
+        }
+
+        ArrayList<LeaderCard> leaderActive = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();
+        for(int i=0;i<2;i++){
+            if(i<leaderActive.size())
+                leaderToImageName(leaderActive.get(i), leaderActiveView[i]);
+            else
+                leaderToImageName(null,leaderActiveView[i]);
         }
     }
 }

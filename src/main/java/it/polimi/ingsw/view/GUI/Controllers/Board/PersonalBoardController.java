@@ -42,9 +42,9 @@ public class PersonalBoardController extends GenericController {
     ImageView[][] slots;
 
     @FXML
-    void updateFaithTrack(){
+    void updateFaithTrack(int player){
         faithImagePosition[currentFaithPosition].setVisible(false);
-        currentFaithPosition = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
+        currentFaithPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
         if(guiView.game.getNumPlayers()==1){
@@ -55,8 +55,8 @@ public class PersonalBoardController extends GenericController {
     }
 
     @FXML
-    void updateStrongBox(){
-        Resources resStrongBox = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getStrongBox().getResources();
+    void updateStrongBox(int player){
+        Resources resStrongBox = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getStrongBox().getResources();
         goldLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.GOLD)));
         servantLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.SERVANT)));
         shieldLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.SHIELD)));
@@ -64,8 +64,8 @@ public class PersonalBoardController extends GenericController {
     }
 
     @FXML
-    void updateWarehouse(){
-        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+    void updateWarehouse(int player){
+        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
         for(int i = 0; i< warehouseDepots.getNumberLevels(); i++){
             ResourceTypes resourceTypes = warehouseDepots.getResourceTypeLevel(i);
             if (resourceTypes != null) {
@@ -95,8 +95,8 @@ public class PersonalBoardController extends GenericController {
     }
 
     @FXML
-    void updateProductionCards(){
-        ArrayList<DevelopmentCard>[] developmentCard = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getCardBoard().getDevelopmentCardsMatrix();
+    void updateProductionCards(int player){
+        ArrayList<DevelopmentCard>[] developmentCard = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getCardBoard().getDevelopmentCardsMatrix();
 
         for(int k=0;k<3;k++){
             for (int i = 0; i < 3; i++) {
@@ -114,11 +114,11 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
-    void updatePersonalBoard(){
-        updateFaithTrack();
-        updateStrongBox();
-        updateWarehouse();
-        updateProductionCards();
+    void updatePersonalBoard(int player){
+        updateFaithTrack(player);
+        updateStrongBox(player);
+        updateWarehouse(player);
+        updateProductionCards(player);
     }
 
 
@@ -131,9 +131,6 @@ public class PersonalBoardController extends GenericController {
         level2Image = new ImageView[]{lev2_1, lev2_2};
         level3Image = new ImageView[]{lev3_1, lev3_2, lev3_3};
         slots = new ImageView[][]{{slot1_1, slot1_2, slot1_3},{slot2_1, slot2_2, slot2_3},{slot3_1, slot3_2, slot3_3}};
-
-
-        updatePersonalBoard();
     }
 
     public static PersonalBoardController getPersonalBoardController() {
@@ -150,6 +147,10 @@ public class PersonalBoardController extends GenericController {
 
     @Override
     public void update() {
-        updatePersonalBoard();
+        updatePersonalBoard(guiView.playerNumber);
+    }
+
+    public void update(int player) {
+        updatePersonalBoard(player);
     }
 }

@@ -19,7 +19,7 @@ public class GUIApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        URL url = ClassLoader.getSystemResource("FXML/homePage.fxml");
+        URL url = ClassLoader.getSystemResource("FXML/HomePage.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Parent root = fxmlLoader.load();
 
