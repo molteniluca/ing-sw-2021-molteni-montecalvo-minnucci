@@ -95,8 +95,6 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveObject(NetworkMessages.class);
         }
         clientHandler.sendObject(SUCCESS);
-
-        clientHandler.sendObject(ENDTURN);
     }
 
 
@@ -401,6 +399,6 @@ public class PlayerTurn implements Turn, Serializable {
 
     @Override
     public void endTurn() throws IOException {
-        clientHandler.sendObject(TURNEND);
+        clientHandler.sendObject(ENDTURN);
     }
 }

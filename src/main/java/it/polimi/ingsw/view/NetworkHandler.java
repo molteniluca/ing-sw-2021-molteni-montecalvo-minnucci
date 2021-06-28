@@ -17,6 +17,7 @@ public class NetworkHandler extends Thread{
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private final View view;
+    private boolean alreadyClosed=false;
 
     public NetworkHandler(String serverAddress, int serverPort, View view) throws IOException {
         this.view=view;
@@ -57,7 +58,6 @@ public class NetworkHandler extends Thread{
                             view.notifyEndGame(false);
                             continue;
                         case TURNBEGIN:
-                            read=null;
                             view.notifyTurnStarted();
                             continue;
                         case ENDTURN:
@@ -87,12 +87,15 @@ public class NetworkHandler extends Thread{
         sendObject(HEARTBEAT);
     }
 
-    public void closeConnection(){
-        try {
-            server.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public synchronized void closeConnection(){
+        if(!alreadyClosed) {
+            alreadyClosed=true;
+            try {
+                server.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            view.notifyDisconnection();
         }
-        view.notifyDisconnection();
     }
 }

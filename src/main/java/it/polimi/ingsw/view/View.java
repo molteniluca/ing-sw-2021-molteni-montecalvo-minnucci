@@ -28,14 +28,12 @@ public abstract class View {
         networkHandler.closeConnection();
     }
 
-    public void notifyResponse(Object o) {
-        synchronized (this) {
-            if (o.getClass() == NetworkMessages.class)
-                if (o == SUCCESS)
-                    gameUpdated = false;
-            messages.add(o);
-            this.notifyAll();
-        }
+    public synchronized void notifyResponse(Object o) {
+        if (o.getClass() == NetworkMessages.class)
+            if (o == SUCCESS)
+                gameUpdated = false;
+        messages.add(o);
+        this.notifyAll();
     }
 
     public void notifyNewGame(Game game) {
@@ -59,14 +57,12 @@ public abstract class View {
     /**
      * Suspend the view thread in wait for a new game object
      */
-    public void waitForUpdatedGame() {
+    public synchronized void waitForUpdatedGame() {
         while (!gameUpdated) {
-            synchronized (this) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -77,22 +73,20 @@ public abstract class View {
      *
      * @return the message or the object received
      */
-    public Object waitAndGetResponse() {
-        synchronized (this) {
-            while (messages.size() == 0) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    public synchronized Object waitAndGetResponse() {
+        while (messages.size() == 0) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            return messages.remove();
         }
+        return messages.remove();
     }
 
     protected abstract void notifyEndGame(boolean youWon);
 
-    public void notifyNewUpdate(ObjectUpdate read) {
+    public synchronized void notifyNewUpdate(ObjectUpdate read) {
         switch (read.getUpdateType()){
             case LEADERCARDS:
                 game.getPlayerTurn(read.getPlayer()).getPlayer().getPersonalBoard().getLeaderBoard()
@@ -101,10 +95,8 @@ public abstract class View {
             default:
                 System.out.println("UNSUPPORTED UPDATE");
         }
-        gameUpdated =true;
-        synchronized (this) {
-            this.notify();
-        }
+        gameUpdated = true;
+        this.notifyAll();
     }
 
 

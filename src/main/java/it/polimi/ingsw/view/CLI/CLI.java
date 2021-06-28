@@ -61,30 +61,24 @@ public class CLI extends View implements Runnable{
         waitForUpdatedGame();
 
 
-        System.out.println(ANSI_GREEN+"Waiting  for players ..."+RESET);
+        System.out.println(ANSI_GREEN + "Waiting  for players ..." + RESET);
 
         waitAndGetResponse(); //game started
 
-        while(winOrLose < 0) {
-            while(!isMyTurn){
+        while (winOrLose < 0) {
+            if(waitAndGetResponse()==TURNBEGIN){
                 try {
-                    synchronized (this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
+                    System.out.print(ANSI_GREEN + "\rIt's your turn, " + ANSI_BOLD + game.getPlayerTurn(playerNumber).getPlayer().getName() + RESET + ANSI_GREEN + " press enter to start " + RESET);
+                    input.readLine();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                waitForUpdatedGame();
+                actionDone = false;
+                showHomepage();
             }
-            try {
-                System.out.print(ANSI_GREEN+"\rIt's your turn, "+ANSI_BOLD+game.getPlayerTurn(playerNumber).getPlayer().getName()+RESET+ANSI_GREEN+" press enter to start "+RESET);
-                input.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            waitForUpdatedGame();
-            actionDone = false;
-            showHomepage();
         }
+
 
         if(winOrLose == 1) {
             cliSupporter.refresh();
@@ -1287,14 +1281,10 @@ public class CLI extends View implements Runnable{
 
     @Override
     public synchronized void notifyTurnStarted() {
-        isMyTurn = true;
-        this.notifyAll();
     }
 
     @Override
     public synchronized void notifyTurnEnded() {
-        isMyTurn = false;
-        this.notifyAll();
     }
 
     @Override

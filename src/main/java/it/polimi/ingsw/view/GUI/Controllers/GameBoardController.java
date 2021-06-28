@@ -84,7 +84,6 @@ public class GameBoardController extends GenericController{
                 alert.setHeaderText("Congratulation, you won");
             else
                 alert.setHeaderText("You lost, better luck next time!");
-
             alert.setContentText("Close the game");
 
             alert.showAndWait();
