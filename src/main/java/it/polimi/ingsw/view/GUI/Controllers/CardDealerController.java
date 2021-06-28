@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -81,24 +82,7 @@ public class CardDealerController extends GenericController{
     }
 
     public void openGameBoard(ActionEvent actionEvent) throws IOException {
-        if (numberOfSelectedCards == 0 || confirm) {
-            goToGameBoard(actionEvent);
-        }
-        else {
-            showError("You need to press confirm or select no one card");
-        }
-    }
-
-    protected static void goToGameBoard(ActionEvent actionEvent) throws IOException {
-        Parent GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
-
-        Scene GameBoardScene = new Scene(GameBoardViewParent);
-
-        Stage GameBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
-        GameBoardStage.setTitle("Game Board");
-        GameBoardStage.setScene(GameBoardScene);
-        GameBoardStage.show();
+        GameBoardController.goToGameBoard(actionEvent);
     }
 
     public void buyProductionCard(MouseEvent event) {
@@ -127,7 +111,7 @@ public class CardDealerController extends GenericController{
         if (numberOfSelectedCards == 1){
             guiView.marketBuyCard(row,column,comboBox.getValue()-1);
             if (guiView.isSuccessReceived()) {
-                goToGameBoard(actionEvent);
+                GameBoardController.goToGameBoard(actionEvent);
             }
         }
         else if (numberOfSelectedCards > 1){

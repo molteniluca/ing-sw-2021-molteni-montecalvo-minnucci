@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -114,7 +115,7 @@ public class InitialLeaderSelectionController extends GenericController{
 
             if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
                 guiView.waitForUpdatedGame();
-                CardDealerController.goToGameBoard(actionEvent); //open gameBoard
+                GameBoardController.goToGameBoard(actionEvent); //open gameBoard
             }
 
         }
