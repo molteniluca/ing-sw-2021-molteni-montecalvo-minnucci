@@ -59,8 +59,8 @@
             <RadioButton fx:id="rb1_3" disable="true" mnemonicParsing="false" opacity="0.0" text="Level 3" />
          </children>
       </VBox>
-      <Button fx:id="bTake" disable="true" layoutX="85.0" layoutY="26.0" mnemonicParsing="false" onAction="#takeResources" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Take resources" />
-      <Button fx:id="bPlace" disable="true" layoutX="322.0" layoutY="26.0" mnemonicParsing="false" onAction="#placeResources" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Place resources" />
+      <Button fx:id="bTake" disable="true" layoutX="85.0" layoutY="26.0" mnemonicParsing="false" onAction="#takeResources" opacity="0.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Take resources" />
+      <Button fx:id="bPlace" disable="true" layoutX="406.0" layoutY="26.0" mnemonicParsing="false" onAction="#placeResources" opacity="0.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Place resources" />
       <VBox layoutX="234.0" layoutY="14.0" prefHeight="56.0" prefWidth="98.0">
          <children>
             <RadioButton fx:id="rb2_1" disable="true" mnemonicParsing="false" opacity="0.0" text="Level 1" />
@@ -125,8 +125,8 @@
          </cursor>
       </ImageView>
       <Button fx:id="bConfirmMarket" layoutX="461.0" layoutY="587.0" mnemonicParsing="false" onAction="#confirmRowColumn" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
-      <Button fx:id="bConfirmSwap" disable="true" layoutX="450.0" layoutY="93.0" mnemonicParsing="false" onAction="#confirmSwap" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
-      <GridPane gridLinesVisible="true" layoutX="184.0" layoutY="102.0" prefHeight="70.0" prefWidth="220.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css">
+      <Button fx:id="bConfirmSwap" disable="true" layoutX="450.0" layoutY="93.0" mnemonicParsing="false" onAction="#confirmSwap" opacity="0.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
+      <GridPane fx:id="gridSwapArea" gridLinesVisible="true" layoutX="184.0" layoutY="102.0" opacity="0.0" prefHeight="70.0" prefWidth="220.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -142,21 +142,33 @@
                <image>
                   <Image url="@../images/resources/gold.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <image>
                   <Image url="@../images/resources/servant.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/resources/shield.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/resources/stone.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <Label fx:id="goldLabel" text="0" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
@@ -205,6 +217,14 @@
          </children>
       </GridPane>
       <Label fx:id="lYouHaveNow" layoutX="85.0" layoutY="129.0" opacity="0.0" prefHeight="17.0" prefWidth="80.0" text="You have now:" />
+      <VBox layoutX="308.0" layoutY="15.0" prefHeight="70.0" prefWidth="98.0">
+         <children>
+            <RadioButton fx:id="rbGold" disable="true" mnemonicParsing="false" opacity="0.0" text="Gold" />
+            <RadioButton fx:id="rbServant" disable="true" mnemonicParsing="false" opacity="0.0" text="Servant" />
+            <RadioButton fx:id="rbShield" disable="true" mnemonicParsing="false" opacity="0.0" text="Shield" />
+            <RadioButton fx:id="rbStone" disable="true" mnemonicParsing="false" opacity="0.0" text="Stone" />
+         </children>
+      </VBox>
 
    </children>
 </AnchorPane>

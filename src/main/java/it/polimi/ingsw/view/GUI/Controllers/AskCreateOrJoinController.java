@@ -46,7 +46,7 @@ public class AskCreateOrJoinController extends GenericController {
     private ComboBox<Integer> comboBox; // Value injected by FXMLLoader
 
     @FXML // fx:id="serverResponse"
-    private Text serverResponse; // Value injected by FXMLLoader
+    private TextField serverResponse; // Value injected by FXMLLoader
 
     @FXML
     public void joinGame(ActionEvent actionEvent)  {
@@ -128,9 +128,10 @@ public class AskCreateOrJoinController extends GenericController {
             loadAnimation.setVisible(true);
             connectToServer();
             guiView.createGame(comboBox.getValue());
+            serverResponse.setOpacity(1);
 
             if(guiView.waitAndGetResponse()==SUCCESS) {
-                serverResponse.setText("Game id=" + guiView.waitAndGetResponse());
+                serverResponse.setText("Game id = " + guiView.waitAndGetResponse());
                 waitForPlayers(nameCreate.getText(),event);
             }else
                 serverResponse.setText("Error");

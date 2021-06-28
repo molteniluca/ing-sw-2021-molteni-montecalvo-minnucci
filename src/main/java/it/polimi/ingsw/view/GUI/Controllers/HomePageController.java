@@ -88,13 +88,5 @@ public class HomePageController extends GenericController {
         scaleTransition1.setToY(1.1);
 
         scaleTransition1.play();
-
-        //animates the background
-        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(5), title);
-        translateTransition.setCycleCount(Animation.INDEFINITE);
-        translateTransition.setAutoReverse(true);
-        translateTransition.setByX(250);
-
-        //translateTransition1.play();
     }
 }

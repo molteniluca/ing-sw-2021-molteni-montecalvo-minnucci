@@ -7,19 +7,19 @@ import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
+import it.polimi.ingsw.view.CLI.ColoredResources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+
+import static it.polimi.ingsw.network.NetworkMessages.ERROR;
 
 
 public class MarketController extends GenericController implements Initializable {
@@ -36,7 +36,7 @@ public class MarketController extends GenericController implements Initializable
     ResourceTypes[] resourceTypes;
 
     @FXML // fx:id="marketGrid"
-    private GridPane marketGrid; // Value injected by FXMLLoader
+    private GridPane marketGrid, gridSwapArea; // Value injected by FXMLLoader
 
     @FXML //fx:id="externalResource"
     private ImageView externalResource;
@@ -51,13 +51,20 @@ public class MarketController extends GenericController implements Initializable
     @FXML
     private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
 
-    private RadioButton[] radioButtons;
+    @FXML
+    private RadioButton rbGold, rbServant, rbShield, rbStone;
+
+    private RadioButton[] levelRadioButtons;
+    private RadioButton[] resourceRadioButtons;
 
     int column = -1, row = -1, arrowsSelected = 0;
 
+    ToggleGroup levelToggleGroup;
+    ToggleGroup resourceToggleGroup;
+
     Resources resourcesFromMarket;
-    int level, tmp, numResOccupied, numResToAdd, numResToMove;
-    ResourceTypes resourceTypesToMove;
+    int  numResOccupied, numResToAdd, numResToMove;
+
 
 
     @Override
@@ -66,11 +73,17 @@ public class MarketController extends GenericController implements Initializable
 
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
-        ToggleGroup toggleGroup = new ToggleGroup();
+        levelToggleGroup = new ToggleGroup();
 
-        radioButtons = new RadioButton[]{rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3};
+        levelRadioButtons = new RadioButton[]{rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3};
         for (int i = 0; i < 6; i++) {
-            radioButtons[i].setToggleGroup(toggleGroup);
+            levelRadioButtons[i].setToggleGroup(levelToggleGroup);
+        }
+
+        resourceToggleGroup = new ToggleGroup();
+        resourceRadioButtons = new RadioButton[] {rbGold, rbServant, rbShield, rbStone};
+        for(int i = 0; i < 4; i++ ) {
+            resourceRadioButtons[i].setToggleGroup(resourceToggleGroup);
         }
 
         arrows = new ImageView[]{iav1, iav2, iav3, iav4, iah1, iah2, iah3};
@@ -174,109 +187,19 @@ public class MarketController extends GenericController implements Initializable
     }
 
 
-/*
-
-    public void wrong() {
-        while(!(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() ==0 || exit)) {
-            System.out.println("1) Place resources");
-            System.out.println("2) Take resources");
-            System.out.println("0) Exit");
-
-            switch (currentAction) {
-                case 1:
-                    do {
-                        level = cliSupporter.integerInput("On which level? (1-" + warehouseDepots.getNumberLevels() + "): ", 0, warehouseDepots.getNumberLevels()) - 1;
-                        if (level == -1)
-                            break;
-                        if (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1)
-                            System.out.println("\nYou selected a full level, please select another one or 0 to quit");
-                    }
-                    while (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1);
-
-                    if (level == -1)
-                        break;
-
-                    if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).getFixedResource()) {
-                        do {
-                            tmp = cliSupporter.integerInput("Which type of resource?\n1) " + ColoredResources.GOLD + "\n2) " + ColoredResources.SERVANT + "\n3) " + ColoredResources.SHIELD + "\n4) " + ColoredResources.STONE + "\n", 1, 4);
-
-                            resourceTypesToMove = cliSupporter.numberToResourceType(tmp);
-                            if(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0)
-                                cliSupporter.wrongInput();
-                        }while(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0);
-                    } else
-                        resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
-
-                    if (warehouseDepots.getResourcesNumber(level) == 0 || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
-                        numResOccupied = warehouseDepots.getResourcesNumber(level);
-
-                        if (0 <= level && level < 3)
-                            numResToAdd = level + 1 - numResOccupied;
-                        else
-                            numResToAdd = 2 - numResOccupied;
-
-                        if (resourcesFromMarket.getResourceNumber(resourceTypesToMove) < numResToAdd)
-                            numResToMove = resourcesFromMarket.getResourceNumber(resourceTypesToMove);
-                        else
-                            numResToMove = numResToAdd;
-
-                        try{
-                            swapMoveToLevel(level,resourceTypesToMove,numResToMove);
-                        }catch (IOException e)
-                        {
-                            e.printStackTrace();
-                        }
-                        if (waitAndGetResponse() == ERROR){
-                            System.out.println(waitAndGetResponse());//probably player tries to put res with different type in the same level
-                            break;
-                        }
-
-                        cliSupporter.resourceMovedCorrectly();
-                        break;
-                    }
-                    //
-                case 2:
-                    do {
-                        level = cliSupporter.integerInput("From which level? (1-" + warehouseDepots.getNumberLevels() + "): ", 0, warehouseDepots.getNumberLevels()) - 1;
-                        if(level == -1)
-                            break;
-                        if (warehouseDepots.getResourcesNumber(level) == 0)
-                            System.out.println("\nYou selected an empty level, please select another one or 0 to quit");
-                    }
-                    while (warehouseDepots.getResourcesNumber(level) == 0);
-
-                    if (level == -1)
-                        break;
-
-                    try{
-                        warehouseDepots.moveToSwap(1);
-                        swapMoveToSwap(level);
-                    }catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    if (waitAndGetResponse() == ERROR) {
-                        System.out.println(waitAndGetResponse());
-                        break;
-                    }
-
-                    cliSupporter.resourceMovedCorrectly();
-                    break;
-
-            }
-            waitForUpdatedGame();
-        }
-    }
-
- */
-
-
 
     private void setAbleButtons(){
-        for (RadioButton button: radioButtons) {
+        for (RadioButton button: levelRadioButtons) {
             button.setDisable(false);
             button.setOpacity(1);
         }
+
+        for (RadioButton button: resourceRadioButtons) {
+            button.setDisable(false);
+            button.setOpacity(1);
+        }
+
+        gridSwapArea.setOpacity(1);
         bTake.setDisable(false);
         bPlace.setDisable(false);
         bConfirmSwap.setDisable(false);
@@ -302,10 +225,17 @@ public class MarketController extends GenericController implements Initializable
         }
         if (resourcesFromMarket.getTotalResourceNumber() == 0 || exit){
             //Before exit from market and swap
-            for (RadioButton button: radioButtons) {
+            for (RadioButton button: levelRadioButtons) {
                 button.setDisable(true);
                 button.setOpacity(0);
             }
+
+            for (RadioButton button: resourceRadioButtons) {
+                button.setDisable(true);
+                button.setOpacity(0);
+            }
+
+            gridSwapArea.setOpacity(0);
             bTake.setDisable(true);
             bPlace.setDisable(true);
             bConfirmSwap.setDisable(true);
@@ -349,12 +279,90 @@ public class MarketController extends GenericController implements Initializable
     }
 
     public void takeResources(ActionEvent actionEvent) {
-        //TODO update warehouse in PersonalBoard
+        int level;
+        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        RadioButton selectedRadioButton = (RadioButton) levelToggleGroup.getSelectedToggle();
+        String selectedRadioButtonString = selectedRadioButton.getText();
+        level = selectedRadioButtonString.charAt(selectedRadioButtonString.length()-1) -49;
 
+
+        if (warehouseDepots.getResourcesNumber(level) == 0) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Illegal action");
+            alert.setContentText("You selected an empty level, please select another one");
+
+            alert.showAndWait();
+        }
+        try {
+            guiView.swapMoveToSwap(level);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+
     public void placeResources(ActionEvent actionEvent) {
-        //TODO update warehouse in PersonalBoard
+        int level;
+        ResourceTypes resourceTypesToMove = null; //resource type obtained from the resource selected in resourceToggleGroup
+        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        RadioButton selectedRadioButton = (RadioButton) levelToggleGroup.getSelectedToggle();
+        String selectedRadioButtonString = selectedRadioButton.getText();
+        level = selectedRadioButtonString.charAt(selectedRadioButtonString.length()-1) -49;
+
+        if (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Illegal action");
+            alert.setContentText("You selected a full level, please select another one");
+
+            alert.showAndWait();
+        }
+
+        if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).getFixedResource()) {
+
+
+            RadioButton selectedResourceRadioButton = (RadioButton) resourceToggleGroup.getSelectedToggle();
+            String selectedResourceRadioButtonString = selectedResourceRadioButton.getText();
+
+            switch (selectedResourceRadioButtonString) {
+                case "Gold":
+                    resourceTypesToMove = ResourceTypes.GOLD;
+                    break;
+                case "Servant":
+                    resourceTypesToMove = ResourceTypes.SERVANT;
+                    break;
+                case "Shield":
+                    resourceTypesToMove = ResourceTypes.SHIELD;
+                    break;
+                case "Stone":
+                    resourceTypesToMove = ResourceTypes.STONE;
+                    break;
+            }
+
+        } else
+            resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
+
+
+        if (warehouseDepots.getResourcesNumber(level) == 0 || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
+            numResOccupied = warehouseDepots.getResourcesNumber(level);
+
+            if (0 <= level && level < 3)
+                numResToAdd = level + 1 - numResOccupied;
+            else
+                numResToAdd = 2 - numResOccupied;
+
+            if (resourcesFromMarket.getResourceNumber(resourceTypesToMove) < numResToAdd)
+                numResToMove = resourcesFromMarket.getResourceNumber(resourceTypesToMove);
+            else
+                numResToMove = numResToAdd;
+
+            try {
+                guiView.swapMoveToLevel(level, resourceTypesToMove, numResToMove);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
