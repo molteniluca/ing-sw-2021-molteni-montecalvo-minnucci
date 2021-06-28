@@ -35,7 +35,6 @@ public class CLI extends View implements Runnable{
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
     private CliSupporter cliSupporter; //supporter class that makes the CLI thinner
-    private boolean isMyTurn;
 
 
     @Override
@@ -216,7 +215,6 @@ public class CLI extends View implements Runnable{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        isMyTurn=false;
                         if(singlePlayer)
                         {
                             System.out.println(ANSI_GREEN+"Lorenzo the Magnificent is playing "+RESET);
@@ -934,7 +932,9 @@ public class CLI extends View implements Runnable{
         boolean temporaryAction2 = false;
         boolean temporaryAction3 = false;
 
-        WarehouseDepots warehouseDepots;
+        boolean[] alreadyUsed = {false, false, false};
+
+        WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
         LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
         ArrayList<LeaderCard> activeLeaders = leaderBoard.getLeaderCards();
@@ -942,13 +942,22 @@ public class CLI extends View implements Runnable{
         do {
             upperLimit = 2;
             ArrayList<ExtraProduction> extraProductionEffect = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getProductionEffects(); //extra production effect of the active leader cards
-            warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-
+           // warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             cliSupporter.refresh();
             showCardBoard(game.getPlayerTurn(playerNumber).getPlayer());
-            showStrongbox(playerNumber);
-            showWarehouse(warehouseDepots);
-            System.out.println("\nACTIVE LEADER CARDS");
+
+            cliSupporter.printTitle("\n\nAVAILABLE RESOURCES");
+            {
+                if(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getAvailableResources() == null)
+                {
+                    showStrongbox(playerNumber);
+                    showWarehouse(warehouseDepots);
+                }
+                else
+                    cliSupporter.printResources(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getAvailableResources(), "real");
+            }
+
+            cliSupporter.printTitle("\n\nACTIVE LEADER CARDS");
             if(activeLeaders.size()>0)
                 cliSupporter.printLeaderCards(activeLeaders);
             else
@@ -1004,7 +1013,7 @@ public class CLI extends View implements Runnable{
                             break;
 
                         case 2:
-                            if(!temporaryAction2) {
+                            //if(!temporaryAction2) {
                                 int currentCard;
                                 DevelopmentCard[] developmentCards = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
 
@@ -1020,14 +1029,29 @@ public class CLI extends View implements Runnable{
                                     continue;
                                 }
 
-                                productionProd2(currentCard);
-                                temporaryAction2 = isSuccessReceived();
-                            }
+                                if(!alreadyUsed[currentCard])
+                                {
+                                    alreadyUsed[currentCard] = true;
+                                    productionProd2(currentCard);
+                                    temporaryAction2 = isSuccessReceived();
+                                }
+
+                                else
+                                {
+                                    System.out.println(ANSI_GREEN+"You already produced with this card"+RESET);
+                                    input.readLine();
+                                    continue;
+                                }
+
+                          //  }
+                            /*
                             else
                             {
                                 System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
                                 input.readLine();
                             }
+
+                             */
                             break;
 
                         case 3:

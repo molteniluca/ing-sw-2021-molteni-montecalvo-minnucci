@@ -357,6 +357,11 @@ public class PersonalBoard implements Serializable {
     private boolean prod1;
     private boolean[] prod2;
 
+    public Resources getAvailableResources()
+    {
+        return availableResources;
+    }
+
     /**
      * This method initializes the production
      */
