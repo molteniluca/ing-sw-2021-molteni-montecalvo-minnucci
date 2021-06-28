@@ -58,6 +58,8 @@ public class AskCreateOrJoinController extends GenericController {
             waitForPlayers(nameJoin.getText(), actionEvent);
         } catch (IOException e) {
             Platform.runLater(() -> {
+                loadAnimation.setDisable(true);
+                loadAnimation.setVisible(false);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Can't connect to the server!");
@@ -78,7 +80,7 @@ public class AskCreateOrJoinController extends GenericController {
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
-                    alert.setHeaderText("Can't connect to the server!");
+                    alert.setHeaderText("Connection interrupted!");
                     alert.setContentText("Retry");
                     alert.showAndWait();
                 });
@@ -122,6 +124,8 @@ public class AskCreateOrJoinController extends GenericController {
     @FXML
     void createGame(ActionEvent event) {
         try {
+            loadAnimation.setDisable(false);
+            loadAnimation.setVisible(true);
             connectToServer();
             guiView.createGame(comboBox.getValue());
 
@@ -132,6 +136,8 @@ public class AskCreateOrJoinController extends GenericController {
                 serverResponse.setText("Error");
         } catch (IOException e) {
             Platform.runLater(() -> {
+                loadAnimation.setDisable(true);
+                loadAnimation.setVisible(false);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Can't connect to the server!");
@@ -187,5 +193,6 @@ public class AskCreateOrJoinController extends GenericController {
     @FXML
     void initialize() {
         comboBox.getItems().addAll(1,2,3,4);
+        comboBox.setValue(1);
     }
 }
