@@ -627,7 +627,7 @@ public class CLI extends View implements Runnable{
         cliSupporter.refresh();
         System.out.println("SWAP AREA\n");
 
-        while(!(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() ==0 || exit)) {
+        while(!(game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber() == 0 || exit)) {
             WarehouseDepots warehouseDepots = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
             resourcesFromMarket = warehouseDepots.getSwapDeposit();
 
@@ -657,18 +657,18 @@ public class CLI extends View implements Runnable{
                     }
                     while (!(currentString.equals("y") || currentString.equals("n")));
 
-                    if(currentString.equals("y"))
+                    if (currentString.equals("y"))
                         exit = true;
-                    if(resourcesFromMarket.getTotalResourceNumber() > 0) {
+                    if (resourcesFromMarket.getTotalResourceNumber() > 0) {
                         try {
                             swapDropResources();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        if(waitAndGetResponse()==SUCCESS){
-                            exit=true;
-                        }else if(waitAndGetResponse()==ERROR){
-                            exit=false;
+                        if (waitAndGetResponse() == SUCCESS) {
+                            exit = true;
+                        } else if (waitAndGetResponse() == ERROR) {
+                            exit = false;
                             System.out.println(waitAndGetResponse());
                         }
                     }
@@ -691,9 +691,9 @@ public class CLI extends View implements Runnable{
                             tmp = cliSupporter.integerInput("Which type of resource?\n1) " + ColoredResources.GOLD + "\n2) " + ColoredResources.SERVANT + "\n3) " + ColoredResources.SHIELD + "\n4) " + ColoredResources.STONE + "\n", 1, 4);
 
                             resourceTypesToMove = cliSupporter.numberToResourceType(tmp);
-                            if(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0)
+                            if (resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0)
                                 cliSupporter.wrongInput();
-                        }while(resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0);
+                        } while (resourcesFromMarket.getResourceNumber(resourceTypesToMove) == 0);
                     } else
                         resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
 
@@ -710,13 +710,12 @@ public class CLI extends View implements Runnable{
                         else
                             numResToMove = numResToAdd;
 
-                        try{
-                            swapMoveToLevel(level,resourceTypesToMove,numResToMove);
-                        }catch (IOException e)
-                        {
+                        try {
+                            swapMoveToLevel(level, resourceTypesToMove, numResToMove);
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        if (waitAndGetResponse() == ERROR){
+                        if (waitAndGetResponse() == ERROR) {
                             System.out.println(waitAndGetResponse());//probably player tries to put res with different type in the same level
                             break;
                         }
@@ -728,7 +727,7 @@ public class CLI extends View implements Runnable{
                 case 2:
                     do {
                         level = cliSupporter.integerInput("From which level? (1-" + warehouseDepots.getNumberLevels() + "): ", 0, warehouseDepots.getNumberLevels()) - 1;
-                        if(level == -1)
+                        if (level == -1)
                             break;
                         if (warehouseDepots.getResourcesNumber(level) == 0)
                             System.out.println("\nYou selected an empty level, please select another one or 0 to quit");
@@ -738,11 +737,10 @@ public class CLI extends View implements Runnable{
                     if (level == -1)
                         break;
 
-                    try{
+                    try {
                         warehouseDepots.moveToSwap(1);
                         swapMoveToSwap(level);
-                    }catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     if (waitAndGetResponse() == ERROR) {
@@ -1289,7 +1287,8 @@ public class CLI extends View implements Runnable{
 
     @Override
     public void notifyDisconnection() {
-
+        System.out.println(ANSI_RED+"\nServer down, exiting game"+RESET);
+        System.exit(1);
     }
 
 

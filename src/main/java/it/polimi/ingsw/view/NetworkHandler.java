@@ -63,6 +63,7 @@ public class NetworkHandler extends Thread{
                             view.notifyTurnStarted();
                             continue;
                         case ENDTURN:
+                            read = null;
                             view.notifyTurnEnded();
                             continue;
                     }
