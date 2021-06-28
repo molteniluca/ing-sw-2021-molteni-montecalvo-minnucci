@@ -62,9 +62,11 @@ public class WarehouseDepots implements Serializable {
      * @throws ResourceTypeAlreadyPresentException In case there is already a level with this type
      */
     public void moveToLevel(int level, ResourceTypes resourceTypes, int number) throws TypeNotChangeableException, LevelTooSmallException, NegativeResourceValueException, ResourceTypeAlreadyPresentException {
-        for (Level l: warehouseDepots) {
-            if(l.getResourceType()==resourceTypes && !l.isFixedResource() && !l.equals(warehouseDepots.get(level))){
-                throw new ResourceTypeAlreadyPresentException("Can't use a resource type on multiple levels");
+        if(level<3) {
+            for (int i = 0; i < 3; i++) {
+                if (warehouseDepots.get(i).getResourceType() == resourceTypes && i!=level) {
+                    throw new ResourceTypeAlreadyPresentException("Can't use a resource type on multiple levels");
+                }
             }
         }
 

@@ -2,15 +2,11 @@ package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.LeaderBoardController;
-import it.polimi.ingsw.view.GUI.Controllers.Board.MarketController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.PersonalBoardController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 
@@ -49,5 +45,8 @@ public class OtherPlayerBoardsController extends GenericController{
 
         newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
+        LeaderBoardController.getLeaderBoardController().buttonActivate.setVisible(false);
+        LeaderBoardController.getLeaderBoardController().buttonActivate.setVisible(false);
+
     }
 }
