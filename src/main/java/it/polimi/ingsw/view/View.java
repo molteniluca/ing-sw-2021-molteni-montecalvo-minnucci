@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.network.exceptions.FullRoomException;
+import it.polimi.ingsw.view.exceptions.UnknownIdException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -183,9 +185,19 @@ public abstract class View {
         networkHandler.sendObject(extraResourceIndex);
     }
 
-    public void sendNickname(String nickname) throws IOException {
+    public void sendNickname(String nickname) throws IOException, UnknownIdException, FullRoomException {
         networkHandler.sendObject(nickname);
-        playerNumber = (int) waitAndGetResponse();
+        Object o = waitAndGetResponse();
+        if(o.getClass() == NetworkMessages.class){
+            switch ((NetworkMessages)o){
+                case FULLROOMERROR:
+                    throw new FullRoomException("Trying to join a full room");
+                case UNKNOWNIDERROR:
+                    throw new UnknownIdException("Trying to join a non existent room");
+            }
+        }else {
+            playerNumber = (int) o;
+        }
     }
 
     public void startConnection(String serverAddress, int serverPort) throws IOException {

@@ -71,7 +71,8 @@ public class GUIView extends View {
 
     @Override
     public void notifyDisconnection() {
-        this.gameBoardController.handleDisconnect();
+        if(this.gameBoardController!=null)
+            this.gameBoardController.handleDisconnect();
     }
 
     public synchronized void registerStage(GameBoardController gameBoardController){

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
+import it.polimi.ingsw.network.exceptions.FullRoomException;
+import it.polimi.ingsw.view.exceptions.UnknownIdException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -8,7 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,6 +24,9 @@ import java.util.regex.Pattern;
 import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
 
 public class AskCreateOrJoinController extends GenericController {
+    @FXML
+    public ProgressIndicator loadAnimation;
+
     @FXML // fx:id="serverAddressText"
     private TextField serverAddressText; // Value injected by FXMLLoader
 
@@ -42,31 +49,70 @@ public class AskCreateOrJoinController extends GenericController {
     private Text serverResponse; // Value injected by FXMLLoader
 
     @FXML
-    public void joinGame(ActionEvent actionEvent) throws IOException {
-        connectToServer();
-
-        guiView.joinGame(gameId.getText().toUpperCase());
-        waitForPlayers(nameJoin.getText(), actionEvent);
+    public void joinGame(ActionEvent actionEvent)  {
+        try {
+            loadAnimation.setDisable(false);
+            loadAnimation.setVisible(true);
+            connectToServer();
+            guiView.joinGame(gameId.getText().toUpperCase());
+            waitForPlayers(nameJoin.getText(), actionEvent);
+        } catch (IOException e) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Can't connect to the server!");
+                alert.setContentText("Retry");
+                alert.showAndWait();
+            });
+        }
     }
 
     private void waitForPlayers(String name, ActionEvent event){
         Task task = new Task<Void>() {
             @Override public Void call() {
+            try {
+                guiView.sendNickname(name);
+            } catch (IOException e) {
+                loadAnimation.setDisable(true);
+                loadAnimation.setVisible(false);
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Can't connect to the server!");
+                    alert.setContentText("Retry");
+                    alert.showAndWait();
+                });
+            } catch (UnknownIdException e) {
+                loadAnimation.setDisable(true);
+                loadAnimation.setVisible(false);
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("This room doesn't exist");
+                    alert.setContentText("Ask your mate for the correct one");
+                    alert.showAndWait();
+                });
+            } catch (FullRoomException e) {
+                loadAnimation.setDisable(true);
+                loadAnimation.setVisible(false);
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("This room is already full");
+                    alert.setContentText("Retry with another one");
+                    alert.showAndWait();
+                });
+            }
+
+                guiView.waitForUpdatedGame();
+            Platform.runLater(() -> {
                 try {
-                    guiView.sendNickname(name);
+                    loadGame(event);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                guiView.waitForUpdatedGame();
-                Platform.runLater(() -> {
-                    try {
-                        loadGame(event);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-                return null;
+            });
+            return null;
             }
         };
         new Thread(task).start();
@@ -74,16 +120,25 @@ public class AskCreateOrJoinController extends GenericController {
 
 
     @FXML
-    void createGame(ActionEvent event) throws IOException
-    {
-        connectToServer();
+    void createGame(ActionEvent event) {
+        try {
+            connectToServer();
+            guiView.createGame(comboBox.getValue());
 
-        guiView.createGame(comboBox.getValue());
-        if(guiView.waitAndGetResponse()==SUCCESS) {
-            serverResponse.setText("Game id=" + guiView.waitAndGetResponse());
-            waitForPlayers(nameCreate.getText(),event);
-        }else
-            serverResponse.setText("Error");
+            if(guiView.waitAndGetResponse()==SUCCESS) {
+                serverResponse.setText("Game id=" + guiView.waitAndGetResponse());
+                waitForPlayers(nameCreate.getText(),event);
+            }else
+                serverResponse.setText("Error");
+        } catch (IOException e) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Can't connect to the server!");
+                alert.setContentText("Retry");
+                alert.showAndWait();
+            });
+        }
     }
 
     private void loadGame(ActionEvent event) throws IOException {

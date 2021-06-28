@@ -160,11 +160,11 @@ public class ClientHandler extends Thread{
             this.id=id;
             printDebug("Joined game:"+id);
         } catch (FullRoomException e) {
-            out.writeObject(FULLROOMERROR);
+            sendObject(FULLROOMERROR);
             printDebug("Trying to join a full room:"+id);
             client.close();
         } catch (NullPointerException e){
-            out.writeObject(UNKNOWNIDERROR);
+            sendObject(UNKNOWNIDERROR);
             printDebug("Trying to join a not existing room:"+id);
             client.close();
         }

@@ -5,6 +5,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 
@@ -14,6 +16,10 @@ import java.util.ArrayList;
 public class GameBoardController extends GenericController {
     @FXML
     public Rectangle rectangleBlock;
+    @FXML
+    public Label labelWaitForPlayers;
+    @FXML
+    public ProgressIndicator spinnyThing;
     @FXML
     AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane, marketAnchorPane;
 
@@ -37,6 +43,8 @@ public class GameBoardController extends GenericController {
         newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
         buttonAnchorPane.getChildren().add(newLoadedPaneButton);
         rectangleBlock.setVisible(!guiView.isMyTurn);
+        spinnyThing.setVisible(!guiView.isMyTurn);
+        labelWaitForPlayers.setVisible(!guiView.isMyTurn);
 
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
         controllerArrayList.add(MarketController.getMarketController());
@@ -45,6 +53,8 @@ public class GameBoardController extends GenericController {
     public void startTurn() {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(false);
+            spinnyThing.setVisible(false);
+            labelWaitForPlayers.setVisible(false);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Your turn has started");
             alert.setHeaderText("Your turn has started");
@@ -57,6 +67,8 @@ public class GameBoardController extends GenericController {
     public void endTurn() {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
+            spinnyThing.setVisible(true);
+            labelWaitForPlayers.setVisible(true);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Your turn has ended");
             alert.setHeaderText("Your turn has ended");
@@ -68,7 +80,9 @@ public class GameBoardController extends GenericController {
 
     public void handleDisconnect() {
         Platform.runLater(() -> {
-            rectangleBlock.setVisible(false);
+            rectangleBlock.setVisible(true);
+            spinnyThing.setVisible(false);
+            labelWaitForPlayers.setVisible(false);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Closed connection with the server");
             alert.setHeaderText("The game has ended");
@@ -80,7 +94,9 @@ public class GameBoardController extends GenericController {
 
     public void handleGameEnd(boolean youWon) {
         Platform.runLater(() -> {
-            rectangleBlock.setVisible(false);
+            rectangleBlock.setVisible(true);
+            spinnyThing.setVisible(false);
+            labelWaitForPlayers.setVisible(false);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game ended");
             if(youWon)
@@ -95,7 +111,6 @@ public class GameBoardController extends GenericController {
 
     public void showError(String lastErrorMessage) {
         Platform.runLater(() -> {
-            rectangleBlock.setVisible(false);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(lastErrorMessage);

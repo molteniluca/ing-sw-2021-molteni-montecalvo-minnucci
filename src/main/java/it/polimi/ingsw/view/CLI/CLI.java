@@ -13,7 +13,9 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.board.personal.storage.StrongBox;
 import it.polimi.ingsw.model.resources.Resources;
+import it.polimi.ingsw.network.exceptions.FullRoomException;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.exceptions.UnknownIdException;
 
 import java.util.*;
 import java.util.regex.*;
@@ -443,7 +445,13 @@ public class CLI extends View implements Runnable{
                 System.out.print("Please enter your name: ");
                 nickname = input.readLine();
 
-                sendNickname(nickname);
+                try {
+                    sendNickname(nickname);
+                } catch (UnknownIdException e) {
+                    e.printStackTrace();//FIXME
+                } catch (FullRoomException e) {
+                    e.printStackTrace();//FIXME
+                }
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
                 System.out.println("\nWaiting for players ...");
