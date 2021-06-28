@@ -80,9 +80,7 @@ public class MarketController extends GenericController implements Initializable
         resLabels = new Label[]{goldLabel, servantLabel, shieldLabel, stoneLabel};
         resourceTypes = new ResourceTypes[]{ResourceTypes.GOLD, ResourceTypes.SERVANT, ResourceTypes.SHIELD, ResourceTypes.STONE};
 
-        Platform.runLater(() -> {
-            updateMarketMatrix();
-        });
+        Platform.runLater(this::updateMarketMatrix);
     }
 
     private void updateMarketMatrix() {

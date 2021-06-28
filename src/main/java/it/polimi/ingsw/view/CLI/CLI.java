@@ -113,6 +113,7 @@ public class CLI extends View implements Runnable{
         askNickname();
     }
 
+
     /**
      * Method that shows the personalBoard of the user
      */
@@ -473,22 +474,46 @@ public class CLI extends View implements Runnable{
         //To add position received from Server
 
         int position = faithTrack.getPosition();
-
+        int[] faithCards = faithTrack.getFaithCards();
 
         for(int i =0; i< MAX_POSITION; i++) {
             if ((i >= 5) && (i <= 8) || (i>=12) && (i<=16) || i>=19) {
                 System.out.print(ColorCLI.ANSI_YELLOW);
                 if (i % 8 == 0)
                     System.out.print(ColorCLI.ANSI_RED);
+
             } else
                 System.out.print(ColorCLI.RESET);
             System.out.print("[ ");
+            if(i == 8)
+                System.out.print(printFaithCard(faithCards[0]));
+            if(i == 16)
+                System.out.print(printFaithCard(faithCards[1]));
+            if(i == 24)
+                System.out.print(printFaithCard(faithCards[2]));
             if (i == position)
                 System.out.print("\bX");
             System.out.print("] ");
         }
         System.out.println(RESET);
+        System.out.println("X: current position, ▲: activated card, 🀫: discarded card");
         System.out.print("\n");
+    }
+
+    /**
+     * Associates each FaithCard to a particular symbol
+     * @param card the pope Card that has to be printed
+     * @return the symbol associated with each faithCard depending on its position
+     */
+    private String printFaithCard(int card)
+    {
+        switch (card){
+            case 1:
+                return "▲";
+            case 2:
+                return "🀫";
+        }
+        return "";
     }
 
 
@@ -1301,9 +1326,11 @@ public class CLI extends View implements Runnable{
         }
     }
 
+
     @Override
     public synchronized void notifyTurnStarted() {
     }
+
 
     @Override
     public synchronized void notifyTurnEnded() {
@@ -1311,7 +1338,7 @@ public class CLI extends View implements Runnable{
 
     @Override
     public void notifyDisconnection() {
-        System.out.println(ANSI_RED+"\nServer down, exiting game"+RESET);
+        System.out.println(ANSI_RED+"\nA client has disconnected, exiting game"+RESET);
         System.exit(1);
     }
 
