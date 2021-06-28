@@ -21,14 +21,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="bMarket" alignment="CENTER" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Buy Resources" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
             <Button fx:id="bCardDealer" alignment="CENTER" mnemonicParsing="false" onAction="#openCardDealer" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Buy Production Cards" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
@@ -45,14 +37,6 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="bLeaders" alignment="CENTER" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Use Leader Cards" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
             <Button fx:id="bOtherPlayers" alignment="CENTER" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Show Other Players" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
@@ -61,7 +45,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="bEndTurn" alignment="CENTER" onAction="#endTurn" mnemonicParsing="false" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Turn" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <Button fx:id="bEndTurn" alignment="CENTER" mnemonicParsing="false" onAction="#endTurn" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Turn" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>

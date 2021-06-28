@@ -10,11 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static it.polimi.ingsw.network.NetworkMessages.GAMESTARTED;
 
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;

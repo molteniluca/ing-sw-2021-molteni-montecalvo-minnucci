@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static it.polimi.ingsw.network.NetworkMessages.SUCCESS;
-
 public class AskCreateOrJoinController extends GenericController {
     @FXML
     public ProgressIndicator loadAnimation;
