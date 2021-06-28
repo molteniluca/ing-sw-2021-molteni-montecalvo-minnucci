@@ -46,7 +46,7 @@ public class PersonalBoardController extends GenericController{
         currentFaithPosition = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
-        if(guiView.game.getNumPlayers()==1 && false){   //TODO why false??
+        if(guiView.game.getNumPlayers()==1){
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(false);
             currentLorenzoFaithPosition = guiView.game.getSelfPLayingTurn().getLorenzo().getFaithTrack().getPosition();
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(true);

@@ -47,7 +47,7 @@ public class Game implements Serializable {
 
 
         Random rand = new Random();
-        int inkwellPlayer = Math.round(rand.nextFloat()*numPlayers);
+        int inkwellPlayer = rand.nextInt(numPlayers);
 
         ArrayList<LeaderCard>[] leaderCardsInHand = getStartingLeaders();
 
