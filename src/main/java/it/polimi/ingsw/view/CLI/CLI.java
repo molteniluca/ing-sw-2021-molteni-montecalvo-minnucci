@@ -315,7 +315,7 @@ public class CLI extends View implements Runnable{
                         }catch (NumberFormatException e)
                         {
                             cliSupporter.wrongInput();
-                            numberOfPlayers = 6;
+                            numberOfPlayers = 6; //used because while requires numberOfPlayers <=0 or >= 5
                         }
                     else
                         numberOfPlayers = 0;
@@ -357,7 +357,9 @@ public class CLI extends View implements Runnable{
 
         }catch (IOException  e)
         {
-            e.printStackTrace();
+            System.out.println(ANSI_RED+"Interrupted connection to the server"+RESET);
+            System.exit(1);
+            //e.printStackTrace();
         }
 
 
@@ -427,7 +429,8 @@ public class CLI extends View implements Runnable{
         try {
             startConnection(serverAddress,serverPort);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(ANSI_RED+"Cannot connect to the server"+RESET);
+            System.exit(1);
         }
     }
 
@@ -448,17 +451,13 @@ public class CLI extends View implements Runnable{
                 try {
                     sendNickname(nickname);
                 } catch (UnknownIdException e) {
-                    e.printStackTrace();//FIXME
-                } catch (FullRoomException e) {
-                    e.printStackTrace();//FIXME
+                    System.out.print(ANSI_RED+"\nTrying to join a non existing room"+RESET);
+                } catch (FullRoomException s) {
+                    System.out.print(ANSI_RED+"\nTrying to join a full room"+RESET);
                 }
                 //check if nickname already exists and eventually throws an Exception
                 correctInput = true;
                 System.out.println("\nWaiting for players ...");
-                /*
-               Send nickname and receive ack or nack from the server if name is already taken
-               throw new NameAlreadyPresentException("Name already present, chose another one");
-                */
             }
             catch (NumberFormatException e) //NameAlreadyPresentException
             {
