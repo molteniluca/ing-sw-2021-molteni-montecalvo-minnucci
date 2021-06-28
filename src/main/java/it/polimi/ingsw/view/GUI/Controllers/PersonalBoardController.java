@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import it.polimi.ingsw.view.GUI.GUIView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 
 public class PersonalBoardController extends GenericController{
     private int currentFaithPosition, currentLorenzoFaithPosition;
-    private int slotPosition[] = new int[3];
+    private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
 
     @FXML
@@ -47,7 +46,7 @@ public class PersonalBoardController extends GenericController{
         currentFaithPosition = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
-        if(guiView.game.getNumPlayers()==1 && false){
+        if(guiView.game.getNumPlayers()==1 && false){   //TODO why false??
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(false);
             currentLorenzoFaithPosition = guiView.game.getSelfPLayingTurn().getLorenzo().getFaithTrack().getPosition();
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(true);
