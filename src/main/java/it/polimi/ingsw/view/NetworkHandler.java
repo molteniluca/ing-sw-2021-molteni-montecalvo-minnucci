@@ -44,6 +44,8 @@ public class NetworkHandler extends Thread{
         while(read==null){
             try {
                 read = in.readObject();
+                if(read==null)
+                    continue;
                 if(read.getClass() == NetworkMessages.class) {
                     switch((NetworkMessages)read) {
                         case HEARTBEAT:
