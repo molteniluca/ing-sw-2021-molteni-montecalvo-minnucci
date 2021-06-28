@@ -34,7 +34,6 @@ public class CLI extends View implements Runnable{
     private int winOrLose = -1; //says if a player won the game, 1 won 0 don't
     private boolean actionDone = false; //says if a main action (produce, market, cardDealer) has been done
     private boolean singlePlayer = false; //says if a player is playing alone
-    private int playerNumber; //the number of the player received before GAMESTARTED
     private CliSupporter cliSupporter; //supporter class that makes the CLI thinner
 
 
@@ -61,7 +60,7 @@ public class CLI extends View implements Runnable{
         waitForUpdatedGame();
 
 
-        System.out.println(ANSI_GREEN+"Waiting  fort players ..."+RESET);
+        System.out.println(ANSI_GREEN+"Waiting  for players ..."+RESET);
 
         waitAndGetResponse(); //game started
 
@@ -268,6 +267,7 @@ public class CLI extends View implements Runnable{
         cliSupporter.refresh();
         cliSupporter.printMainTitle();
     }
+
 
     /**
      * Method that asks the user if it wants to create a new game or join
@@ -503,7 +503,7 @@ public class CLI extends View implements Runnable{
         int column;
         int row;
 
-        Market market = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
+        Market market;
         LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
         ArrayList<ExtraResource> extraResources  = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
 
@@ -1273,7 +1273,7 @@ public class CLI extends View implements Runnable{
         }
         else {
             winOrLose = 0;
-            System.out.println("\nYou lost"+ game.getPlayerTurn(playerNumber).getVictoryPoints());
+            System.out.println("\nYou lost, "+ game.getPlayerTurn(playerNumber).getVictoryPoints());
         }
     }
 

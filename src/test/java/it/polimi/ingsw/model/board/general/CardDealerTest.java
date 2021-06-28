@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.board.general;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
@@ -9,14 +12,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class CardDealerTest {
 
     private CardDealer cardDealer;
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 4;
+    private Stack<DevelopmentCard>[][] cardMatrix;
     private DevelopmentCard developmentCard; //the drown card
     private ArrayList<Character> cardType; // array that contains types of DevelopmentCards --> colors
 
@@ -24,9 +30,87 @@ public class CardDealerTest {
     public final ExpectedException exception = ExpectedException.none();
 
 
+    /**
+     * The test is done assuming that the card dealer is static, not shuffled
+     * It is created and than reinitialized
+     */
     @Before
-    public void setUp() throws Exception{
+    public void setUp(){
         cardDealer = new CardDealer();
+
+        cardMatrix = cardDealer.getCardMatrix();
+
+        Gson gson = new Gson();
+        JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("json/developmentCards.json"))));
+        List<DevelopmentCard> data = gson.fromJson(reader,  new TypeToken<ArrayList<DevelopmentCard>>(){}.getType());
+
+
+        //initializes the card matrix again
+        for (int i=0; i<ROWS; i++) {
+            for (int k=0; k<COLUMNS; k++) {
+                cardMatrix[i][k] = new Stack<>();
+            }
+        }
+
+        //fill the stacks with Development cards
+        for (DevelopmentCard card: data)
+        {
+            switch (card.getType()) {
+                case 'g':
+                    switch (card.getLevel()) {
+                        case 1:
+                            cardMatrix[2][0].push(card);
+                            break;
+                        case 2:
+                            cardMatrix[1][0].push(card);
+                            break;
+                        case 3:
+                            cardMatrix[0][0].push(card);
+                            break;
+                    }
+                    break;
+                case 'b':
+                    switch (card.getLevel()) {
+                        case 1:
+                            cardMatrix[2][1].push(card);
+                            break;
+                        case 2:
+                            cardMatrix[1][1].push(card);
+                            break;
+                        case 3:
+                            cardMatrix[0][1].push(card);
+                            break;
+                    }
+                    break;
+                case 'y':
+                    switch (card.getLevel()) {
+                        case 1:
+                            cardMatrix[2][2].push(card);
+                            break;
+                        case 2:
+                            cardMatrix[1][2].push(card);
+                            break;
+                        case 3:
+                            cardMatrix[0][2].push(card);
+                            break;
+                    }
+                    break;
+                case 'p':
+                    switch (card.getLevel()) {
+                        case 1:
+                            cardMatrix[2][3].push(card);
+                            break;
+                        case 2:
+                            cardMatrix[1][3].push(card);
+                            break;
+                        case 3:
+                            cardMatrix[0][3].push(card);
+                            break;
+                    }
+                    break;
+            }
+        }
+
         cardType = new ArrayList<>();
         //adding order is important
         cardType.add('g');
