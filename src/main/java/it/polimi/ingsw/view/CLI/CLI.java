@@ -27,7 +27,7 @@ import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 /**
  * Concrete class that represent the Command Line interface created by the user
  */
-public class CLI extends View{
+public class CLI extends View implements Runnable{
 
     private static final int MAX_POSITION = 25;
     private final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -1250,7 +1250,11 @@ public class CLI extends View{
 
         if(message == TURNEND)
         {
-            this.interrupt();
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         return true;

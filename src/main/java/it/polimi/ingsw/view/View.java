@@ -14,7 +14,7 @@ import java.util.Queue;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;
 
-public abstract class View extends Thread {
+public abstract class View {
     private NetworkHandler networkHandler;
     public Game game;
     public int playerNumber; //the number of the player received before GAMESTARTED
