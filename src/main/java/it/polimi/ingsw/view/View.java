@@ -114,6 +114,7 @@ public abstract class View {
     }
 
     public void discardLeader(int currentCard) throws IOException {
+        networkHandler.sendObject(DISCARDLEADER);
         networkHandler.sendObject(currentCard);
     }
 

@@ -45,7 +45,7 @@ public class AskCreateOrJoinController extends GenericController {
     public void joinGame(ActionEvent actionEvent) throws IOException {
         connectToServer();
 
-        guiView.joinGame(gameId.getText());
+        guiView.joinGame(gameId.getText().toUpperCase());
         waitForPlayers(nameJoin.getText(), actionEvent);
     }
 
