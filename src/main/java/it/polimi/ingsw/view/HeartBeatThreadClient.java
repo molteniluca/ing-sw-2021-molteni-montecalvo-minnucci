@@ -20,6 +20,7 @@ public class HeartBeatThreadClient extends TimerTask {
             networkHandler.sendHeartBeat();
         } catch (IOException e) {
             networkHandler.closeConnection();
+            this.cancel();
         }
     }
 }
