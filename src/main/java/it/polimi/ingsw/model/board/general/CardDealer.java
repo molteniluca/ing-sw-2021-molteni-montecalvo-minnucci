@@ -28,12 +28,15 @@ public class CardDealer implements Serializable {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("json/developmentCards.json"))));
         List<DevelopmentCard> data = gson.fromJson(reader,  new TypeToken<ArrayList<DevelopmentCard>>(){}.getType());
 
+        //shuffles the cards before adding them in the stack
+        Collections.shuffle(data);
+
 
         //creates the matrix and the stack
-        this.cardMatrix = new Stack[ROWS][COLUMNS];
+        cardMatrix = new Stack[ROWS][COLUMNS];
         for (int i=0; i<ROWS; i++) {
             for (int k=0; k<COLUMNS; k++) {
-                this.cardMatrix[i][k] = new Stack<>();
+                cardMatrix[i][k] = new Stack<>();
             }
         }
 
@@ -77,6 +80,7 @@ public class CardDealer implements Serializable {
                             break;
                         case 3:
                             cardMatrix[0][2].push(card);
+                            break;
                     }
                     break;
                 case 'p':
@@ -95,15 +99,6 @@ public class CardDealer implements Serializable {
             }
         }
 
-        /*
-        //Shuffles all the single stacks
-        for (int i=0; i<ROWS; i++) {
-            for (int k=0; k<COLUMNS; k++) {
-                Collections.shuffle(this.cardMatrix[i][k]);
-            }
-        }
-
-         */
     }
 
 
