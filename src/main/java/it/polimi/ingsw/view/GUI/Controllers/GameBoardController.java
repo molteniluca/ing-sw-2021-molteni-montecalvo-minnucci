@@ -62,4 +62,32 @@ public class GameBoardController extends GenericController{
             alert.showAndWait();
         });
     }
+
+    public void handleDisconnect() {
+        Platform.runLater(() -> {
+            rectangleBlock.setVisible(false);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Closed connection with the server");
+            alert.setHeaderText("The game has ended");
+            alert.setContentText("Close the game");
+
+            alert.showAndWait();
+        });
+    }
+
+    public void handleGameEnd(boolean youWon) {
+        Platform.runLater(() -> {
+            rectangleBlock.setVisible(false);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game ended");
+            if(youWon)
+                alert.setHeaderText("Congratulation, you won");
+            else
+                alert.setHeaderText("You lost, better luck next time!");
+
+            alert.setContentText("Close the game");
+
+            alert.showAndWait();
+        });
+    }
 }

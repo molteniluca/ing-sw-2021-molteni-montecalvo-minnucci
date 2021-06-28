@@ -36,7 +36,7 @@ public class GUIView extends View {
 
     @Override
     protected void notifyEndGame(boolean youWon) {
-
+        gameBoardController.handleGameEnd(youWon);
     }
 
     @Override
@@ -63,6 +63,11 @@ public class GUIView extends View {
         }
         isMyTurn=false;
         gameBoardController.endTurn();
+    }
+
+    @Override
+    public void notifyDisconnection() {
+        this.gameBoardController.handleDisconnect();
     }
 
     public synchronized void registerStage(GameBoardController gameBoardController){

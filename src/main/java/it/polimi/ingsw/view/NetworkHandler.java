@@ -61,9 +61,8 @@ public class NetworkHandler extends Thread{
                             view.notifyTurnStarted();
                             continue;
                         case TURNEND:
-                            read=null;
                             view.notifyTurnEnded();
-                            continue;
+                            return SUCCESS;
                     }
                 }
                 if(read.getClass() == Game.class) {
@@ -94,5 +93,6 @@ public class NetworkHandler extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        view.notifyDisconnection();
     }
 }

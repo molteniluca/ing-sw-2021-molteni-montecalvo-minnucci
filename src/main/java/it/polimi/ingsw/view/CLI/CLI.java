@@ -1287,6 +1287,11 @@ public class CLI extends View implements Runnable{
 
     }
 
+    @Override
+    public void notifyDisconnection() {
+
+    }
+
 
     /**
      * Depending on the number of the player allows the user to

@@ -46,7 +46,7 @@ public class PersonalBoardController extends GenericController{
         currentFaithPosition = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
-        if(guiView.game.getNumPlayers()==1){
+        if(guiView.game.getNumPlayers()==1 && false){
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(false);
             currentLorenzoFaithPosition = guiView.game.getSelfPLayingTurn().getLorenzo().getFaithTrack().getPosition();
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(true);
@@ -107,7 +107,6 @@ public class PersonalBoardController extends GenericController{
     }
 
     private void updateSlotImage(int level,int slot, DevelopmentCard developmentCard){
-        //FIXME !!!!
         if(slots[slot][level].getImage()==null) {
             String nameImage = developmentCard.getImage();
             slots[slot][level].setImage(new Image("images/Cards/DevelopmentCards/" +nameImage+"-1.png"));

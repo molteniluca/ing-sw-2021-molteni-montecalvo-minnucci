@@ -49,6 +49,10 @@ public abstract class View {
      * @param game the new game received from the server
      */
     public synchronized void updateObjects(Game game) {
+        if(this.game != null)
+            game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().setLeaderCardsInHand(
+                    this.game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand()
+            );
         this.game = game;
     }
 
@@ -213,4 +217,6 @@ public abstract class View {
     public abstract void notifyTurnStarted();
 
     public abstract void notifyTurnEnded();
+
+    public abstract void notifyDisconnection();
 }

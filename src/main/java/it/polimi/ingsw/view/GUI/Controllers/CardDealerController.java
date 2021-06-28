@@ -53,7 +53,8 @@ public class CardDealerController extends GenericController{
         Stack<DevelopmentCard>[][] cardMatrix = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                developmentCardToImageName(cardMatrix[i][j].peek(), ipc[i][j]);
+                if(!cardMatrix[i][j].empty())
+                    developmentCardToImageName(cardMatrix[i][j].peek(), ipc[i][j]);
             }
         }
         setColumnRowIndexes();

@@ -19,8 +19,7 @@ public class HeartBeatThreadClient extends TimerTask {
         try {
             networkHandler.sendHeartBeat();
         } catch (IOException e) {
-            System.out.println("Disconnected from server!");
-            System.exit(-1);
+            networkHandler.closeConnection();
         }
     }
 }
