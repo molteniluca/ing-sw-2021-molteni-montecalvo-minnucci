@@ -3,10 +3,12 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
+import it.polimi.ingsw.view.GUI.Controllers.CardDealerController;
 import it.polimi.ingsw.view.View;
 
-import static it.polimi.ingsw.network.NetworkMessages.TURNBEGIN;
-import static it.polimi.ingsw.network.NetworkMessages.TURNEND;
+import java.io.IOException;
+
+import static it.polimi.ingsw.network.NetworkMessages.*;
 
 
 public class GUIView extends View {
@@ -87,7 +89,24 @@ public class GUIView extends View {
         return singleton;
     }
 
-    public Object waitAndGetResponse(){
+    public String createGameAndGetId(int numberOfPlayers) throws IOException {
+        super.createGame(numberOfPlayers);
+        if(isSuccessReceived())
+            return (String) waitAndGetResponse();
+        else
+            throw new IOException();
+    }
+
+
+    public boolean chooseLeaderAndWaitForStart(Integer[] chose) throws IOException {
+        super.chooseLeader(chose);
+        if(isSuccessReceived()) {
+            return waitAndGetResponse() == GAMESTARTED;
+        }
+        return false;
+    }
+
+    protected Object waitAndGetResponse(){
         Object ret = super.waitAndGetResponse();
         if(ret==TURNBEGIN || ret==TURNEND)
             return waitAndGetResponse();

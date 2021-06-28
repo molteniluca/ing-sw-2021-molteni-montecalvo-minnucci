@@ -114,13 +114,11 @@ public class InitialLeaderSelectionController extends GenericController{
                     k++;
                 }
             }
-            guiView.chooseLeader(numberOfLeaderToSend);
-            if(guiView.isSuccessReceived()) {
-                if(guiView.waitAndGetResponse()==GAMESTARTED) {
-                    guiView.waitForUpdatedGame();
-                    CardDealerController.goToGameBoard(actionEvent); //open gameBoard
-                }
-            }//FIXME else
+
+            if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
+                guiView.waitForUpdatedGame();
+                CardDealerController.goToGameBoard(actionEvent); //open gameBoard
+            }
 
         }
         else {
@@ -152,7 +150,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 {
                     e.printStackTrace();
                 }
-                guiView.waitAndGetResponse(); //FIXME
+                guiView.isSuccessReceived();
                 break;
 
             case 3:
@@ -173,7 +171,7 @@ public class InitialLeaderSelectionController extends GenericController{
                     gChooseResource.setDisable(true);
                 }
 
-                guiView.waitAndGetResponse(); //FIXME
+                guiView.isSuccessReceived();
                 break;
         }
     }

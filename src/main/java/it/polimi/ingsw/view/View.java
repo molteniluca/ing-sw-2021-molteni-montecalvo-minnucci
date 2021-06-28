@@ -49,7 +49,7 @@ public abstract class View {
      * @param game the new game received from the server
      */
     public synchronized void updateObjects(Game game) {
-        if(this.game != null)
+        if(this.game != null && false)
             game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().setLeaderCardsInHand(
                     this.game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand()
             );
@@ -75,7 +75,7 @@ public abstract class View {
      *
      * @return the message or the object received
      */
-    public synchronized Object waitAndGetResponse() {
+    protected synchronized Object waitAndGetResponse() {
         while (messages.size() == 0) {
             try {
                 this.wait();

@@ -15,7 +15,7 @@ public class StrongBox implements Serializable {
     private Resources resources;
 
     public StrongBox(){
-        resources=new Resources();//.set(ResourceTypes.SHIELD,100).set(ResourceTypes.STONE,100).set(ResourceTypes.GOLD,100).set(ResourceTypes.SERVANT,100);
+        resources=new Resources().set(ResourceTypes.SHIELD,20).set(ResourceTypes.STONE,20).set(ResourceTypes.GOLD,20).set(ResourceTypes.SERVANT,20);
     }
 
     public Resources getResources(){

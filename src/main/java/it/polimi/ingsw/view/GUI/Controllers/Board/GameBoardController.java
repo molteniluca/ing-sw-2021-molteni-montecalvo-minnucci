@@ -48,6 +48,7 @@ public class GameBoardController extends GenericController {
 
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
         controllerArrayList.add(MarketController.getMarketController());
+        controllerArrayList.add(LeaderBoardController.getLeaderBoardController());
     }
 
     public void startTurn() {
