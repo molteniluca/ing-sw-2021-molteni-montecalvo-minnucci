@@ -2,6 +2,8 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.network.exceptions.FullRoomException;
+import it.polimi.ingsw.network.exceptions.WrongObjectException;
+
 import static it.polimi.ingsw.network.NetworkMessages.*;
 
 import java.io.*;
@@ -43,7 +45,7 @@ public class ClientHandler extends Thread{
             in = new ObjectInputStream(client.getInputStream());
             out = new ObjectOutputStream(client.getOutputStream());
 
-            command = receiveObject(NetworkMessages.class);
+            command = receiveMessage();
 
             new HeartbeatThreadServer(this);
 
@@ -56,7 +58,7 @@ public class ClientHandler extends Thread{
 
                 client.close();
             }
-        } catch (IOException e) {
+        } catch (IOException | WrongObjectException e) {
             try {
                 client.close();
             } catch (IOException ioException) {
@@ -85,7 +87,7 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      * @throws ClassCastException In case the client doesn't send the specified type of object
      */
-    public synchronized <T> T receiveObject(Class<? extends T> c) throws IOException {
+    public synchronized <T> T receiveObject(Class<? extends T> c) throws IOException, WrongObjectException {
         Object read = null;
         while(read==null){
             try {
@@ -94,7 +96,7 @@ public class ClientHandler extends Thread{
                     sendObject(ERROR);
                     sendObject("Unexpected object, expecting:"+c.toString()+", but got null");
                     printDebug("Unexpected object, expecting:"+c+", but got null");
-                    continue;
+                    throw new WrongObjectException("Unexpected object, expecting:"+c+", but got null");
                 }
                 if(read.getClass() == NetworkMessages.class) {
                     if (read == HEARTBEAT) {
@@ -106,12 +108,13 @@ public class ClientHandler extends Thread{
                     sendObject(ERROR);
                     sendObject("Unexpected object, expecting:"+c.toString()+", but got:"+read.getClass());
                     printDebug("Unexpected object, expecting:"+c+", but got:"+read.getClass());
-                    read = null;
+                    throw new WrongObjectException("Unexpected object, expecting:"+c+", but got:"+read.getClass());
                 }
             } catch (ClassNotFoundException e) {
                 sendObject(ERROR);
                 sendObject("Unexpected object");
                 printDebug("Unexpected object");
+                throw new WrongObjectException("Unexpected object");
             }
         }
 
@@ -166,6 +169,8 @@ public class ClientHandler extends Thread{
         } catch (NullPointerException e){
             sendObject(UNKNOWNIDERROR);
             printDebug("Trying to join a not existing room:"+id);
+            client.close();
+        } catch (WrongObjectException e) {
             client.close();
         }
     }
@@ -247,7 +252,12 @@ public class ClientHandler extends Thread{
      * @return The received message
      */
     public NetworkMessages receiveMessage() throws IOException {
-        return receiveObject(NetworkMessages.class);
+        while(true){
+            try {
+                return receiveObject(NetworkMessages.class);
+            } catch (WrongObjectException ignored) {
+            }
+        }
     }
 
     /**
