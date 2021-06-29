@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -67,28 +68,35 @@ public class PersonalBoardController extends GenericController {
     void updateWarehouse(int player){
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
         for(int i = 0; i< warehouseDepots.getNumberLevels(); i++){
+            int resourceNumber = warehouseDepots.getResourcesNumber(i);
             ResourceTypes resourceTypes = warehouseDepots.getResourceTypeLevel(i);
-            if (resourceTypes != null) {
+            if (resourceNumber > 0) {
                 String imageName = "images/resources/" + resourceTypes.toString().toLowerCase() + ".png";
                 changeLevelResources(imageName, warehouseDepots.getResourcesNumber(i), i);
             }
+            else
+                changeLevelResources(null, warehouseDepots.getLevel(i).getMaxResourceNumber(), i);
         }
 
     }
 
     private void changeLevelResources(String imageName, int numberOfResources, int level){
+        Image image;
+        if(imageName == null)
+            image = null;
+        else
+            image = new Image(imageName);
+
         for(int j = 0; j<numberOfResources; j++){
             switch (level){
                 case 0:
-                    lev1.setImage(new Image(imageName));
+                    lev1.setImage(image);
                     break;
                 case 1:
-                    level2Image[j].setImage(new Image(imageName));
-                    j++;
+                    level2Image[j].setImage(image);
                     break;
                 case 2:
-                    level3Image[j].setImage(new Image(imageName));
-                    j++;
+                    level3Image[j].setImage(image);
                     break;
             }
         }
@@ -147,7 +155,7 @@ public class PersonalBoardController extends GenericController {
 
     @Override
     public void update() {
-        updatePersonalBoard(guiView.playerNumber);
+        Platform.runLater(() -> updatePersonalBoard(guiView.playerNumber));
     }
 
     public void update(int player) {

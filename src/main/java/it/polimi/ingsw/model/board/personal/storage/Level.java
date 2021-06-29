@@ -106,4 +106,8 @@ public class Level implements Serializable {
     public boolean getFixedResource() {
         return fixedResource;
     }
+
+    public int getMaxResourceNumber() {
+        return maxResourceNumber;
+    }
 }

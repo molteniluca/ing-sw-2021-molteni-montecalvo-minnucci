@@ -175,18 +175,25 @@ public class MarketController extends GenericController implements Initializable
     }
 
     private void showSwapArea() {
-
         setAbleButtons();
+        //updateSwap();
+        lYouHaveNow.setOpacity(1);
+    }
+
+    private void updateSwap(){
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
         resourcesFromMarket = warehouseDepots.getSwapDeposit();
-
-        lYouHaveNow.setOpacity(1);
         for (int i = 0; i < 4; i++) {
             resLabels[i].setText(String.valueOf(resourcesFromMarket.getResourceNumber(resourceTypes[i])));
         }
+
+        if (resourcesFromMarket.getTotalResourceNumber() == 0 && bTake.getOpacity() != 0){ //only one control on the opacity is necessary
+            bTake.setDisable(true);
+            bPlace.setDisable(true);
+            bTake.setOpacity(0.5);
+            bPlace.setOpacity(0.5);
+        }
     }
-
-
 
     private void setAbleButtons(){
         for (RadioButton button: levelRadioButtons) {
@@ -209,7 +216,7 @@ public class MarketController extends GenericController implements Initializable
 
     }
 
-    public void confirmSwap(MouseEvent mouseEvent){
+    public void confirmSwap(ActionEvent actionEvent){
         boolean exit = false;
         //TODO ask if player is sure, he can lose resources (alert/popup?)
 
@@ -242,6 +249,7 @@ public class MarketController extends GenericController implements Initializable
             bTake.setOpacity(0);
             bPlace.setOpacity(0);
             bConfirmSwap.setOpacity(0);
+            lYouHaveNow.setOpacity(0);
         }
     }
 
@@ -368,8 +376,13 @@ public class MarketController extends GenericController implements Initializable
 
     @Override
     public void update() {
-        updateMarketMatrix();
+        Platform.runLater( () -> {
+            updateMarketMatrix();
+            updateSwap();
+        }
+        );
     }
+
 }
 
 

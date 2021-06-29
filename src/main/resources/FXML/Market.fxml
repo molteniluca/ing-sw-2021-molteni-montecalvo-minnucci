@@ -143,7 +143,7 @@
                   <Image url="@../images/resources/gold.png" />
                </image>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
@@ -151,7 +151,7 @@
                   <Image url="@../images/resources/servant.png" />
                </image>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
@@ -159,7 +159,7 @@
                   <Image url="@../images/resources/shield.png" />
                </image>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -167,7 +167,7 @@
                   <Image url="@../images/resources/stone.png" />
                </image>
                <cursor>
-                  <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
             <Label fx:id="goldLabel" text="0" textAlignment="CENTER" GridPane.columnIndex="1">

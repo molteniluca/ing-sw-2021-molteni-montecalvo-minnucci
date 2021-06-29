@@ -904,7 +904,7 @@ public class CLI extends View implements Runnable{
                 System.out.print(ColoredResources.valueOf(warehouseDepots.getResourceTypeLevel(i - 1).toString()) + " ");
 
             int j;
-            j = (0 < i && i < 4) ? i : 2;
+            j = (0 < i && i < 4) ? i : 2; //levels from 1 to 3 has 1 to 3 resources, others (4, 5) have 2 resource (leaders)
 
             for (int l = warehouseDepots.getResourcesNumber(i - 1); l < j; l++)
                 System.out.print(BLANK + " ");
