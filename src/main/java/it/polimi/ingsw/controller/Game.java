@@ -124,14 +124,17 @@ public class Game implements Serializable {
                 try {
                     turns.get(currentPlayer).beginTurn();
                 } catch (FaithOverflowException e) {
+                    turns.get(0).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(currentPlayer==0);
                 } catch (NotEnoughCardException e) {
+                    turns.get(0).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(false);
                 } catch (WinException e) {
+                    turns.get(0).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(true);

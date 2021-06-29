@@ -151,7 +151,7 @@ public class GUIView extends View {
      */
     protected Object waitAndGetResponse(){
         Object ret = super.waitAndGetResponse();
-        if(ret==TURNBEGIN || ret==TURNEND)
+        if(ret==TURNBEGIN) //Ignore notification messages (Which are useful for cli)
             return waitAndGetResponse();
         else
             return ret;
