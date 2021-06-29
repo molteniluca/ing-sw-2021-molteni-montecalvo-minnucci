@@ -21,27 +21,27 @@ import java.io.IOException;
 import java.util.Stack;
 
 public class CardDealerController extends GenericController{
-
-    public Label servantLabel;
-    public Label shieldLabel;
-    public Label stoneLabel;
-    public Label goldLabel;
     boolean[][] isProdCardSelected = new boolean[3][4];
     int counter, numberOfSelectedCards;
     int row;
     int column;
 
     @FXML
-    ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
-
-    ImageView[][] ipc;
+    public Label servantLabel;
+    @FXML
+    public Label shieldLabel;
+    @FXML
+    public Label stoneLabel;
+    @FXML
+    public Label goldLabel;
 
     @FXML
-    Button bGameBoard, bConfirm;
-
+    public ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
+    public ImageView[][] ipc;
+    @FXML
+    public Button bGameBoard, bConfirm;
     @FXML // fx:id="comboBox"
     private ComboBox<Integer> comboBox;
-
     @FXML
     Label lWrongSelection;
 

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.view.GUI.Controllers.Board;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
+import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.CLI.ColoredResources;
@@ -24,11 +26,12 @@ import static it.polimi.ingsw.network.NetworkMessages.ERROR;
 
 public class MarketController extends GenericController implements Initializable {
     private static MarketController marketController;
-
-
+    @FXML
+    public ComboBox extraEffectComboBox;
+    @FXML
+    public Label extraEffectLabel;
     @FXML
     private Button bTake, bPlace, bConfirmSwap;
-
     @FXML
     private Label goldLabel, servantLabel, shieldLabel, stoneLabel, lYouHaveNow;
 
@@ -37,20 +40,15 @@ public class MarketController extends GenericController implements Initializable
 
     @FXML // fx:id="marketGrid"
     private GridPane marketGrid, gridSwapArea; // Value injected by FXMLLoader
-
     @FXML //fx:id="externalResource"
     private ImageView externalResource;
-
     @FXML
     private ImageView ig0_0,ig0_1, ig0_2, ig0_3, ig1_0, ig1_1, ig1_2, ig1_3, ig2_0, ig2_1, ig2_2, ig2_3;
-
     @FXML
     private ImageView iav1, iav2, iav3, iav4, iah1, iah2, iah3; //i= image, a= arrow, v= vertical, h= horizontal
     private ImageView[] arrows;
-
     @FXML
     private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
-
     @FXML
     private RadioButton rbGold, rbServant, rbShield, rbStone;
 
@@ -65,7 +63,7 @@ public class MarketController extends GenericController implements Initializable
     Resources resourcesFromMarket;
     int  numResOccupied, numResToAdd, numResToMove;
 
-
+    ArrayList<ExtraResource> effects;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -91,6 +89,7 @@ public class MarketController extends GenericController implements Initializable
         resourceTypes = new ResourceTypes[]{ResourceTypes.GOLD, ResourceTypes.SERVANT, ResourceTypes.SHIELD, ResourceTypes.STONE};
 
         Platform.runLater(this::updateMarketMatrix);
+
     }
 
     private void updateMarketMatrix() {
@@ -265,7 +264,13 @@ public class MarketController extends GenericController implements Initializable
         if (arrowsSelected == 1){
             if (row != -1){
                 try {
-                    guiView.marketBuyRow(row, -1); //TODO insert correct index of leaderCard with white marble effect instead of 1
+                    int selectedEffect=-1;
+                    for(int i=0; i< effects.size();i++){
+                        if(extraEffectComboBox.getValue()==effects.get(i).getResource()){
+                            selectedEffect=i;
+                        }
+                    }
+                    guiView.marketBuyRow(row, selectedEffect);
                     guiView.isSuccessReceived();
                     guiView.waitForUpdatedGame();
                     disableMarket();
@@ -276,8 +281,13 @@ public class MarketController extends GenericController implements Initializable
             }
             else if (column != -1){
                 try {
-                    guiView.marketBuyColumn(column, -1); //TODO insert correct index of leaderCard with white marble effect instead of 1
-                    guiView.isSuccessReceived();
+                    int selectedEffect=-1;
+                    for(int i=0; i< effects.size();i++){
+                        if(extraEffectComboBox.getValue()==effects.get(i).getResource()){
+                            selectedEffect=i;
+                        }
+                    }
+                    guiView.marketBuyColumn(column, selectedEffect);guiView.isSuccessReceived();
                     guiView.waitForUpdatedGame();
                     disableMarket();
                     showSwapArea();
@@ -387,6 +397,19 @@ public class MarketController extends GenericController implements Initializable
         Platform.runLater( () -> {
             updateMarketMatrix();
             updateSwap();
+            effects = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
+            if(effects.size()>0) {
+                extraEffectComboBox.setVisible(true);
+                extraEffectLabel.setVisible(true);
+                for (ExtraResource effect : effects) {
+                    extraEffectComboBox.getItems().remove(effect.getResource());
+                    extraEffectComboBox.getItems().add(effect.getResource());
+                    extraEffectComboBox.setValue(effect.getResource());
+                }
+            }else{
+                extraEffectComboBox.setVisible(false);
+                extraEffectLabel.setVisible(false);
+            }
         }
         );
     }
