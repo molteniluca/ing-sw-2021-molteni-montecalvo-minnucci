@@ -1,25 +1,29 @@
 package it.polimi.ingsw.view.GUI.Controllers.Board;
 
+import it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
+import it.polimi.ingsw.view.GUI.Controllers.HomePageController;
+import it.polimi.ingsw.view.GUI.GUIApplication;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameBoardController extends GenericController {
+    public static Stage stage;
     @FXML
     public Rectangle rectangleBlock;
     @FXML
@@ -76,7 +80,7 @@ public class GameBoardController extends GenericController {
     }
 
     public void endTurn() {
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
             spinnyThing.setVisible(true);
             labelWaitForPlayers.setVisible(true);
@@ -88,7 +92,7 @@ public class GameBoardController extends GenericController {
 
                 alertTurnEnded.showAndWait();
             }
-        });
+        });*/
     }
 
     public void handleDisconnect() {
@@ -103,6 +107,7 @@ public class GameBoardController extends GenericController {
                 alertDisconnected.setContentText("Close the game");
 
                 alertDisconnected.showAndWait();
+                System.exit(0);
             }
         });
     }
@@ -121,15 +126,33 @@ public class GameBoardController extends GenericController {
             if(alertDisconnected!=null){
                 alertDisconnected.close();
             }
-            alertWin = new Alert(Alert.AlertType.INFORMATION);
+            alertWin = new Alert(Alert.AlertType.CONFIRMATION);
             alertWin.setTitle("Game ended");
             if(youWon)
                 alertWin.setHeaderText("Congratulation, you won");
             else
                 alertWin.setHeaderText("You lost, better luck next time!");
-            alertWin.setContentText("Close the game");
+            alertWin.setContentText("Do you wanna play again?");
 
-            alertWin.showAndWait();
+            ButtonType button = alertWin.showAndWait().orElse(ButtonType.CANCEL);
+            if(button == ButtonType.OK){
+                Parent GameBoardViewParent = null;
+                try {
+                    GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Scene GameBoardScene = new Scene(GameBoardViewParent);
+
+                Stage GameBoardStage = stage;
+
+                GameBoardStage.setTitle("Master Of Renaissance");
+                GameBoardStage.setScene(GameBoardScene);
+                GameBoardStage.show();
+            }else{
+                System.exit(0);
+            }
         });
     }
 
@@ -156,6 +179,7 @@ public class GameBoardController extends GenericController {
         Scene GameBoardScene = new Scene(GameBoardViewParent);
 
         Stage GameBoardStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage=GameBoardStage;
 
         GameBoardStage.setTitle("Game Board");
         GameBoardStage.setScene(GameBoardScene);
