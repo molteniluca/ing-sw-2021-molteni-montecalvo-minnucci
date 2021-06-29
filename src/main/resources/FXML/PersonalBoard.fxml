@@ -576,5 +576,6 @@
             </Label>
          </children>
       </GridPane>
+      <Label fx:id="playerName" layoutX="6.0" layoutY="6.0" />
    </children>
 </AnchorPane>

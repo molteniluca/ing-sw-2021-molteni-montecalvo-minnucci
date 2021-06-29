@@ -20,6 +20,8 @@ public class PersonalBoardController extends GenericController {
     private static PersonalBoardController personalBoardController;
 
     @FXML
+    public Label playerName;
+    @FXML
     ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
     @FXML
     ImageView ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24;
@@ -110,15 +112,19 @@ public class PersonalBoardController extends GenericController {
             for (int i = 0; i < 3; i++) {
                 if (developmentCard[i].size() > k) {
                     updateSlotImage(k,i, developmentCard[i].get(k));
+                }else{
+                    updateSlotImage(k,i,null);
                 }
             }
         }
     }
 
     private void updateSlotImage(int level,int slot, DevelopmentCard developmentCard){
-        if(slots[slot][level].getImage()==null) {
+        if(developmentCard!=null) {
             String nameImage = developmentCard.getImage();
             slots[slot][level].setImage(new Image("images/Cards/DevelopmentCards/" +nameImage+"-1.png"));
+        }else{
+            slots[slot][level].setImage(null);
         }
     }
 
@@ -155,6 +161,7 @@ public class PersonalBoardController extends GenericController {
         updateStrongBox(player);
         updateWarehouse(player);
         updateProductionCards(player);
+        playerName.setText(guiView.game.getPlayerTurn(player).getPlayer().getName());
     }
 
     @Override

@@ -76,6 +76,10 @@ public class LeaderBoardController extends GenericController {
                 else
                     leaderToImageName(null,leaderInHandView[i]);
             }
+        }else{
+            for(int i=0;i<2;i++){
+                leaderToImageName(null,leaderInHandView[i]);
+            }
         }
 
         ArrayList<LeaderCard> leaderActive = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();

@@ -46,7 +46,7 @@ public class OtherPlayerBoardsController extends GenericController{
         newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
         LeaderBoardController.getLeaderBoardController().buttonActivate.setVisible(false);
-        LeaderBoardController.getLeaderBoardController().buttonActivate.setVisible(false);
+        LeaderBoardController.getLeaderBoardController().buttonDiscard.setVisible(false);
 
     }
 }
