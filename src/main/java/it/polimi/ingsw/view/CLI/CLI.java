@@ -1349,6 +1349,22 @@ public class CLI extends View implements Runnable{
         System.exit(1);
     }
 
+    /**
+     * Method that notifies an error
+     */
+    @Override
+    public void notifyError() {
+
+    }
+
+    /**
+     * Method that notifies a success in the request
+     */
+    @Override
+    public void notifySuccess() {
+
+    }
+
 
     /**
      * Depending on the number of the player allows the user to

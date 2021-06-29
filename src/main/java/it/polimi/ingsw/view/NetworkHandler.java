@@ -66,6 +66,12 @@ public class NetworkHandler extends Thread{
                             read = null;
                             view.notifyTurnEnded();
                             continue;
+                        case ERROR:
+                            view.notifyError();
+                            break;
+                        case SUCCESS:
+                            view.notifySuccess();
+                            break;
                     }
                 }
                 if(read.getClass() == Game.class) {

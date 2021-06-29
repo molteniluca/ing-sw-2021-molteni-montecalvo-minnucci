@@ -368,4 +368,14 @@ public abstract class View {
      * Method that notifies this object that the server has disconnected
      */
     public abstract void notifyDisconnection();
+
+    /**
+     * Method that notifies an error
+     */
+    public abstract void notifyError();
+
+    /**
+     * Method that notifies a success in the request
+     */
+    public abstract void notifySuccess();
 }

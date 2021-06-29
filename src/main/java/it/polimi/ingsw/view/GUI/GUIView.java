@@ -14,9 +14,10 @@ import static it.polimi.ingsw.network.NetworkMessages.*;
  */
 public class GUIView extends View {
     public static GUIView singleton;
-    public String lastErrorMessage;
     public GameBoardController gameBoardController;
     public boolean isMyTurn = false;
+    private boolean response = false;
+    private boolean success;
 
     /**
      * Private constructor for singleton purposes
@@ -30,21 +31,16 @@ public class GUIView extends View {
      * @return True if is success and false if error
      */
     @Override
-    public boolean isSuccessReceived() {
-        NetworkMessages message;
-
-        message = (NetworkMessages) waitAndGetResponse();
-
-        switch(message){
-            case ERROR:
-                lastErrorMessage = (String) waitAndGetResponse(); //receive the error message
-                gameBoardController.showError(lastErrorMessage);
-                return false;
-            case SUCCESS:
-                return true;
-            default:
-                return false;
+    public synchronized boolean isSuccessReceived() {
+        while(!response){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        response = false;
+        return success;
     }
 
     /**
@@ -95,6 +91,27 @@ public class GUIView extends View {
     public void notifyDisconnection() {
         if(this.gameBoardController!=null)
             this.gameBoardController.handleDisconnect();
+    }
+
+    /**
+     * Method that notifies an error
+     */
+    @Override
+    public synchronized void notifyError() {
+        gameBoardController.showError("Error");
+        response = true;
+        success = false;
+        notifyAll();
+    }
+
+    /**
+     * Method that notifies a success in the request
+     */
+    @Override
+    public synchronized void notifySuccess() {
+        response = true;
+        success = true;
+        notifyAll();
     }
 
     /**
@@ -151,7 +168,9 @@ public class GUIView extends View {
      */
     protected Object waitAndGetResponse(){
         Object ret = super.waitAndGetResponse();
-        if(ret==TURNBEGIN || ret==TURNEND)
+        if(ret==ENDTURN)
+            return SUCCESS;
+        else if(ret==TURNBEGIN)
             return waitAndGetResponse();
         else
             return ret;
