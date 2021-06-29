@@ -174,9 +174,13 @@ public class MarketController extends GenericController implements Initializable
         return marketController;
     }
 
+
+    /**
+     * Shows the swap area after buying from market
+     * also enables all the necessary buttons setting their opacity to one
+     */
     private void showSwapArea() {
         setAbleButtons();
-        //updateSwap();
         lYouHaveNow.setOpacity(1);
     }
 
@@ -195,6 +199,10 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
+
+    /**
+     * Enables the buttons setting the disable
+     */
     private void setAbleButtons(){
         for (RadioButton button: levelRadioButtons) {
             button.setDisable(false);

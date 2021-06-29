@@ -35,10 +35,10 @@ public class PersonalBoardController extends GenericController {
     @FXML
     ImageView lev1, lev2_1, lev2_2, lev3_1, lev3_2, lev3_3;
 
-    ImageView[] level2Image, level3Image;
+    ImageView[] level2Image, level3Image; //warehouse
 
     @FXML
-    ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3;
+    ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3; //cardBoard slots
 
     ImageView[][] slots;
 
@@ -122,12 +122,7 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
-    void updatePersonalBoard(int player){
-        updateFaithTrack(player);
-        updateStrongBox(player);
-        updateWarehouse(player);
-        updateProductionCards(player);
-    }
+
 
 
 
@@ -151,6 +146,15 @@ public class PersonalBoardController extends GenericController {
 
     public void hideStrongBox() {
         strongBoxGrid.setOpacity(0);
+    }
+
+
+
+    void updatePersonalBoard(int player){
+        updateFaithTrack(player);
+        updateStrongBox(player);
+        updateWarehouse(player);
+        updateProductionCards(player);
     }
 
     @Override
