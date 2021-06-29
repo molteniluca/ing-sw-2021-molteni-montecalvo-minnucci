@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +32,8 @@ public class GameBoardController extends GenericController {
     AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton, newLoadedAnchorPaneMarket;
 
     ArrayList<GenericController> controllerArrayList = new ArrayList<>();
+
+    Alert alertDisconnected, alertTurnEnded, alertWin, alertError;
 
     @FXML
     void initialize() throws IOException {
@@ -77,12 +80,14 @@ public class GameBoardController extends GenericController {
             rectangleBlock.setVisible(true);
             spinnyThing.setVisible(true);
             labelWaitForPlayers.setVisible(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Your turn has ended");
-            alert.setHeaderText("Your turn has ended");
-            alert.setContentText("Wait for the other players to play");
+            if(alertWin==null) {
+                alertTurnEnded = new Alert(Alert.AlertType.INFORMATION);
+                alertTurnEnded.setTitle("Your turn has ended");
+                alertTurnEnded.setHeaderText("Your turn has ended");
+                alertTurnEnded.setContentText("Wait for the other players to play");
 
-            alert.showAndWait();
+                alertTurnEnded.showAndWait();
+            }
         });
     }
 
@@ -91,12 +96,14 @@ public class GameBoardController extends GenericController {
             rectangleBlock.setVisible(true);
             spinnyThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Closed connection with the server");
-            alert.setHeaderText("The game has ended");
-            alert.setContentText("Close the game");
+            if(alertWin==null){
+                alertDisconnected = new Alert(Alert.AlertType.ERROR);
+                alertDisconnected.setTitle("Closed connection with the server");
+                alertDisconnected.setHeaderText("The game has ended");
+                alertDisconnected.setContentText("Close the game");
 
-            alert.showAndWait();
+                alertDisconnected.showAndWait();
+            }
         });
     }
 
@@ -105,26 +112,35 @@ public class GameBoardController extends GenericController {
             rectangleBlock.setVisible(true);
             spinnyThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Game ended");
+            if(alertError!=null){
+                alertError.close();
+            }
+            if(alertTurnEnded!=null){
+                alertTurnEnded.close();
+            }
+            if(alertDisconnected!=null){
+                alertDisconnected.close();
+            }
+            alertWin = new Alert(Alert.AlertType.INFORMATION);
+            alertWin.setTitle("Game ended");
             if(youWon)
-                alert.setHeaderText("Congratulation, you won");
+                alertWin.setHeaderText("Congratulation, you won");
             else
-                alert.setHeaderText("You lost, better luck next time!");
-            alert.setContentText("Close the game");
+                alertWin.setHeaderText("You lost, better luck next time!");
+            alertWin.setContentText("Close the game");
 
-            alert.showAndWait();
+            alertWin.showAndWait();
         });
     }
 
     public void showError(String lastErrorMessage) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(lastErrorMessage);
-            alert.setContentText("Retry");
+            alertError = new Alert(Alert.AlertType.ERROR);
+            alertError.setTitle("Error");
+            alertError.setHeaderText(lastErrorMessage);
+            alertError.setContentText("Retry");
 
-            alert.showAndWait();
+            alertError.showAndWait();
         });
     }
 

@@ -1,14 +1,13 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -17,15 +16,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Stack;
 
 public class CardDealerController extends GenericController{
 
+    public Label servantLabel;
+    public Label shieldLabel;
+    public Label stoneLabel;
+    public Label goldLabel;
     boolean[][] isProdCardSelected = new boolean[3][4];
-    boolean confirm;
     int counter, numberOfSelectedCards;
     int row;
     int column;
@@ -45,9 +46,6 @@ public class CardDealerController extends GenericController{
     Label lWrongSelection;
 
     @FXML
-    GridPane gCardDealer;
-
-    @FXML
     void initialize() {
         ipc = new ImageView[][]{{ipc1_1, ipc1_2, ipc1_3, ipc1_4},{ ipc2_1, ipc2_2, ipc2_3, ipc2_4},{ ipc3_1, ipc3_2, ipc3_3, ipc3_4}};
         counter = 0;
@@ -61,6 +59,11 @@ public class CardDealerController extends GenericController{
         }
         setColumnRowIndexes();
         comboBox.getItems().addAll(1,2,3);
+        Resources res = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
+        goldLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.GOLD)));
+        servantLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
+        shieldLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
+        stoneLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
     }
 
     private void setColumnRowIndexes(){
@@ -109,10 +112,13 @@ public class CardDealerController extends GenericController{
 
     public void confirmCard(ActionEvent actionEvent) throws IOException {
         if (numberOfSelectedCards == 1){
-            guiView.marketBuyCard(row,column,comboBox.getValue()-1);
-            if (guiView.isSuccessReceived()) {
-                GameBoardController.goToGameBoard(actionEvent);
-            }
+            if(comboBox.getValue()!=null){
+                guiView.marketBuyCard(row,column,comboBox.getValue()-1);
+                if (guiView.isSuccessReceived()) {
+                    GameBoardController.goToGameBoard(actionEvent);
+                }
+            }else
+                showError("Select a place in the card board");
         }
         else if (numberOfSelectedCards > 1){
             showError("You can buy only one card per turn");

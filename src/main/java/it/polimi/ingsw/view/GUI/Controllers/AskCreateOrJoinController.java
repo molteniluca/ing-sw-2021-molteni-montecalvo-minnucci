@@ -149,9 +149,11 @@ public class AskCreateOrJoinController extends GenericController {
         //gets the stage information
         Stage leaderSelectionStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 
-        leaderSelectionStage.setTitle("Leader Selection");
-        leaderSelectionStage.setScene(leaderSelectionScene);
-        leaderSelectionStage.show();
+        if(leaderSelectionStage!=null) {
+            leaderSelectionStage.setTitle("Leader Selection");
+            leaderSelectionStage.setScene(leaderSelectionScene);
+            leaderSelectionStage.show();
+        }
     }
 
     @FXML
