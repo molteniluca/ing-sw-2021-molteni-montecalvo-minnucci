@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI.Controllers;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.LeaderBoardController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.PersonalBoardController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,17 +21,19 @@ public class OtherPlayerBoardsController extends GenericController{
     AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard;
 
     public void previousPlayer(ActionEvent actionEvent) {
-        if(guiView.game.getNumPlayers()==currentPlayer+1)
-            currentPlayer=0;
-            LeaderBoardController.getLeaderBoardController().update(currentPlayer);
-            PersonalBoardController.getPersonalBoardController().update(currentPlayer);
+        if(currentPlayer==0)
+            currentPlayer=guiView.game.getNumPlayers()-1;
+        else
+            currentPlayer--;
+        update();
     }
 
     public void nextPlayer(ActionEvent actionEvent) {
-        if(currentPlayer==0)
-            currentPlayer=guiView.game.getNumPlayers()-1;
-        LeaderBoardController.getLeaderBoardController().update(currentPlayer);
-        PersonalBoardController.getPersonalBoardController().update(currentPlayer);
+        if(guiView.game.getNumPlayers()==currentPlayer+1)
+            currentPlayer=0;
+        else
+            currentPlayer++;
+        update();
     }
 
     public void toHomePage(ActionEvent actionEvent) throws IOException {
@@ -47,6 +50,14 @@ public class OtherPlayerBoardsController extends GenericController{
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
         LeaderBoardController.getLeaderBoardController().buttonActivate.setVisible(false);
         LeaderBoardController.getLeaderBoardController().buttonDiscard.setVisible(false);
+        update();
+    }
 
+    @Override
+    public void update() {
+        Platform.runLater(() -> {
+            LeaderBoardController.getLeaderBoardController().update(currentPlayer);
+            PersonalBoardController.getPersonalBoardController().update(currentPlayer);
+        });
     }
 }

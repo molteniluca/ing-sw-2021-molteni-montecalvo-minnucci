@@ -169,7 +169,7 @@ public class PersonalBoardController extends GenericController {
         updateStrongBox(player);
         updateWarehouse(player);
         updateProductionCards(player);
-        playerName.setText(guiView.game.getPlayerTurn(player).getPlayer().getName());
+        playerName.setText(guiView.game.getPlayerTurn(player).getPlayer().getName()+" | "+ (player + 1) +"° Player");
     }
 
     @Override
