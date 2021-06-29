@@ -74,18 +74,19 @@
             </ImageView>
          </children>
       </GridPane>
-      <GridPane layoutX="50.0" layoutY="290.0" prefHeight="163.0" prefWidth="146.0">
+      <GridPane layoutX="50.0" layoutY="290.0" prefHeight="210.0" prefWidth="146.0">
         <columnConstraints>
-          <ColumnConstraints percentWidth="20" />
-          <ColumnConstraints percentWidth="20" />
-            <ColumnConstraints percentWidth="20" />
-            <ColumnConstraints percentWidth="20" />
-            <ColumnConstraints percentWidth="20" />
+          <ColumnConstraints percentWidth="20.0" />
+          <ColumnConstraints percentWidth="20.0" />
+            <ColumnConstraints percentWidth="20.0" />
+            <ColumnConstraints percentWidth="20.0" />
+            <ColumnConstraints percentWidth="20.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
         </rowConstraints>
           <children>
               <ImageView fx:id="lev1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
@@ -97,6 +98,10 @@
             <ImageView fx:id="lev3_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ImageView fx:id="lev3_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <ImageView fx:id="lev3_3" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <ImageView fx:id="lev4_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+            <ImageView fx:id="lev5_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <ImageView fx:id="lev4_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ImageView fx:id="lev5_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
           </children>
       </GridPane>
       <GridPane layoutX="-11.0" layoutY="36.0" prefHeight="143.0" prefWidth="915.0">
