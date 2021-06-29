@@ -134,10 +134,6 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
-
-
-
-
     @FXML
     void initialize(){
         personalBoardController=this;

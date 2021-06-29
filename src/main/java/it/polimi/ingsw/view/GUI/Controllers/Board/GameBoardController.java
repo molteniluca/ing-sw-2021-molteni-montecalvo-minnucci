@@ -1,22 +1,16 @@
 package it.polimi.ingsw.view.GUI.Controllers.Board;
 
-import it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
-import it.polimi.ingsw.view.GUI.Controllers.HomePageController;
-import it.polimi.ingsw.view.GUI.GUIApplication;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -70,29 +64,29 @@ public class GameBoardController extends GenericController {
             rectangleBlock.setVisible(false);
             spinnyThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Your turn has started");
             alert.setHeaderText("Your turn has started");
             alert.setContentText("Have fun!");
 
-            alert.showAndWait();
+            alert.showAndWait();*/
         });
     }
 
     public void endTurn() {
-        /*Platform.runLater(() -> {
+        Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
             spinnyThing.setVisible(true);
             labelWaitForPlayers.setVisible(true);
-            if(alertWin==null) {
+            /*if(alertWin==null) {
                 alertTurnEnded = new Alert(Alert.AlertType.INFORMATION);
                 alertTurnEnded.setTitle("Your turn has ended");
                 alertTurnEnded.setHeaderText("Your turn has ended");
                 alertTurnEnded.setContentText("Wait for the other players to play");
 
                 alertTurnEnded.showAndWait();
-            }
-        });*/
+            }*/
+        });
     }
 
     public void handleDisconnect() {
@@ -103,7 +97,7 @@ public class GameBoardController extends GenericController {
             if(alertWin==null){
                 alertDisconnected = new Alert(Alert.AlertType.ERROR);
                 alertDisconnected.setTitle("Closed connection with the server");
-                alertDisconnected.setHeaderText("The game has ended");
+                alertDisconnected.setHeaderText("There is a problem communicating with the server or one of the players");
                 alertDisconnected.setContentText("Close the game");
 
                 alertDisconnected.showAndWait();
