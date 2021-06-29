@@ -5,10 +5,7 @@ import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -17,7 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Stack;
@@ -25,7 +21,6 @@ import java.util.Stack;
 public class CardDealerController extends GenericController{
 
     boolean[][] isProdCardSelected = new boolean[3][4];
-    boolean confirm;
     int counter, numberOfSelectedCards;
     int row;
     int column;
@@ -43,9 +38,6 @@ public class CardDealerController extends GenericController{
 
     @FXML
     Label lWrongSelection;
-
-    @FXML
-    GridPane gCardDealer;
 
     @FXML
     void initialize() {
@@ -109,10 +101,13 @@ public class CardDealerController extends GenericController{
 
     public void confirmCard(ActionEvent actionEvent) throws IOException {
         if (numberOfSelectedCards == 1){
-            guiView.marketBuyCard(row,column,comboBox.getValue()-1);
-            if (guiView.isSuccessReceived()) {
-                GameBoardController.goToGameBoard(actionEvent);
-            }
+            if(comboBox.getValue()!=null){
+                guiView.marketBuyCard(row,column,comboBox.getValue()-1);
+                if (guiView.isSuccessReceived()) {
+                    GameBoardController.goToGameBoard(actionEvent);
+                }
+            }else
+                showError("Select a place in the card board");
         }
         else if (numberOfSelectedCards > 1){
             showError("You can buy only one card per turn");
