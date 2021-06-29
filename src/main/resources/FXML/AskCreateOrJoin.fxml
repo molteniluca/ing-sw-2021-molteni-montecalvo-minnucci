@@ -63,7 +63,7 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <ProgressIndicator fx:id="loadAnimation" disable="true" prefHeight="170.0" prefWidth="170.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="401.0" AnchorPane.rightAnchor="401.0" />
+            <ProgressIndicator fx:id="loadAnimation" disable="true" prefHeight="170.0" prefWidth="170.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="401.0" AnchorPane.rightAnchor="401.0" style="-fx-progress-color: darkred"/>
             <TextField fx:id="serverResponse" editable="false" opacity="0.0" prefHeight="25.0" prefWidth="148.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="353.0" AnchorPane.rightAnchor="353.0" />
          </children>
          <padding>
