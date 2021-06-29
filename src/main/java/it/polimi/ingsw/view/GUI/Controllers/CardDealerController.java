@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view.GUI.Controllers;
 
 import it.polimi.ingsw.model.cards.DevelopmentCard;
+import it.polimi.ingsw.model.resources.ResourceTypes;
+import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -20,6 +22,10 @@ import java.util.Stack;
 
 public class CardDealerController extends GenericController{
 
+    public Label servantLabel;
+    public Label shieldLabel;
+    public Label stoneLabel;
+    public Label goldLabel;
     boolean[][] isProdCardSelected = new boolean[3][4];
     int counter, numberOfSelectedCards;
     int row;
@@ -53,6 +59,11 @@ public class CardDealerController extends GenericController{
         }
         setColumnRowIndexes();
         comboBox.getItems().addAll(1,2,3);
+        Resources res = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getTotalResources();
+        goldLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.GOLD)));
+        servantLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
+        shieldLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
+        stoneLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
     }
 
     private void setColumnRowIndexes(){
