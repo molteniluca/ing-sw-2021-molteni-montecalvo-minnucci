@@ -15,10 +15,13 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 
 public class PersonalBoardController extends GenericController {
+    public GridPane availableResourcesProduction;
     private int currentFaithPosition, currentLorenzoFaithPosition;
     private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
 
+    @FXML
+    public Label stoneLabelProduction, shieldLabelProduction, servantLabelProduction, goldLabelProduction;
     @FXML
     public Label playerName;
     @FXML
@@ -122,6 +125,17 @@ public class PersonalBoardController extends GenericController {
                     updateSlotImage(k,i,null);
                 }
             }
+        }
+
+        Resources res = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getAvailableResources();
+        if(res==null){
+            availableResourcesProduction.setVisible(false);
+        }else{
+            availableResourcesProduction.setVisible(true);
+            goldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.GOLD)));
+            stoneLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
+            servantLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
+            shieldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
         }
     }
 

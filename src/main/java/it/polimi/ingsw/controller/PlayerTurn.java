@@ -42,6 +42,8 @@ public class PlayerTurn implements Turn, Serializable {
     public void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException {
         boolean leaderAction = true;
         boolean error = true;
+
+        player.getPersonalBoard().setUpAvailableProductions();
         clientHandler.sendObject(TURNBEGIN);
 
         clientHandler.sendGame(playerNum);
@@ -248,6 +250,7 @@ public class PlayerTurn implements Turn, Serializable {
                     }
                     break;
                 case ENDPRODUCTION:
+                    player.getPersonalBoard().endProduce();
                     clientHandler.sendObject(SUCCESS);
                     return error;
                 case PRODUCTION:
