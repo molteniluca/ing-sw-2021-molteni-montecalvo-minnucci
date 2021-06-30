@@ -50,14 +50,22 @@ public class LeaderBoardController extends GenericController {
         });
     }
 
-    public void discardLeader(ActionEvent actionEvent) throws IOException {
-        guiView.discardLeader(leaderSelected);
-        guiView.isSuccessReceived();
+    public void discardLeader(ActionEvent actionEvent) {
+        try {
+            guiView.discardLeader(leaderSelected);
+            guiView.isSuccessReceived();
+        } catch (IOException e) {
+            guiView.notifyDisconnection();
+        }
     }
 
-    public void activateLeader(ActionEvent actionEvent) throws IOException {
-        guiView.activateLeader(leaderSelected);
-        guiView.isSuccessReceived();
+    public void activateLeader(ActionEvent actionEvent) {
+        try {
+            guiView.activateLeader(leaderSelected);
+            guiView.isSuccessReceived();
+        } catch (IOException e) {
+            guiView.notifyDisconnection();
+        }
     }
 
     public void leaderClick(MouseEvent mouseEvent) {

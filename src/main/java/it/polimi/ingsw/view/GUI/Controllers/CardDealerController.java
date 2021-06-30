@@ -105,7 +105,11 @@ public class CardDealerController extends GenericController{
     public void confirmCard(ActionEvent actionEvent) throws IOException {
         if (numberOfSelectedCards == 1){
             if(comboBox.getValue()!=null){
-                guiView.marketBuyCard(row,column,comboBox.getValue()-1);
+                try {
+                    guiView.marketBuyCard(row,column,comboBox.getValue()-1);
+                } catch (IOException e) {
+                    guiView.notifyDisconnection();
+                }
                 if (guiView.isSuccessReceived()) {
                     GameBoardController.goToGameBoard(actionEvent);
                 }

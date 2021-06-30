@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
-import it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
 import it.polimi.ingsw.view.GUI.Controllers.DisconnectController;
 import it.polimi.ingsw.view.View;

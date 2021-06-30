@@ -48,13 +48,17 @@ public class ButtonBoardController extends GenericController {
             bOtherPlayers.setVisible(false);
     }
 
-    public void endTurn() throws IOException {
-        guiView.endTurn();
-        boolean response = guiView.isSuccessReceived();
-        if(response && guiView.game.getNumPlayers()!=1){
-            guiView.notifyTurnEnded();
+    public void endTurn() {
+        try {
+            guiView.endTurn();
+            boolean response = guiView.isSuccessReceived();
+            if(response && guiView.game.getNumPlayers()!=1){
+                guiView.notifyTurnEnded();
+            }
+            productionEnded =false;
+        } catch (IOException e) {
+            guiView.notifyDisconnection();
         }
-        productionEnded =false;
     }
 
     public void openCardDealer(ActionEvent actionEvent) throws IOException {
@@ -226,7 +230,7 @@ public class ButtonBoardController extends GenericController {
             productionEnded=true;
             update();
         } catch (IOException e) {
-            //TODO DISCONNECT
+            guiView.notifyDisconnection();
         }
     }
 

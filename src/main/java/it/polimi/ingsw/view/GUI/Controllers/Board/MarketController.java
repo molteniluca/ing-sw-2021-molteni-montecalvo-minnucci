@@ -181,7 +181,7 @@ public class MarketController extends GenericController implements Initializable
                     guiView.marketBuyRow(row, selectedEffect);
                     guiView.isSuccessReceived();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    guiView.notifyDisconnection();
                 }
             }
             else if (column != -1){
@@ -195,7 +195,7 @@ public class MarketController extends GenericController implements Initializable
                     guiView.marketBuyColumn(column, selectedEffect);
                     guiView.isSuccessReceived();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    guiView.notifyDisconnection();
                 }
             }
         }
@@ -221,7 +221,7 @@ public class MarketController extends GenericController implements Initializable
             guiView.swapMoveToSwap(level);
             guiView.isSuccessReceived();
         } catch (IOException e) {
-            e.printStackTrace();
+            guiView.notifyDisconnection();
         }
     }
 
@@ -284,7 +284,7 @@ public class MarketController extends GenericController implements Initializable
                 guiView.swapMoveToLevel(level, resourceTypesToMove, numResToMove);
                 guiView.isSuccessReceived();
             } catch (IOException e) {
-                e.printStackTrace();
+                guiView.notifyDisconnection();
             }
         }
 
@@ -297,7 +297,7 @@ public class MarketController extends GenericController implements Initializable
             try {
                 guiView.swapDropResources();
             } catch (IOException e) {
-                e.printStackTrace();
+                guiView.notifyDisconnection();
             }
             if(guiView.isSuccessReceived()){
                 exit = true;
