@@ -26,9 +26,8 @@ public class ButtonBoardController extends GenericController {
     @FXML
     void initialize(){
         buttonBoardController = this;
-        if(guiView.game.getNumPlayers()==1) {
+        if(guiView.game.getNumPlayers()==1)
             bOtherPlayers.setVisible(false);
-        }
     }
 
     public void endTurn() throws IOException {
@@ -70,8 +69,10 @@ public class ButtonBoardController extends GenericController {
     @Override
     public void update() {
         Platform.runLater(() -> {
-            if(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction()!=null)
-                tokenImage.setImage(new Image(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction().getTokenImage()));
+            if(guiView.game.getNumPlayers() == 1) {
+                if (guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction() != null)
+                    tokenImage.setImage(new Image(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction().getTokenImage()));
+            }
                 }
         );
     }

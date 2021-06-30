@@ -38,7 +38,7 @@
          </children>
       </GridPane>
       <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" text="Leader Cards activated" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
-      <Button fx:id="buttonActivate" layoutX="307.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateLeader" text="Activate" />
-      <Button fx:id="buttonDiscard" layoutX="307.0" layoutY="73.0" mnemonicParsing="false" onAction="#discardLeader" prefHeight="24.0" prefWidth="72.0" text="Discard" />
+      <Button fx:id="buttonActivate" layoutX="307.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateLeader" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Activate" />
+      <Button fx:id="buttonDiscard" layoutX="307.0" layoutY="99.0" mnemonicParsing="false" onAction="#discardLeader" prefHeight="33.0" prefWidth="90.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Discard" />
    </children>
 </AnchorPane>

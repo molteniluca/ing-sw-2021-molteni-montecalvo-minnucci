@@ -50,12 +50,12 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label alignment="CENTER" layoutX="600.0" layoutY="382.0" prefHeight="33.0" prefWidth="301.0" text="Choose two leader cards" textAlignment="CENTER" AnchorPane.bottomAnchor="485.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="599.0">
+      <Label alignment="CENTER" layoutX="469.0" layoutY="340.0" prefHeight="98.0" prefWidth="563.0" styleClass="customText" text="Choose two leader cards" textAlignment="CENTER" AnchorPane.bottomAnchor="462.0" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="468.0">
          <font>
-            <Font size="20.0" />
+            <Font size="50.0" />
          </font>
       </Label>
-      <Button fx:id="bConfirm" layoutX="682.0" layoutY="778.0" mnemonicParsing="false" onAction="#confirmLeaders" text="CONFIRM" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="682.0" AnchorPane.rightAnchor="681.0">
+      <Button fx:id="bConfirm" layoutX="682.0" layoutY="768.0" mnemonicParsing="false" onAction="#confirmLeaders" prefHeight="60.0" prefWidth="137.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="CONFIRM" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="682.0" AnchorPane.rightAnchor="681.0">
          <font>
             <Font size="24.0" />
          </font>
@@ -105,9 +105,9 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label fx:id="lChooseResource" alignment="CENTER" layoutX="600.0" layoutY="124.0" prefHeight="33.0" prefWidth="301.0" text="Choose one resource" textAlignment="CENTER">
+      <Label fx:id="lChooseResource" alignment="CENTER" layoutX="469.0" layoutY="92.0" prefHeight="97.0" prefWidth="568.0" styleClass="customText" text="Choose one resource" textAlignment="CENTER">
          <font>
-            <Font size="20.0" />
+            <Font size="49.0" />
          </font>
       </Label>
       <Label fx:id="lWrongNumberOfLeaders" alignment="CENTER" contentDisplay="CENTER" layoutX="611.0" layoutY="731.0" opacity="0.0" text="You have to pick 2 leaders" textAlignment="CENTER" textFill="RED" underline="true">
