@@ -304,7 +304,6 @@ public class MarketController extends GenericController implements Initializable
                 e.printStackTrace();
             }
             if(guiView.isSuccessReceived()){
-                rMarket.setVisible(false);
                 exit = true;
             }
         }
@@ -396,7 +395,6 @@ public class MarketController extends GenericController implements Initializable
     }
 
     private void disableMarket(){
-        rMarket.setVisible(true);
         for (ImageView image: arrows) {
             image.setDisable(true);
         }
@@ -405,6 +403,7 @@ public class MarketController extends GenericController implements Initializable
     private void setClickable(){
         rMarketTotal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone()||
                 guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
+        rMarket.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
     }
 
     @Override
