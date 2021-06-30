@@ -12,11 +12,7 @@
 
 <AnchorPane fx:id="personalBoardAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670" prefWidth="935" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.Board.PersonalBoardController">
    <children>
-      <ImageView fitHeight="670" fitWidth="935.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/PersonalBoard.jpg" />
-         </image>
-      </ImageView>
+      <ImageView fx:id="personalBoardImage" fitHeight="670" fitWidth="935.0" pickOnBounds="true" preserveRatio="true" />
       <GridPane layoutX="362.0" layoutY="290.0" prefHeight="321.0" prefWidth="525.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="10.0" prefWidth="170.0" />

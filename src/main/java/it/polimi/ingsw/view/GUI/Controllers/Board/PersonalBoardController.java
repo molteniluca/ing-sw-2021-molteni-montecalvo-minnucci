@@ -22,20 +22,24 @@ public class PersonalBoardController extends GenericController {
     private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
 
+    @FXML
+    public ImageView personalBoardImage;
 
     //initializes the three pope cards front and back
-    private final Image popeFavor1Front = new Image("images/FaithTrack/pope_favor1_front.png");
-    private final Image popeFavor2Front = new Image("images/FaithTrack/pope_favor2_front.png");
-    private final Image popeFavor3Front = new Image("images/FaithTrack/pope_favor3_front.png");
+    private static final Image popeFavor1Front = new Image("images/FaithTrack/pope_favor1_front.png");
+    private static final Image popeFavor2Front = new Image("images/FaithTrack/pope_favor2_front.png");
+    private static final Image popeFavor3Front = new Image("images/FaithTrack/pope_favor3_front.png");
 
-    private final Image[] popeFavorFront = new Image[]{popeFavor1Front, popeFavor2Front, popeFavor3Front}; //array used to better handle the cards
+    private static final Image personalBoardImageLoaded = new Image("/images/PersonalBoard.jpg");
+
+    private static final Image[] popeFavorFront = new Image[]{popeFavor1Front, popeFavor2Front, popeFavor3Front}; //array used to better handle the cards
 
 
-    private final Image popeFavor1Back = new Image("images/FaithTrack/pope_favor1_back.png");
-    private final Image popeFavor2Back = new Image("images/FaithTrack/pope_favor2_back.png");
-    private final Image popeFavor3Back = new Image("images/FaithTrack/pope_favor3_back.png");
+    private static final Image popeFavor1Back = new Image("images/FaithTrack/pope_favor1_back.png");
+    private static final Image popeFavor2Back = new Image("images/FaithTrack/pope_favor2_back.png");
+    private static final Image popeFavor3Back = new Image("images/FaithTrack/pope_favor3_back.png");
 
-    private final Image[] popeFavorBack = new Image[]{popeFavor1Back, popeFavor2Back, popeFavor3Back};
+    private static final Image[] popeFavorBack = new Image[]{popeFavor1Back, popeFavor2Back, popeFavor3Back};
 
     @FXML
     public GridPane availableResourcesProduction;
@@ -216,6 +220,7 @@ public class PersonalBoardController extends GenericController {
 
     @FXML
     void initialize(){
+        personalBoardImage.setImage(personalBoardImageLoaded);
         personalBoardController=this;
         popeFavor = new ImageView[]{popeFavor1, popeFavor2, popeFavor3};
         faithImagePosition = new ImageView[]{if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24};
