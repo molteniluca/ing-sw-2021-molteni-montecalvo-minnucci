@@ -170,12 +170,6 @@ public class GameBoardController extends GenericController {
         for (GenericController g : controllerArrayList){
             g.update();
         }
-        /*
-        PersonalBoardController.getPersonalBoardController().setClickable(!guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
-        MarketController.getMarketController().setClickable(!guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
-        ButtonBoardController.getButtonBoardController().setCliclable(!guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
-
-        LeaderBoardController.getLeaderBoardController().setClickable(guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction());*/
     }
 
     public static void goToGameBoard(ActionEvent actionEvent) throws IOException {

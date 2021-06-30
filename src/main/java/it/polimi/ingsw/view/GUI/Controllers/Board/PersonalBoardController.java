@@ -252,8 +252,8 @@ public class PersonalBoardController extends GenericController {
         strongBoxGrid.setOpacity(0);
     }
 
-    public void setClickable(boolean set){
-        rPersonal.setVisible(!set);
+    private void setClickable(){
+        rPersonal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
     }
 
     void updatePersonalBoard(int player){
@@ -267,7 +267,10 @@ public class PersonalBoardController extends GenericController {
 
     @Override
     public void update() {
-        Platform.runLater(() -> updatePersonalBoard(guiView.playerNumber));
+        Platform.runLater(() -> {
+            updatePersonalBoard(guiView.playerNumber);
+            setClickable();
+        });
     }
 
     public void update(int player) {

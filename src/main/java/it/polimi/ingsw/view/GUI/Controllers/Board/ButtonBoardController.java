@@ -88,6 +88,7 @@ public class ButtonBoardController extends GenericController {
     @Override
     public void update() {
         Platform.runLater(() -> {
+            setClickable();
             if(guiView.game.getNumPlayers() == 1) {
                 if (guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction() != null)
                     tokenImage.setImage(new Image(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction().getTokenImage()));
@@ -229,7 +230,7 @@ public class ButtonBoardController extends GenericController {
         }
     }
 
-    public void setClickable(boolean set){
-        rBlockProduceAndBuyProduction.setVisible(!set);
+    private void setClickable(){
+        rBlockProduceAndBuyProduction.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
     }
 }

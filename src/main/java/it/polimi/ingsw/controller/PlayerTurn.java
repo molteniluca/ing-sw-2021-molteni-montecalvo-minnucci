@@ -46,6 +46,8 @@ public class PlayerTurn implements Turn, Serializable {
 
         player.getPersonalBoard().setUpAvailableProductions();
         clientHandler.sendObject(TURNBEGIN);
+        leaderAction = true;
+        alreadyDone=false;
 
         clientHandler.sendGame(playerNum);
 
@@ -53,15 +55,16 @@ public class PlayerTurn implements Turn, Serializable {
 
         while((action == DISCARDLEADER || action == ACTIVATELEADER)){
             if(action == ACTIVATELEADER)
-                error&=activateLeader();
+                error&=!activateLeader();
             else
-                error&=discardLeader();
+                error&=!discardLeader();
             if(!error)
                 leaderAction=false;
             action = clientHandler.receiveMessage();
         }
 
-        alreadyDone=false;
+        clientHandler.sendGame(playerNum);
+
         error=true;
         while(error){
             switch(action){
@@ -83,9 +86,12 @@ public class PlayerTurn implements Turn, Serializable {
                     clientHandler.sendObject(ERROR);
                     clientHandler.sendObject("You must complete at lest one action");
             }
+            if(!error){
+                alreadyDone=true;
+                clientHandler.sendGame(playerNum);
+            }
             action = clientHandler.receiveMessage();
         }
-        alreadyDone=true;
 
         while((action == DISCARDLEADER || action == ACTIVATELEADER) && leaderAction){
             if(action == ACTIVATELEADER)

@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.Controllers.Board;
 
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,7 +45,9 @@ public class LeaderBoardController extends GenericController {
 
     @Override
     public void update() {
-        update(guiView.playerNumber);
+        Platform.runLater(()->{
+            update(guiView.playerNumber);
+        });
     }
 
     public void discardLeader(ActionEvent actionEvent) throws IOException {
@@ -65,11 +68,12 @@ public class LeaderBoardController extends GenericController {
         }
     }
 
-    public void setClickable(boolean set){
-        rLeader.setVisible(!set);
+    private void setClickable(){
+        rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction());
     }
 
     public void update(int player) {
+        setClickable();
         ImageView[] leaderInHandView=new ImageView[]{ilh1,ilh2};
         ImageView[] leaderActiveView=new ImageView[]{ila1,ila2};
 
