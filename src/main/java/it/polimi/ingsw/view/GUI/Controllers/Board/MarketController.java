@@ -11,7 +11,6 @@ import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -178,7 +177,6 @@ public class MarketController extends GenericController implements Initializable
                     }
                     guiView.marketBuyRow(row, selectedEffect);
                     guiView.isSuccessReceived();
-                    guiView.waitForUpdatedGame();
                     disableMarket();
                     showSwapArea();
                 } catch (IOException e) {
@@ -194,7 +192,7 @@ public class MarketController extends GenericController implements Initializable
                         }
                     }
                     guiView.marketBuyColumn(column, selectedEffect);guiView.isSuccessReceived();
-                    guiView.waitForUpdatedGame();
+                    guiView.isSuccessReceived();
                     disableMarket();
                     showSwapArea();
                 } catch (IOException e) {
@@ -222,6 +220,7 @@ public class MarketController extends GenericController implements Initializable
         }
         try {
             guiView.swapMoveToSwap(level);
+            guiView.isSuccessReceived();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -284,6 +283,7 @@ public class MarketController extends GenericController implements Initializable
 
             try {
                 guiView.swapMoveToLevel(level, resourceTypesToMove, numResToMove);
+                guiView.isSuccessReceived();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -23,6 +23,8 @@ public class PlayerTurn implements Turn, Serializable {
     private final Player player;
     private final transient ClientHandler clientHandler;
     private final transient int playerNum;
+    private boolean leaderAction = true;
+    private boolean alreadyDone = false;
 
     public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum){
         this.player = player;
@@ -40,7 +42,6 @@ public class PlayerTurn implements Turn, Serializable {
      */
     @Override
     public void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException {
-        boolean leaderAction = true;
         boolean error = true;
 
         player.getPersonalBoard().setUpAvailableProductions();
@@ -60,6 +61,7 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveMessage();
         }
 
+        alreadyDone=false;
         error=true;
         while(error){
             switch(action){
@@ -83,6 +85,7 @@ public class PlayerTurn implements Turn, Serializable {
             }
             action = clientHandler.receiveMessage();
         }
+        alreadyDone=true;
 
         while((action == DISCARDLEADER || action == ACTIVATELEADER) && leaderAction){
             if(action == ACTIVATELEADER)
@@ -442,6 +445,14 @@ public class PlayerTurn implements Turn, Serializable {
         }else{
             clientHandler.sendObject(YOULOST);
         }
+    }
+
+    public boolean isAlreadyDone() {
+        return alreadyDone;
+    }
+
+    public boolean isLeaderAction() {
+        return leaderAction;
     }
 
     @Override

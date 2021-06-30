@@ -78,8 +78,6 @@ public class PersonalBoardController extends GenericController {
 
     @FXML
     void updateFaithTrack(int player){
-
-
         //sets the position of the player in the faith track
         faithImagePosition[currentFaithPosition].setVisible(false);
         currentFaithPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
