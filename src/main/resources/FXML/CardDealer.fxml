@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -89,13 +90,17 @@
             </GridPane>
          </center>
          <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="334.0" style="-fx-background-color: white;" text="PRODUCTION CARDS" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="377.0" text="Development Cards" textFill="#831919" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets top="20.0" />
+                  <Insets />
                </BorderPane.margin>
                <font>
-                  <Font name="Lucida Handwriting Italic" size="24.0" />
+                  <Font size="34.0" />
                </font>
+               <styleClass>
+                  <String fx:value="customLabel" />
+                  <String fx:value="customText" />
+               </styleClass>
             </Label>
          </top>
          <right>
@@ -196,14 +201,14 @@
                         </Label>
                      </children>
                   </GridPane>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="191.0" style="-fx-background-color: white;" text="Your total resources" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="191.0" styleClass="customSmallLabel" text="Your total resources" textFill="#fcfcfc" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" style="-fx-background-color: white;" text="Your production cards" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Label alignment="CENTER" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Your development cards" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
                </children>

@@ -12,6 +12,19 @@
 
 }
 
+.customLabel {
+    -fx-background-image: url('title_label.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.customSmallLabel {
+    -fx-background-image: url('littleLabel.jpg') ;
+    -fx-background-size: stretch;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
 .bodyBackground{
     -fx-background-image: url('initialBackground.png');
     -fx-background-size: stretch;
