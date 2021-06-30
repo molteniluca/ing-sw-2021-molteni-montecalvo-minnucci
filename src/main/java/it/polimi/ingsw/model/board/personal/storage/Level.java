@@ -18,10 +18,6 @@ public class Level implements Serializable {
     private final boolean fixedResource;
     private final int maxResourceNumber;
 
-    public boolean isFixedResource() {
-        return fixedResource;
-    }
-
     /**
      * Constructor of the class in case the level has no fixed resource type
      * @param maxResourceNumber The maximum number of resources that this level can contain
@@ -106,7 +102,7 @@ public class Level implements Serializable {
         this.setResourceNumber(this.resourceNumber - resourceNumber);
     }
 
-    public boolean getFixedResource() {
+    public boolean isFixedResource() {
         return fixedResource;
     }
 
