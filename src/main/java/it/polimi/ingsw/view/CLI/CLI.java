@@ -62,7 +62,7 @@ public class CLI extends View implements Runnable{
         waitForUpdatedGame();
 
 
-        System.out.println(ANSI_GREEN + "Waiting  for players ..." + RESET);
+        System.out.println(ANSI_GREEN + "Waiting for players ..." + RESET);
 
         waitAndGetResponse(); //game started
 

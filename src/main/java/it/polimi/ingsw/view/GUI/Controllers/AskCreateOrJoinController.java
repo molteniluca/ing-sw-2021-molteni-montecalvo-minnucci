@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -47,6 +44,9 @@ public class AskCreateOrJoinController extends GenericController implements Disc
     private TextField serverResponse; // Value injected by FXMLLoader
 
     @FXML
+    private Button createButton, joinButton;
+
+    @FXML
     public void joinGame(ActionEvent actionEvent)  {
         try {
             loadAnimation.setDisable(false);
@@ -54,6 +54,8 @@ public class AskCreateOrJoinController extends GenericController implements Disc
             connectToServer();
             guiView.joinGame(gameId.getText().toUpperCase());
             waitForPlayers(nameJoin.getText(), actionEvent);
+            joinButton.setDisable(true);
+            createButton.setDisable(true);
         } catch (IOException e) {
             Platform.runLater(() -> {
                 loadAnimation.setDisable(true);
@@ -91,6 +93,8 @@ public class AskCreateOrJoinController extends GenericController implements Disc
                     alert.setHeaderText("This room doesn't exist");
                     alert.setContentText("Ask your mate for the correct one");
                     alert.showAndWait();
+                    joinButton.setDisable(false);
+                    createButton.setDisable(false);
                 });
             } catch (FullRoomException e) {
                 loadAnimation.setDisable(true);
@@ -101,6 +105,8 @@ public class AskCreateOrJoinController extends GenericController implements Disc
                     alert.setHeaderText("This room is already full");
                     alert.setContentText("Retry with another one");
                     alert.showAndWait();
+                    joinButton.setDisable(false);
+                    createButton.setDisable(false);
                 });
             }
 
@@ -128,6 +134,8 @@ public class AskCreateOrJoinController extends GenericController implements Disc
             serverResponse.setText("Game id = " + guiView.createGameAndGetId(comboBox.getValue()));
             serverResponse.setOpacity(1);
             waitForPlayers(nameCreate.getText(),event);
+            createButton.setDisable(true);
+            joinButton.setDisable(true);
         } catch (IOException e) {
             Platform.runLater(() -> {
                 loadAnimation.setDisable(true);
