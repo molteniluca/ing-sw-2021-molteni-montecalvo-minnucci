@@ -253,7 +253,8 @@ public class PersonalBoardController extends GenericController {
     }
 
     private void setClickable(){
-        rPersonal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
+        rPersonal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone() ||
+                guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
     }
 
     void updatePersonalBoard(int player){
