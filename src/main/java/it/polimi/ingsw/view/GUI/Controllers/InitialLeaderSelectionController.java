@@ -127,6 +127,8 @@ public class InitialLeaderSelectionController extends GenericController{
     public void chooseResource(MouseEvent mouseEvent) {
         ResourceTypes resourceTypes = null;
         ImageView imageView = (ImageView) mouseEvent.getSource();
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
         if (imageView == iGold)
             resourceTypes = ResourceTypes.GOLD;
         else if (imageView == iServant)
@@ -153,12 +155,13 @@ public class InitialLeaderSelectionController extends GenericController{
 
             case 3:
                 if (!isSecondResourceChosen){
+                    imageView.setFitHeight(40);
+                    imageView.setFitWidth(40);
                     temp = resourceTypes;
                     isSecondResourceChosen = true;
                     lChooseResource.setText("Choose another resource");
                 }
                 else {
-
                 try{
                     guiView.setInitialResources(temp, resourceTypes);
                 }catch (IOException e)
