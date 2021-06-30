@@ -3,8 +3,10 @@ package it.polimi.ingsw.view.GUI.Controllers;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -101,7 +103,7 @@ public class InitialLeaderSelectionController extends GenericController{
         return isLeaderSelected;
     }
 
-    public void confirmLeaders(ActionEvent actionEvent) throws IOException {
+    public void confirmLeaders(ActionEvent actionEvent) {
         if(numberOfSelectedLeader==2) {
             Integer[] numberOfLeaderToSend = new Integer[2];
             boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
@@ -113,9 +115,13 @@ public class InitialLeaderSelectionController extends GenericController{
                 }
             }
 
-            if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
-                guiView.waitForUpdatedGame();
-                GameBoardController.goToGameBoard(actionEvent); //open gameBoard
+            try {
+                if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
+                    guiView.waitForUpdatedGame();
+                    GameBoardController.goToGameBoard(actionEvent); //open gameBoard
+                }
+            } catch (IOException e) {
+                handleDisconnect();
             }
 
         }
@@ -148,7 +154,7 @@ public class InitialLeaderSelectionController extends GenericController{
                     guiView.setInitialResources(resourceTypes);
                 }catch (IOException e)
                 {
-                    e.printStackTrace();
+                    handleDisconnect();
                 }
                 guiView.isSuccessReceived();
                 break;
@@ -166,14 +172,24 @@ public class InitialLeaderSelectionController extends GenericController{
                     guiView.setInitialResources(temp, resourceTypes);
                 }catch (IOException e)
                 {
-                    e.printStackTrace();
+                    handleDisconnect();
                 }
-
                     gChooseResource.setDisable(true);
                 }
-
                 guiView.isSuccessReceived();
                 break;
         }
+    }
+
+    public void handleDisconnect() {
+        Platform.runLater(() -> {
+            Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+            alertDisconnected.setTitle("Closed connection with the server");
+            alertDisconnected.setHeaderText("There is a problem communicating with the server or one of the players");
+            alertDisconnected.setContentText("Close the game");
+
+            alertDisconnected.showAndWait();
+            System.exit(0);
+        });
     }
 }

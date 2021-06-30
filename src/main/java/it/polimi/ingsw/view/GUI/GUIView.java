@@ -2,7 +2,9 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.view.GUI.Controllers.AskCreateOrJoinController;
 import it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController;
+import it.polimi.ingsw.view.GUI.Controllers.DisconnectController;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class GUIView extends View {
     public String lastErrorMessage;
     public GameBoardController gameBoardController;
     public boolean isMyTurn = false;
+    public DisconnectController disconnectController;
 
     /**
      * Private constructor for singleton purposes
@@ -95,6 +98,8 @@ public class GUIView extends View {
     public void notifyDisconnection() {
         if(this.gameBoardController!=null)
             this.gameBoardController.handleDisconnect();
+        if(this.disconnectController!=null)
+            this.disconnectController.notifyDisconnect();
     }
 
     /**
@@ -102,6 +107,8 @@ public class GUIView extends View {
      * @param gameBoardController The main controller
      */
     public synchronized void registerStage(GameBoardController gameBoardController){
+        if(this.disconnectController != null)
+            this.disconnectController = null;
         this.gameBoardController=gameBoardController;
         notifyAll();
     }
@@ -166,5 +173,13 @@ public class GUIView extends View {
         super.notifyNewUpdate(read);
         if(gameBoardController!=null)
             gameBoardController.notifyUpdate();
+    }
+
+    /**
+     * Method that registers a listener for disconnection
+     * @param disconnectController The controller to be notified
+     */
+    public void registerDisconnectListener(DisconnectController disconnectController){
+        this.disconnectController = disconnectController;
     }
 }

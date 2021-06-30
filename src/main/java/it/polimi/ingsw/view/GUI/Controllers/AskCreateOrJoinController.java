@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AskCreateOrJoinController extends GenericController {
+public class AskCreateOrJoinController extends GenericController implements DisconnectController{
     @FXML
     public ProgressIndicator loadAnimation;
 
@@ -183,6 +183,7 @@ public class AskCreateOrJoinController extends GenericController {
 
         }
 
+        guiView.registerDisconnectListener(this);
         guiView.startConnection(serverAddress,serverPort);
     }
 
@@ -190,5 +191,21 @@ public class AskCreateOrJoinController extends GenericController {
     void initialize() {
         comboBox.getItems().addAll(1,2,3,4);
         comboBox.setValue(1);
+    }
+
+    /**
+     * Method that is invoked when disconnected from sever
+     */
+    @Override
+    public void notifyDisconnect() {
+        Platform.runLater(() -> {
+            Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+            alertDisconnected.setTitle("Closed connection with the server");
+            alertDisconnected.setHeaderText("There is a problem communicating with the server or one of the players");
+            alertDisconnected.setContentText("Close the game");
+
+            alertDisconnected.showAndWait();
+            System.exit(0);
+        });
     }
 }
