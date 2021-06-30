@@ -172,6 +172,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean activateLeader() throws IOException {
         try {
             player.getPersonalBoard().playLeader(clientHandler.receiveObject(Integer.class));
+            player.getPersonalBoard().setUpAvailableProductions();
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
             return false;

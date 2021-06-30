@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
-import javafx.animation.Animation;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,11 +16,8 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class PersonalBoardController extends GenericController {
-    public GridPane availableResourcesProduction;
     private int currentFaithPosition, currentLorenzoFaithPosition;
     private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
@@ -41,7 +37,8 @@ public class PersonalBoardController extends GenericController {
 
     private final Image[] popeFavorBack = new Image[]{popeFavor1Back, popeFavor2Back, popeFavor3Back};
 
-
+    @FXML
+    public GridPane availableResourcesProduction;
     @FXML
     public Label stoneLabelProduction, shieldLabelProduction, servantLabelProduction, goldLabelProduction;
     @FXML

@@ -158,15 +158,17 @@ public class ButtonBoardController extends GenericController {
                     }else if(selected.contains("2")) {
                         guiView.productionProd3(p.getAvailableProductions().get(0).getProductionCost(), (ResourceTypes) comboRes1.getValue());
                     }
+                    guiView.isSuccessReceived();
                     producing=true;
                 } else{
                     if(selected.contains("1")){
                         guiView.productionProd2(0);
                     }else if(selected.contains("2")){
-                        guiView.productionProd2(0);
+                        guiView.productionProd2(1);
                     }else if(selected.contains("3")){
-                        guiView.productionProd2(0);
+                        guiView.productionProd2(2);
                     }
+                    guiView.isSuccessReceived();
                     producing=true;
                 }
             }
