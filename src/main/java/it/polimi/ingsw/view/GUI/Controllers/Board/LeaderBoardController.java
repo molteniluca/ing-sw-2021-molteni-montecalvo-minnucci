@@ -68,14 +68,17 @@ public class LeaderBoardController extends GenericController {
         }
     }
 
-    private void setClickable(){
-        rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() ||
-                guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap() ||
-                guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
+    private void setClickable(int player){
+        if(player == guiView.playerNumber)
+            rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() ||
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap() ||
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
+        else
+            rLeader.setVisible(false);
     }
 
     public void update(int player) {
-        setClickable();
+        setClickable(player);
         ImageView[] leaderInHandView=new ImageView[]{ilh1,ilh2};
         ImageView[] leaderActiveView=new ImageView[]{ila1,ila2};
 

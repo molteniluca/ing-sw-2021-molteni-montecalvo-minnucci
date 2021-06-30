@@ -47,7 +47,10 @@ public class Level implements Serializable {
     }
 
     public ResourceTypes getResourceType() {
-        return resourceType;
+        if(resourceNumber==0)
+            return null;
+        else
+            return resourceType;
     }
 
     /**
