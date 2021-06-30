@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,15 +29,17 @@ public class ButtonBoardController extends GenericController {
     private boolean productionEnded = false;
 
     @FXML
-    public ComboBox productionComboBox;
+    private ComboBox productionComboBox;
     @FXML
-    public ComboBox comboRes1, comboRes2, comboRes3;
+    private ComboBox comboRes1, comboRes2, comboRes3;
     @FXML
-    public Button bEndProduction;
+    private Button bEndProduction, bProduce, bOtherPlayers;
     @FXML
-    Button bCardDealer, bProduce, bOtherPlayers, bEndTurn;
+    public Button bCardDealer, bEndTurn;
     @FXML
-    ImageView tokenImage;
+    private ImageView tokenImage;
+    @FXML
+    public Rectangle rBlockProduceAndBuyProduction, rForProduce, rButtonBoard;
 
     @FXML
     void initialize(){
@@ -224,5 +227,9 @@ public class ButtonBoardController extends GenericController {
         } catch (IOException e) {
             //TODO DISCONNECT
         }
+    }
+
+    public void setClickable(boolean set){
+        rBlockProduceAndBuyProduction.setVisible(!set);
     }
 }

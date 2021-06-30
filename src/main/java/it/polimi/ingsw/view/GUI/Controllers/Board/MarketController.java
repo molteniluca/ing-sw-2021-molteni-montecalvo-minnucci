@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Rectangle;
 
 
 public class MarketController extends GenericController implements Initializable {
@@ -55,6 +56,8 @@ public class MarketController extends GenericController implements Initializable
     private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
     @FXML
     private RadioButton rbGold, rbServant, rbShield, rbStone;
+    @FXML
+    public Rectangle rMarket, rMarketTotal;
 
     private RadioButton[] levelRadioButtons;
     private RadioButton[] resourceRadioButtons;
@@ -395,6 +398,10 @@ public class MarketController extends GenericController implements Initializable
         for (ImageView image: arrows) {
             image.setDisable(true);
         }
+    }
+
+    public void setClickable(boolean set){
+        rMarketTotal.setVisible(!set);
     }
 
     @Override

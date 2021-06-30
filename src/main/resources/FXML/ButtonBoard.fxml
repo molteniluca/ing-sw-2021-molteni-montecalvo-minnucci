@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.Board.ButtonBoardController">
@@ -58,7 +59,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ComboBox fx:id="productionComboBox" onAction="#selectedCombo" prefWidth="150.0" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="productionComboBox" onAction="#selectedCombo" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   <Button fx:id="bProduce" alignment="CENTER" mnemonicParsing="false" onAction="#produce" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Produce Resources" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="14.0" />
@@ -69,7 +70,7 @@
                   </Button>
                </children>
             </GridPane>
-            <GridPane GridPane.rowIndex="1">
+            <GridPane prefWidth="245.0" GridPane.rowIndex="1">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -80,10 +81,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ComboBox fx:id="comboRes2" prefWidth="150.0" GridPane.rowIndex="1" />
-                  <ComboBox fx:id="comboRes3" prefWidth="150.0" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="comboRes1" prefWidth="150.0" />
-                  <Button fx:id="bEndProduction" alignment="CENTER" mnemonicParsing="false" onAction="#endProduction" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Production" textAlignment="CENTER" GridPane.rowIndex="3">
+                  <ComboBox fx:id="comboRes2" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="comboRes3" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="comboRes1" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Button fx:id="bEndProduction" alignment="CENTER" mnemonicParsing="false" onAction="#endProduction" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="End Production" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -95,5 +96,8 @@
             </GridPane>
          </children>
       </GridPane>
+      <Rectangle fx:id="rBlockProduceAndBuyProduction" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rForProduce" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rButtonBoard" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

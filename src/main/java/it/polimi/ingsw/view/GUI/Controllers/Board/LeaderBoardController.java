@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ public class LeaderBoardController extends GenericController {
     private int leaderSelected=-1;
 
     @FXML
-    public Button buttonDiscard;
+    public Button buttonDiscard, buttonActivate;
 
     @FXML
-    public Button buttonActivate;
+    private ImageView ilh1, ilh2, ila1, ila2; //i = image, l = leader, h = hand, a = activated
 
     @FXML
-    ImageView ilh1, ilh2, ila1, ila2; //i = image, l = leader, h = hand, a = activated
+    public Rectangle rLeader;
 
     public static LeaderBoardController getLeaderBoardController() {
         return leaderBoardController;
@@ -62,6 +63,10 @@ public class LeaderBoardController extends GenericController {
         }else {
             leaderSelected=1;
         }
+    }
+
+    public void setClickable(boolean set){
+        rLeader.setVisible(!set);
     }
 
     public void update(int player) {
