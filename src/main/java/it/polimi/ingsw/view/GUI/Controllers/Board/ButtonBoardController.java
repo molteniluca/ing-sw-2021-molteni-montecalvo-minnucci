@@ -232,5 +232,7 @@ public class ButtonBoardController extends GenericController {
 
     private void setClickable(){
         rBlockProduceAndBuyProduction.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
+        rButtonBoard.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
+        rForProduce.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
     }
 }

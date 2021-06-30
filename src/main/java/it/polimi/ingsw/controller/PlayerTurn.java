@@ -25,6 +25,8 @@ public class PlayerTurn implements Turn, Serializable {
     private final transient int playerNum;
     private boolean leaderAction = true;
     private boolean alreadyDone = false;
+    private boolean isProducing = false;
+    private boolean isHandlingSwap = false;
 
     public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum){
         this.player = player;
@@ -47,7 +49,9 @@ public class PlayerTurn implements Turn, Serializable {
         player.getPersonalBoard().setUpAvailableProductions();
         clientHandler.sendObject(TURNBEGIN);
         leaderAction = true;
-        alreadyDone=false;
+        alreadyDone = false;
+        isProducing = false;
+        isHandlingSwap = false;
 
         clientHandler.sendGame(playerNum);
 
@@ -116,6 +120,8 @@ public class PlayerTurn implements Turn, Serializable {
      */
     private void handleSwap() throws IOException, FaithOverflowException {
         while(player.getPersonalBoard().getDeposit().getWarehouseDepots().getSwapDeposit().getTotalResourceNumber()!=0){
+            isHandlingSwap = true;
+            clientHandler.sendGame(playerNum);
             switch (clientHandler.receiveMessage()){
                 case MOVETOLEVEL:
                     try {
@@ -123,6 +129,8 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(Integer.class)
                         );
+                        clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame(playerNum);
                     } catch (TypeNotChangeableException | LevelTooSmallException | NegativeResourceValueException | IndexOutOfBoundsException | ResourceTypeAlreadyPresentException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         if(e.getMessage()==null)
@@ -134,6 +142,8 @@ public class PlayerTurn implements Turn, Serializable {
                 case MOVETOSWAP:
                     try {
                         player.getPersonalBoard().getDeposit().getWarehouseDepots().moveToSwap(clientHandler.receiveObject(Integer.class));
+                        clientHandler.sendObject(SUCCESS);
+                        clientHandler.sendGame(playerNum);
                     } catch (IndexOutOfBoundsException | WrongObjectException e){
                         clientHandler.sendObject(ERROR);
                         if(e.getMessage()==null)
@@ -144,11 +154,13 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
                 case DROPRESOURCES:
                     player.getPersonalBoard().dropResources();
+                    clientHandler.sendObject(SUCCESS);
+                    clientHandler.sendGame(playerNum);
                     break;
             }
-            clientHandler.sendObject(SUCCESS);
-            clientHandler.sendGame(playerNum);
         }
+        isHandlingSwap = false;
+        clientHandler.sendGame(playerNum);
     }
 
     /**
@@ -210,6 +222,7 @@ public class PlayerTurn implements Turn, Serializable {
         player.getPersonalBoard().initProduce();
         boolean error = true;
         while(true) {
+            isProducing=true;
             NetworkMessages message = clientHandler.receiveMessage();
             switch (message) {
                 case PROD1:
@@ -260,12 +273,14 @@ public class PlayerTurn implements Turn, Serializable {
                     }
                     break;
                 case ENDPRODUCTION:
+                    isProducing=false;
                     player.getPersonalBoard().endProduce();
                     clientHandler.sendObject(SUCCESS);
                     return error;
                 case PRODUCTION:
                     continue;
                 default:
+                    isProducing=false;
                     clientHandler.sendObject(ERROR);
                     clientHandler.sendObject("Expecting a production action");
                     return true;
@@ -459,6 +474,14 @@ public class PlayerTurn implements Turn, Serializable {
 
     public boolean isLeaderAction() {
         return leaderAction;
+    }
+
+    public boolean isHandlingSwap() {
+        return isHandlingSwap;
+    }
+
+    public boolean isProducing() {
+        return isProducing;
     }
 
     @Override
