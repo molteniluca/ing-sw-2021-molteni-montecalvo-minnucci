@@ -5,6 +5,7 @@ import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,28 +52,77 @@ public class LeaderBoardController extends GenericController {
     }
 
     public void discardLeader(ActionEvent actionEvent) {
-        try {
-            guiView.discardLeader(leaderSelected);
-            guiView.isSuccessReceived();
-        } catch (IOException e) {
-            guiView.notifyDisconnection();
+        if(leaderSelected == -1)
+            Platform.runLater(() -> {
+                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+                alertDisconnected.setTitle("Error!");
+                alertDisconnected.setHeaderText("You need to select a leader card");
+                alertDisconnected.setContentText("Retry");
+                alertDisconnected.showAndWait();
+            });
+        else
+            try {
+                guiView.discardLeader(leaderSelected);
+                guiView.isSuccessReceived();
+            } catch (IOException e) {
+                guiView.notifyDisconnection();
+            }
+    }
+
+    private void selectImage(ImageView im, boolean isActive) {
+        if(isActive) {
+            im.setFitWidth(140.0);
+            im.setFitHeight(210);
+        }
+        else{
+            im.setFitWidth(130.0);
+            im.setFitHeight(195.0);
         }
     }
 
     public void activateLeader(ActionEvent actionEvent) {
-        try {
-            guiView.activateLeader(leaderSelected);
-            guiView.isSuccessReceived();
-        } catch (IOException e) {
-            guiView.notifyDisconnection();
-        }
+        if(leaderSelected == -1)
+            Platform.runLater(() -> {
+                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+                alertDisconnected.setTitle("Error!");
+                alertDisconnected.setHeaderText("You need to select a leader card");
+                alertDisconnected.setContentText("Retry");
+                alertDisconnected.showAndWait();
+            });
+        else
+            try {
+                guiView.activateLeader(leaderSelected);
+                guiView.isSuccessReceived();
+            } catch (IOException e) {
+                guiView.notifyDisconnection();
+            }
     }
 
     public void leaderClick(MouseEvent mouseEvent) {
         if(mouseEvent.getPickResult().getIntersectedNode().getId().equals("ilh1")){
-            leaderSelected=0;
+            if(leaderSelected==0)
+                leaderSelected=-1;
+            else
+                leaderSelected=0;
         }else {
-            leaderSelected=1;
+            if(leaderSelected==1)
+                leaderSelected=-1;
+            else
+                leaderSelected=1;
+        }
+
+        switch (leaderSelected){
+            case -1:
+                selectImage(ilh1,false);
+                selectImage(ilh2,false);
+                break;
+            case 0:
+                selectImage(ilh2,false);
+                selectImage(ilh1,true);
+                break;
+            case 1:
+                selectImage(ilh2,true);
+                selectImage(ilh1,false);
         }
     }
 
