@@ -111,6 +111,7 @@ public class FaithTrack implements Serializable {
                     this.faithObserver.notify(1);
 
                 if (this.position >= 24) {
+                    this.position=24;
                     this.faithObserver.notify(2);
                     throw new FaithOverflowException("Trying to exceed faith boundaries");
                 }

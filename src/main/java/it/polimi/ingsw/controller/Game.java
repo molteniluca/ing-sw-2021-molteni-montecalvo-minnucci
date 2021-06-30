@@ -127,7 +127,7 @@ public class Game implements Serializable {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
-                    turns.get(0).endGame(currentPlayer==0);
+                    turns.get(0).endGame(getPlayerTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition()==24);
                 } catch (NotEnoughCardException e) {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
