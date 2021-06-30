@@ -125,7 +125,7 @@ public class AskCreateOrJoinController extends GenericController {
             loadAnimation.setDisable(false);
             loadAnimation.setVisible(true);
             connectToServer();
-            serverResponse.setText("Game id=" + guiView.createGameAndGetId(comboBox.getValue()));
+            serverResponse.setText("Game id = " + guiView.createGameAndGetId(comboBox.getValue()));
             serverResponse.setOpacity(1);
             waitForPlayers(nameCreate.getText(),event);
         } catch (IOException e) {
