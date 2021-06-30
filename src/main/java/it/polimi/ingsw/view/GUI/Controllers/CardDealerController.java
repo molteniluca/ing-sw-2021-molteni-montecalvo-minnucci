@@ -86,13 +86,15 @@ public class CardDealerController extends GenericController{
 
     private boolean selectProductionCard(ImageView ipc, boolean isProdCardSelected){
         if(!isProdCardSelected) {
-            //change layout to selected layout TODO
+            ipc.setFitWidth(180.0);
+            ipc.setFitHeight(247.5);
 
             isProdCardSelected = true;
             numberOfSelectedCards++;
         }
         else{
-            //change layout to unselected/normal layout TODO
+            ipc.setFitWidth(160.0);
+            ipc.setFitHeight(226.875);
 
             isProdCardSelected = false;
             numberOfSelectedCards--;
