@@ -163,7 +163,6 @@ public class GUIView extends View {
      */
     @Override
     public void notifyNewUpdate(ObjectUpdate read) {
-        System.out.println("A");
         super.notifyNewUpdate(read);
         if(gameBoardController!=null)
             gameBoardController.notifyUpdate();
