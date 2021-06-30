@@ -238,7 +238,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Select a place" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="comboBox" prefWidth="150.0" promptText="Select a place" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
          </bottom>
