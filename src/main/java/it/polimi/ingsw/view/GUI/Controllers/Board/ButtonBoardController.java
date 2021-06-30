@@ -149,8 +149,6 @@ public class ButtonBoardController extends GenericController {
         try {
             if(selected.equals("Default Production")){
                 guiView.productionProd1((ResourceTypes) comboRes1.getValue(),(ResourceTypes) comboRes2.getValue(), (ResourceTypes) comboRes3.getValue());
-                guiView.isSuccessReceived();
-                producing=true;
             }else{
                 if(selected.contains("Leader")){
                     if(selected.contains("1")){
@@ -158,8 +156,6 @@ public class ButtonBoardController extends GenericController {
                     }else if(selected.contains("2")) {
                         guiView.productionProd3(p.getAvailableProductions().get(0).getProductionCost(), (ResourceTypes) comboRes1.getValue());
                     }
-                    guiView.isSuccessReceived();
-                    producing=true;
                 } else{
                     if(selected.contains("1")){
                         guiView.productionProd2(0);
@@ -168,10 +164,15 @@ public class ButtonBoardController extends GenericController {
                     }else if(selected.contains("3")){
                         guiView.productionProd2(2);
                     }
-                    guiView.isSuccessReceived();
-                    producing=true;
                 }
+
             }
+            if(guiView.isSuccessReceived())
+                producing=true;
+            else if(!producing)
+                guiView.endProduction();
+            else
+                producing = true;
         } catch (IOException e) {
             guiView.notifyDisconnection();
         }
