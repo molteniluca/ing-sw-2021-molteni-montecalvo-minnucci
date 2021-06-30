@@ -74,36 +74,6 @@
             </ImageView>
          </children>
       </GridPane>
-      <GridPane layoutX="50.0" layoutY="290.0" prefHeight="210.0" prefWidth="146.0">
-        <columnConstraints>
-          <ColumnConstraints percentWidth="20.0" />
-          <ColumnConstraints percentWidth="20.0" />
-            <ColumnConstraints percentWidth="20.0" />
-            <ColumnConstraints percentWidth="20.0" />
-            <ColumnConstraints percentWidth="20.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-          <children>
-              <ImageView fx:id="lev1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="3.0" />
-               </GridPane.margin></ImageView>
-            <ImageView fx:id="lev2_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ImageView fx:id="lev2_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ImageView fx:id="lev3_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ImageView fx:id="lev3_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ImageView fx:id="lev3_3" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <ImageView fx:id="lev4_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
-            <ImageView fx:id="lev5_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <ImageView fx:id="lev4_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ImageView fx:id="lev5_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-          </children>
-      </GridPane>
       <GridPane layoutX="-11.0" layoutY="36.0" prefHeight="143.0" prefWidth="915.0">
         <columnConstraints>
             <ColumnConstraints percentWidth="5.0" />
@@ -582,5 +552,15 @@
          </children>
       </GridPane>
       <Label fx:id="playerName" layoutX="6.0" layoutY="6.0" />
+        <ImageView fx:id="lev1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="343.0" AnchorPane.leftAnchor="109.0" />
+      <ImageView fx:id="lev2_1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="288.0" AnchorPane.leftAnchor="85.0" />
+      <ImageView fx:id="lev2_2" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="288.0" AnchorPane.leftAnchor="125.0" />
+      <ImageView fx:id="lev3_1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="230.0" AnchorPane.leftAnchor="70.0" />
+      <ImageView fx:id="lev3_2" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="230.0" AnchorPane.leftAnchor="105.0" />
+      <ImageView fx:id="lev3_3" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="230.0" AnchorPane.leftAnchor="140.0" />
+      <ImageView fx:id="lev4_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="lev5_1" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="lev4_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="lev5_2" fitHeight="29.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>
