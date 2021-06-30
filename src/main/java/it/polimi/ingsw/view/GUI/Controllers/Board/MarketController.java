@@ -194,7 +194,7 @@ public class MarketController extends GenericController implements Initializable
                             selectedEffect=i;
                         }
                     }
-                    guiView.marketBuyColumn(column, selectedEffect);guiView.isSuccessReceived();
+                    guiView.marketBuyColumn(column, selectedEffect);
                     guiView.isSuccessReceived();
                     disableMarket();
                     showSwapArea();
