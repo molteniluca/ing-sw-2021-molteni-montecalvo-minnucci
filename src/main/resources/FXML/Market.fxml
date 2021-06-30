@@ -124,7 +124,7 @@
          </cursor>
       </ImageView>
       <Button fx:id="bConfirmMarket" layoutX="461.0" layoutY="587.0" mnemonicParsing="false" onAction="#confirmRowColumn" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
-      <Button fx:id="bConfirmSwap" disable="true" layoutX="450.0" layoutY="93.0" mnemonicParsing="false" onAction="#confirmSwap" opacity="0.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
+      <Button fx:id="bConfirmSwap" disable="true" layoutX="468.0" layoutY="93.0" mnemonicParsing="false" onAction="#confirmSwap" opacity="0.0" prefHeight="34.0" prefWidth="80.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Drop Resources" />
       <GridPane fx:id="gridSwapArea" gridLinesVisible="true" layoutX="184.0" layoutY="102.0" opacity="0.0" prefHeight="70.0" prefWidth="220.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -226,8 +226,8 @@
       </VBox>
       <ComboBox fx:id="extraEffectComboBox" layoutX="463.0" layoutY="536.0" prefHeight="24.0" prefWidth="88.0" />
       <Label fx:id="extraEffectLabel" layoutX="463.0" layoutY="486.0" prefHeight="50.0" prefWidth="88.0" text="You need to select a leader effect" wrapText="true" />
-      <Rectangle fx:id="rMarket" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="485.0" layoutX="25.0" layoutY="317.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Rectangle fx:id="rMarketTotal" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="670.0" layoutX="184.0" layoutY="235.0" stroke="BLACK" strokeType="INSIDE" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Rectangle fx:id="rMarket" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="485.0" layoutX="25.0" layoutY="317.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Rectangle fx:id="rMarketTotal" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="670.0" layoutX="184.0" layoutY="235.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 
    </children>
 </AnchorPane>

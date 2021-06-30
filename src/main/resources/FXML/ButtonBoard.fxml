@@ -96,8 +96,8 @@
             </GridPane>
          </children>
       </GridPane>
-      <Rectangle fx:id="rBlockProduceAndBuyProduction" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Rectangle fx:id="rForProduce" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Rectangle fx:id="rButtonBoard" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rBlockProduceAndBuyProduction" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rForProduce" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="370.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rButtonBoard" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
