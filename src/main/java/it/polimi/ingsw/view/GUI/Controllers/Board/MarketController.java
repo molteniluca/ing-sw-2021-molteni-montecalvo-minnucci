@@ -180,8 +180,6 @@ public class MarketController extends GenericController implements Initializable
                     }
                     guiView.marketBuyRow(row, selectedEffect);
                     guiView.isSuccessReceived();
-                    disableMarket();
-                    showSwapArea();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -196,8 +194,6 @@ public class MarketController extends GenericController implements Initializable
                     }
                     guiView.marketBuyColumn(column, selectedEffect);
                     guiView.isSuccessReceived();
-                    disableMarket();
-                    showSwapArea();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -318,15 +314,6 @@ public class MarketController extends GenericController implements Initializable
                 button.setDisable(true);
                 button.setOpacity(0);
             }
-
-            gridSwapArea.setOpacity(0);
-            bTake.setDisable(true);
-            bPlace.setDisable(true);
-            bConfirmSwap.setDisable(true);
-            bTake.setOpacity(0);
-            bPlace.setOpacity(0);
-            bConfirmSwap.setOpacity(0);
-            lYouHaveNow.setOpacity(0);
         }
     }
 
@@ -413,6 +400,11 @@ public class MarketController extends GenericController implements Initializable
             updateMarketMatrix();
             updateSwap();
             effects = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getExtraResource();
+            if(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap()){
+                showSwapArea();
+            }else{
+                hideSwapArea();
+            }
             if(effects.size()>0) {
                 extraEffectComboBox.setVisible(true);
                 extraEffectLabel.setVisible(true);
@@ -427,6 +419,27 @@ public class MarketController extends GenericController implements Initializable
             }
         }
         );
+    }
+
+    private void hideSwapArea() {
+        for (RadioButton button: levelRadioButtons) {
+            button.setDisable(true);
+            button.setOpacity(0);
+        }
+
+        for (RadioButton button: resourceRadioButtons) {
+            button.setDisable(true);
+            button.setOpacity(0);
+        }
+
+        gridSwapArea.setOpacity(0);
+        bTake.setDisable(true);
+        bPlace.setDisable(true);
+        bConfirmSwap.setDisable(true);
+        bTake.setOpacity(0);
+        bPlace.setOpacity(0);
+        bConfirmSwap.setOpacity(0);
+        lYouHaveNow.setOpacity(0);
     }
 
 }

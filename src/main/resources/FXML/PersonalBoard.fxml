@@ -624,6 +624,6 @@
        </GridPane>
       <ImageView fx:id="popeFavor3" fitHeight="65.0" fitWidth="65.0" layoutX="470.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="734.0" AnchorPane.topAnchor="94.0" />
       <Label fx:id="playerName" layoutX="6.0" layoutY="6.0" />
-      <Rectangle fx:id="rPersonal" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="670.0" stroke="BLACK" strokeType="INSIDE" width="935.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rPersonal" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="670.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="935.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
