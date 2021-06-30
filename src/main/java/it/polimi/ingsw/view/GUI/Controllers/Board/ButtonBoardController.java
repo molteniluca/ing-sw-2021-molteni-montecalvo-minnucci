@@ -169,10 +169,10 @@ public class ButtonBoardController extends GenericController {
             }
             if(guiView.isSuccessReceived())
                 producing=true;
-            else if(!producing)
+            else if(!producing){
                 guiView.endProduction();
-            else
-                producing = true;
+                guiView.isSuccessReceived();
+            }
         } catch (IOException e) {
             guiView.notifyDisconnection();
         }

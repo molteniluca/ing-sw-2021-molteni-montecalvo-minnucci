@@ -114,6 +114,8 @@ public class CardDealerController extends GenericController{
         }
         else if (numberOfSelectedCards > 1){
             showError("You can buy only one card per turn");
+        }else{
+            showError("You need to select a card!");
         }
     }
 
