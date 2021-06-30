@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EmptyStackException;
 
+/**
+ * Class that represents the personal board
+ */
 public class PersonalBoard implements Serializable {
     private static final long serialVersionUID = 6732146736278436290L;
     private final FaithTrack faithTrack;
@@ -23,6 +26,11 @@ public class PersonalBoard implements Serializable {
     private final LeaderBoard leaderBoard;
     private final GeneralBoard generalBoard;
 
+    /**
+     * Constructor of the class
+     * @param generalBoard The general board associated with this player
+     * @param cardsInHand The leader cards at the beginning of the game
+     */
     public PersonalBoard(GeneralBoard generalBoard, ArrayList<LeaderCard> cardsInHand) {
         this.faithTrack = new FaithTrack(generalBoard.getFaithObserver());
         this.deposit = new Deposit();
@@ -194,6 +202,7 @@ public class PersonalBoard implements Serializable {
         if(this.getLeaderBoard().getProductionEffects().stream().anyMatch(extraProduction -> extraProduction.getProductionCost()==resource1)){
             if(deposit.checkRemoveResource(new Resources().set(resource1,1))){
                 this.deposit.removeResources(new Resources().set(resource1,1));
+                faithTrack.incrementPosition(1);
 
                 if(output==ResourceTypes.FAITH)
                     faithTrack.incrementPosition(1);
@@ -357,6 +366,18 @@ public class PersonalBoard implements Serializable {
     private boolean prod1;
     private boolean[] prod2;
 
+    public ArrayList<ExtraProduction> getAvailableProductions() {
+        return availableProductions;
+    }
+
+    public boolean isProd1() {
+        return prod1;
+    }
+
+    public boolean[] getProd2() {
+        return prod2;
+    }
+
     public Resources getAvailableResources()
     {
         return availableResources;
@@ -366,10 +387,30 @@ public class PersonalBoard implements Serializable {
      * This method initializes the production
      */
     public void initProduce() {
-        availableProductions = this.getLeaderBoard().getProductionEffects();
+        setUpAvailableProductions();
         availableResources = deposit.getTotalResources();
+    }
+
+    /**
+     * Method that sets up the booleans representing the available productions
+     */
+    public void setUpAvailableProductions(){
+        availableProductions = this.getLeaderBoard().getProductionEffects();
         prod1 = true;
-        prod2 = new boolean[]{true, true, true};
+        prod2 = new boolean[3];
+        for(int i=0; i<3; i++) {
+            prod2[i] = cardBoard.getUpperDevelopmentCards()[i]!=null;
+        }
+    }
+
+    /**
+     * This method ends the production
+     */
+    public void endProduce(){
+        availableProductions = null;
+        availableResources = null;
+        prod1 = true;
+        prod2 = null;
     }
 
     /**

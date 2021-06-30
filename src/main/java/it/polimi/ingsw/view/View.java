@@ -61,7 +61,7 @@ public abstract class View {
      * @param game the new game received from the server
      */
     public synchronized void updateObjects(Game game) {
-        if(this.game != null && false)
+        if(this.game != null)
             game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().setLeaderCardsInHand(
                     this.game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand()
             );
