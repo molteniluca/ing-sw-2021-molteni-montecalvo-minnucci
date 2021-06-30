@@ -9,7 +9,6 @@ import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import it.polimi.ingsw.view.CLI.ColoredResources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,15 +20,23 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-import static it.polimi.ingsw.network.NetworkMessages.ERROR;
-
 
 public class MarketController extends GenericController implements Initializable {
     private static MarketController marketController;
+    private static Image marketImage = new Image("/images/marketBoard.png");
+    private static Image shield=new Image("/images/Marble/blue marble.png");
+    private static Image gold=new Image("/images/Marble/yellow marble.png");
+    private static Image servant=new Image("/images/Marble/purple marble.png");
+    private static Image stone=new Image("/images/Marble/gray marble.png");
+    private static Image faith=new Image("/images/Marble/red marble.png");
+    private static Image blank=new Image("/images/Marble/white marble.png");
+
     @FXML
     public ComboBox extraEffectComboBox;
     @FXML
     public Label extraEffectLabel;
+    @FXML
+    public ImageView marketImageView;
     @FXML
     private Button bTake, bPlace, bConfirmSwap;
     @FXML
@@ -67,6 +74,8 @@ public class MarketController extends GenericController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        marketImageView.setImage(marketImage);
+
         marketController = this;
 
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
@@ -103,11 +112,11 @@ public class MarketController extends GenericController implements Initializable
         {
             for(int j=0; j < market.COLUMNS; j++)
             {
-                gridMarbles[i][j].setImage(new Image(fromResourceToMarbleImage(marketMatrix[i][j])));
+                gridMarbles[i][j].setImage(fromResourceToMarbleImage(marketMatrix[i][j]));
             }
         }
 
-        externalResource.setImage(new Image(fromResourceToMarbleImage(market.getExternalResource())));
+        externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
     }
 
 
@@ -116,27 +125,26 @@ public class MarketController extends GenericController implements Initializable
      * @param resourceTypes the resource type that has to be showed
      * @return the image associated at the resourceType
      */
-    private String fromResourceToMarbleImage(ResourceTypes resourceTypes)
+    private Image fromResourceToMarbleImage(ResourceTypes resourceTypes)
     {
-        String imageName = "images/Marble/";
         switch (resourceTypes)
         {
             case GOLD:
-                return imageName + "yellow marble.png";
+                return gold;
 
             case SERVANT:
-                return imageName + "purple marble.png";
+                return servant;
 
             case SHIELD:
-                return imageName + "blue marble.png";
+                return shield;
 
             case STONE:
-                return imageName + "gray marble.png";
+                return stone;
 
             case FAITH:
-                return imageName + "red marble.png";
+                return faith;
         }
-        return imageName + "white marble.png";
+        return blank;
     }
 
     public void chooseRowColumn(MouseEvent mouseEvent) {

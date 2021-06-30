@@ -97,6 +97,7 @@ public class PersonalBoardController extends GenericController {
 
         int[] faithCardsPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getFaithCards();
 
+
         for (int i=0; i<popeFavor.length; i++)
         {
 
