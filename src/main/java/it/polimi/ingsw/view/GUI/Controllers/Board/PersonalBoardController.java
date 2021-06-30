@@ -5,19 +5,41 @@ import it.polimi.ingsw.model.cards.DevelopmentCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
+import javafx.animation.Animation;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Point3D;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class PersonalBoardController extends GenericController {
     private int currentFaithPosition, currentLorenzoFaithPosition;
     private int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
+
+
+    //initializes the three pope cards front and back
+    private final Image popeFavor1Front = new Image("images/FaithTrack/pope_favor1_front.png");
+    private final Image popeFavor2Front = new Image("images/FaithTrack/pope_favor2_front.png");
+    private final Image popeFavor3Front = new Image("images/FaithTrack/pope_favor3_front.png");
+
+    private final Image[] popeFavorFront = new Image[]{popeFavor1Front, popeFavor2Front, popeFavor3Front}; //array used to better handle the cards
+
+
+    private final Image popeFavor1Back = new Image("images/FaithTrack/pope_favor1_back.png");
+    private final Image popeFavor2Back = new Image("images/FaithTrack/pope_favor2_back.png");
+    private final Image popeFavor3Back = new Image("images/FaithTrack/pope_favor3_back.png");
+
+    private final Image[] popeFavorBack = new Image[]{popeFavor1Back, popeFavor2Back, popeFavor3Back};
+
 
     @FXML
     public Label playerName;
@@ -45,16 +67,63 @@ public class PersonalBoardController extends GenericController {
     ImageView[][] slots;
 
     @FXML
+    ImageView popeFavor1, popeFavor2, popeFavor3; //the 3 popeCards in the faith track
+
+    ImageView[] popeFavor; //an array of the 3 popeCards
+
+
+    @FXML
     void updateFaithTrack(int player){
+
+
+        //sets the position of the player in the faith track
         faithImagePosition[currentFaithPosition].setVisible(false);
         currentFaithPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
         faithImagePosition[currentFaithPosition].setVisible(true);
 
+        //sets Lorenzo's position in the faith track
         if(guiView.game.getNumPlayers()==1){
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(false);
             currentLorenzoFaithPosition = guiView.game.getSelfPLayingTurn().getLorenzo().getFaithTrack().getPosition();
             faithLorenzoImagePosition[currentLorenzoFaithPosition].setVisible(true);
         }
+
+
+        //updates the popeFavor cards
+
+        int[] faithCardsPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getFaithCards();
+
+        for (int i=0; i<popeFavor.length; i++)
+        {
+
+            ImageView a = popeFavor[i];
+            Image b = popeFavorBack[i];
+            Image c = popeFavorFront[i];
+
+            switch (faithCardsPosition[i])
+            {
+                case 0:
+                    rotateCard(i, a, b);
+                    break;
+                case 1:
+                    rotateCard(i, a,c);
+                    break;
+                case 2:
+                    rotateCard(i, a, null);
+                    break;
+            }
+        }
+
+    }
+
+    private void rotateCard(int i, ImageView a, Image b) {
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2));
+        rotateTransition.setNode(popeFavor[i]);
+        rotateTransition.setCycleCount(1);
+        rotateTransition.setToAngle(360);
+        rotateTransition.setAxis(new Point3D(0,1,0));
+        rotateTransition.play();
+        rotateTransition.setOnFinished(e -> a.setImage(b));
     }
 
     @FXML
@@ -137,6 +206,7 @@ public class PersonalBoardController extends GenericController {
     @FXML
     void initialize(){
         personalBoardController=this;
+        popeFavor = new ImageView[]{popeFavor1, popeFavor2, popeFavor3};
         faithImagePosition = new ImageView[]{if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24};
         faithLorenzoImagePosition = new ImageView[]{ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24};
         level2Image = new ImageView[]{lev2_1, lev2_2};
@@ -167,6 +237,7 @@ public class PersonalBoardController extends GenericController {
         updateProductionCards(player);
         playerName.setText(guiView.game.getPlayerTurn(player).getPlayer().getName()+" | "+ (player + 1) +"° Player");
     }
+
 
     @Override
     public void update() {

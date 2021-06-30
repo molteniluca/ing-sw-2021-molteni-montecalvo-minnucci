@@ -512,8 +512,7 @@ public class CLI extends View implements Runnable{
      * @param card the pope Card that has to be printed
      * @return the symbol associated with each faithCard depending on its position
      */
-    private String printFaithCard(int card)
-    {
+    private String printFaithCard(int card) {
         switch (card){
             case 1:
                 return "▲";
