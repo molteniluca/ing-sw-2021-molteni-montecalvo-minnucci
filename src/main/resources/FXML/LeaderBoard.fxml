@@ -24,7 +24,7 @@
             <ImageView fx:id="ilh2" fitHeight="195.0" fitWidth="130.0" onMouseClicked="#leaderClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <Label layoutX="113.0" layoutY="14.0" style="-fx-background-color: white;" text="Leader Cards in hand" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="7.0" />
+      <Label layoutX="113.0" layoutY="14.0" style="-fx-background-color: white;" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Leader Cards in hand" textFill="WHITE" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="7.0" />
       <GridPane layoutX="301.0" layoutY="77.0" prefHeight="190.0" prefWidth="277.0" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="30.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -38,7 +38,7 @@
             <ImageView fx:id="ila2" fitHeight="195.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" text="Leader Cards activated" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
+      <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Leader Cards activated" textFill="WHITE" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
       <Button fx:id="buttonActivate" layoutX="307.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateLeader" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Activate" />
       <Button fx:id="buttonDiscard" layoutX="307.0" layoutY="99.0" mnemonicParsing="false" onAction="#discardLeader" prefHeight="33.0" prefWidth="90.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Discard" />
       <Rectangle fx:id="rLeader" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" width="935.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
