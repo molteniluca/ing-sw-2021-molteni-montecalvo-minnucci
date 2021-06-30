@@ -55,6 +55,7 @@ public class GameBoardController extends GenericController {
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
         controllerArrayList.add(MarketController.getMarketController());
         controllerArrayList.add(LeaderBoardController.getLeaderBoardController());
+        controllerArrayList.add(ButtonBoardController.getButtonBoardController());
         guiView.waitForUpdatedGame();
         notifyUpdate();
     }
@@ -161,6 +162,9 @@ public class GameBoardController extends GenericController {
         });
     }
 
+    /**
+     * Calls the update method on every controller
+     */
     public void notifyUpdate() {
         for (GenericController g : controllerArrayList){
             g.update();

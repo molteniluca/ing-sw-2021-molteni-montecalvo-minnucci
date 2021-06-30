@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI.Controllers.Board;
 
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,18 +9,26 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class ButtonBoardController extends GenericController {
+    private static ButtonBoardController buttonBoardController;
     @FXML
     Button bCardDealer, bProduce, bOtherPlayers, bEndTurn;
 
     @FXML
+    ImageView tokenImage;
+
+    @FXML
     void initialize(){
-        if(guiView.game.getNumPlayers()==1)
+        buttonBoardController = this;
+        if(guiView.game.getNumPlayers()==1) {
             bOtherPlayers.setVisible(false);
+        }
     }
 
     public void endTurn() throws IOException {
@@ -52,5 +61,18 @@ public class ButtonBoardController extends GenericController {
         cardDealerStage.setTitle("Other Players");
         cardDealerStage.setScene(cardDealerScene);
         cardDealerStage.show();
+    }
+
+    public static ButtonBoardController getButtonBoardController() {
+        return buttonBoardController;
+    }
+
+    @Override
+    public void update() {
+        Platform.runLater(() -> {
+            if(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction()!=null)
+                tokenImage.setImage(new Image(guiView.game.getSelfPLayingTurn().getLorenzo().getLastAction().getTokenImage()));
+                }
+        );
     }
 }
