@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class Server {
     private final HashMap<String,WaitingRoom> rooms;
-    public int port;
+    public final int port;
     private ServerSocket serverSocket;
 
     /**

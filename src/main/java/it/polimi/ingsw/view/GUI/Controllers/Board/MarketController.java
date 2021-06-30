@@ -242,7 +242,7 @@ public class MarketController extends GenericController implements Initializable
             alert.showAndWait();
         }
 
-        if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).getFixedResource()) {
+        if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).isFixedResource()) {
 
 
             RadioButton selectedResourceRadioButton = (RadioButton) resourceToggleGroup.getSelectedToggle();
