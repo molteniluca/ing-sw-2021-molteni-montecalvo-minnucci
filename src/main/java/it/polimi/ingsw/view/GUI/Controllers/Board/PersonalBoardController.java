@@ -16,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonalBoardController extends GenericController {
     private int currentFaithPosition, currentLorenzoFaithPosition;
@@ -203,6 +202,17 @@ public class PersonalBoardController extends GenericController {
                     updateSlotImage(k,i,null);
                 }
             }
+        }
+
+        Resources res = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getAvailableResources();
+        if(res==null){
+            availableResourcesProduction.setVisible(false);
+        }else{
+            availableResourcesProduction.setVisible(true);
+            goldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.GOLD)));
+            stoneLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
+            servantLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
+            shieldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
         }
     }
 
