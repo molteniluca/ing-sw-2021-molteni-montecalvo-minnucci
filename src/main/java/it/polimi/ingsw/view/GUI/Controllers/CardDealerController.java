@@ -27,27 +27,24 @@ public class CardDealerController extends GenericController{
     int column;
 
     @FXML
-    public Label servantLabel;
-    @FXML
-    public Label shieldLabel;
-    @FXML
-    public Label stoneLabel;
-    @FXML
-    public Label goldLabel;
+    private Label goldLabel, servantLabel, shieldLabel, stoneLabel;
 
     @FXML
-    public ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
-    public ImageView[][] ipc;
+    private ImageView ipc1_1, ipc1_2, ipc1_3, ipc1_4, ipc2_1, ipc2_2, ipc2_3, ipc2_4, ipc3_1, ipc3_2, ipc3_3, ipc3_4;
+    private ImageView[][] ipc;
     @FXML
-    public Button bGameBoard, bConfirm;
+    private Button bGameBoard, bConfirm;
     @FXML // fx:id="comboBox"
     private ComboBox<Integer> comboBox;
+
     @FXML
-    Label lWrongSelection;
+    private ImageView slot1, slot2, slot3;
+    private ImageView[] slots;
 
     @FXML
     void initialize() {
         ipc = new ImageView[][]{{ipc1_1, ipc1_2, ipc1_3, ipc1_4},{ ipc2_1, ipc2_2, ipc2_3, ipc2_4},{ ipc3_1, ipc3_2, ipc3_3, ipc3_4}};
+        slots = new ImageView[]{slot1, slot2, slot3};
         counter = 0;
 
         Stack<DevelopmentCard>[][] cardMatrix = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getCardDealer().getCardMatrix();
@@ -64,6 +61,12 @@ public class CardDealerController extends GenericController{
         servantLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
         shieldLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
         stoneLabel.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
+        
+        DevelopmentCard[] developmentCards = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
+        for (int i = 0; i < 3; i++) {
+            if (developmentCards[i]!=null)
+                developmentCardToImageName(developmentCards[i], slots[i]);
+        }
     }
 
     private void setColumnRowIndexes(){
@@ -73,19 +76,6 @@ public class CardDealerController extends GenericController{
                 GridPane.setRowIndex(ipc[i][j], i);
             }
         }
-    }
-
-    private void developmentCardToImageName(DevelopmentCard developmentCard, ImageView image){
-        String temp = "images/Cards/DevelopmentCards/" + developmentCard.getImage() + "-1.png";
-        image.setImage(new Image(temp));
-    }
-
-    public void returnToGameBoard(ActionEvent actionEvent) throws IOException {
-        openGameBoard(actionEvent);
-    }
-
-    public void openGameBoard(ActionEvent actionEvent) throws IOException {
-        GameBoardController.goToGameBoard(actionEvent);
     }
 
     public void buyProductionCard(MouseEvent event) {
@@ -125,7 +115,7 @@ public class CardDealerController extends GenericController{
         }
     }
 
-    public void showError(String error) {
+    private void showError(String error) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -134,5 +124,18 @@ public class CardDealerController extends GenericController{
 
             alert.showAndWait();
         });
+    }
+
+    private void developmentCardToImageName(DevelopmentCard developmentCard, ImageView image){
+        String temp = "images/Cards/DevelopmentCards/" + developmentCard.getImage() + "-1.png";
+        image.setImage(new Image(temp));
+    }
+
+    public void returnToGameBoard(ActionEvent actionEvent) throws IOException {
+        openGameBoard(actionEvent);
+    }
+
+    public void openGameBoard(ActionEvent actionEvent) throws IOException {
+        GameBoardController.goToGameBoard(actionEvent);
     }
 }
