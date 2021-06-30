@@ -72,7 +72,8 @@ public class LeaderBoardController extends GenericController {
         if(player == guiView.playerNumber)
             rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() ||
                     guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap() ||
-                    guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isProducing() ||
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction());
         else
             rLeader.setVisible(false);
     }

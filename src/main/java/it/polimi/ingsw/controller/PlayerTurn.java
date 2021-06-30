@@ -27,6 +27,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean alreadyDone = false;
     private boolean isProducing = false;
     private boolean isHandlingSwap = false;
+    private boolean waitingForAction = false;
 
     public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum){
         this.player = player;
@@ -52,6 +53,7 @@ public class PlayerTurn implements Turn, Serializable {
         alreadyDone = false;
         isProducing = false;
         isHandlingSwap = false;
+        waitingForAction = false;
 
         clientHandler.sendGame(playerNum);
 
@@ -67,6 +69,7 @@ public class PlayerTurn implements Turn, Serializable {
             action = clientHandler.receiveMessage();
         }
 
+        waitingForAction = true;
         clientHandler.sendGame(playerNum);
 
         error=true;
@@ -92,6 +95,7 @@ public class PlayerTurn implements Turn, Serializable {
             }
             if(!error){
                 alreadyDone=true;
+                waitingForAction = false;
                 clientHandler.sendGame(playerNum);
             }
             action = clientHandler.receiveMessage();
@@ -482,6 +486,10 @@ public class PlayerTurn implements Turn, Serializable {
 
     public boolean isProducing() {
         return isProducing;
+    }
+
+    public boolean isWaitingForAction() {
+        return waitingForAction;
     }
 
     @Override
