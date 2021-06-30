@@ -94,7 +94,6 @@ public class MarketController extends GenericController implements Initializable
         arrows = new ImageView[]{iav1, iav2, iav3, iav4, iah1, iah2, iah3};
         resLabels = new Label[]{goldLabel, servantLabel, shieldLabel, stoneLabel};
         resourceTypes = new ResourceTypes[]{ResourceTypes.GOLD, ResourceTypes.SERVANT, ResourceTypes.SHIELD, ResourceTypes.STONE};
-
         Platform.runLater(this::updateMarketMatrix);
 
     }

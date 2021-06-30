@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonalBoardController extends GenericController {
     private int currentFaithPosition, currentLorenzoFaithPosition;
@@ -94,31 +95,37 @@ public class PersonalBoardController extends GenericController {
 
 
         //updates the popeFavor cards
-
         int[] faithCardsPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getFaithCards();
 
 
-        for (int i=0; i<popeFavor.length; i++)
+        for (int i = 0; i < 3 ; i++)
         {
-
-            ImageView a = popeFavor[i];
-            Image b = popeFavorBack[i];
-            Image c = popeFavorFront[i];
-
-            switch (faithCardsPosition[i])
+            switch(faithCardsPosition[i])
             {
-                case 0:
-                    rotateCard(i, a, b);
+                case 0: //card upside down
+                    popeFavor[i].setImage(popeFavorBack[i]);
                     break;
-                case 1:
-                    rotateCard(i, a,c);
+                case 1: //card active
+                    RotateTransition rotate = new RotateTransition(Duration.seconds(2), popeFavor[i]);
+                    rotate.setCycleCount(1);
+                    rotate.setToAngle(360);
+                    rotate.setAxis(new Point3D(0,1,0));
+                    rotate.play();
+                    int intero = i;
+                    rotate.setOnFinished( (e) -> popeFavor[intero].setImage(popeFavorFront[intero]) );
                     break;
-                case 2:
-                    rotateCard(i, a, null);
+                case 2: //card discarded
+                    RotateTransition rotate2 = new RotateTransition(Duration.seconds(2), popeFavor[i]);
+                    rotate2.setCycleCount(1);
+                    rotate2.setToAngle(360);
+                    rotate2.setAxis(new Point3D(0,1,0));
+                    rotate2.setNode(popeFavor[i]);
+                    rotate2.play();
+                    int intero2 = i;
+                    rotate2.setOnFinished( (e) -> popeFavor[intero2].setImage(null) );
                     break;
             }
         }
-
     }
 
     private void rotateCard(int i, ImageView a, Image b) {
@@ -196,17 +203,6 @@ public class PersonalBoardController extends GenericController {
                     updateSlotImage(k,i,null);
                 }
             }
-        }
-
-        Resources res = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getAvailableResources();
-        if(res==null){
-            availableResourcesProduction.setVisible(false);
-        }else{
-            availableResourcesProduction.setVisible(true);
-            goldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.GOLD)));
-            stoneLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.STONE)));
-            servantLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SERVANT)));
-            shieldLabelProduction.setText(Integer.toString(res.getResourceNumber(ResourceTypes.SHIELD)));
         }
     }
 
