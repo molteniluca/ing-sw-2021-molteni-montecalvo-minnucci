@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -48,33 +49,35 @@ public class PersonalBoardController extends GenericController {
     @FXML
     public Label playerName;
     @FXML
-    ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
+    private ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
     @FXML
-    ImageView ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24;
+    private ImageView ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24;
 
-    ImageView[] faithImagePosition, faithLorenzoImagePosition;
-
-    @FXML
-    GridPane strongBoxGrid;
+    private ImageView[] faithImagePosition, faithLorenzoImagePosition;
 
     @FXML
-    Label goldLabel, servantLabel, shieldLabel, stoneLabel;
+    private GridPane strongBoxGrid;
 
     @FXML
-    ImageView lev1, lev2_1, lev2_2, lev3_1, lev3_2, lev3_3, lev4_1, lev4_2, lev5_1, lev5_2;
-
-    ImageView[] level2Image, level3Image, level4Image, level5Image; //warehouse
+    private Label goldLabel, servantLabel, shieldLabel, stoneLabel;
 
     @FXML
-    ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3; //cardBoard slots
+    private ImageView lev1, lev2_1, lev2_2, lev3_1, lev3_2, lev3_3, lev4_1, lev4_2, lev5_1, lev5_2;
 
-    ImageView[][] slots;
+    private ImageView[] level2Image, level3Image, level4Image, level5Image; //warehouse
 
     @FXML
-    ImageView popeFavor1, popeFavor2, popeFavor3; //the 3 popeCards in the faith track
+    private ImageView slot1_1, slot1_2, slot1_3, slot2_1, slot2_2, slot2_3, slot3_1, slot3_2, slot3_3; //cardBoard slots
 
-    ImageView[] popeFavor; //an array of the 3 popeCards
+    private ImageView[][] slots;
 
+    @FXML
+    private ImageView popeFavor1, popeFavor2, popeFavor3; //the 3 popeCards in the faith track
+
+    private ImageView[] popeFavor; //an array of the 3 popeCards
+
+    @FXML
+    public Rectangle rPersonal;
 
     @FXML
     void updateFaithTrack(int player){
@@ -249,7 +252,9 @@ public class PersonalBoardController extends GenericController {
         strongBoxGrid.setOpacity(0);
     }
 
-
+    public void setClickable(boolean set){
+        rPersonal.setVisible(!set);
+    }
 
     void updatePersonalBoard(int player){
         updateFaithTrack(player);

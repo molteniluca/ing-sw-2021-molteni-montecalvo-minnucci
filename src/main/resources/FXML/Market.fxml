@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.Board.MarketController">
@@ -225,6 +226,8 @@
       </VBox>
       <ComboBox fx:id="extraEffectComboBox" layoutX="463.0" layoutY="536.0" prefHeight="24.0" prefWidth="88.0" />
       <Label fx:id="extraEffectLabel" layoutX="463.0" layoutY="486.0" prefHeight="50.0" prefWidth="88.0" text="You need to select a leader effect" wrapText="true" />
+      <Rectangle fx:id="rMarket" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="485.0" layoutX="25.0" layoutY="317.0" stroke="BLACK" strokeType="INSIDE" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Rectangle fx:id="rMarketTotal" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="670.0" layoutX="184.0" layoutY="235.0" stroke="BLACK" strokeType="INSIDE" width="565.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 
    </children>
 </AnchorPane>
