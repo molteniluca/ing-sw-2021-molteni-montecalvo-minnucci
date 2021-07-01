@@ -1067,7 +1067,6 @@ public class CLI extends View implements Runnable{
                                 {
                                     alreadyUsed[currentCard] = true;
                                     productionProd2(currentCard);
-                                    isSuccessReceived();
                                     temporaryAction2 = isSuccessReceived();
                                     if(!temporaryAction2){
                                         endProduction();

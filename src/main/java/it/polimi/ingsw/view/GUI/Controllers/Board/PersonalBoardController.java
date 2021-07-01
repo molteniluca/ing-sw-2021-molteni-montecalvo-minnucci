@@ -151,6 +151,9 @@ public class PersonalBoardController extends GenericController {
             }
             changeLevelResources(imageName, warehouseDepots.getResourcesNumber(i), maxResources, i);
         }
+        for(int i = warehouseDepots.getNumberLevels(); i< 5; i++){
+            changeLevelResources(null, 0, 2, i);
+        }
 
     }
 

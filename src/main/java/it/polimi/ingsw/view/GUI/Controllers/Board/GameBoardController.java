@@ -125,9 +125,9 @@ public class GameBoardController extends GenericController {
             alertWin = new Alert(Alert.AlertType.CONFIRMATION);
             alertWin.setTitle("Game ended");
             if(youWon)
-                alertWin.setHeaderText("Congratulation, you won");
+                alertWin.setHeaderText("Congratulation, you won with "+guiView.game.getPlayerTurn(guiView.playerNumber).getVictoryPoints()+" victory points");
             else
-                alertWin.setHeaderText("You lost, better luck next time!");
+                alertWin.setHeaderText("You lost, better luck next time! You had: " + guiView.game.getPlayerTurn(guiView.playerNumber).getVictoryPoints()+" victory points");
             alertWin.setContentText("Do you wanna play again?");
 
             ButtonType button = alertWin.showAndWait().orElse(ButtonType.CANCEL);
