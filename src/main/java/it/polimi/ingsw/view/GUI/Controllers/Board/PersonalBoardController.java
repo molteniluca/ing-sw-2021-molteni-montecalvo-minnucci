@@ -143,39 +143,55 @@ public class PersonalBoardController extends GenericController {
         for(int i = 0; i< warehouseDepots.getNumberLevels(); i++){
             int resourceNumber = warehouseDepots.getResourcesNumber(i);
             ResourceTypes resourceTypes = warehouseDepots.getResourceTypeLevel(i);
-            if (resourceNumber > 0) {
-                String imageName = "images/resources/" + resourceTypes.toString().toLowerCase() + ".png";
-                changeLevelResources(imageName, warehouseDepots.getResourcesNumber(i), i);
+            int maxResources = warehouseDepots.getLevel(i).getMaxResourceNumber();
+            String imageName = null;
+            if (resourceTypes != null) {
+                imageName = "images/resources/" + resourceTypes.toString().toLowerCase() + ".png";
+
             }
-            else
-                changeLevelResources(null, warehouseDepots.getLevel(i).getMaxResourceNumber(), i);
+            changeLevelResources(imageName, warehouseDepots.getResourcesNumber(i), maxResources, i);
         }
 
     }
 
-    private void changeLevelResources(String imageName, int numberOfResources, int level){
+    private void changeLevelResources(String imageName, int numberOfResources, int maxNumberOfResources, int level){
         Image image;
         if(imageName == null)
             image = null;
         else
             image = new Image(imageName);
 
-        for(int j = 0; j<numberOfResources; j++){
+        for(int j = 0; j<maxNumberOfResources; j++){
             switch (level){
                 case 0:
-                    lev1.setImage(image);
+                    if (j >= numberOfResources)
+                        lev1.setImage(null);
+                    else
+                        lev1.setImage(image);
                     break;
                 case 1:
-                    level2Image[j].setImage(image);
+                    if (j >= numberOfResources)
+                        level2Image[j].setImage(null);
+                    else
+                        level2Image[j].setImage(image);
                     break;
                 case 2:
-                    level3Image[j].setImage(image);
+                    if (j >= numberOfResources)
+                        level3Image[j].setImage(null);
+                    else
+                        level3Image[j].setImage(image);
                     break;
                 case 3:
-                    level4Image[j].setImage(image);
+                    if (j >= numberOfResources)
+                        level4Image[j].setImage(null);
+                    else
+                        level4Image[j].setImage(image);
                     break;
                 case 4:
-                    level5Image[j].setImage(image);
+                    if (j >= numberOfResources)
+                        level5Image[j].setImage(null);
+                    else
+                        level5Image[j].setImage(image);
                     break;
             }
         }
