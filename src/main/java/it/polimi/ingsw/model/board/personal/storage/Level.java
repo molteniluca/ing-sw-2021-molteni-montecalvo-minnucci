@@ -67,12 +67,11 @@ public class Level implements Serializable {
         Resources res =new Resources();
         res.set(resourceType,resourceNumber);
         resourceNumber=0;
-        resourceType=null;
         return res;
     }
 
     private void setResourceType(ResourceTypes resourceType) throws TypeNotChangeableException {
-        if(resourceType!=this.resourceType)
+        if(resourceType!=getResourceType())
             if(!fixedResource)
                 if(resourceNumber==0)
                     this.resourceType = resourceType;
