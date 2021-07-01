@@ -466,7 +466,7 @@
       </GridPane>
       <ImageView fx:id="popeFavor1" fitHeight="65.0" fitWidth="65.0" layoutX="234.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="231.0" AnchorPane.topAnchor="96.0" />
       <ImageView fx:id="popeFavor2" fitHeight="65.0" fitWidth="65.0" layoutX="460.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="52.0" />
-      <GridPane fx:id="strongBoxGrid" gridLinesVisible="true" layoutX="33.0" layoutY="524.0" onMouseEntered="#showStrongBox" onMouseExited="#hideStrongBox" opacity="0.0" prefHeight="91.0" prefWidth="146.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css">
+      <GridPane fx:id="strongBoxGrid" gridLinesVisible="true" layoutX="33.0" layoutY="524.0" onMouseEntered="#showStrongBox" onMouseExited="#hideStrongBox" opacity="0.0" prefHeight="91.0" prefWidth="146.0" styleClass="bodyBackground" stylesheets="@../CSS/boardsBackground.css">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

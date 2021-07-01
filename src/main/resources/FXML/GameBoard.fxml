@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="secondBodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="secondBodyBackground" stylesheets="@../CSS/boardsBackground.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.Board.GameBoardController">
   <columnConstraints>
     <ColumnConstraints prefWidth="935.0" />
       <ColumnConstraints prefWidth="565.0" />

@@ -1032,8 +1032,8 @@ public class CLI extends View implements Runnable{
                                     continue;
 
                                 productionProd1(cliSupporter.numberToResourceType(firstResource),cliSupporter.numberToResourceType(secondResource),cliSupporter.numberToResourceType(productionResult));
-
-                                temporaryAction1 = isSuccessReceived();
+                                isSuccessReceived();
+                                temporaryAction1 = true;
                             }
                             else
                             {
@@ -1064,7 +1064,8 @@ public class CLI extends View implements Runnable{
                                 {
                                     alreadyUsed[currentCard] = true;
                                     productionProd2(currentCard);
-                                    temporaryAction2 = isSuccessReceived();
+                                    isSuccessReceived();
+                                    temporaryAction2 = true;
                                 }
 
                                 else
@@ -1114,7 +1115,8 @@ public class CLI extends View implements Runnable{
                                 currentResource = cliSupporter.integerInput("Select resource: ", 1, 4);
 
                                 productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),cliSupporter.numberToResourceType(currentResource));
-                                temporaryAction3 = isSuccessReceived();
+                                isSuccessReceived();
+                                temporaryAction3 = true;
                             }
                             else
                             {

@@ -21,7 +21,7 @@
             <Image url="@../images/fiorenza.jpg" />
          </image>
       </ImageView>
-      <HBox alignment="CENTER" layoutY="114.0" prefHeight="204.0" prefWidth="1368.0" stylesheets="@../CSS/backgroundCreateOrJoin.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox alignment="CENTER" layoutY="114.0" prefHeight="204.0" prefWidth="1368.0" stylesheets="@../CSS/boardsBackground.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="customText" text="Mast}ers of Renai_ssance" textAlignment="RIGHT" wrappingWidth="1254.20654296875">
                <font>

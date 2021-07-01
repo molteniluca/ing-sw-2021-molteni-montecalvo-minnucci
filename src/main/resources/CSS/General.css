@@ -3,8 +3,6 @@
     src: url("../Fonts/MyteriScript.otf");
 }
 
-
-
 .customText {
     -fx-font-family: 'Myteri Script PERSONAL USE ONLY Regular PERSONAL USE ONLY';
     -fx-text-fill: #451616;

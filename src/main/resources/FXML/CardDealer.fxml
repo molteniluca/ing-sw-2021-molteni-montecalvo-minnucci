@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="secondBodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.CardDealerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1500.0" styleClass="secondBodyBackground" stylesheets="@../CSS/boardsBackground.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.Controllers.CardDealerController">
    <children>
       <BorderPane prefHeight="900.0" prefWidth="1500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -123,7 +123,7 @@
                   <ImageView fx:id="slot1" fitHeight="206.25" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <ImageView fx:id="slot2" fitHeight="206.25" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   <ImageView fx:id="slot3" fitHeight="206.25" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                  <GridPane gridLinesVisible="true" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css" GridPane.rowIndex="5">
+                  <GridPane gridLinesVisible="true" styleClass="bodyBackground" stylesheets="@../CSS/boardsBackground.css" GridPane.rowIndex="5">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -206,7 +206,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Your development cards" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Label alignment="CENTER" styleClass="customSmallLabel" stylesheets="@../CSS/boardsBackground.css" text="Your development cards" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>

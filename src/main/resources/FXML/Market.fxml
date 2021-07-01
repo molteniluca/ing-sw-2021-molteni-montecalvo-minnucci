@@ -125,7 +125,7 @@
       </ImageView>
       <Button fx:id="bConfirmMarket" layoutX="461.0" layoutY="587.0" mnemonicParsing="false" onAction="#confirmRowColumn" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Confirm" />
       <Button fx:id="bConfirmSwap" disable="true" layoutX="468.0" layoutY="93.0" mnemonicParsing="false" onAction="#confirmSwap" opacity="0.0" prefHeight="34.0" prefWidth="80.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Drop Resources" />
-      <GridPane fx:id="gridSwapArea" gridLinesVisible="true" layoutX="184.0" layoutY="102.0" opacity="0.0" prefHeight="70.0" prefWidth="220.0" styleClass="bodyBackground" stylesheets="@../CSS/backgroundCreateOrJoin.css">
+      <GridPane fx:id="gridSwapArea" gridLinesVisible="true" layoutX="184.0" layoutY="102.0" opacity="0.0" prefHeight="70.0" prefWidth="220.0" styleClass="bodyBackground" stylesheets="@../CSS/boardsBackground.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

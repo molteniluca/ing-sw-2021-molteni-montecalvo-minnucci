@@ -128,16 +128,6 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
-    private void rotateCard(int i, ImageView a, Image b) {
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(2));
-        rotateTransition.setNode(popeFavor[i]);
-        rotateTransition.setCycleCount(1);
-        rotateTransition.setToAngle(360);
-        rotateTransition.setAxis(new Point3D(0,1,0));
-        rotateTransition.play();
-        rotateTransition.setOnFinished(e -> a.setImage(b));
-    }
-
     @FXML
     void updateStrongBox(int player){
         Resources resStrongBox = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getStrongBox().getResources();
