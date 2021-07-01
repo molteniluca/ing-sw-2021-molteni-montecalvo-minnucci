@@ -18,13 +18,14 @@ public class NetworkHandler extends Thread{
     private ObjectOutputStream out;
     private final View view;
     private boolean alreadyClosed=false;
+    private HeartBeatThreadClient heartBeatThreadClient;
 
     public NetworkHandler(String serverAddress, int serverPort, View view) throws IOException {
         this.view=view;
         server = new Socket(serverAddress, serverPort);
         out = new ObjectOutputStream(server.getOutputStream());
         in = new ObjectInputStream(server.getInputStream());
-        new HeartBeatThreadClient(this);
+        heartBeatThreadClient = new HeartBeatThreadClient(this);
     }
 
     @Override
@@ -32,6 +33,7 @@ public class NetworkHandler extends Thread{
         while (!server.isClosed()){
             try {
                 view.notifyResponse(receiveObject());
+                heartBeatThreadClient.messageReceived();
             } catch (IOException e) {
                closeConnection();
             }
