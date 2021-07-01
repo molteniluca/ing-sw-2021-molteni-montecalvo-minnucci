@@ -302,8 +302,8 @@ public class PersonalBoard implements Serializable {
      */
     public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException, NotEnoughCardException {
         if(checkDrawCard(row,column)){
-            this.deposit.removeResources(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
             this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column),place);
+            this.deposit.removeResources(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
         }else{
             throw new NegativeResourceValueException("Can't draw the development card, not enough resources");
         }
@@ -411,6 +411,7 @@ public class PersonalBoard implements Serializable {
         availableResources = null;
         prod1 = true;
         prod2 = null;
+        setUpAvailableProductions();
     }
 
     /**
