@@ -142,7 +142,30 @@ public class LeaderBoardController extends GenericController {
         ImageView[] leaderActiveView=new ImageView[]{ila1,ila2};
 
         if(player==guiView.playerNumber){
+            ilh2.setVisible(true);
+            ilh1.setVisible(true);
             ArrayList<LeaderCard> leaderCardsInHand = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
+            switch(leaderCardsInHand.size()){
+                case 0:
+                    leaderSelected=-1;
+                    buttonDiscard.setDisable(true);
+                    buttonActivate.setDisable(true);
+                    ilh2.setVisible(false);
+                    ilh1.setVisible(false);
+                    break;
+                case 1:
+                    leaderSelected=0;
+                    selectImage(ilh2,false);
+                    selectImage(ilh1,true);
+                    buttonDiscard.setDisable(false);
+                    buttonActivate.setDisable(false);
+                    ilh2.setVisible(false);
+                    ilh1.setVisible(true);
+                    break;
+                case 2:
+                    buttonDiscard.setDisable(false);
+                    buttonActivate.setDisable(false);
+            }
             for(int i=0;i<2;i++){
                 if(i<leaderCardsInHand.size())
                     leaderToImageName(leaderCardsInHand.get(i), leaderInHandView[i]);
@@ -150,10 +173,13 @@ public class LeaderBoardController extends GenericController {
                     leaderToImageName(null,leaderInHandView[i]);
             }
         }else{
+            ilh2.setVisible(false);
+            ilh1.setVisible(false);
             for(int i=0;i<2;i++){
                 leaderToImageName(null,leaderInHandView[i]);
             }
         }
+
 
         ArrayList<LeaderCard> leaderActive = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCards();
         for(int i=0;i<2;i++){
