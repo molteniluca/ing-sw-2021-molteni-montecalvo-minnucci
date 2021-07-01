@@ -8,11 +8,11 @@ import javafx.application.Application;
 public class Client {
 
     public static void main(String[] args) {
-        boolean choseGui = false;
+        boolean choseGui = true;
 
         for (String arg : args) {
-            if (arg.equals("--gui")) {
-                choseGui = true;
+            if (arg.equals("--cli")) {
+                choseGui = false;
                 break;
             }
         }

@@ -1022,7 +1022,6 @@ public class CLI extends View implements Runnable{
                                 if(firstResource == 0)
                                     continue;
 
-
                                 secondResource = cliSupporter.integerInput("Select second resource (0 to exit): ", 0, 4);
                                 if(secondResource == 0)
                                     continue;
@@ -1080,16 +1079,6 @@ public class CLI extends View implements Runnable{
                                     input.readLine();
                                     continue;
                                 }
-
-                          //  }
-                            /*
-                            else
-                            {
-                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
-                                input.readLine();
-                            }
-
-                             */
                             break;
 
                         case 3:
@@ -1098,7 +1087,6 @@ public class CLI extends View implements Runnable{
 
                                 System.out.println("\nACTIVE LEADER CARDS");
                                 if (activeLeaders.size() > 0) {
-                                    //FIXME shows all leader cards, not only the ones with the extra production effect
                                     cliSupporter.printLeaderCards(activeLeaders);
                                     System.out.println("\n1)Activate leader effect one");
 
@@ -1142,7 +1130,6 @@ public class CLI extends View implements Runnable{
                                 isSuccessReceived();
                             }
                             break;
-
                     }
                 }catch (IOException e)
                 {

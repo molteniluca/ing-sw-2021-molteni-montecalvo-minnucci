@@ -67,7 +67,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 break;
 
             case 3:
-                lChooseResource.setText("You can have two resources and one faith point");
+                lChooseResource.setText("You can have two resources");
                 gChooseResource2.setOpacity(1);
                 break;
         }
