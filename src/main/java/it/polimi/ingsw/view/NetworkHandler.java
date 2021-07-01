@@ -33,7 +33,6 @@ public class NetworkHandler extends Thread{
         while (!server.isClosed()){
             try {
                 view.notifyResponse(receiveObject());
-                heartBeatThreadClient.messageReceived();
             } catch (IOException e) {
                closeConnection();
             }
@@ -44,6 +43,7 @@ public class NetworkHandler extends Thread{
     private Object receiveObject() throws IOException {
         Object read = null;
         while(read==null){
+            heartBeatThreadClient.messageReceived();
             try {
                 read = in.readObject();
                 if(read==null)
