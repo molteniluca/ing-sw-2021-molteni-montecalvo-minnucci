@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.board.general.ActionTokens;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ public class Lorenzo implements Serializable {
     /**
      * This method plays lorenzo's turn
      * @throws FaithOverflowException In case the game has ended
-     * @throws NotEnoughCardException In case the game has ended
+     * @throws CardsOfSameColorFinishedException In case the game has ended
      */
-    public void play() throws FaithOverflowException, NotEnoughCardException {
+    public void play() throws FaithOverflowException, CardsOfSameColorFinishedException {
         lastAction = actionTokens.get(positionToken);
         switch (actionTokens.get(positionToken++)){
             case DOUBLEFAITH:

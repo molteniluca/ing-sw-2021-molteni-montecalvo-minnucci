@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import org.junit.Before;
@@ -142,26 +142,26 @@ public class CardDealerTest {
      * Checks if type, level and victory point of every card are correct
      */
     @Test
-    public void testDrawCard_Type_Level_VictoryPoint() throws NotEnoughCardException {
+    public void testDrawCard_Type_Level_VictoryPoint() throws CardsOfSameColorFinishedException {
 
         for (char type: cardType) {
             for (int i=12; i>8; i--) {
-                developmentCard = cardDealer.drawCard(0, cardType.indexOf(type));
+                developmentCard = cardDealer.drawCard(0, cardType.indexOf(type),true);
                 assertEquals(developmentCard.getLevel(), 3);
                 assertEquals(developmentCard.getType(), type);
                 assertEquals(developmentCard.getVictoryPoint(), i);
             }
 
             for (int i=8; i>4; i--){
-                developmentCard = cardDealer.drawCard(1, cardType.indexOf(type));
+                developmentCard = cardDealer.drawCard(1, cardType.indexOf(type),true);
                 assertEquals(developmentCard.getLevel(), 2);
                 assertEquals(developmentCard.getType(), type);
                 assertEquals(developmentCard.getVictoryPoint(), i);
             }
 
-            exception.expect(NotEnoughCardException.class);
+            exception.expect(CardsOfSameColorFinishedException.class);
             for (int i=4; i>0; i--) {
-                developmentCard = cardDealer.drawCard(2, cardType.indexOf(type));
+                developmentCard = cardDealer.drawCard(2, cardType.indexOf(type),true);
                 assertEquals(developmentCard.getLevel(), 1);
                 assertEquals(developmentCard.getType(), type);
                 assertEquals(developmentCard.getVictoryPoint(), i);
@@ -175,7 +175,7 @@ public class CardDealerTest {
      * Checks if cost, productionCost and productionPower are correct
      */
     @Test
-    public void testDrawCard_Resources() throws NotEnoughCardException {
+    public void testDrawCard_Resources() throws CardsOfSameColorFinishedException {
         Resources cost, productionCost, productionPower; //parameters of development card
 
         //creates and set the resources to check a particular card
@@ -192,7 +192,7 @@ public class CardDealerTest {
         productionPower.set(ResourceTypes.SHIELD, 1);
 
         //check first cell
-        developmentCard = cardDealer.drawCard(0,0);
+        developmentCard = cardDealer.drawCard(0,0,true);
         assertTrue(developmentCard.getCost().equals(cost));
         assertTrue(developmentCard.getProductionCost().equals(productionCost));
         assertTrue(developmentCard.getProductionPower().equals(productionPower));
@@ -210,7 +210,7 @@ public class CardDealerTest {
         productionPower.set(ResourceTypes.STONE,2);
         productionPower.set(ResourceTypes.FAITH,1);
 
-        developmentCard = cardDealer.drawCard(2,3);
+        developmentCard = cardDealer.drawCard(2,3, true);
         assertTrue(developmentCard.getCost().equals(cost));
         assertTrue(developmentCard.getProductionCost().equals(productionCost));
         assertTrue(developmentCard.getProductionPower().equals(productionPower));
@@ -226,7 +226,7 @@ public class CardDealerTest {
         productionPower.set(ResourceTypes.SHIELD,1);
         productionPower.set(ResourceTypes.STONE,1);
 
-        developmentCard = cardDealer.drawCard(2,3);
+        developmentCard = cardDealer.drawCard(2,3,true);
         assertTrue(developmentCard.getCost().equals(cost));
         assertTrue(developmentCard.getProductionCost().equals(productionCost));
         assertTrue(developmentCard.getProductionPower().equals(productionPower));
@@ -238,21 +238,21 @@ public class CardDealerTest {
      * Checks the launched exceptions
      */
     @Test
-    public void testDrawCard_Exception() throws NotEnoughCardException {
+    public void testDrawCard_Exception() throws CardsOfSameColorFinishedException {
         //draws more than 4 times the same cell of the matrix in card dealer in order to empty the stack
         exception.expect(EmptyStackException.class);
         for (int i=0; i<6; i++)
-            developmentCard = cardDealer.drawCard(0,0);
+            developmentCard = cardDealer.drawCard(0,0, true);
 
         //try drawing a card out of bounds
         exception.expect(IndexOutOfBoundsException.class);
-        cardDealer.drawCard(5,0);
+        cardDealer.drawCard(5,0, true);
 
         exception.expect(IndexOutOfBoundsException.class);
-        cardDealer.drawCard(1,6);
+        cardDealer.drawCard(1,6, true);
 
         exception.expect(IndexOutOfBoundsException.class);
-        cardDealer.drawCard(8,8);
+        cardDealer.drawCard(8,8, true);
 
     }
 
@@ -268,7 +268,7 @@ public class CardDealerTest {
         for(char type : cardType)
         {
             cardDealer.discardDevelopment(type);
-            developmentCard = cardDealer.drawCard(2, cardType.indexOf(type));
+            developmentCard = cardDealer.drawCard(2, cardType.indexOf(type), true);
             assertEquals(developmentCard.getLevel(), 1);
             assertEquals(developmentCard.getType(), type);
             assertEquals(developmentCard.getVictoryPoint(), 2);
@@ -284,7 +284,7 @@ public class CardDealerTest {
      */
     @Test
     public void testDiscardDevelopment_exceptions() throws Exception {
-        exception.expect(NotEnoughCardException.class);
+        exception.expect(CardsOfSameColorFinishedException.class);
         for (char cardType: cardType) {
             for(int i=0; i<6; i++)
                 cardDealer.discardDevelopment(cardType);

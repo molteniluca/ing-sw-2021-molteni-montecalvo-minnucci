@@ -154,10 +154,13 @@ public class InitialLeaderSelectionController extends GenericController{
             try {
                 if (guiView.playerNumber == 3) {
                     guiView.setInitialResources(temp, resourceTypes);
+                    guiView.isSuccessReceived();
                 }
                 else if (resourceTypes != null) {
                     guiView.setInitialResources(resourceTypes);
+                    guiView.isSuccessReceived();
                 }
+
                 guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend);
                 GameBoardController.goToGameBoard(actionEvent);
             } catch (IOException e) {

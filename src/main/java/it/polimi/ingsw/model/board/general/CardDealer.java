@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.DevelopmentCard;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.InputStreamReader;
@@ -127,14 +127,19 @@ public class CardDealer implements Serializable {
      * @throws IndexOutOfBoundsException in case one between the provided row and column is out of bounds
      * @throws EmptyStackException if the stack is empty
      */
-    public DevelopmentCard drawCard(int row, int column) throws IndexOutOfBoundsException, EmptyStackException, NotEnoughCardException {
+    public DevelopmentCard drawCard(int row, int column, boolean singlePLayer) throws IndexOutOfBoundsException, EmptyStackException, CardsOfSameColorFinishedException {
         DevelopmentCard card = this.cardMatrix[row][column].pop();
-        for(int i=0; i<ROWS; i++) {
-            if (!this.cardMatrix[i][column].isEmpty()) {
-                return card;
+
+        if(singlePLayer) {
+            for(int i=0; i<ROWS; i++) {
+                if (!this.cardMatrix[i][column].isEmpty()) {
+                    return card;
+                }
             }
+            throw new CardsOfSameColorFinishedException("Not Enough Cards in CardDealer!");
+        }else{
+            return card;
         }
-        throw new NotEnoughCardException("Not Enough Cards in CardDealer!");
     }
 
 
@@ -144,7 +149,7 @@ public class CardDealer implements Serializable {
      * if the stack is empty goes up on the column
      * @param type the cardType that has to be discarded
      */
-    public void discardDevelopment(char type) throws NotEnoughCardException {
+    public void discardDevelopment(char type) throws CardsOfSameColorFinishedException {
         int stillDiscard = 2; //number of cards that must be discarded
 
         switch (type) {
@@ -160,7 +165,7 @@ public class CardDealer implements Serializable {
 
                 }
                 if(stillDiscard >0 )
-                    throw new NotEnoughCardException("Not Enough Cards in CardDealer");
+                    throw new CardsOfSameColorFinishedException("Not Enough Cards in CardDealer");
                 break;
 
             case 'b':
@@ -175,7 +180,7 @@ public class CardDealer implements Serializable {
 
                 }
                 if(stillDiscard >0 )
-                    throw new NotEnoughCardException("Not Enough Cards in CardDealer");
+                    throw new CardsOfSameColorFinishedException("Not Enough Cards in CardDealer");
                 break;
 
             case 'y':
@@ -190,7 +195,7 @@ public class CardDealer implements Serializable {
 
                 }
                 if(stillDiscard >0 )
-                    throw new NotEnoughCardException("Not Enough Cards in CardDealer");
+                    throw new CardsOfSameColorFinishedException("Not Enough Cards in CardDealer");
                 break;
 
             case 'p':
@@ -204,7 +209,7 @@ public class CardDealer implements Serializable {
                     }
                 }
                 if(stillDiscard >0 )
-                    throw new NotEnoughCardException("Not Enough Cards in CardDealer");
+                    throw new CardsOfSameColorFinishedException("Not Enough Cards in CardDealer");
                 break;
         }
     }

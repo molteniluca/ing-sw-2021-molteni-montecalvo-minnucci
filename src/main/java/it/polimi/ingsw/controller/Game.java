@@ -10,13 +10,12 @@ import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.exceptions.WinException;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.network.Server;
 
 import java.io.*;
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -53,13 +52,13 @@ public class Game implements Serializable {
 
         for(int i=inkwellPlayer; i<numPlayers; i++){
             players[i] = new Player(playerNames.get(i),i==inkwellPlayer,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount));
+            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount,numPlayers==1));
             playerCount++;
         }
 
         for(int i=0; i<inkwellPlayer; i++){
             players[i] = new Player(playerNames.get(i),false,generalBoard, leaderCardsInHand[i]);
-            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount));
+            turns.add(new PlayerTurn(players[i],clients.get(i), playerCount, numPlayers==1));
             playerCount++;
         }
 
@@ -128,7 +127,7 @@ public class Game implements Serializable {
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
                     turns.get(0).endGame(getPlayerTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition()==24);
-                } catch (NotEnoughCardException e) {
+                } catch (CardsOfSameColorFinishedException e) {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
@@ -152,7 +151,7 @@ public class Game implements Serializable {
             for(currentPlayer = 0; currentPlayer < numPlayers; currentPlayer++){
                 try {
                     turns.get(currentPlayer).beginTurn();
-                } catch (FaithOverflowException | WinException | NotEnoughCardException e) {
+                } catch (FaithOverflowException | WinException | CardsOfSameColorFinishedException e) {
                     gameEnded=true;
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());

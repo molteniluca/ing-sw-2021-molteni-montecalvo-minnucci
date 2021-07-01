@@ -3,15 +3,12 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.board.general.ActionTokens;
 import it.polimi.ingsw.model.board.general.CardDealer;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
-import it.polimi.ingsw.model.board.personal.FaithTrack;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import javax.swing.*;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +28,7 @@ public class LorenzoTest {
     }
 
     @Test
-    public void testPlay() throws NotEnoughCardException, FaithOverflowException {
+    public void testPlay() throws CardsOfSameColorFinishedException, FaithOverflowException {
         int positionAfter;
         int positionBefore;
         int[] previousSize = new int[4]; //size of a group of cards before the turn

@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Lorenzo;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCardException;
+import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,7 +19,7 @@ public class SelfPlayingTurn implements Turn, Serializable {
         lorenzo = new Lorenzo(generalBoard);
     }
 
-    public void beginTurn() throws FaithOverflowException, NotEnoughCardException {
+    public void beginTurn() throws FaithOverflowException, CardsOfSameColorFinishedException {
         lorenzo.play();
     }
 

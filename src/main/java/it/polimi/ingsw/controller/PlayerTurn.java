@@ -23,16 +23,18 @@ public class PlayerTurn implements Turn, Serializable {
     private final Player player;
     private final transient ClientHandler clientHandler;
     private final transient int playerNum;
+    private final boolean singlePlayer;
     private boolean leaderAction = true;
     private boolean alreadyDone = false;
     private boolean isProducing = false;
     private boolean isHandlingSwap = false;
     private boolean waitingForAction = false;
 
-    public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum){
+    public PlayerTurn(Player player, ClientHandler clientHandler, int playerNum, boolean singlePlayer){
         this.player = player;
         this.clientHandler = clientHandler;
         this.playerNum = playerNum;
+        this.singlePlayer = singlePlayer;
     }
 
     public Player getPlayer() {
@@ -44,7 +46,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @throws IOException In case the client disconnects
      */
     @Override
-    public void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException {
+    public void beginTurn() throws IOException, FaithOverflowException, WinException, CardsOfSameColorFinishedException {
         boolean error = true;
         NetworkMessages action;
         player.getPersonalBoard().setUpAvailableProductions();
@@ -221,7 +223,7 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean activateProduction() throws IOException {
+    private boolean activateProduction() throws IOException, FaithOverflowException {
         player.getPersonalBoard().initProduce();
         boolean error = true;
         while(true) {
@@ -238,7 +240,7 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
-                    } catch (NegativeResourceValueException | FaithOverflowException | NullPointerException | WrongObjectException e) {
+                    } catch (NegativeResourceValueException | NullPointerException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         if(e.getMessage()==null)
                             clientHandler.sendObject("Index not valid!");
@@ -253,7 +255,7 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
-                    } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException | IndexOutOfBoundsException | NullPointerException | WrongObjectException e) {
+                    } catch (UnusableCardException | NegativeResourceValueException | IndexOutOfBoundsException | NullPointerException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         if(e.getMessage()==null)
                             clientHandler.sendObject("Index not valid!");
@@ -270,7 +272,7 @@ public class PlayerTurn implements Turn, Serializable {
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
-                    } catch (FaithOverflowException | NegativeResourceValueException | UnusableCardException | NullPointerException | WrongObjectException e) {
+                    } catch (NegativeResourceValueException | UnusableCardException | NullPointerException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         if(e.getMessage()==null)
                             clientHandler.sendObject("Index not valid!");
@@ -346,9 +348,9 @@ public class PlayerTurn implements Turn, Serializable {
      * @return true if error and false if not
      * @throws IOException in case of connection problems
      */
-    private boolean buyDevelopmentCard() throws IOException, WinException, NotEnoughCardException {
+    private boolean buyDevelopmentCard() throws IOException, WinException, CardsOfSameColorFinishedException {
         try {
-            player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
+            player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),singlePlayer);
             alreadyDone=true;
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);

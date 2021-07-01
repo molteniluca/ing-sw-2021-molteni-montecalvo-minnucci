@@ -300,9 +300,9 @@ public class PersonalBoard implements Serializable {
      * @param column Column of the card dealer
      * @param place Where to place the card in the personal dashboard
      */
-    public void drawCard(int row, int column, int place) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException, NotEnoughCardException {
+    public void drawCard(int row, int column, int place, boolean singlePlayer) throws IncompatibleCardLevelException, NegativeResourceValueException, WinException, EmptyStackException, CardsOfSameColorFinishedException {
         if(checkDrawCard(row,column)){
-            this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column),place);
+            this.cardBoard.insertCard(this.generalBoard.getCardDealer().drawCard(row, column,singlePlayer),place);
             this.deposit.removeResources(handleDiscount(generalBoard.getCardDealer().getCost(row,column)));
         }else{
             throw new NegativeResourceValueException("Can't draw the development card, not enough resources");
