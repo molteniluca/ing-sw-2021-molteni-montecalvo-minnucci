@@ -27,13 +27,16 @@ public class InitialLeaderSelectionController extends GenericController{
     Label lChooseResource, lWrongNumberOfLeaders;
 
     @FXML
-    GridPane gChooseResource;
+    GridPane gChooseResource, gChooseResource2;
 
     @FXML
     ImageView leader1, leader2, leader3, leader4;
 
     @FXML
     ImageView iGold, iServant, iShield, iStone; //i = image
+
+    @FXML
+    ImageView iGold2, iServant2, iShield2, iStone2;
 
     ImageView[] leadersImage;
 
@@ -65,23 +68,14 @@ public class InitialLeaderSelectionController extends GenericController{
 
             case 3:
                 lChooseResource.setText("You can have two resources and one faith point");
+                gChooseResource2.setOpacity(1);
                 break;
         }
     }
 
-    public void chooseResource(MouseEvent mouseEvent) {
+    public void chooseFirstResource(MouseEvent mouseEvent) {
 
-        ImageView imageView = (ImageView) mouseEvent.getSource();
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
-        if (imageView == iGold)
-            resourceTypes = ResourceTypes.GOLD;
-        else if (imageView == iServant)
-            resourceTypes = ResourceTypes.SERVANT;
-        else if (imageView == iShield)
-            resourceTypes = ResourceTypes.SHIELD;
-        else if (imageView == iStone)
-            resourceTypes = ResourceTypes.STONE;
+        imageResBiggerAndToResourceType(mouseEvent);
 
         switch(guiView.playerNumber){
             case 0:
@@ -94,20 +88,20 @@ public class InitialLeaderSelectionController extends GenericController{
                 break;
 
             case 3:
-                if (!isSecondResourceChosen){
-                    imageView.setFitHeight(40);
-                    imageView.setFitWidth(40);
-                    temp = resourceTypes;
-                    isSecondResourceChosen = true;
-                    lChooseResource.setText("Choose another resource");
-                }
-                else {
-                    isResourcesSelected = true;
-                    gChooseResource.setDisable(true);
-                }
-                guiView.isSuccessReceived();
+                gChooseResource.setDisable(true);
+                gChooseResource2.setDisable(false);
+
+                temp = resourceTypes;
+                lChooseResource.setText("Choose another resource");
                 break;
         }
+    }
+
+    public void chooseSecondResource(MouseEvent mouseEvent) {
+        imageResBiggerAndToResourceType(mouseEvent);
+
+        isResourcesSelected = true;
+        gChooseResource2.setDisable(true);
     }
 
     public void selectLeaderCard(MouseEvent mouseEvent) {
@@ -158,11 +152,12 @@ public class InitialLeaderSelectionController extends GenericController{
             }
 
             try {
-                if (isSecondResourceChosen)
+                if (isSecondResourceChosen) {
                     guiView.setInitialResources(temp, resourceTypes);
-                else if (resourceTypes != null)
+                }
+                else if (resourceTypes != null) {
                     guiView.setInitialResources(resourceTypes);
-
+                }
                 guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend);
                 GameBoardController.goToGameBoard(actionEvent);
             } catch (IOException e) {
@@ -183,6 +178,20 @@ public class InitialLeaderSelectionController extends GenericController{
     private void leaderToImageName(LeaderCard leader, ImageView image){
         String temp = "images/Cards/LeaderCards/" + leader.getImage() + "-1.png";
         image.setImage(new Image(temp));
+    }
+
+    private void imageResBiggerAndToResourceType(MouseEvent mouseEvent){
+        ImageView imageView = (ImageView) mouseEvent.getSource();
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        if (imageView == iGold || imageView == iGold2)
+            resourceTypes = ResourceTypes.GOLD;
+        else if (imageView == iServant || imageView == iServant2)
+            resourceTypes = ResourceTypes.SERVANT;
+        else if (imageView == iShield || imageView == iShield2)
+            resourceTypes = ResourceTypes.SHIELD;
+        else if (imageView == iStone || imageView == iStone2)
+            resourceTypes = ResourceTypes.STONE;
     }
 
     public void handleDisconnect() {
