@@ -236,7 +236,7 @@ public class ButtonBoardController extends GenericController {
 
     private void setClickable(){
         bEndTurn.setDisable(!guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
-        rBlockProduceAndBuyProduction.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone());
+        rBlockProduceAndBuyProduction.setVisible(! guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction());
         rButtonBoard.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
         rForProduce.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
     }

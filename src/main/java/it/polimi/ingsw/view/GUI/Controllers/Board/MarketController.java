@@ -421,7 +421,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     private void setClickable(){
-        rMarketTotal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone()||
+        rMarketTotal.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction()||
                 guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
         rMarket.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
     }
