@@ -154,9 +154,9 @@ public class LeaderBoardController extends GenericController {
                     ilh1.setVisible(false);
                     break;
                 case 1:
-                    leaderSelected=0;
+                    leaderSelected=-1;
                     selectImage(ilh2,false);
-                    selectImage(ilh1,true);
+                    selectImage(ilh1,false);
                     buttonDiscard.setDisable(false);
                     buttonActivate.setDisable(false);
                     ilh2.setVisible(false);

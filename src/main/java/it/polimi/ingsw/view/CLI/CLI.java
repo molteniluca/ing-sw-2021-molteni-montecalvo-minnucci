@@ -1032,15 +1032,18 @@ public class CLI extends View implements Runnable{
                                     continue;
 
                                 productionProd1(cliSupporter.numberToResourceType(firstResource),cliSupporter.numberToResourceType(secondResource),cliSupporter.numberToResourceType(productionResult));
-                                isSuccessReceived();
-                                temporaryAction1 = true;
+
+                                temporaryAction1 = isSuccessReceived();
+                                if(!temporaryAction1){
+                                    endProduction();
+                                    isSuccessReceived();
+                                }
                             }
                             else
                             {
                                 System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
                                 input.readLine();
                             }
-
                             break;
 
                         case 2:
@@ -1065,7 +1068,11 @@ public class CLI extends View implements Runnable{
                                     alreadyUsed[currentCard] = true;
                                     productionProd2(currentCard);
                                     isSuccessReceived();
-                                    temporaryAction2 = true;
+                                    temporaryAction2 = isSuccessReceived();
+                                    if(!temporaryAction2){
+                                        endProduction();
+                                        isSuccessReceived();
+                                    }
                                 }
 
                                 else
@@ -1116,7 +1123,11 @@ public class CLI extends View implements Runnable{
 
                                 productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),cliSupporter.numberToResourceType(currentResource));
                                 isSuccessReceived();
-                                temporaryAction3 = true;
+                                temporaryAction3 = isSuccessReceived();
+                                if(!temporaryAction3){
+                                    endProduction();
+                                    isSuccessReceived();
+                                }
                             }
                             else
                             {
@@ -1129,6 +1140,7 @@ public class CLI extends View implements Runnable{
                             if(temporaryAction1 || temporaryAction2 || temporaryAction3){
                                 actionDone = true;
                                 endProduction();
+                                isSuccessReceived();
                             }
                             break;
 

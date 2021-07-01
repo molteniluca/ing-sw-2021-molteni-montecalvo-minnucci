@@ -97,7 +97,18 @@ public class ResourcesTest extends TestCase {
         assert resources.equals(resources2);
         assert resources.equals(resources);
 
+        assert !resources.equals(resources.add(new Resources().set(ResourceTypes.FAITH,2)));
+
         assert !resources.equals(resources.add(resources2));
 
+    }
+
+    public void testGetTotalResourceNumber() {
+        Resources resources= new Resources();
+        resources.set(ResourceTypes.BLANK,8);
+        resources.set(ResourceTypes.STONE,5);
+        resources.set(ResourceTypes.GOLD,5);
+
+        assertEquals(resources.getTotalResourceNumber(),10);
     }
 }
