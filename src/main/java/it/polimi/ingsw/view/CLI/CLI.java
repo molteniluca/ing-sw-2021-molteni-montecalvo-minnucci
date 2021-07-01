@@ -1155,7 +1155,7 @@ public class CLI extends View implements Runnable{
      * the answer to the server
      */
     private void showLeaderBoard() {
-        int currentAction;
+        int currentAction = 0;
         int currentCard;
 
         do {
@@ -1179,18 +1179,33 @@ public class CLI extends View implements Runnable{
                 cliSupporter.showLegend();
                 System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
 
+                if (!(!game.getPlayerTurn(playerNumber).isLeaderAction() && !
+                        game.getPlayerTurn(playerNumber).isWaitingForAction() ||
+                        game.getPlayerTurn(playerNumber).isHandlingSwap() ||
+                        game.getPlayerTurn(playerNumber).isProducing()))
+                {
+                    if (leaderInHand.size() > 0) {
+                        System.out.println("\n1) Play leader");
+                        System.out.println("2) Discard leader");
+                        System.out.println("0) Exit");
+                        currentAction = cliSupporter.integerInput("Select action: ", 0, 2);
+                    } else {
+                        System.out.println(ANSI_GREEN + "\nYou activated or discarded all you leader cards" + RESET);
+                        System.out.println("0) Exit");
+                        currentAction = cliSupporter.integerInput("Select action: ", 0, 0);
+                    }
 
-                if (leaderInHand.size() > 0) {
-                    System.out.println("\n1) Play leader");
-                    System.out.println("2) Discard leader");
-                    System.out.println("0) Exit");
-                    currentAction = cliSupporter.integerInput("Select action: ", 0, 2);
-                } else {
-                    System.out.println(ANSI_GREEN + "\nYou activated or discarded all you leader cards" + RESET);
-                    System.out.println("0) Exit");
-                    currentAction = cliSupporter.integerInput("Select action: ", 0, 0);
                 }
 
+                else
+                {
+                    System.out.print(ANSI_GREEN+"You already did a leader card action, press enter to continue"+RESET);
+                    try {
+                        input.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 try {
                     switch (currentAction) {

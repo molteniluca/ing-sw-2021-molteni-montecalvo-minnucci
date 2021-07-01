@@ -31,6 +31,13 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+.secondBodyBackground{
+    -fx-background-image: url('alternativeInitialBackground.jpg');
+    -fx-background-size: stretch;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
 
 .button-shiny-orange {
     -fx-background-color: linear-gradient(#ffd65b, #e68400),
