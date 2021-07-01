@@ -25,7 +25,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="leader1" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard1" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader1" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
@@ -33,17 +33,17 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader2" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader2" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader3" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader3" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="leader4" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard4" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <ImageView fx:id="leader4" fitHeight="220.0" fitWidth="160.0" onMouseClicked="#selectLeaderCard" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -55,7 +55,7 @@
             <Font size="50.0" />
          </font>
       </Label>
-      <Button fx:id="bConfirm" layoutX="682.0" layoutY="768.0" mnemonicParsing="false" onAction="#confirmLeaders" prefHeight="60.0" prefWidth="137.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="CONFIRM" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="682.0" AnchorPane.rightAnchor="681.0">
+      <Button fx:id="bConfirm" layoutX="682.0" layoutY="768.0" mnemonicParsing="false" onAction="#confirmResourcesLeaders" prefHeight="60.0" prefWidth="137.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="CONFIRM" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="682.0" AnchorPane.rightAnchor="681.0">
          <font>
             <Font size="24.0" />
          </font>
