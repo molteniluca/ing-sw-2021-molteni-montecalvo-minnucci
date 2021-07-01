@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
@@ -20,8 +21,14 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="ilh1" fitHeight="195.0" fitWidth="130.0" onMouseClicked="#leaderClick" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ImageView fx:id="ilh2" fitHeight="195.0" fitWidth="130.0" onMouseClicked="#leaderClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="ilh1" fitHeight="195.0" fitWidth="130.0" onMouseClicked="#leaderClick" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ImageView>
+            <ImageView fx:id="ilh2" fitHeight="195.0" fitWidth="130.0" onMouseClicked="#leaderClick" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ImageView>
          </children>
       </GridPane>
       <Label layoutX="113.0" layoutY="14.0" style="-fx-background-color: white;" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Leader Cards in hand" textFill="WHITE" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="7.0" />
@@ -41,6 +48,6 @@
       <Label layoutX="583.0" layoutY="6.0" style="-fx-background-color: white;" styleClass="customSmallLabel" stylesheets="@../CSS/backgroundCreateOrJoin.css" text="Leader Cards activated" textFill="WHITE" AnchorPane.leftAnchor="583.0" AnchorPane.topAnchor="6.0" />
       <Button fx:id="buttonActivate" layoutX="307.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateLeader" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Activate" />
       <Button fx:id="buttonDiscard" layoutX="307.0" layoutY="99.0" mnemonicParsing="false" onAction="#discardLeader" prefHeight="33.0" prefWidth="90.0" styleClass="whiteBlack" stylesheets="@../CSS/Buttons.css" text="Discard" />
-      <Rectangle fx:id="rLeader" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="935.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle fx:id="rLeader" arcHeight="5.0" arcWidth="5.0" fill="#00000012" height="230.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="935.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

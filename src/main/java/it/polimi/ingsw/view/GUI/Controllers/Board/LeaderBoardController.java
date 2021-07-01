@@ -128,10 +128,10 @@ public class LeaderBoardController extends GenericController {
 
     private void setClickable(int player){
         if(player == guiView.playerNumber)
-            rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() ||
+            rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() && !
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction() ||
                     guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap() ||
-                    guiView.game.getPlayerTurn(guiView.playerNumber).isProducing() ||
-                    guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction());
+                    guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
         else
             rLeader.setVisible(false);
     }
