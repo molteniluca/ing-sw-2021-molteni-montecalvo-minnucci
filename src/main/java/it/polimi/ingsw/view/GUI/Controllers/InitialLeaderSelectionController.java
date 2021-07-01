@@ -152,7 +152,7 @@ public class InitialLeaderSelectionController extends GenericController{
             }
 
             try {
-                if (isSecondResourceChosen) {
+                if (guiView.playerNumber == 3) {
                     guiView.setInitialResources(temp, resourceTypes);
                 }
                 else if (resourceTypes != null) {
