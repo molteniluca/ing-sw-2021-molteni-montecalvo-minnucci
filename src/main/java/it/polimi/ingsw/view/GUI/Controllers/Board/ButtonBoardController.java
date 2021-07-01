@@ -108,24 +108,24 @@ public class ButtonBoardController extends GenericController {
 
                 if (p.getProd2() != null) {
                     if (p.isProd1()) {
-                        productionComboBox.getItems().addAll("Default Production");
+                        productionComboBox.getItems().add("Default Production");
                     }
 
                     for (int i = 0; i < p.getProd2().length; i++) {
                         if (p.getProd2()[i])
-                            productionComboBox.getItems().addAll("Card " + (i + 1));
+                            productionComboBox.getItems().add("Card " + (i + 1));
                     }
 
                     for (int i = 0; i < p.getAvailableProductions().size(); i++) {
-                        productionComboBox.getItems().addAll("Leader " + (i + 1));
+                        productionComboBox.getItems().add("Leader " + (i + 1));
                     }
                 } else {
-                    productionComboBox.getItems().addAll("Default Production");
+                    productionComboBox.getItems().add("Default Production");
                     for (int i = 0; i < 3; i++) {
-                        productionComboBox.getItems().addAll("Card " + (i + 1));
+                        productionComboBox.getItems().add("Card " + (i + 1));
                     }
                     for (int i = 0; i < 2; i++) {
-                        productionComboBox.getItems().addAll("Leader " + (i + 1));
+                        productionComboBox.getItems().add("Leader " + (i + 1));
                     }
                 }
                 productionComboBox.getSelectionModel().selectFirst();
@@ -201,9 +201,9 @@ public class ButtonBoardController extends GenericController {
                 comboRes2.getItems().clear();
                 comboRes3.getItems().clear();
                 for (ResourceTypes r : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) {
-                    comboRes1.getItems().addAll(r);
-                    comboRes2.getItems().addAll(r);
-                    comboRes3.getItems().addAll(r);
+                    comboRes1.getItems().add(r);
+                    comboRes2.getItems().add(r);
+                    comboRes3.getItems().add(r);
                 }
                 comboRes1.getSelectionModel().selectFirst();
                 comboRes2.getSelectionModel().selectFirst();
