@@ -87,7 +87,7 @@ public class PlayerTurn implements Turn, Serializable {
                 case BUYCARD:
                     error = buyDevelopmentCard();
                     break;
-                case ENDTURN:
+                case TURNEND:
                     clientHandler.sendObject(ERROR);
                     clientHandler.sendObject("You must complete at lest one action");
             }
@@ -98,7 +98,6 @@ public class PlayerTurn implements Turn, Serializable {
                 break;
             }
         }
-
         action = clientHandler.receiveMessage();
 
         while((action == DISCARDLEADER || action == ACTIVATELEADER) && leaderAction){
