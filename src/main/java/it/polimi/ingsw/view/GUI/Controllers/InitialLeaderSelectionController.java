@@ -19,7 +19,9 @@ import java.util.ArrayList;
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
     private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
-    private ResourceTypes temp;
+    private boolean isResourcesSelected;
+    Boolean isLeaderSelected[];
+    private ResourceTypes temp, resourceTypes = null;
 
     @FXML
     Label lChooseResource, lWrongNumberOfLeaders;
@@ -39,6 +41,7 @@ public class InitialLeaderSelectionController extends GenericController{
     @FXML
     void initialize(){
         leadersImage = new ImageView[]{leader1, leader2, leader3, leader4};
+        isLeaderSelected = new Boolean[]{isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
         ArrayList<LeaderCard> leaderCards = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
         for (LeaderCard leaders: leaderCards) {
             leaderToImageName(leaders, leadersImage[i]);
@@ -66,25 +69,63 @@ public class InitialLeaderSelectionController extends GenericController{
         }
     }
 
-    private void leaderToImageName(LeaderCard leader, ImageView image){
-        String temp = "images/Cards/LeaderCards/" + leader.getImage() + "-1.png";
-        image.setImage(new Image(temp));
+    public void chooseResource(MouseEvent mouseEvent) {
+
+        ImageView imageView = (ImageView) mouseEvent.getSource();
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        if (imageView == iGold)
+            resourceTypes = ResourceTypes.GOLD;
+        else if (imageView == iServant)
+            resourceTypes = ResourceTypes.SERVANT;
+        else if (imageView == iShield)
+            resourceTypes = ResourceTypes.SHIELD;
+        else if (imageView == iStone)
+            resourceTypes = ResourceTypes.STONE;
+
+        switch(guiView.playerNumber){
+            case 0:
+
+            case 1:
+
+            case 2:
+                gChooseResource.setDisable(true);
+                isResourcesSelected = true;
+                break;
+
+            case 3:
+                if (!isSecondResourceChosen){
+                    imageView.setFitHeight(40);
+                    imageView.setFitWidth(40);
+                    temp = resourceTypes;
+                    isSecondResourceChosen = true;
+                    lChooseResource.setText("Choose another resource");
+                }
+                else {
+                    isResourcesSelected = true;
+                    gChooseResource.setDisable(true);
+                }
+                guiView.isSuccessReceived();
+                break;
+        }
     }
 
-    public void selectLeaderCard1() {
-        isLeader1Selected = selectLeader(leader1, isLeader1Selected);
-    }
-
-    public void selectLeaderCard2() {
-        isLeader2Selected = selectLeader(leader2, isLeader2Selected);
-    }
-
-    public void selectLeaderCard3() {
-        isLeader3Selected = selectLeader(leader3, isLeader3Selected);
-    }
-
-    public void selectLeaderCard4() {
-        isLeader4Selected = selectLeader(leader4, isLeader4Selected);
+    public void selectLeaderCard(MouseEvent mouseEvent) {
+        String id = mouseEvent.getPickResult().getIntersectedNode().getId();
+        switch (id){
+            case "leader1":
+                isLeader1Selected = selectLeader(leader1, isLeader1Selected);
+                break;
+            case "leader2":
+                isLeader2Selected = selectLeader(leader2, isLeader2Selected);
+                break;
+            case "leader3":
+                isLeader3Selected = selectLeader(leader3, isLeader3Selected);
+                break;
+            case "leader4":
+                isLeader4Selected = selectLeader(leader4, isLeader4Selected);
+                break;
+        }
     }
 
     private boolean selectLeader(ImageView leader, boolean isLeaderSelected){
@@ -103,8 +144,9 @@ public class InitialLeaderSelectionController extends GenericController{
         return isLeaderSelected;
     }
 
-    public void confirmLeaders(ActionEvent actionEvent) {
-        if(numberOfSelectedLeader==2) {
+    public void confirmResourcesLeaders(ActionEvent actionEvent) {
+        if(numberOfSelectedLeader==2 && (isResourcesSelected || guiView.playerNumber==0)) {
+
             Integer[] numberOfLeaderToSend = new Integer[2];
             boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
             int k = 0;
@@ -116,69 +158,31 @@ public class InitialLeaderSelectionController extends GenericController{
             }
 
             try {
-                if(guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend)) {
-                    guiView.waitForUpdatedGame();
-                    GameBoardController.goToGameBoard(actionEvent); //open gameBoard
-                }
+                if (isSecondResourceChosen)
+                    guiView.setInitialResources(temp, resourceTypes);
+                else if (resourceTypes != null)
+                    guiView.setInitialResources(resourceTypes);
+
+                guiView.chooseLeaderAndWaitForStart(numberOfLeaderToSend);
+                GameBoardController.goToGameBoard(actionEvent);
             } catch (IOException e) {
                 handleDisconnect();
             }
 
         }
         else {
-            lWrongNumberOfLeaders.setOpacity(1);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("WARNING");
+            alert.setHeaderText("Illegal action");
+            alert.setContentText("Choose leaders and eventually resources correctly.");
+
+            alert.showAndWait();
         }
     }
 
-    public void chooseResource(MouseEvent mouseEvent) {
-        ResourceTypes resourceTypes = null;
-        ImageView imageView = (ImageView) mouseEvent.getSource();
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
-        if (imageView == iGold)
-            resourceTypes = ResourceTypes.GOLD;
-        else if (imageView == iServant)
-            resourceTypes = ResourceTypes.SERVANT;
-        else if (imageView == iShield)
-            resourceTypes = ResourceTypes.SHIELD;
-        else if (imageView == iStone)
-            resourceTypes = ResourceTypes.STONE;
-
-        switch(guiView.playerNumber){
-            case 1:
-
-            case 2:
-                gChooseResource.setDisable(true);
-
-                try{
-                    guiView.setInitialResources(resourceTypes);
-                }catch (IOException e)
-                {
-                    handleDisconnect();
-                }
-                guiView.isSuccessReceived();
-                break;
-
-            case 3:
-                if (!isSecondResourceChosen){
-                    imageView.setFitHeight(40);
-                    imageView.setFitWidth(40);
-                    temp = resourceTypes;
-                    isSecondResourceChosen = true;
-                    lChooseResource.setText("Choose another resource");
-                }
-                else {
-                try{
-                    guiView.setInitialResources(temp, resourceTypes);
-                }catch (IOException e)
-                {
-                    handleDisconnect();
-                }
-                    gChooseResource.setDisable(true);
-                }
-                guiView.isSuccessReceived();
-                break;
-        }
+    private void leaderToImageName(LeaderCard leader, ImageView image){
+        String temp = "images/Cards/LeaderCards/" + leader.getImage() + "-1.png";
+        image.setImage(new Image(temp));
     }
 
     public void handleDisconnect() {
