@@ -46,34 +46,32 @@ public class PlayerTurn implements Turn, Serializable {
     @Override
     public void beginTurn() throws IOException, FaithOverflowException, WinException, NotEnoughCardException {
         boolean error = true;
-
+        NetworkMessages action;
         player.getPersonalBoard().setUpAvailableProductions();
         clientHandler.sendObject(TURNBEGIN);
+
         leaderAction = true;
-        alreadyDone = false;
-        isProducing = false;
-        isHandlingSwap = false;
-        waitingForAction = false;
 
-        clientHandler.sendGame(playerNum);
-
-        NetworkMessages action = clientHandler.receiveMessage();
-
-        while((action == DISCARDLEADER || action == ACTIVATELEADER)){
-            if(action == ACTIVATELEADER)
-                error&=!activateLeader();
-            else
-                error&=!discardLeader();
-            if(!error)
-                leaderAction=false;
-            action = clientHandler.receiveMessage();
-        }
-
-        waitingForAction = true;
-        clientHandler.sendGame(playerNum);
-
-        error=true;
         while(error){
+            alreadyDone = false;
+            isProducing = false;
+            isHandlingSwap = false;
+            waitingForAction = true;
+
+            clientHandler.sendGame(playerNum);
+
+            action = clientHandler.receiveMessage();
+
+            while((action == DISCARDLEADER || action == ACTIVATELEADER)){
+                if(action == ACTIVATELEADER)
+                    error&=!activateLeader();
+                else
+                    error&=!discardLeader();
+                if(!error)
+                    leaderAction=false;
+                action = clientHandler.receiveMessage();
+            }
+
             switch(action){
                 case PRODUCTION:
                     error = activateProduction();
@@ -89,7 +87,7 @@ public class PlayerTurn implements Turn, Serializable {
                 case BUYCARD:
                     error = buyDevelopmentCard();
                     break;
-                default:
+                case ENDTURN:
                     clientHandler.sendObject(ERROR);
                     clientHandler.sendObject("You must complete at lest one action");
             }
@@ -97,9 +95,11 @@ public class PlayerTurn implements Turn, Serializable {
                 alreadyDone=true;
                 waitingForAction = false;
                 clientHandler.sendGame(playerNum);
+                break;
             }
-            action = clientHandler.receiveMessage();
         }
+
+        action = clientHandler.receiveMessage();
 
         while((action == DISCARDLEADER || action == ACTIVATELEADER) && leaderAction){
             if(action == ACTIVATELEADER)

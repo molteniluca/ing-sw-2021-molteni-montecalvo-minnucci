@@ -133,15 +133,16 @@ public class WarehouseDepots implements Serializable {
     public void removeResources(Resources sub) throws NegativeResourceValueException {
         for(Level l : warehouseDepots){
             if(l.getResourceType()!=null) {
-                int num = sub.getResourceNumber(l.getResourceType());
+                ResourceTypes resourceType = l.getResourceType();
+                int num = sub.getResourceNumber(resourceType);
                 num = Math.min(num, l.getResourceNumber());
 
                 try {
-                    l.removeResources(num, l.getResourceType());
+                    l.removeResources(num, resourceType);
                 } catch (LevelTooSmallException | TypeNotChangeableException e) {
                     e.printStackTrace();
                 }
-                sub = sub.sub(new Resources().set(l.getResourceType(), num));
+                sub = sub.sub(new Resources().set(resourceType, num));
             }
         }
     }
