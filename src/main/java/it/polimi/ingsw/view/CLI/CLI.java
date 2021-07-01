@@ -1193,8 +1193,7 @@ public class CLI extends View implements Runnable{
                 cliSupporter.showLegend();
                 System.out.println(ANSI_BLUE + "🁢" + RESET + "1 : Color and number of a development card\n");
 
-                if (!(!game.getPlayerTurn(playerNumber).isLeaderAction() && !
-                        game.getPlayerTurn(playerNumber).isWaitingForAction() ||
+                if (!(!game.getPlayerTurn(playerNumber).isLeaderAction() && actionDone ||//&& game.getPlayerTurn(playerNumber).isAlreadyDone()||
                         game.getPlayerTurn(playerNumber).isHandlingSwap() ||
                         game.getPlayerTurn(playerNumber).isProducing()))
                 {

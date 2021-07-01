@@ -234,6 +234,7 @@ public class PlayerTurn implements Turn, Serializable {
                                 clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
+                        alreadyDone=true;
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
@@ -248,6 +249,7 @@ public class PlayerTurn implements Turn, Serializable {
                 case PROD2:
                     try {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(Integer.class));
+                        alreadyDone=true;
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
@@ -264,6 +266,7 @@ public class PlayerTurn implements Turn, Serializable {
                         player.getPersonalBoard().enqueueProduce(clientHandler.receiveObject(ResourceTypes.class),
                                 clientHandler.receiveObject(ResourceTypes.class)
                         );
+                        alreadyDone=true;
                         clientHandler.sendObject(SUCCESS);
                         clientHandler.sendGame(playerNum);
                         error = false;
@@ -300,6 +303,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyColumn() throws IOException, FaithOverflowException {
         try {
             player.getPersonalBoard().buyColumn(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
+            alreadyDone=true;
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
             return false;
@@ -322,6 +326,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyRow() throws IOException, FaithOverflowException {
         try {
             player.getPersonalBoard().buyRow(clientHandler.receiveObject(Integer.class), clientHandler.receiveObject(Integer.class));
+            alreadyDone=true;
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
             return false;
@@ -344,6 +349,7 @@ public class PlayerTurn implements Turn, Serializable {
     private boolean buyDevelopmentCard() throws IOException, WinException, NotEnoughCardException {
         try {
             player.getPersonalBoard().drawCard(clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class),clientHandler.receiveObject(Integer.class));
+            alreadyDone=true;
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
             return false;

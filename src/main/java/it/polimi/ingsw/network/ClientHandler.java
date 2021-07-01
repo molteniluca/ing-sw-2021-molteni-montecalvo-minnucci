@@ -86,7 +86,7 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      * @throws ClassCastException In case the client doesn't send the specified type of object
      */
-    public synchronized <T> T receiveObject(Class<? extends T> c) throws IOException, WrongObjectException {
+    public <T> T receiveObject(Class<? extends T> c) throws IOException, WrongObjectException {
         Object read = null;
         while(read==null){
             try {
@@ -125,7 +125,7 @@ public class ClientHandler extends Thread{
      * @param o The object to be sent
      * @throws IOException In case there's a problem communicating with the client
      */
-    public synchronized void sendObject(Object o) throws IOException {
+    public void sendObject(Object o) throws IOException {
         out.reset();
         out.writeObject(o);
     }
@@ -136,19 +136,19 @@ public class ClientHandler extends Thread{
      * @throws IOException In case there's a problem communicating with the client
      */
     private void createGame(int numPlayers) throws IOException {
+        String id = randomizeId();
         synchronized (waitingRooms){
-            String id = randomizeId();
             while(waitingRooms.containsKey(id))
                 id = randomizeId();
             waitingRooms.put(id,new WaitingRoom(numPlayers,id,waitingRooms));
-
-            printDebug("New game ID:"+id+"\tPlayers:"+(numPlayers));
-
-            sendObject(SUCCESS);
-            sendObject(id);
-
-            joinGame(id);
         }
+
+        printDebug("New game ID:"+id+"\tPlayers:"+(numPlayers));
+
+        sendObject(SUCCESS);
+        sendObject(id);
+
+        joinGame(id);
     }
 
     /**
