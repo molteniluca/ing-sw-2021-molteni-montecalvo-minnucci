@@ -7,13 +7,11 @@ import java.util.ResourceBundle;
 
 import it.polimi.ingsw.model.board.general.Market;
 import it.polimi.ingsw.model.board.personal.storage.WarehouseDepots;
-import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.cards.specialAbility.ExtraResource;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.view.GUI.Controllers.GenericController;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -29,13 +27,13 @@ import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
 
 public class MarketController extends GenericController implements Initializable {
     private static MarketController marketController;
-    private static Image marketImage = new Image("/images/marketBoard.png");
-    private static Image shield = new Image("/images/Marble/blue marble.png");
-    private static Image gold = new Image("/images/Marble/yellow marble.png");
-    private static Image servant = new Image("/images/Marble/purple marble.png");
-    private static Image stone = new Image("/images/Marble/gray marble.png");
-    private static Image faith = new Image("/images/Marble/red marble.png");
-    private static Image blank = new Image("/images/Marble/white marble.png");
+    private static final Image marketImage = new Image("/images/marketBoard.png");
+    private static final Image shield = new Image("/images/Marble/blue marble.png");
+    private static final Image gold = new Image("/images/Marble/yellow marble.png");
+    private static final Image servant = new Image("/images/Marble/purple marble.png");
+    private static final Image stone = new Image("/images/Marble/gray marble.png");
+    private static final Image faith = new Image("/images/Marble/red marble.png");
+    private static final Image blank = new Image("/images/Marble/white marble.png");
 
     @FXML
     private ComboBox extraEffectComboBox, comboLevelTake, comboLevelPlace, comboResourceTypePlace;
@@ -158,6 +156,14 @@ public class MarketController extends GenericController implements Initializable
                 }
             }
         }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Illegal action");
+            alert.setContentText("Select 1 arrow.");
+
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -195,7 +201,7 @@ public class MarketController extends GenericController implements Initializable
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Illegal action");
-            alert.setContentText("You selected an empty level, please select another one");
+            alert.setContentText("You selected an empty level, please select another one.");
 
             alert.showAndWait();
         }
