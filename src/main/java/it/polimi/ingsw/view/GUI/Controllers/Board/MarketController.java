@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.Controllers.Board;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.ResourceBundle;
 
 import it.polimi.ingsw.model.board.general.Market;
@@ -20,19 +21,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
+import static it.polimi.ingsw.model.resources.ResourceTypes.*;
+import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
+
 
 public class MarketController extends GenericController implements Initializable {
     private static MarketController marketController;
-    private static Image marketImage = new Image("/images/marketBoard.png");
-    private static Image shield = new Image("/images/Marble/blue marble.png");
-    private static Image gold = new Image("/images/Marble/yellow marble.png");
-    private static Image servant = new Image("/images/Marble/purple marble.png");
-    private static Image stone = new Image("/images/Marble/gray marble.png");
-    private static Image faith = new Image("/images/Marble/red marble.png");
-    private static Image blank = new Image("/images/Marble/white marble.png");
+    private static final Image marketImage = new Image("/images/marketBoard.png");
+    private static final Image shield = new Image("/images/Marble/blue marble.png");
+    private static final Image gold = new Image("/images/Marble/yellow marble.png");
+    private static final Image servant = new Image("/images/Marble/purple marble.png");
+    private static final Image stone = new Image("/images/Marble/gray marble.png");
+    private static final Image faith = new Image("/images/Marble/red marble.png");
+    private static final Image blank = new Image("/images/Marble/white marble.png");
 
     @FXML
-    private ComboBox extraEffectComboBox;
+    private ComboBox extraEffectComboBox, comboLevelTake, comboLevelPlace, comboResourceTypePlace;
     @FXML
     private ImageView marketImageView;
     @FXML
@@ -53,19 +57,9 @@ public class MarketController extends GenericController implements Initializable
     private ImageView iav1, iav2, iav3, iav4, iah1, iah2, iah3; //i= image, a= arrow, v= vertical, h= horizontal
     private ImageView[] arrows;
     @FXML
-    private RadioButton rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3; //r= radio, b= button, 1_2 means in the first VBOX the second radioButton
-    @FXML
-    private RadioButton rbGold, rbServant, rbShield, rbStone;
-    @FXML
-    public Rectangle rMarket, rMarketTotal;
-
-    private RadioButton[] levelRadioButtons;
-    private RadioButton[] resourceRadioButtons;
+    private Rectangle rMarket, rMarketTotal;
 
     int column = -1, row = -1, arrowsSelected = 0;
-
-    ToggleGroup levelToggleGroup;
-    ToggleGroup resourceToggleGroup;
 
     Resources resourcesFromMarket;
     int  numResOccupied, numResToAdd, numResToMove;
@@ -80,24 +74,11 @@ public class MarketController extends GenericController implements Initializable
 
         assert marketGrid != null : "fx:id=\"marketGrid\" was not injected: check your FXML file 'Market.fxml'.";
 
-        levelToggleGroup = new ToggleGroup();
-
-        levelRadioButtons = new RadioButton[]{rb1_1, rb1_2, rb1_3, rb2_1, rb2_2, rb2_3};
-        for (int i = 0; i < 6; i++) {
-            levelRadioButtons[i].setToggleGroup(levelToggleGroup);
-        }
-
-        resourceToggleGroup = new ToggleGroup();
-        resourceRadioButtons = new RadioButton[] {rbGold, rbServant, rbShield, rbStone};
-        for(int i = 0; i < 4; i++ ) {
-            resourceRadioButtons[i].setToggleGroup(resourceToggleGroup);
-        }
-
         arrows = new ImageView[]{iav1, iav2, iav3, iav4, iah1, iah2, iah3};
         resLabels = new Label[]{goldLabel, servantLabel, shieldLabel, stoneLabel};
         resourceTypes = new ResourceTypes[]{ResourceTypes.GOLD, ResourceTypes.SERVANT, ResourceTypes.SHIELD, ResourceTypes.STONE};
-        Platform.runLater(this::updateMarketMatrix);
 
+        Platform.runLater(this::updateMarketMatrix);
     }
 
     private void updateMarketMatrix() {
@@ -144,30 +125,6 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
-    /**
-     * Shows the swap area after buying from market
-     * also enables all the necessary buttons setting their opacity to one
-     */
-    private void showSwapArea() {
-        setAbleButtons();
-        lYouHaveNow.setOpacity(1);
-    }
-
-    private void updateSwap(){
-        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-        resourcesFromMarket = warehouseDepots.getSwapDeposit();
-        for (int i = 0; i < 4; i++) {
-            resLabels[i].setText(String.valueOf(resourcesFromMarket.getResourceNumber(resourceTypes[i])));
-        }
-
-        if (resourcesFromMarket.getTotalResourceNumber() == 0 && bTake.getOpacity() != 0){ //only one control on the opacity is necessary
-            bTake.setDisable(true);
-            bPlace.setDisable(true);
-            bTake.setOpacity(0.5);
-            bPlace.setOpacity(0.5);
-        }
-    }
-
     public void confirmRowColumn() {
         if (arrowsSelected == 1){
             if (row != -1){
@@ -199,21 +156,52 @@ public class MarketController extends GenericController implements Initializable
                 }
             }
         }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Illegal action");
+            alert.setContentText("Select 1 arrow.");
+
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Shows the swap area after buying from market
+     * also enables all the necessary buttons setting their opacity to one
+     */
+    private void showSwapArea() {
+        updateComboBoxes();
+        setAbleButtons();
+    }
+
+    private void updateSwap(){
+        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        resourcesFromMarket = warehouseDepots.getSwapDeposit();
+        for (int i = 0; i < 4; i++) {
+            resLabels[i].setText(String.valueOf(resourcesFromMarket.getResourceNumber(resourceTypes[i])));
+        }
+
+        if (resourcesFromMarket.getTotalResourceNumber() == 0 && bTake.getOpacity() != 0){ //only one control on the opacity is necessary
+            bTake.setDisable(true);
+            bPlace.setDisable(true);
+            bTake.setOpacity(0.5);
+            bPlace.setOpacity(0.5);
+        }
     }
 
     public void takeResources() {
         int level;
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-        RadioButton selectedRadioButton = (RadioButton) levelToggleGroup.getSelectedToggle();
-        String selectedRadioButtonString = selectedRadioButton.getText();
-        level = selectedRadioButtonString.charAt(selectedRadioButtonString.length()-1) -49;
 
+        String comboSelection = comboLevelTake.getValue().toString();
+        level = comboSelection.charAt(comboSelection.length()-1) -49;
 
         if (warehouseDepots.getResourcesNumber(level) == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Illegal action");
-            alert.setContentText("You selected an empty level, please select another one");
+            alert.setContentText("You selected an empty level, please select another one.");
 
             alert.showAndWait();
         }
@@ -227,11 +215,11 @@ public class MarketController extends GenericController implements Initializable
 
     public void placeResources() {
         int level;
-        ResourceTypes resourceTypesToMove = null; //resource type obtained from the resource selected in resourceToggleGroup
+        ResourceTypes resourceTypesToMove; //resource type obtained from the resource selected
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
-        RadioButton selectedRadioButton = (RadioButton) levelToggleGroup.getSelectedToggle();
-        String selectedRadioButtonString = selectedRadioButton.getText();
-        level = selectedRadioButtonString.charAt(selectedRadioButtonString.length()-1) -49;
+
+        String comboSelection = comboLevelPlace.getValue().toString();
+        level = comboSelection.charAt(comboSelection.length()-1) -49;
 
         if (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -244,28 +232,10 @@ public class MarketController extends GenericController implements Initializable
 
         if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).isFixedResource()) {
 
-
-            RadioButton selectedResourceRadioButton = (RadioButton) resourceToggleGroup.getSelectedToggle();
-            String selectedResourceRadioButtonString = selectedResourceRadioButton.getText();
-
-            switch (selectedResourceRadioButtonString) {
-                case "Gold":
-                    resourceTypesToMove = ResourceTypes.GOLD;
-                    break;
-                case "Servant":
-                    resourceTypesToMove = ResourceTypes.SERVANT;
-                    break;
-                case "Shield":
-                    resourceTypesToMove = ResourceTypes.SHIELD;
-                    break;
-                case "Stone":
-                    resourceTypesToMove = ResourceTypes.STONE;
-                    break;
-            }
+            resourceTypesToMove = (ResourceTypes) comboResourceTypePlace.getValue();
 
         } else
             resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
-
 
         if (warehouseDepots.getResourcesNumber(level) == 0 || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
             numResOccupied = warehouseDepots.getResourcesNumber(level);
@@ -283,11 +253,38 @@ public class MarketController extends GenericController implements Initializable
             try {
                 guiView.swapMoveToLevel(level, resourceTypesToMove, numResToMove);
                 guiView.isSuccessReceived();
+                disableMarket();
             } catch (IOException e) {
                 guiView.notifyDisconnection();
             }
         }
+    }
 
+    public void levelPlaceSelected() {
+        WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+
+        if (comboLevelPlace.getValue() != null){
+            String selected = comboLevelPlace.getValue().toString();
+            int levelPlaceSelected = selected.charAt(selected.length()-1) -49;
+            ResourceTypes resFixedType = null;
+
+            if (levelPlaceSelected > 2) {
+                for (int i = 3; i < warehouseDepots.getNumberLevels(); i++) {
+                    if (levelPlaceSelected == i) {
+                        resFixedType = warehouseDepots.getLevel(i).getResourceType();
+                        comboResourceTypePlace.getItems().clear();
+                        comboResourceTypePlace.getItems().add(resFixedType);
+                    }
+                }
+            }
+            else {
+                comboResourceTypePlace.getItems().clear();
+                for (ResourceTypes r : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) {
+                    comboResourceTypePlace.getItems().add(r);
+                }
+            }
+            comboResourceTypePlace.getSelectionModel().selectFirst();
+        }
     }
 
     public void confirmSwap(){
@@ -305,15 +302,8 @@ public class MarketController extends GenericController implements Initializable
         }
         if (resourcesFromMarket.getTotalResourceNumber() == 0 || exit){
             //Before exit from market and swap
-            for (RadioButton button: levelRadioButtons) {
-                button.setDisable(true);
-                button.setOpacity(0);
-            }
-
-            for (RadioButton button: resourceRadioButtons) {
-                button.setDisable(true);
-                button.setOpacity(0);
-            }
+            hideSwapArea();
+            disableMarket();
         }
     }
 
@@ -361,15 +351,13 @@ public class MarketController extends GenericController implements Initializable
      * Enables the buttons setting the disable
      */
     private void setAbleButtons(){
-        for (RadioButton button: levelRadioButtons) {
-            button.setDisable(false);
-            button.setOpacity(1);
-        }
+        comboLevelPlace.setDisable(false);
+        comboLevelTake.setDisable(false);
+        comboLevelPlace.setOpacity(1);
+        comboLevelTake.setOpacity(1);
 
-        for (RadioButton button: resourceRadioButtons) {
-            button.setDisable(false);
-            button.setOpacity(1);
-        }
+        comboResourceTypePlace.setDisable(false);
+        comboResourceTypePlace.setOpacity(1);
 
         gridSwapArea.setOpacity(1);
         bTake.setDisable(false);
@@ -379,11 +367,56 @@ public class MarketController extends GenericController implements Initializable
         bPlace.setOpacity(1);
         bConfirmSwap.setOpacity(1);
 
+        lYouHaveNow.setOpacity(1);
     }
 
+    private void hideSwapArea() {
+        comboLevelPlace.setDisable(true);
+        comboLevelTake.setDisable(true);
+        comboLevelPlace.setOpacity(0);
+        comboLevelTake.setOpacity(0);
+
+        comboResourceTypePlace.setDisable(true);
+        comboResourceTypePlace.setOpacity(0);
+
+        gridSwapArea.setOpacity(0);
+        bTake.setDisable(true);
+        bPlace.setDisable(true);
+        bConfirmSwap.setDisable(true);
+        bTake.setOpacity(0);
+        bPlace.setOpacity(0);
+        bConfirmSwap.setOpacity(0);
+        lYouHaveNow.setOpacity(0);
+    }
+
+    private void updateComboBoxes(){
+        int numberOfLevels = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getNumberLevels();
+
+        comboLevelTake.getItems().clear();
+        comboLevelPlace.getItems().clear();
+        comboResourceTypePlace.getItems().clear();
+
+        for (int i = 1; i <= numberOfLevels; i++) {
+            comboLevelTake.getItems().add("Level " + i);
+            comboLevelPlace.getItems().add("Level" + i);
+        }
+        for (ResourceTypes r : EnumSet.of(GOLD, STONE, SHIELD, SERVANT)) {
+            comboResourceTypePlace.getItems().add(r);
+        }
+        comboLevelTake.getSelectionModel().selectFirst();
+        comboLevelPlace.getSelectionModel().selectFirst();
+        comboResourceTypePlace.getSelectionModel().selectFirst();
+    }
+
+    /**
+     * Disable arrow after swap action
+     */
     private void disableMarket(){
         for (ImageView image: arrows) {
+            arrowsSelected = 0;
             image.setDisable(true);
+            if (image.getOpacity() != 0)
+                image.setOpacity(0);
         }
     }
 
@@ -420,28 +453,6 @@ public class MarketController extends GenericController implements Initializable
         }
         );
     }
-
-    private void hideSwapArea() {
-        for (RadioButton button: levelRadioButtons) {
-            button.setDisable(true);
-            button.setOpacity(0);
-        }
-
-        for (RadioButton button: resourceRadioButtons) {
-            button.setDisable(true);
-            button.setOpacity(0);
-        }
-
-        gridSwapArea.setOpacity(0);
-        bTake.setDisable(true);
-        bPlace.setDisable(true);
-        bConfirmSwap.setDisable(true);
-        bTake.setOpacity(0);
-        bPlace.setOpacity(0);
-        bConfirmSwap.setOpacity(0);
-        lYouHaveNow.setOpacity(0);
-    }
-
 }
 
 

@@ -42,7 +42,7 @@ public class MarketTest {
     }
 
     @Test
-    public void testbuyColumn() {
+    public void testBuyColumn() {
 
         /*test all possible legit values of column*/
 
@@ -88,7 +88,7 @@ public class MarketTest {
     }
 
     @Test
-    public void testbuyRow() {
+    public void testBuyRow() {
 
         /*test all possible legit values of row*/
 
@@ -126,7 +126,7 @@ public class MarketTest {
     }
 
     @Test
-    public void testbuyColumn_buyRow() {
+    public void testBuyColumn_buyRow() {
 
         market.buyColumn(0);
         market.buyRow(0);
@@ -144,7 +144,7 @@ public class MarketTest {
     }
 
     @Test
-    public void testgetExternalResource()
+    public void testGetExternalResource()
     {
         assertEquals(market.getExternalResource(), ResourceTypes.SHIELD);
     }
