@@ -142,7 +142,7 @@ public class CardDealerTest {
      * Checks if type, level and victory point of every card are correct
      */
     @Test
-    public void testdrawCard_Type_Level_VictoryPoint() throws NotEnoughCardException {
+    public void testDrawCard_Type_Level_VictoryPoint() throws NotEnoughCardException {
 
         for (char type: cardType) {
             for (int i=12; i>8; i--) {
@@ -175,7 +175,7 @@ public class CardDealerTest {
      * Checks if cost, productionCost and productionPower are correct
      */
     @Test
-    public void testdrawCard_Resources() throws NotEnoughCardException {
+    public void testDrawCard_Resources() throws NotEnoughCardException {
         Resources cost, productionCost, productionPower; //parameters of development card
 
         //creates and set the resources to check a particular card
@@ -238,7 +238,7 @@ public class CardDealerTest {
      * Checks the launched exceptions
      */
     @Test
-    public void testdrawCard_Exception() throws NotEnoughCardException {
+    public void testDrawCard_Exception() throws NotEnoughCardException {
         //draws more than 4 times the same cell of the matrix in card dealer in order to empty the stack
         exception.expect(EmptyStackException.class);
         for (int i=0; i<6; i++)
@@ -263,7 +263,7 @@ public class CardDealerTest {
      * @throws Exception if a problem occures
      */
     @Test
-    public void testdiscardDevelopment() throws Exception{
+    public void testDiscardDevelopment() throws Exception{
 
         for(char type : cardType)
         {
@@ -283,7 +283,7 @@ public class CardDealerTest {
      * the method is called more than 6 times in order to generate the exception
      */
     @Test
-    public void testdiscardDevelopment_exceptions() throws Exception {
+    public void testDiscardDevelopment_exceptions() throws Exception {
         exception.expect(NotEnoughCardException.class);
         for (char cardType: cardType) {
             for(int i=0; i<6; i++)
