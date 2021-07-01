@@ -411,6 +411,7 @@ public class PersonalBoard implements Serializable {
         availableResources = null;
         prod1 = true;
         prod2 = null;
+        setUpAvailableProductions();
     }
 
     /**
