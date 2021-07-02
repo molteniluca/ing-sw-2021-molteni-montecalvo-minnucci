@@ -350,7 +350,6 @@ public class MarketController extends GenericController implements Initializable
         }
         if (resourcesFromMarket.getTotalResourceNumber() == 0 || exit){
             //Before exit from market and swap
-            hideSwapArea();
             disableMarket();
         }
     }
