@@ -1109,7 +1109,7 @@ public class CLI extends View implements Runnable{
                                 currentResource = cliSupporter.integerInput("Select resource: ", 1, 4);
 
                                 productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),cliSupporter.numberToResourceType(currentResource));
-                                isSuccessReceived();
+
                                 temporaryAction3 = isSuccessReceived();
                                 if(!temporaryAction3){
                                     endProduction();
