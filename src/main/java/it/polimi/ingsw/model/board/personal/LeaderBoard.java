@@ -71,7 +71,6 @@ public class LeaderBoard implements Serializable {
      */
     public void discardLeader (LeaderCard leader) throws FaithOverflowException {
         leaderCardsInHand.remove(leader);
-        victoryPoints++;
 
         personalBoard.getFaithTrack().incrementPosition(1);
     }

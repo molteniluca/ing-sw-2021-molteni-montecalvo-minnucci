@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Lorenzo;
 import it.polimi.ingsw.model.board.general.GeneralBoard;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
+import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.Serializable;
 
@@ -60,6 +61,16 @@ public class SelfPlayingTurn implements Turn, Serializable {
     @Override
     public void endTurn() {
 
+    }
+
+    /**
+     * Method that returns the total resources of a player
+     *
+     * @return The total resources of this player (0 for lorenzo)
+     */
+    @Override
+    public Resources getTotalResources() {
+        return new Resources();
     }
 
     /**

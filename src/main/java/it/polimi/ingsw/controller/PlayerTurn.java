@@ -502,4 +502,13 @@ public class PlayerTurn implements Turn, Serializable {
     public void endTurn() throws IOException {
         clientHandler.sendObject(ENDTURN);
     }
+
+    /**
+     * Method that returns the total resources of a player
+     * @return The total resources of this player (0 for lorenzo)
+     */
+    @Override
+    public Resources getTotalResources() {
+        return player.getPersonalBoard().getDeposit().getTotalResources();
+    }
 }

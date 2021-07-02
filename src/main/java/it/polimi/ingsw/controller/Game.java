@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.exceptions.WinException;
+import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.network.server.ClientHandler;
 import it.polimi.ingsw.network.server.Server;
 
@@ -165,10 +166,31 @@ public class Game implements Serializable {
         }
 
         ArrayList<Integer> victoryPoints = getAllVictoryPoints();
-        int maxValue = Collections.max(victoryPoints);
+        int maxVictoryPoints = Collections.max(victoryPoints);
+        int numPlayersWithSameVictoryPoints=0;
 
         for (int i = 0; i < numPlayers; i++) {
-            turns.get(i).endGame(maxValue == victoryPoints.get(i));
+            if(maxVictoryPoints == victoryPoints.get(i)){
+                numPlayersWithSameVictoryPoints++;
+            }
+        }
+
+        if(numPlayersWithSameVictoryPoints>1){
+            int maxResources=0;
+            for(int i = 0; i < numPlayers; i++){
+                int tmp = turns.get(i).getTotalResources().getTotalResourceNumber();
+                if(tmp > maxResources && maxVictoryPoints == victoryPoints.get(i))
+                    maxResources = tmp;
+            }
+
+            for (int i = 0; i < numPlayers; i++) {
+                turns.get(i).endGame(maxVictoryPoints == victoryPoints.get(i) &&
+                        maxResources == turns.get(i).getTotalResources().getTotalResourceNumber());
+            }
+        }else{
+            for (int i = 0; i < numPlayers; i++) {
+                turns.get(i).endGame(maxVictoryPoints == victoryPoints.get(i));
+            }
         }
     }
 

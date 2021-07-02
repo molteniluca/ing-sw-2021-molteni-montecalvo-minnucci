@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.exceptions.WinException;
+import it.polimi.ingsw.model.resources.Resources;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -36,4 +37,10 @@ public interface Turn extends Serializable {
      * This method is used to force the end of a turn caused by a win
      */
     void endTurn() throws IOException;
+
+    /**
+     * Method that returns the total resources of a player
+     * @return The total resources of this player (0 for lorenzo)
+     */
+    Resources getTotalResources();
 }
