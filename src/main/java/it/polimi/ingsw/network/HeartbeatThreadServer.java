@@ -6,12 +6,18 @@ import java.util.TimerTask;
 
 public class HeartbeatThreadServer extends TimerTask {
     private static final long interval = 10000;
+    private static final int threshold = 2;
     private final ClientHandler clientHandler;
+    private boolean isWaitingForMessage;
+    private int countFromDisconnect;
+    private boolean messageReceived;
 
     public HeartbeatThreadServer(ClientHandler c){
         clientHandler=c;
         Timer t = new Timer();
         t.schedule(this,interval,interval);
+        isWaitingForMessage=false;
+        messageReceived=false;
     }
 
     @Override
@@ -21,10 +27,28 @@ public class HeartbeatThreadServer extends TimerTask {
         }else {
             try {
                 clientHandler.sendHeartBeat();
+                if(isWaitingForMessage){
+                    if(!messageReceived){
+                        countFromDisconnect++;
+                        if(countFromDisconnect >= threshold) {
+                            clientHandler.closeConnection();
+                            this.cancel();
+                        }
+                    }else
+                        messageReceived=false;
+                }
             } catch (IOException e) {
                 clientHandler.handleDisconnect();
                 this.cancel();
             }
         }
+    }
+
+    public void notifyIsWaitingForMessage() {
+        isWaitingForMessage=true;
+    }
+
+    public void notifyMessage() {
+        messageReceived=true;
     }
 }

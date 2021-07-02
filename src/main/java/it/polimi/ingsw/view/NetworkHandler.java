@@ -93,6 +93,9 @@ public class NetworkHandler extends Thread{
 
     public synchronized void closeConnection(){
         if(!alreadyClosed) {
+            view.notifyResponse(ERROR);
+            view.notifyResponse("Action not completed because of a network error");
+            this.notifyAll();
             alreadyClosed=true;
             try {
                 server.close();

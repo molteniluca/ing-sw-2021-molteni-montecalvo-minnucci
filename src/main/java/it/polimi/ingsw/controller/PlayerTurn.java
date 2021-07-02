@@ -48,6 +48,7 @@ public class PlayerTurn implements Turn, Serializable {
     @Override
     public void beginTurn() throws IOException, FaithOverflowException, WinException, CardsOfSameColorFinishedException {
         boolean error = true;
+        boolean errorLeader = true;
         NetworkMessages action;
         player.getPersonalBoard().setUpAvailableProductions();
         clientHandler.sendObject(TURNBEGIN);
@@ -66,10 +67,10 @@ public class PlayerTurn implements Turn, Serializable {
 
             while((action == DISCARDLEADER || action == ACTIVATELEADER)){
                 if(action == ACTIVATELEADER)
-                    error&=!activateLeader();
+                    errorLeader&=activateLeader();
                 else
-                    error&=!discardLeader();
-                if(!error)
+                    errorLeader&=discardLeader();
+                if(!errorLeader)
                     leaderAction=false;
                 action = clientHandler.receiveMessage();
             }
