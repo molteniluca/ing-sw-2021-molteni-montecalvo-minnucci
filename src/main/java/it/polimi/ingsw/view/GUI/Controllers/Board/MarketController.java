@@ -35,7 +35,9 @@ public class MarketController extends GenericController implements Initializable
     private static final Image blank = new Image("/images/Marble/white marble.png");
 
     @FXML
-    private ComboBox extraEffectComboBox, comboLevelTake, comboLevelPlace, comboResourceTypePlace;
+    private ComboBox<String> comboLevelTake, comboLevelPlace;
+    @FXML
+    private ComboBox<ResourceTypes> extraEffectComboBox, comboResourceTypePlace;
     @FXML
     private ImageView marketImageView;
     @FXML
@@ -222,7 +224,7 @@ public class MarketController extends GenericController implements Initializable
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
         //selection of level
-        String comboSelection = comboLevelTake.getValue().toString();
+        String comboSelection = comboLevelTake.getValue();
         level = comboSelection.charAt(comboSelection.length()-1) -49;
 
         if (warehouseDepots.getResourcesNumber(level) == 0) { //if there are zero resources in level selected
@@ -251,7 +253,7 @@ public class MarketController extends GenericController implements Initializable
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
         //selection of level
-        String comboSelection = comboLevelPlace.getValue().toString();
+        String comboSelection = comboLevelPlace.getValue();
         level = comboSelection.charAt(comboSelection.length()-1) -49;
 
         if (warehouseDepots.getResourcesNumber(level) > level || level > 2 && warehouseDepots.getResourcesNumber(level) > 1) {
@@ -266,7 +268,7 @@ public class MarketController extends GenericController implements Initializable
         //if there are no resources in level chosen and level has not fixed resourceTypes player can chose which type of resource place
         if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).isFixedResource()) {
 
-            resourceTypesToMove = (ResourceTypes) comboResourceTypePlace.getValue();
+            resourceTypesToMove = comboResourceTypePlace.getValue();
 
         } else
             resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
@@ -305,9 +307,9 @@ public class MarketController extends GenericController implements Initializable
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
         if (comboLevelPlace.getValue() != null){
-            String selected = comboLevelPlace.getValue().toString();
+            String selected = comboLevelPlace.getValue();
             int levelPlaceSelected = selected.charAt(selected.length()-1) -49;
-            ResourceTypes resFixedType = null;
+            ResourceTypes resFixedType;
 
             if (levelPlaceSelected > 2) {
                 for (int i = 3; i < warehouseDepots.getNumberLevels(); i++) {
@@ -484,7 +486,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Method that allows or not to click in market and swap area thanks to little gray rectangles
+     * Method that allows or not to click in market and swap area thanks to little-gray rectangles
      */
     private void setClickable(){
         rMarketTotal.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction()||
