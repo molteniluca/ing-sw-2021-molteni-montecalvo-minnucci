@@ -54,7 +54,7 @@ public class ResourcesTest extends TestCase {
         assert test;
     }
 
-    public void testNegativeSubValues() {
+    public void testNegativeSubValues() throws NegativeResourceValueException {
         Resources resources= new Resources();
         resources.set(ResourceTypes.BLANK,8);
         resources.set(ResourceTypes.STONE,5);
@@ -69,6 +69,21 @@ public class ResourcesTest extends TestCase {
 
         assert resources.getResourceNumber(ResourceTypes.GOLD)==4;
         assert resources.getResourceNumber(ResourceTypes.STONE)==0;
+
+
+        Resources tosub= new Resources();
+        tosub.set(ResourceTypes.SHIELD,3);
+        tosub.set(null,9);
+
+        Resources resources3= new Resources();
+        resources3.set(ResourceTypes.SERVANT,1);
+        resources3.set(ResourceTypes.SHIELD,3);
+        resources3.set(null,3);
+
+        assert tosub.sub(resources3.negativeSubValues(tosub)).equals(tosub);
+
+        new Resources().sub(resources3.negativeSubValues(tosub));
+        assert resources3.negativeSubValues(tosub).getTotalResourceNumber()==0;
     }
 
     public void testSwitchBlank() {

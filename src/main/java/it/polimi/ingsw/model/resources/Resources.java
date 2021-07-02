@@ -29,7 +29,8 @@ public class Resources implements Serializable {
      * @param number the value of the resource to be set
      */
     public Resources set(ResourceTypes resource, int number){
-        resourceMap.put(resource,number);
+        if(resource!=null)
+            resourceMap.put(resource,number);
         return this;
     }
 
@@ -58,7 +59,7 @@ public class Resources implements Serializable {
         operand.resourceMap.forEach((key,value)-> diff.resourceMap.merge(key,value, (v1,v2)->v1-v2));/*subtract the operand*/
 
         diff.eraseBlank();/*sets zero to the blank resource*/
-        if(diff.resourceMap.entrySet().stream().anyMatch(e -> e.getValue() < 0)){
+        if(diff.resourceMap.entrySet().stream().anyMatch(e -> e.getValue() < 0 && e.getKey()!=null)){
             throw new NegativeResourceValueException("Negative resource value in subtraction");
         }
         return diff;
