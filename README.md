@@ -1,65 +1,64 @@
-# Prova finale d' Ingegneria del Software, AA 2020/2021
+# Final Software Engineering Exam, AY 2020/2021
 ![alt text](src/main/resources/images/Masters-of-Renaissance.png)
 
-La prova finale consiste nell' implementazione del gioco da tavolo [Maestri del Rinascimento](http://www.craniocreations.it/prodotto/masters-of-renaissance/).
-Il progetto prevede l' utilizzo di un' architettura client-server con un singolo server centrale al quale i vari client potranno connettersi
-tramtite socket.
-Tutto il progetto sfrutta l' architettura MVC (Model-View-Controller)
 
-## Funzionalità
-Sono state implementate:
-- Regole complete
-- CLI
-- GUI
-- Socket
-- 1 Funzionalità Avanzata (FA):
-  - **Partite multiple**: il server è in grado di gestire più partite contemporaneamente.
-    All' accesso al server ai giocatori viene richiesto se desiderano creare una nuova partita oppure unirsi
-    a una già esistente. Nel primo caso sarà richiesto il numero di giocatori e poi verrà fornito un ID univoco
-    per la partita che gli altri giocatori che si uniranno dovranno inserire; se invece un giocatore
-    desidera unirsi a una partita già esistente dovrà inserire l'ID della stessa.
-    Ogni partita inizia solo quando tutti i giocatori sono connessi.
+The final exam consists in the implementation of the game board of [Masters of Renaissance](http://www.craniocreations.it/prodotto/masters-of-renaissance/). 
+The project involves the use of a client-server architecture with a single central server in 
+which the clients can connect via socket. The project in its entirety uses the MCV architecture 
+(Model-View-Controller).
 
-## Strumenti utilizzati
-Per la realizzazione del progetto sono stati utilizzati vari strumenti software:
+## Functionalities
+Features that have been implemented:
+•     Complete rules of the game.
+•     GLI
+•     GUI
+•     Socket
+• 1 Advanced functionality (FA):
+  - **Multiple games**: server can support more than one game at the same time.
+    When they log in, the player can choose either to join a game by entering 
+    the specific ID or to create a new one. In the second case, it will be asked 
+    the numbers of players, and he will receive an ID, which has to be entered by 
+    the players who want to join. The game starts only when all the players are connected.
 
-|Software|Descrizione|
+## Tools
+Different software tools have been used in the project making:
+
+|Software|Description|
 |-------------|-----|
-|IntelliJ IDEA| IDE scritto in Java sviluppato da JetBrains|
-|[Apache Maven](https://maven.apache.org)|Strumento di build automation e gestione di progetti software basati su Java |
-|JavaFX|Libreria grafica utilizzata da Java per la realizzazione di interfacce utente|
-|JUnit|Framework per il test di unità (integrato in IntelliJ) |
+|IntelliJ IDEA| IDE written in Java developed by JetBrain|
+|[Apache Maven](https://maven.apache.org)|Java-based build automation and software project management tool|
+|JavaFX|Graphic library used by Java for the creation of user interfaces|
+|JUnit|Unit testing Framework (built into IntelliJ)|
 
 
-## Avvio del gioco
-Per poter utilizzare il gioco correttamente sono consigliate versioni di java 8.x o superiori.
+## Starting the game
+In order to use the game correctly, java versions 8.x or higher are recommended.
 
 ### Client
-Il client potrà essere avviato sia in modalità GUI (Graphical User Interface) che CLI (Command Line Interface).
-Per lanciare il client tramite terminale è necessario recarsi nella cartella contenente il file jar
-e digitare:
+a client can be launched either in GUI (Graphical User Interface) or CLI 
+(Command Line Interface) mode. To launch the client through the terminal 
+it is necessary to reach the folder which contains the jar and type:
 ``` 
 java -jar Client.jar
 ```
-Di default sarà selezionata la modalità CLI.
-Se invece si desidera avviare l' interfaccia grafica si dovrà inserire un apposito parametro:
+Mode GUI will be selected automatically. To launch the command line 
+interface it is necessary to enter a specific parameter:
 ```
-java -jar Client.jar --gui
+java -jar Client.jar --cli
 ```
-Il client può essere lanciato anche cliccando due volte sull' icona dell' applicazione, in tal caso
-sarà avviata la modalità GUI.
+A client can also be launched by clicking two times on 
+the application icon, in that case, it will be launched in GUI mode.
 ### Server
-Il server non possiede interfaccia grafica o da linea di comando. Per lanciarlo è necessario
-posizionarsi nella cartella contenente il jar e utilizzare il comando:
+The server does not own any graphic interface or command line. 
+To launch it, it is necessary to reach the folder which contains the jar and use the command:
 ```
 java -jar Server.jar <portNumber>
 ```
-Il programma partirà e sarà eseguito in background sulla porta selezionata. 
-Di default si avrà ``portNumber = 10000``. Se verranno forniti parametri sbagliati il server non partirà
-ma mostrerà un messaggio di errore che invita a utilizzare il parametro ``-h`` per ricevere aiuto.
+The program will be launched and will be followed in the background on the selected door.
+``portNumber = 10000`` will be selected by default. If the parameters supplied are incorrect,
+the server won’t start, and it will show an error alert which suggests using the -h parameter to ask for assistance.
 
-
-## Componenti del gruppo
+## Group members
 - **[Luca Molteni](https://github.com/molteniluca)**
 - **[Manuel Montecalvo](https://github.com/ManuelMontecalvo)**
 - **[Francesco Minnucci](https://github.com/FrancescoMinnucci)**
