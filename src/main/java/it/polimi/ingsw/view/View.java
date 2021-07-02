@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.network.client.NetworkHandler;
 import it.polimi.ingsw.network.exceptions.FullRoomException;
 import it.polimi.ingsw.view.exceptions.UnknownIdException;
 
@@ -352,7 +353,7 @@ public abstract class View {
      * Method that notifies this object of a victory
      * @param youWon True if you won and false if not
      */
-    protected abstract void notifyEndGame(boolean youWon);
+    public abstract void notifyEndGame(boolean youWon);
 
     /**
      * Method that notifies this object that the turn has started

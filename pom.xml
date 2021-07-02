@@ -121,7 +121,7 @@
               <finalName>Server</finalName>
               <transformers>
                 <transformer implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>it.polimi.ingsw.network.Server</mainClass>
+                  <mainClass>it.polimi.ingsw.network.server.Server</mainClass>
                 </transformer>
               </transformers>
             </configuration>

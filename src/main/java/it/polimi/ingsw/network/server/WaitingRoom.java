@@ -1,6 +1,7 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.network.ObjectUpdate;
 import it.polimi.ingsw.network.exceptions.FullRoomException;
 
 import java.io.IOException;

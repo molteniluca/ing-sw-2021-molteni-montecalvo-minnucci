@@ -1,6 +1,9 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.network.NetworkMessages;
+import it.polimi.ingsw.network.ObjectUpdate;
+import it.polimi.ingsw.network.UpdateTypes;
 import it.polimi.ingsw.network.exceptions.FullRoomException;
 import it.polimi.ingsw.network.exceptions.WrongObjectException;
 
@@ -250,7 +253,7 @@ public class ClientHandler extends Thread{
     public void sendGame(int player) throws IOException {
         Game g=getGame();
         sendObject(g);
-        sendObject(new ObjectUpdate(g.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand(),UpdateTypes.LEADERCARDS,player));
+        sendObject(new ObjectUpdate(g.getPlayerTurn(player).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand(), UpdateTypes.LEADERCARDS,player));
     }
 
     /**

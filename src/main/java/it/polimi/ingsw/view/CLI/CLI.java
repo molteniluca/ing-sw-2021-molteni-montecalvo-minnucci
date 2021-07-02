@@ -1315,7 +1315,7 @@ public class CLI extends View implements Runnable{
      * @param youWon says if the user is the winner or not
      */
     @Override
-    protected synchronized void notifyEndGame(boolean youWon) {
+    public synchronized void notifyEndGame(boolean youWon) {
         if(youWon) {
             System.out.println("\nYou won, "+ game.getPlayerTurn(playerNumber).getVictoryPoints());
             winOrLose = 1;
