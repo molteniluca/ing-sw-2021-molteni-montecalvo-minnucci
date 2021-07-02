@@ -333,7 +333,7 @@ public class PlayerTurn implements Turn, Serializable {
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
             return false;
-        } catch (IndexOutOfBoundsException | WrongObjectException e) {
+        } catch (IndexOutOfBoundsException | WrongObjectException | YouMustPlayLeaderException e) {
             clientHandler.sendObject(ERROR);
             if(e.getMessage()==null)
                 clientHandler.sendObject("Index not valid!");
