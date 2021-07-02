@@ -26,31 +26,6 @@ public class HomePageController extends GenericController {
     private ImageView backgroundImage;
 
     @FXML
-    public void startGame(ActionEvent event) throws IOException{
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
-
-        Scene createOrJoinScene = new Scene(marketViewParent);
-
-        //gets the stage information
-        Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-
-        //access to the gridPane in the scene
-        //marketGrid = (GridPane) marketScene.lookup("marketGrid");
-
-        primaryStage.setTitle("Masters Of Renaissance");
-        primaryStage.setScene(createOrJoinScene);
-        primaryStage.show();
-
-    }
-
-    @FXML
-    public void exitGame(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
-    }
-
-    @FXML
     void initialize() {
 
         if(backgroundImage!=null) {
@@ -76,5 +51,37 @@ public class HomePageController extends GenericController {
         scaleTransition1.setToY(1.1);
 
         scaleTransition1.play();
+    }
+
+    /**
+     * Method invoked when game is started
+     * @param event start of the game
+     * @throws IOException if fxml file is not reachable
+     */
+    @FXML
+    private void startGame(ActionEvent event) throws IOException{
+        Parent marketViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
+
+        Scene createOrJoinScene = new Scene(marketViewParent);
+
+        //gets the stage information
+        Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+
+        //access to the gridPane in the scene
+        //marketGrid = (GridPane) marketScene.lookup("marketGrid");
+
+        primaryStage.setTitle("Masters Of Renaissance");
+        primaryStage.setScene(createOrJoinScene);
+        primaryStage.show();
+
+    }
+
+    /**
+     * Method that terminates game and allows player to exit
+     */
+    @FXML
+    private void exitGame() {
+        Platform.exit();
+        System.exit(0);
     }
 }

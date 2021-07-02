@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class AskCreateOrJoinController extends GenericController implements DisconnectController{
     @FXML
-    public ProgressIndicator loadAnimation;
+    private ProgressIndicator loadAnimation;
 
     @FXML // fx:id="serverAddressText"
     private TextField serverAddressText; // Value injected by FXMLLoader
@@ -47,7 +47,17 @@ public class AskCreateOrJoinController extends GenericController implements Disc
     private Button createButton, joinButton;
 
     @FXML
-    public void joinGame(ActionEvent actionEvent)  {
+    void initialize() {
+        comboBox.getItems().addAll(1,2,3,4);
+        comboBox.setValue(1);
+    }
+
+    /**
+     * Method invoked when player confirm that he wants to join an existing game
+     * @param actionEvent click on join game button
+     */
+    @FXML
+    private void joinGame(ActionEvent actionEvent)  {
         try {
             loadAnimation.setDisable(false);
             loadAnimation.setVisible(true);
@@ -69,6 +79,11 @@ public class AskCreateOrJoinController extends GenericController implements Disc
         }
     }
 
+    /**
+     * Method that puts players on hold until game starts
+     * @param name of player
+     * @param event click on join game
+     */
     private void waitForPlayers(String name, ActionEvent event){
         Task task = new Task<Void>() {
             @Override public Void call() {
@@ -124,7 +139,10 @@ public class AskCreateOrJoinController extends GenericController implements Disc
         new Thread(task).start();
     }
 
-
+    /**
+     * Method invoked when player wants to create a game
+     * @param event click on create game
+     */
     @FXML
     void createGame(ActionEvent event) {
         try {
@@ -149,6 +167,13 @@ public class AskCreateOrJoinController extends GenericController implements Disc
         }
     }
 
+    /**
+     * Method to change scene to initial section with
+     * resource and leader selections
+     * @param event when all players connect to the game or
+     *              single player game
+     * @throws IOException if file fxml is not reachable
+     */
     private void loadGame(ActionEvent event) throws IOException {
         Parent leaderSelectionViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/InitialLeaderSelection.fxml"));
 
@@ -164,6 +189,10 @@ public class AskCreateOrJoinController extends GenericController implements Disc
         }
     }
 
+    /**
+     * Method that connects client with server (ip and port)
+     * @throws IOException if server is not reachable
+     */
     @FXML
     void connectToServer() throws IOException {
 
@@ -193,12 +222,6 @@ public class AskCreateOrJoinController extends GenericController implements Disc
 
         guiView.registerDisconnectListener(this);
         guiView.startConnection(serverAddress,serverPort);
-    }
-
-    @FXML
-    void initialize() {
-        comboBox.getItems().addAll(1,2,3,4);
-        comboBox.setValue(1);
     }
 
     /**

@@ -64,7 +64,7 @@ public class OtherPlayerBoardsController extends GenericController{
     }
 
     /**
-     * Method that is invoked when client received an updated game and update the entire otherPlayerBoard view
+     * Method that is invoked when client received an updated game and updates the entire otherPlayerBoard view
      */
     @Override
     public void update() {

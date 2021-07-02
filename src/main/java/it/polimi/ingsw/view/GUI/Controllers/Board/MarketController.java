@@ -82,7 +82,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Method that update the market with marbles
+     * Method that updates the market with marbles
      * and enable arrow (row and column) selection
      */
     private void updateMarketMatrix() {
@@ -197,7 +197,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Method that update swap area label resources
+     * Method that updates swap area label resources
      * with new information received from the server
      */
     private void updateSwap(){
@@ -495,7 +495,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Method that is invoked when client received an updated game and update the entire market view
+     * Method that is invoked when client received an updated game and updates the entire market view
      */
     @Override
     public void update() {
