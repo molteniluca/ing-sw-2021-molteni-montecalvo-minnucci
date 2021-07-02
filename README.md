@@ -34,7 +34,7 @@ Different software tools have been used in the project making:
 
 
 ## Starting the game
-In order to use the game correctly, java versions 8.x or higher are recommended.
+In order to use the game correctly, java must be installed on you computer.
 
 ### Client
 A client can be launched either in GUI (Graphical User Interface) or CLI 
