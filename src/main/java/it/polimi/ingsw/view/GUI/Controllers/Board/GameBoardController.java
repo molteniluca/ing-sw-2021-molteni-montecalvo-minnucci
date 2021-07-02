@@ -64,7 +64,7 @@ public class GameBoardController extends GenericController {
             rectangleBlock.setVisible(false);
             spinnyThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
-            if(guiView.game.getNumPlayers()==1) {
+            if(guiView.game.getNumPlayers()!=1) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Your turn has started");
                 alert.setHeaderText("Your turn has started");

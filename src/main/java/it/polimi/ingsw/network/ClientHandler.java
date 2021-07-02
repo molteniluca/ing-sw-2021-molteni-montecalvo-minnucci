@@ -21,6 +21,7 @@ public class ClientHandler extends Thread{
     private ObjectInputStream in = null;
     private ObjectOutputStream out = null;
     private String id=null;
+    private HeartbeatThreadServer heartbeatThreadServer;
 
     /**
      * Constructor of the class
@@ -46,7 +47,7 @@ public class ClientHandler extends Thread{
 
             command = receiveMessage();
 
-            new HeartbeatThreadServer(this);
+            heartbeatThreadServer = new HeartbeatThreadServer(this);
 
             if(command == CREATEGAME){
                 createGame(receiveObject(Integer.class));
@@ -88,9 +89,11 @@ public class ClientHandler extends Thread{
      */
     public <T> T receiveObject(Class<? extends T> c) throws IOException, WrongObjectException {
         Object read = null;
+        heartbeatThreadServer.notifyIsWaitingForMessage();
         while(read==null){
             try {
                 read = in.readObject();
+                heartbeatThreadServer.notifyMessage();
                 if (read == null){
                     sendObject(ERROR);
                     sendObject("Unexpected object, expecting:"+c.toString()+", but got null");
