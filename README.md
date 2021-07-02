@@ -19,6 +19,7 @@ Features that have been implemented:
     the specific ID or to create a new one. In the second case, it will be asked 
     the numbers of players, and he will receive an ID, which has to be entered by 
     the players who want to join. The game starts only when all the players are connected.
+• In the game is possible to see other player boards as in real board game.
 
 ## Tools
 Different software tools have been used in the project making:
