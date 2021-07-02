@@ -37,7 +37,7 @@ Different software tools have been used in the project making:
 In order to use the game correctly, java versions 8.x or higher are recommended.
 
 ### Client
-a client can be launched either in GUI (Graphical User Interface) or CLI 
+A client can be launched either in GUI (Graphical User Interface) or CLI 
 (Command Line Interface) mode. To launch the client through the terminal 
 it is necessary to reach the folder which contains the jar and type:
 ``` 
