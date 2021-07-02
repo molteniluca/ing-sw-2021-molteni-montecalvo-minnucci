@@ -125,33 +125,16 @@ public class GameBoardController extends GenericController {
             if(alertDisconnected!=null){
                 alertDisconnected.close();
             }
-            alertWin = new Alert(Alert.AlertType.CONFIRMATION);
+            alertWin = new Alert(Alert.AlertType.INFORMATION);
             alertWin.setTitle("Game ended");
             if(youWon)
                 alertWin.setHeaderText("Congratulation, you won with "+guiView.game.getPlayerTurn(guiView.playerNumber).getVictoryPoints()+" victory points");
             else
                 alertWin.setHeaderText("You lost, better luck next time! You had: " + guiView.game.getPlayerTurn(guiView.playerNumber).getVictoryPoints()+" victory points");
-            alertWin.setContentText("Do you wanna play again?");
+            alertWin.setContentText("Exit the game");
 
-            ButtonType button = alertWin.showAndWait().orElse(ButtonType.CANCEL);
-            if(button == ButtonType.OK){
-                Parent GameBoardViewParent = null;
-                try {
-                    GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/AskCreateOrJoin.fxml"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Scene GameBoardScene = new Scene(GameBoardViewParent);
-
-                Stage GameBoardStage = stage;
-
-                GameBoardStage.setTitle("Master Of Renaissance");
-                GameBoardStage.setScene(GameBoardScene);
-                GameBoardStage.show();
-            }else{
-                System.exit(0);
-            }
+            alertWin.showAndWait();
+            System.exit(0);
         });
     }
 

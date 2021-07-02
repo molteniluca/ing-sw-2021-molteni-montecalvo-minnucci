@@ -118,6 +118,7 @@ public class Game implements Serializable {
      * @throws IOException In case a client disconnects
      */
     private void singlePlayerGame() throws IOException {
+        boolean youWon=false;
         while(!gameEnded){
             for(currentPlayer = 0; currentPlayer < 2; currentPlayer++){
                 try {
@@ -126,20 +127,24 @@ public class Game implements Serializable {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
-                    turns.get(0).endGame(getPlayerTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition()==24);
+                    youWon=getPlayerTurn(0).getPlayer().getPersonalBoard().getFaithTrack().getPosition()==24;
+                    break;
                 } catch (CardsOfSameColorFinishedException e) {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
-                    turns.get(0).endGame(false);
+                    youWon=false;
+                    break;
                 } catch (WinException e) {
                     turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
                     gameEnded=true;
-                    turns.get(0).endGame(true);
+                    youWon=true;
+                    break;
                 }
             }
         }
+        turns.get(0).endGame(youWon);
     }
 
     /**
