@@ -44,40 +44,48 @@ public class CLI extends View implements Runnable{
 
         cliSupporter = new CliSupporter(input);
 
-        initializeView();
+        try {
+            initializeView();
 
-        waitForUpdatedGame();
+            waitForUpdatedGame();
 
-        //System.out.println(game.getTurn(0).getPlayer().getName()); // prints the name of a player
+            selectInitialResources(); //Asks to the player the resources it wants depending on playerNumber
 
-        //Asks to the player the resources it wants depending on playerNumber
-        selectInitialResources();
+            waitForUpdatedGame();
 
-        waitForUpdatedGame();
+            cliSupporter.refresh();
 
-        cliSupporter.refresh();
+            choseLeaderCards();
 
-        choseLeaderCards();
-
-        waitForUpdatedGame();
-
+            waitForUpdatedGame();
+        }catch (IOException e)
+        {
+            System.out.println(ANSI_RED+"You've been disconnected, exiting game"+RESET);
+            System.exit(1);
+        }
 
         System.out.println(ANSI_GREEN + "Waiting for players ..." + RESET);
 
         waitAndGetResponse(); //game started
 
-        while (winOrLose < 0) {
-            if(waitAndGetResponse()==TURNBEGIN){
-                try {
-                    System.out.print(ANSI_GREEN + "\rIt's your turn, " + ANSI_BOLD + game.getPlayerTurn(playerNumber).getPlayer().getName() + RESET + ANSI_GREEN + " press enter to start " + RESET);
-                    input.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        try {
+            while (winOrLose < 0) {
+                if (waitAndGetResponse() == TURNBEGIN) {
+                    try {
+                        System.out.print(ANSI_GREEN + "\rIt's your turn, " + ANSI_BOLD + game.getPlayerTurn(playerNumber).getPlayer().getName() + RESET + ANSI_GREEN + " press enter to start " + RESET);
+                        input.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    waitForUpdatedGame();
+                    actionDone = false;
+                    showHomepage();
                 }
-                waitForUpdatedGame();
-                actionDone = false;
-                showHomepage();
             }
+        }catch (IOException e)
+        {
+            System.out.println(ANSI_RED+"You've been disconnected exiting game"+RESET);
+            System.exit(1);
         }
 
 
@@ -119,7 +127,7 @@ public class CLI extends View implements Runnable{
     /**
      * Method that shows the personalBoard of the user
      */
-    public void showHomepage() {
+    public void showHomepage() throws IOException{
 
         int currentAction = -1;
         Player player;
@@ -528,7 +536,7 @@ public class CLI extends View implements Runnable{
      * the player is not important because the general board is shared
      * between the players
      */
-    public void showMarket() {
+    public void showMarket() throws IOException {
         int currentAction = -1;
         int extraResourceIndex; //null effect index
         int column;
@@ -595,15 +603,12 @@ public class CLI extends View implements Runnable{
                                 extraResourceIndex = cliSupporter.integerInput("Which leader effect do you want to apply (1-2) ?", 1,2)-1;
                         }
 
-                        try {
-                            marketBuyColumn(column,extraResourceIndex);
 
-                            isSuccessReceived();
-                            showSwapArea();
+                        marketBuyColumn(column,extraResourceIndex);
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        isSuccessReceived();
+                        showSwapArea();
+
                         actionDone = true;
                         break;
 
@@ -620,13 +625,11 @@ public class CLI extends View implements Runnable{
                                 extraResourceIndex = cliSupporter.integerInput("Which leader effect do you want to apply (1-2) ?", 1,2)-1;
                         }
 
-                        try {
-                            marketBuyRow(row,extraResourceIndex);
-                            isSuccessReceived();
-                            showSwapArea();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
+                        marketBuyRow(row,extraResourceIndex);
+                        isSuccessReceived();
+                        showSwapArea();
+
                         actionDone = true;
                         break;
 
@@ -647,7 +650,7 @@ public class CLI extends View implements Runnable{
     /**
      * Method that helps player to organize resources gotten from market in warehouse
      */
-    public void showSwapArea() {
+    public void showSwapArea() throws IOException {
         Resources resourcesFromMarket;
         int currentAction, level, tmp, numResOccupied, numResToAdd, numResToMove;
         ResourceTypes resourceTypesToMove;
@@ -689,11 +692,8 @@ public class CLI extends View implements Runnable{
                     if (currentString.equals("y"))
                         exit = true;
                     if (resourcesFromMarket.getTotalResourceNumber() > 0) {
-                        try {
-                            swapDropResources();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        swapDropResources();
+
                         if (waitAndGetResponse() == SUCCESS) {
                             exit = true;
                         } else if (waitAndGetResponse() == ERROR) {
@@ -739,11 +739,9 @@ public class CLI extends View implements Runnable{
                         else
                             numResToMove = numResToAdd;
 
-                        try {
-                            swapMoveToLevel(level, resourceTypesToMove, numResToMove);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+
+                        swapMoveToLevel(level, resourceTypesToMove, numResToMove);
+
                         if (waitAndGetResponse() == ERROR) {
                             System.out.println(waitAndGetResponse());//probably player tries to put res with different type in the same level
                             break;
@@ -766,12 +764,10 @@ public class CLI extends View implements Runnable{
                     if (level == -1)
                         break;
 
-                    try {
-                        warehouseDepots.moveToSwap(1);
-                        swapMoveToSwap(level);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
+                    warehouseDepots.moveToSwap(1);
+                    swapMoveToSwap(level);
+
                     if (waitAndGetResponse() == ERROR) {
                         System.out.println(waitAndGetResponse());
                         break;
@@ -791,7 +787,7 @@ public class CLI extends View implements Runnable{
      * @param player that has to be shown, used to print out the card board when showing
      *               the card dealer
      */
-    public void showCardDealer(int player) {
+    public void showCardDealer(int player) throws IOException{
         int currentAction;
         ArrayList<DevelopmentCard> currentLine = new ArrayList<>(3);
         Stack<DevelopmentCard>[][] cardMatrix;
@@ -833,7 +829,6 @@ public class CLI extends View implements Runnable{
                 System.out.println("0) Exit");
                 currentAction = cliSupporter.integerInput("Select action: ", 0, 1);
 
-                try {
                     switch (currentAction) {
 
                         case 1:
@@ -854,7 +849,11 @@ public class CLI extends View implements Runnable{
                                 cardMatrix[row][column].peek();
                             } catch (EmptyStackException e) {
                                 System.out.print(ANSI_RED + "There are no more development cards in the selected cell, press enter to continue " + RESET);
-                                input.readLine();
+                                try {
+                                    input.readLine();
+                                } catch (IOException ioException) {
+                                    ioException.printStackTrace();
+                                }
                                 continue;
                             }
 
@@ -866,9 +865,6 @@ public class CLI extends View implements Runnable{
                         case 0:
                             break;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             } else {
                 System.out.println(ANSI_GREEN + "You already did a basic action" + RESET);
                 System.out.println("0) Exit");
@@ -955,7 +951,7 @@ public class CLI extends View implements Runnable{
      * Method that shows the production options available for a player
      * and sands the choice to the server
      */
-    private void showProduce() {
+    private void showProduce() throws IOException {
         int currentAction;
         int upperLimit; // the limit of integer input while selecting the action, it depends by the presence of leader cards with extra production effects
         //three boolean values because every single production can fail but if one of them succeed a basic action is done
@@ -1008,132 +1004,126 @@ public class CLI extends View implements Runnable{
                 System.out.println("0) Exit");
                 currentAction = cliSupporter.integerInput("Select action: ", 0, upperLimit);
 
-                try {
-                    switch (currentAction) {
-                        case 1:
-                            if(!temporaryAction1) {
-                                int firstResource, secondResource, productionResult;
+                switch (currentAction) {
+                    case 1:
+                        if(!temporaryAction1) {
+                            int firstResource, secondResource, productionResult;
 
-                                System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
-                                System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
-
-
-                                firstResource = cliSupporter.integerInput("Select first resource (0 to exit): ", 0, 4);
-                                if(firstResource == 0)
-                                    continue;
-
-                                secondResource = cliSupporter.integerInput("Select second resource (0 to exit): ", 0, 4);
-                                if(secondResource == 0)
-                                    continue;
-
-                                productionResult = cliSupporter.integerInput("Select production result (0 to exit): ", 0, 4);
-                                if(productionResult == 0)
-                                    continue;
-
-                                productionProd1(cliSupporter.numberToResourceType(firstResource),cliSupporter.numberToResourceType(secondResource),cliSupporter.numberToResourceType(productionResult));
-
-                                temporaryAction1 = isSuccessReceived();
-                                if(!temporaryAction1){
-                                    endProduction();
-                                    isSuccessReceived();
-                                }
-                            }
-                            else
-                            {
-                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
-                                input.readLine();
-                            }
-                            break;
-
-                        case 2:
-                            //if(!temporaryAction2) {
-                                int currentCard;
-                                DevelopmentCard[] developmentCards = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
-
-                                currentCard = cliSupporter.integerInput("Select card (1,2,3) (0 to exit): ", 0, 3) - 1;
-
-                                if (currentCard == -1)
-                                    continue;
-
-                                if(developmentCards[currentCard] == null)
-                                {
-                                    System.out.print(ANSI_RED+"There is no development card in the selected position, press enter to continue "+RESET);
-                                    input.readLine();
-                                    continue;
-                                }
-
-                                if(!alreadyUsed[currentCard])
-                                {
-                                    alreadyUsed[currentCard] = true;
-                                    productionProd2(currentCard);
-                                    temporaryAction2 = isSuccessReceived();
-                                    if(!temporaryAction2){
-                                        endProduction();
-                                        isSuccessReceived();
-                                    }
-                                }
-
-                                else
-                                {
-                                    System.out.println(ANSI_GREEN+"You already produced with this card"+RESET);
-                                    input.readLine();
-                                    continue;
-                                }
-                            break;
-
-                        case 3:
-                            if(!temporaryAction3) {
-                                int currentLeader, currentResource;
-
-                                System.out.println("\nACTIVE LEADER CARDS");
-                                if (activeLeaders.size() > 0) {
-                                    cliSupporter.printLeaderCards(activeLeaders);
-                                    System.out.println("\n1)Activate leader effect one");
+                            System.out.println(ANSI_GREEN + "\nYou can produce one generic resource (except faith) using 2 resources" + RESET);
+                            System.out.println("1) Gold, 2) Servant, 3) Shield, 4) Stone");
 
 
-                                    if (extraProductionEffect.size() > 1)
-                                        System.out.println("2)Activate leader effect two");
+                            firstResource = cliSupporter.integerInput("Select first resource (0 to exit): ", 0, 4);
+                            if(firstResource == 0)
+                                continue;
 
-                                } else
-                                    System.out.println(ANSI_GREEN + "There are no active leader cards" + RESET);
+                            secondResource = cliSupporter.integerInput("Select second resource (0 to exit): ", 0, 4);
+                            if(secondResource == 0)
+                                continue;
 
+                            productionResult = cliSupporter.integerInput("Select production result (0 to exit): ", 0, 4);
+                            if(productionResult == 0)
+                                continue;
 
-                                currentLeader = cliSupporter.integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
+                            productionProd1(cliSupporter.numberToResourceType(firstResource),cliSupporter.numberToResourceType(secondResource),cliSupporter.numberToResourceType(productionResult));
 
-                                if (currentLeader == -1)
-                                    continue;
-
-
-                                System.out.println(ANSI_GREEN + "\nYou can produce one of the following resources:" + RESET);
-                                System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
-                                currentResource = cliSupporter.integerInput("Select resource: ", 1, 4);
-
-                                productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),cliSupporter.numberToResourceType(currentResource));
-
-                                temporaryAction3 = isSuccessReceived();
-                                if(!temporaryAction3){
-                                    endProduction();
-                                    isSuccessReceived();
-                                }
-                            }
-                            else
-                            {
-                                System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
-                                input.readLine();
-                            }
-                            break;
-
-                        case 0:
-                            if(temporaryAction1 || temporaryAction2 || temporaryAction3){
-                                actionDone = true;
+                            temporaryAction1 = isSuccessReceived();
+                            if(!temporaryAction1){
                                 endProduction();
                                 isSuccessReceived();
                             }
-                            break;
-                    }
-                }catch (IOException e)
-                {
-                    e.printStackTrace();
+                        }
+                        else
+                        {
+                            System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
+                            input.readLine();
+                        }
+                        break;
+
+                    case 2:
+                            int currentCard;
+                            DevelopmentCard[] developmentCards = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getCardBoard().getUpperDevelopmentCards();
+
+                            currentCard = cliSupporter.integerInput("Select card (1,2,3) (0 to exit): ", 0, 3) - 1;
+
+                            if (currentCard == -1)
+                                continue;
+
+                            if(developmentCards[currentCard] == null)
+                            {
+                                System.out.print(ANSI_RED+"There is no development card in the selected position, press enter to continue "+RESET);
+                                input.readLine();
+                                continue;
+                            }
+
+                            if(!alreadyUsed[currentCard])
+                            {
+                                alreadyUsed[currentCard] = true;
+                                productionProd2(currentCard);
+                                temporaryAction2 = isSuccessReceived();
+                                if(!temporaryAction2){
+                                    endProduction();
+                                    isSuccessReceived();
+                                }
+                            }
+
+                            else
+                            {
+                                System.out.println(ANSI_GREEN+"You already produced with this card"+RESET);
+                                input.readLine();
+                                continue;
+                            }
+                        break;
+
+                    case 3:
+                        if(!temporaryAction3) {
+                            int currentLeader, currentResource;
+
+                            System.out.println("\nACTIVE LEADER CARDS");
+                            if (activeLeaders.size() > 0) {
+                                cliSupporter.printLeaderCards(activeLeaders);
+                                System.out.println("\n1)Activate leader effect one");
+
+
+                                if (extraProductionEffect.size() > 1)
+                                    System.out.println("2)Activate leader effect two");
+
+                            } else
+                                System.out.println(ANSI_GREEN + "There are no active leader cards" + RESET);
+
+
+                            currentLeader = cliSupporter.integerInput("Select action (0 to exit): ", 0, extraProductionEffect.size()) - 1;
+
+                            if (currentLeader == -1)
+                                continue;
+
+
+                            System.out.println(ANSI_GREEN + "\nYou can produce one of the following resources:" + RESET);
+                            System.out.println("1)Gold, 2)Servant, 3)Shield, 4)Stone");
+                            currentResource = cliSupporter.integerInput("Select resource: ", 1, 4);
+
+                            productionProd3(extraProductionEffect.get(currentLeader).getProductionCost(),cliSupporter.numberToResourceType(currentResource));
+
+                            temporaryAction3 = isSuccessReceived();
+                            if(!temporaryAction3){
+                                endProduction();
+                                isSuccessReceived();
+                            }
+                        }
+                        else
+                        {
+                            System.out.print(ANSI_GREEN+"You already used this production power, press enter to continue "+RESET);
+                            input.readLine();
+                        }
+                        break;
+
+                    case 0:
+                        if(temporaryAction1 || temporaryAction2 || temporaryAction3){
+                            actionDone = true;
+                            endProduction();
+                            isSuccessReceived();
+                        }
+                        break;
                 }
             }
 
@@ -1154,7 +1144,7 @@ public class CLI extends View implements Runnable{
      * and asks wat to do with them, discard or play. It also sands
      * the answer to the server
      */
-    private void showLeaderBoard() {
+    private void showLeaderBoard() throws IOException {
         int currentAction = 0;
         int currentCard;
 
@@ -1206,33 +1196,29 @@ public class CLI extends View implements Runnable{
                     }
                 }
 
-                try {
-                    switch (currentAction) {
 
-                        case 1:
-                            currentCard = cliSupporter.integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
-                            if (currentCard == -1)
-                                continue;
-                            activateLeader(currentCard);
-                            if(!isSuccessReceived())
-                                continue;
-                            break;
+                switch (currentAction) {
 
-                        case 2:
-                            currentCard = cliSupporter.integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
-                            if (currentCard == -1)
-                                continue;
-                            discardLeader(currentCard);
-                            if(!isSuccessReceived())
-                                continue;
-                            break;
+                    case 1:
+                        currentCard = cliSupporter.integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
+                        if (currentCard == -1)
+                            continue;
+                        activateLeader(currentCard);
+                        if(!isSuccessReceived())
+                            continue;
+                        break;
 
-                        case 0:
-                            break;
-                    }
+                    case 2:
+                        currentCard = cliSupporter.integerInput("Select card (0 to exit): ", 0, leaderInHand.size()) - 1;
+                        if (currentCard == -1)
+                            continue;
+                        discardLeader(currentCard);
+                        if(!isSuccessReceived())
+                            continue;
+                        break;
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    case 0:
+                        break;
                 }
             }
             else {
@@ -1253,7 +1239,7 @@ public class CLI extends View implements Runnable{
      * Method that allows the user to chose two leader cards at
      * the beginning of the game
      */
-    private void choseLeaderCards() {
+    private void choseLeaderCards() throws IOException{
         Integer[] chose= new Integer[2];
 
         LeaderBoard leaderBoard = game.getPlayerTurn(playerNumber).getPlayer().getPersonalBoard().getLeaderBoard();
@@ -1274,14 +1260,8 @@ public class CLI extends View implements Runnable{
         }while(chose[0].equals(chose[1]));
 
 
-        try
-        {
-            chooseLeader(chose);
-            isSuccessReceived();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        chooseLeader(chose);
+        isSuccessReceived();
 
     }
 

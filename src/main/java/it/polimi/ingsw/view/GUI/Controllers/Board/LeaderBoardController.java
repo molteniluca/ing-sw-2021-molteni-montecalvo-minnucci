@@ -160,7 +160,7 @@ public class LeaderBoardController extends GenericController {
     }
 
     /**
-     * Method that is invoked when client received an updated game and update the entire leader board view
+     * Method that is invoked when client received an updated game and updates the entire leader board view
      */
     @Override
     public void update() {
