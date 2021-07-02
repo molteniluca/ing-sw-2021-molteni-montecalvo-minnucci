@@ -59,12 +59,11 @@ public class MarketController extends GenericController implements Initializable
     @FXML
     private Rectangle rMarket, rMarketTotal;
 
-    int column = -1, row = -1, arrowsSelected = 0;
+    private int column = -1, row = -1, arrowsSelected = 0;
 
-    Resources resourcesFromMarket;
-    int  numResOccupied, numResToAdd, numResToMove;
+    private Resources resourcesFromMarket;
 
-    ArrayList<ExtraResource> effects;
+    private ArrayList<ExtraResource> effects;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -81,6 +80,10 @@ public class MarketController extends GenericController implements Initializable
         Platform.runLater(this::updateMarketMatrix);
     }
 
+    /**
+     * Method that update the market with marbles
+     * and enable arrow (row and column) selection
+     */
     private void updateMarketMatrix() {
         Market market = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getGeneralBoard().getMarket();
         ResourceTypes[][] marketMatrix = market.getMarketMatrix();
@@ -93,6 +96,7 @@ public class MarketController extends GenericController implements Initializable
             arrow.setDisable(false);
         }
 
+        //set marble images in market
         for(int i=0; i < market.ROWS; i++)
         {
             for(int j=0; j < market.COLUMNS; j++)
@@ -101,34 +105,47 @@ public class MarketController extends GenericController implements Initializable
             }
         }
 
+        //set external resource
         externalResource.setImage(fromResourceToMarbleImage(market.getExternalResource()));
     }
 
+    /**
+     * It checks which row or column the player has chosen
+     * and counts how many arrows are selected
+     * @param mouseEvent click on one arrow (row and column)
+     */
     public void chooseRowColumn(MouseEvent mouseEvent) {
         String tempString = mouseEvent.getPickResult().getIntersectedNode().getId();
         ImageView tempImageView = stringIdToImageView(tempString);
+
+        //if arrow was not selected previously
         if (tempImageView.getOpacity()!=1) {
             tempImageView.setOpacity(1);
-            if (tempImageView.getId().charAt(2) == 'h')
+            if (tempImageView.getId().charAt(2) == 'h') //image name could be iah or iav, h = horizontal (row), v = vertical (column)
                 row = (int) tempImageView.getId().charAt(3) - 49;
             else
                 column = (int) tempImageView.getId().charAt(3) -49;
-            arrowsSelected++;
+            arrowsSelected++; //to count how many arrows are selected
         }
         else {
             tempImageView.setOpacity(0);
-            if (tempImageView.getId().charAt(2) == 'h')
+            if (tempImageView.getId().charAt(2) == 'h') //image name could be iah or iav, h = horizontal (row), v = vertical (column)
                 row = -1;
             else
                 column = -1;
-            arrowsSelected--;
+            arrowsSelected--; //to count how many arrows are selected
         }
     }
 
+    /**
+     * Method invoked when player confirm his row or column choice,
+     * it check if everything is ok and sends info to the server
+     */
     public void confirmRowColumn() {
         if (arrowsSelected == 1){
             if (row != -1){
                 try {
+                    //for leader effect with white marble
                     int selectedEffect=-1;
                     for(int i=0; i< effects.size();i++){
                         if(extraEffectComboBox.getValue()==effects.get(i).getResource()){
@@ -143,6 +160,7 @@ public class MarketController extends GenericController implements Initializable
             }
             else if (column != -1){
                 try {
+                    //for leader effect with white marble
                     int selectedEffect=-1;
                     for(int i=0; i< effects.size();i++){
                         if(extraEffectComboBox.getValue()==effects.get(i).getResource()){
@@ -156,6 +174,7 @@ public class MarketController extends GenericController implements Initializable
                 }
             }
         }
+        //arrows selected are more than one or zero arrows are selected
         else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
@@ -167,14 +186,19 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Shows the swap area after buying from market
-     * also enables all the necessary buttons setting their opacity to one
+     * Shows the swap area after buying from market,
+     * enables all the necessary buttons setting and
+     * their opacity to one
      */
     private void showSwapArea() {
         updateComboBoxes();
         setAbleButtons();
     }
 
+    /**
+     * Method that update swap area label resources
+     * with new information received from the server
+     */
     private void updateSwap(){
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
         resourcesFromMarket = warehouseDepots.getSwapDeposit();
@@ -190,14 +214,19 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
+    /**
+     * Method invoked when player chose to take
+     * resources from warehouse pressing bTake button
+     */
     public void takeResources() {
         int level;
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
+        //selection of level
         String comboSelection = comboLevelTake.getValue().toString();
         level = comboSelection.charAt(comboSelection.length()-1) -49;
 
-        if (warehouseDepots.getResourcesNumber(level) == 0) {
+        if (warehouseDepots.getResourcesNumber(level) == 0) { //if there are zero resources in level selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Illegal action");
@@ -213,11 +242,16 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
+    /**
+     * Method invoked when player chose to place
+     * resources in warehouse pressing bPlace button
+     */
     public void placeResources() {
         int level;
         ResourceTypes resourceTypesToMove; //resource type obtained from the resource selected
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
+        //selection of level
         String comboSelection = comboLevelPlace.getValue().toString();
         level = comboSelection.charAt(comboSelection.length()-1) -49;
 
@@ -230,6 +264,7 @@ public class MarketController extends GenericController implements Initializable
             alert.showAndWait();
         }
 
+        //if there are no resources in level chosen and level has not fixed resourceTypes player can chose which type of resource place
         if (warehouseDepots.getResourcesNumber(level) == 0 && !warehouseDepots.getLevel(level).isFixedResource()) {
 
             resourceTypesToMove = (ResourceTypes) comboResourceTypePlace.getValue();
@@ -238,13 +273,15 @@ public class MarketController extends GenericController implements Initializable
             resourceTypesToMove = warehouseDepots.getResourceTypeLevel(level);
 
         if (warehouseDepots.getResourcesNumber(level) == 0 || warehouseDepots.getResourceTypeLevel(level).equals(resourceTypesToMove)) {
-            numResOccupied = warehouseDepots.getResourcesNumber(level);
+            int numResOccupied = warehouseDepots.getResourcesNumber(level);
 
+            int numResToAdd;
             if (0 <= level && level < 3)
                 numResToAdd = level + 1 - numResOccupied;
             else
                 numResToAdd = 2 - numResOccupied;
 
+            int numResToMove;
             if (resourcesFromMarket.getResourceNumber(resourceTypesToMove) < numResToAdd)
                 numResToMove = resourcesFromMarket.getResourceNumber(resourceTypesToMove);
             else
@@ -260,6 +297,11 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
+    /**
+     * Method invoked when player selects one level to place resources in comboBox.
+     * It clears and sets correct items to chose in comboResourceTypePlace,
+     * depending on fixed resources for leader levels or default options
+     */
     public void levelPlaceSelected() {
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
 
@@ -287,6 +329,11 @@ public class MarketController extends GenericController implements Initializable
         }
     }
 
+    /**
+     * Method invoked when player confirm and
+     * terminate his swap action. It Sends info to
+     * the server and hide and disable swap and market
+     */
     public void confirmSwap(){
         boolean exit = false;
 
@@ -334,6 +381,11 @@ public class MarketController extends GenericController implements Initializable
         return blank;
     }
 
+    /**
+     * Method that converts String id of image to ImageView
+     * @param string id of image to convert
+     * @return ImageView of relative string id
+     */
     private ImageView stringIdToImageView(String string){
         ImageView image = null;
         for (ImageView iArrows: arrows) {
@@ -343,12 +395,16 @@ public class MarketController extends GenericController implements Initializable
         return image;
     }
 
+    /**
+     * Getter of marketController to manage it from GameBoardController
+     * @return the marketController
+     */
     public static MarketController getMarketController() {
         return marketController;
     }
 
     /**
-     * Enables the buttons setting the disable
+     * Enables and shows swap area
      */
     private void setAbleButtons(){
         comboLevelPlace.setDisable(false);
@@ -370,6 +426,9 @@ public class MarketController extends GenericController implements Initializable
         lYouHaveNow.setOpacity(1);
     }
 
+    /**
+     * Disable and hide swap area
+     */
     private void hideSwapArea() {
         comboLevelPlace.setDisable(true);
         comboLevelTake.setDisable(true);
@@ -389,6 +448,9 @@ public class MarketController extends GenericController implements Initializable
         lYouHaveNow.setOpacity(0);
     }
 
+    /**
+     * Update method for correct items in comboBoxes in swap area
+     */
     private void updateComboBoxes(){
         int numberOfLevels = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots().getNumberLevels();
 
@@ -409,7 +471,7 @@ public class MarketController extends GenericController implements Initializable
     }
 
     /**
-     * Disable arrow after swap action
+     * Disable arrows after swap action
      */
     private void disableMarket(){
         for (ImageView image: arrows) {
@@ -418,14 +480,22 @@ public class MarketController extends GenericController implements Initializable
             if (image.getOpacity() != 0)
                 image.setOpacity(0);
         }
+        row = -1;
+        column = -1;
     }
 
+    /**
+     * Method that allows or not to click in market and swap area thanks to little gray rectangles
+     */
     private void setClickable(){
         rMarketTotal.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isWaitingForAction()||
                 guiView.game.getPlayerTurn(guiView.playerNumber).isProducing());
         rMarket.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());
     }
 
+    /**
+     * Method that is invoked when client received an updated game and update the entire market view
+     */
     @Override
     public void update() {
         Platform.runLater( () -> {
