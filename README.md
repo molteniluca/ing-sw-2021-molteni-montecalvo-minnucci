@@ -43,7 +43,7 @@ it is necessary to reach the folder which contains the jar and type:
 ``` 
 java -jar Client.jar
 ```
-Mode GUI will be selected automatically. To launch the command line 
+GUI mode will be selected automatically. To launch the command line 
 interface it is necessary to enter a specific parameter:
 ```
 java -jar Client.jar --cli
