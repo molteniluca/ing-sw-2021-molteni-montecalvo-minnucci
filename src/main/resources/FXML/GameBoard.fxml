@@ -25,7 +25,7 @@
       <AnchorPane fx:id="marketAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <AnchorPane fx:id="buttonAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
       <Rectangle fx:id="rectangleBlock" arcHeight="5.0" arcWidth="5.0" fill="#909090" height="1572.0" opacity="0.71" stroke="BLACK" strokeType="INSIDE" width="1501.0" />
-      <ProgressIndicator fx:id="spinnyThing" maxHeight="700.0" maxWidth="450.0" opacity="0.46" prefHeight="46.0" prefWidth="32.0" style="-fx-progress-color: darkred;" translateX="505.0" translateY="-115.0" GridPane.rowIndex="1" />
+      <ProgressIndicator fx:id="spinningThing" maxHeight="700.0" maxWidth="450.0" opacity="0.46" prefHeight="46.0" prefWidth="32.0" style="-fx-progress-color: darkred;" translateX="505.0" translateY="-115.0" GridPane.rowIndex="1" />
       <Label fx:id="labelWaitForPlayers" styleClass="customText" text="Waiting for other Players" translateX="317.0" translateY="-450.0" GridPane.rowIndex="1">
          <font>
             <Font size="80.0" />
