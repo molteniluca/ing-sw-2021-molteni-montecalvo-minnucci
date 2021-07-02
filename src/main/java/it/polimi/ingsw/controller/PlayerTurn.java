@@ -386,9 +386,7 @@ public class PlayerTurn implements Turn, Serializable {
                     } catch (FaithNotAllowedException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
-                        e.printStackTrace();
-                    } catch (ResourceTypeAlreadyPresentException e) {
+                    } catch (LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException | ResourceTypeAlreadyPresentException e) {
                         e.printStackTrace();
                     }
                 }
@@ -406,9 +404,7 @@ public class PlayerTurn implements Turn, Serializable {
                     } catch (FaithNotAllowedException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
-                        e.printStackTrace();
-                    } catch (ResourceTypeAlreadyPresentException e) {
+                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException | ResourceTypeAlreadyPresentException e) {
                         e.printStackTrace();
                     }
                 }
@@ -432,9 +428,7 @@ public class PlayerTurn implements Turn, Serializable {
                     } catch (FaithNotAllowedException | WrongObjectException e) {
                         clientHandler.sendObject(ERROR);
                         clientHandler.sendObject(e.getMessage());
-                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException e) {
-                        e.printStackTrace();
-                    } catch (ResourceTypeAlreadyPresentException e) {
+                    } catch (FaithOverflowException | LevelTooSmallException | NegativeResourceValueException | TypeNotChangeableException | ResourceTypeAlreadyPresentException e) {
                         e.printStackTrace();
                     }
                 }
@@ -500,6 +494,10 @@ public class PlayerTurn implements Turn, Serializable {
         return waitingForAction;
     }
 
+    /**
+     * Method that forces the turn ending for this player
+     * @throws IOException In case the client has disconnected
+     */
     @Override
     public void endTurn() throws IOException {
         clientHandler.sendObject(ENDTURN);

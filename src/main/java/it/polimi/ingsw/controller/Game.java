@@ -222,7 +222,6 @@ public class Game implements Serializable {
         return (SelfPlayingTurn) turns.get(1);
     }
 
-
     public int getNumPlayers() {
         return numPlayers;
     }

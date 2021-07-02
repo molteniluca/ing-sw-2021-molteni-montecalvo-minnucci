@@ -15,12 +15,12 @@ import static it.polimi.ingsw.network.NetworkMessages.*;
  * Object that handles a connection with the server
  */
 public class NetworkHandler extends Thread{
-    private Socket server;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
+    private final Socket server;
+    private final ObjectInputStream in;
+    private final ObjectOutputStream out;
     private final View view;
+    private final HeartBeatThreadClient heartBeatThreadClient;
     private boolean alreadyClosed=false;
-    private HeartBeatThreadClient heartBeatThreadClient;
 
     /**
      * Constructor of the class

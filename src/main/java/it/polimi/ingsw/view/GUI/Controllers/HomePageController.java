@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.GUI.Controllers;
 
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
