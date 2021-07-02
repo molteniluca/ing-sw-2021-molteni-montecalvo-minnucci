@@ -9,18 +9,18 @@ which the clients can connect via socket. The project in its entirety uses the M
 
 ## Functionalities
 Features that have been implemented:
-•     Complete rules of the game.
-•     GLI
-•     GUI
-•     Socket
-• 1 Advanced functionality (FA):
+- Complete rules of the game.
+- CLI
+- GUI
+- Socket
+- 1 Advanced functionality (FA):
   - **Multiple games**: server can support more than one game at the same time.
     When they log in, the player can choose either to join a game by entering 
     the specific ID or to create a new one. In the second case, it will be asked 
     the numbers of players, and he will receive an ID, which has to be entered by 
     the players who want to join. The game starts only when all the players are connected. 
 
-• In the game is possible to see other player boards as in real board game.
+- In the game is possible to see other player boards just like in the real board game.
 
 ## Tools
 Different software tools have been used in the project making:
