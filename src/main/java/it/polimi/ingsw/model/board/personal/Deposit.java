@@ -32,6 +32,11 @@ public class Deposit implements Serializable {
         return warehouseDepots.getResources().add(strongBox.getResources());
     }
 
+    /**
+     * Method that checks weather you can remove resources from this level
+     * @param requirements The resources to check
+     * @return True if there are enough resources and false if not
+     */
     public boolean checkRemoveResource(Resources requirements){
         return this.getTotalResources().isSubPositive(requirements);
     }

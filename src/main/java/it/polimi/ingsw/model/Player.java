@@ -7,12 +7,22 @@ import it.polimi.ingsw.model.cards.LeaderCard;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Class that represents a player
+ */
 public class Player implements Serializable {
     private static final long serialVersionUID = 6732146736278436277L;
     private final String name;
     private final boolean hasInkwell;
     private final PersonalBoard personalBoard;
 
+    /**
+     * Constructor of the object
+     * @param name The name of the player
+     * @param hasInkwell The boolean that represents the inkwell
+     * @param generalBoard The general board of this player
+     * @param leaderCards The starting leader cards of the player
+     */
     public Player(String name, boolean hasInkwell, GeneralBoard generalBoard, ArrayList<LeaderCard> leaderCards) {
         this.name = name;
         this.hasInkwell = hasInkwell;

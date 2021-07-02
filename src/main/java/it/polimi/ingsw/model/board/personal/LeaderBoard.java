@@ -154,6 +154,10 @@ public class LeaderBoard implements Serializable {
         }
     }
 
+    /**
+     * Gets the victory points for this object
+     * @return The victory points
+     */
     public int getVictoryPoint() {
         for(LeaderCard l : leaderCards){
             victoryPoints+=l.getVictoryPoint();

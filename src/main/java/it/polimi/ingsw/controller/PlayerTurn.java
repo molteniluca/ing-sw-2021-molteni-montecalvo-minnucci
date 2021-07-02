@@ -500,6 +500,10 @@ public class PlayerTurn implements Turn, Serializable {
         return waitingForAction;
     }
 
+    /**
+     * Method that forces the turn ending for this player
+     * @throws IOException In case the client has disconnected
+     */
     @Override
     public void endTurn() throws IOException {
         clientHandler.sendObject(ENDTURN);

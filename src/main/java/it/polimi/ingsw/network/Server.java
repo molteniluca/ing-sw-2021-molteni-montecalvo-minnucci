@@ -59,7 +59,9 @@ public class Server {
         new ClientHandler(client,rooms).start();
     }
 
-
+    /**
+     * Method that closes the server
+     */
     private void closeServer() {
         printDebug("Server closing...");
         try {
@@ -83,6 +85,10 @@ public class Server {
         System.out.println(debugTime() + "\t\t" + "SERVER -> "+s);
     }
 
+    /**
+     * Main method to run the server
+     * @param args Command line arguments
+     */
     public static void main( String[] args )
     {
         if(args.length==0)
@@ -97,6 +103,10 @@ public class Server {
         }
     }
 
+    /**
+     * Method that retrieves the time for log print reasons
+     * @return
+     */
     public static String debugTime(){
         StringBuilder s = new StringBuilder(LocalTime.now().toString());
         while (s.length()<18){

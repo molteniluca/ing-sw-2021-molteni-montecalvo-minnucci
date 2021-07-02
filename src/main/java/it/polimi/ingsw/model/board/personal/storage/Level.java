@@ -91,11 +91,27 @@ public class Level implements Serializable {
             throw new LevelTooSmallException("Trying to put too much resources in a level");
     }
 
+    /**
+     * Method that adds resources to this level
+     * @param resourceNumber The number of resources to be added
+     * @param resourceType The type of resources to be added
+     * @throws LevelTooSmallException In case the level isn't big enough
+     * @throws NegativeResourceValueException In case you're trying to use this method for a subtraction
+     * @throws TypeNotChangeableException In case you're trying to add a different resources than the ones in this level
+     */
     public void addResources(int resourceNumber, ResourceTypes resourceType) throws LevelTooSmallException, NegativeResourceValueException, TypeNotChangeableException {
         this.setResourceType(resourceType);
         this.setResourceNumber(this.resourceNumber + resourceNumber);
     }
 
+    /**
+     * Method that remover resources to this level
+     * @param resourceNumber The number of resources to be removed
+     * @param resourceType The type of resources to be removed
+     * @throws LevelTooSmallException In case the level isn't big enough
+     * @throws NegativeResourceValueException In case there aren't enough resources in this level
+     * @throws TypeNotChangeableException In case you're trying to subtract a different resources than the ones in this level
+     */
     public void removeResources(int resourceNumber, ResourceTypes resourceType) throws NegativeResourceValueException, LevelTooSmallException, TypeNotChangeableException {
         this.setResourceType(resourceType);
         this.setResourceNumber(this.resourceNumber - resourceNumber);
