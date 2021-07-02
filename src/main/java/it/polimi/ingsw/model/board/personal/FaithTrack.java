@@ -34,33 +34,34 @@ public class FaithTrack implements Serializable {
             points+=3;
         if(faithCards[2]==1)
             points+=4;
-        switch (position){
-            case 3:
-                points+=1;
-                break;
-            case 6:
-                points+=2;
-                break;
-            case 9:
-                points+=4;
-                break;
-            case 12:
-                points+=6;
-                break;
-            case 15:
-                points+=9;
-                break;
-            case 18:
-                points+=12;
-                break;
-            case 21:
-                points+=16;
-                break;
-            case 24:
-                points+=20;
-                break;
+
+        int increment=0;
+        if(position>=3){
+            increment=1;
+            if(position>=6){
+                increment=2;
+                if(position>=9){
+                    increment=4;
+                    if(position>=12){
+                        increment=6;
+                        if(position>=15){
+                            increment=9;
+                            if(position>=18){
+                                increment=12;
+                                if(position>=21){
+                                    increment=16;
+                                    if(position==24){
+                                        increment=20;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        return points;
+
+        return points+increment;
     }
 
     public int getPosition(){
@@ -74,13 +75,13 @@ public class FaithTrack implements Serializable {
     public void checkRelationship(int zone){
         switch (zone){
             case 0:
-                if(position>4 && position<9)
+                if(position>4)
                     faithCards[0]=1;
                 else
                     faithCards[0]=2;
                 break;
             case 1:
-                if(position>11 && position<17)
+                if(position>11)
                     faithCards[1]=1;
                 else
                     faithCards[1]=2;
@@ -100,20 +101,21 @@ public class FaithTrack implements Serializable {
      * @throws FaithOverflowException In case the faith goes out of bounds
      */
     public void incrementPosition(int increment) throws FaithOverflowException {
-        this.position+=increment;
+        if(increment!=0){
+            this.position+=increment;
+            if(this.position>=8){
+                if(this.faithCards[0]==0)
+                    this.faithObserver.notify(0);
 
-        if(this.position>=8){
-            if(this.faithCards[0]==0)
-                this.faithObserver.notify(0);
+                if(this.position>=16) {
+                    if (this.faithCards[1] == 0)
+                        this.faithObserver.notify(1);
 
-            if(this.position>=16) {
-                if (this.faithCards[1] == 0)
-                    this.faithObserver.notify(1);
-
-                if (this.position >= 24) {
-                    this.position=24;
-                    this.faithObserver.notify(2);
-                    throw new FaithOverflowException("Trying to exceed faith boundaries");
+                    if (this.position >= 24) {
+                        this.position=24;
+                        this.faithObserver.notify(2);
+                        throw new FaithOverflowException("Trying to exceed faith boundaries");
+                    }
                 }
             }
         }

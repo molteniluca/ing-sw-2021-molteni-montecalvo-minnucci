@@ -12,7 +12,6 @@ import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.exceptions.WinException;
-import it.polimi.ingsw.model.resources.Resources;
 import it.polimi.ingsw.network.server.ClientHandler;
 import it.polimi.ingsw.network.server.Server;
 
@@ -159,8 +158,8 @@ public class Game implements Serializable {
                     turns.get(currentPlayer).beginTurn();
                 } catch (FaithOverflowException | WinException | CardsOfSameColorFinishedException e) {
                     gameEnded=true;
-                    turns.get(currentPlayer).endTurn();
                     printDebug("The game has ended, player " + currentPlayer + " triggered: " + e.getMessage());
+                    turns.get(currentPlayer).endTurn();
                 }
             }
         }
