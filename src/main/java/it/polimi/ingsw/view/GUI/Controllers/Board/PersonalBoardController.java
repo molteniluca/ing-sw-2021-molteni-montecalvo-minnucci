@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class PersonalBoardController extends GenericController {
     private int currentFaithPosition, currentLorenzoFaithPosition;
-    private int[] slotPosition = new int[3];
+    private final int[] slotPosition = new int[3];
     private static PersonalBoardController personalBoardController;
 
     @FXML
@@ -43,14 +43,14 @@ public class PersonalBoardController extends GenericController {
     private static final Image[] popeFavorBack = new Image[]{popeFavor1Back, popeFavor2Back, popeFavor3Back};
 
     @FXML
-    public GridPane availableResourcesProduction;
+    private GridPane availableResourcesProduction;
     @FXML
-    public Label stoneLabelProduction, shieldLabelProduction, servantLabelProduction, goldLabelProduction;
+    private Label stoneLabelProduction, shieldLabelProduction, servantLabelProduction, goldLabelProduction;
     @FXML
-    public Label playerName;
-    @FXML
+    private Label playerName;
+    @FXML //i = image, f = faith
     private ImageView if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24;
-    @FXML
+    @FXML //i = image, f = faith, l = Lorenzo
     private ImageView ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24;
 
     private ImageView[] faithImagePosition, faithLorenzoImagePosition;
@@ -77,10 +77,25 @@ public class PersonalBoardController extends GenericController {
     private ImageView[] popeFavor; //an array of the 3 popeCards
 
     @FXML
-    public Rectangle rPersonal;
+    void initialize(){
+        personalBoardImage.setImage(personalBoardImageLoaded);
+        personalBoardController=this;
+        popeFavor = new ImageView[]{popeFavor1, popeFavor2, popeFavor3};
+        faithImagePosition = new ImageView[]{if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24};
+        faithLorenzoImagePosition = new ImageView[]{ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24};
+        level2Image = new ImageView[]{lev2_1, lev2_2};
+        level4Image = new ImageView[]{lev4_1, lev4_2};
+        level5Image = new ImageView[]{lev5_1, lev5_2};
+        level3Image = new ImageView[]{lev3_1, lev3_2, lev3_3};
+        slots = new ImageView[][]{{slot1_1, slot1_2, slot1_3},{slot2_1, slot2_2, slot2_3},{slot3_1, slot3_2, slot3_3}};
+    }
 
+    /**
+     * Update method for faithTrack, for single player and multiplayer
+     * @param player number of player's faith track
+     */
     @FXML
-    void updateFaithTrack(int player){
+    private void updateFaithTrack(int player){
         //sets the position of the player in the faith track
         faithImagePosition[currentFaithPosition].setVisible(false);
         currentFaithPosition = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getFaithTrack().getPosition();
@@ -128,8 +143,12 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
+    /**
+     * Update method for strongbox
+     * @param player number of player's strongbox to show
+     */
     @FXML
-    void updateStrongBox(int player){
+    private void updateStrongBox(int player){
         Resources resStrongBox = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getStrongBox().getResources();
         goldLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.GOLD)));
         servantLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.SERVANT)));
@@ -137,11 +156,15 @@ public class PersonalBoardController extends GenericController {
         stoneLabel.setText(String.valueOf(resStrongBox.getResourceNumber(ResourceTypes.STONE)));
     }
 
+    /**
+     * Update method for warehouse
+     * @param player number of player's warehouse to show
+     */
     @FXML
-    void updateWarehouse(int player){
+    private void updateWarehouse(int player){
         WarehouseDepots warehouseDepots = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getDeposit().getWarehouseDepots();
+        //for every levels which current player has, "overwrite" levels with current player resources
         for(int i = 0; i< warehouseDepots.getNumberLevels(); i++){
-            int resourceNumber = warehouseDepots.getResourcesNumber(i);
             ResourceTypes resourceTypes = warehouseDepots.getResourceTypeLevel(i);
             int maxResources = warehouseDepots.getLevel(i).getMaxResourceNumber();
             String imageName = null;
@@ -151,11 +174,20 @@ public class PersonalBoardController extends GenericController {
             }
             changeLevelResources(imageName, warehouseDepots.getResourcesNumber(i), maxResources, i);
         }
+        //for every levels which current player does not have, clear them
         for(int i = warehouseDepots.getNumberLevels(); i< 5; i++){
             changeLevelResources(null, 0, 2, i);
         }
     }
 
+    /**
+     * Method that changes resources in levels or clears levels,
+     * depending on which player board you are watching
+     * @param imageName String name of image
+     * @param numberOfResources number of resources that player has in that level
+     * @param maxNumberOfResources max number of resources that level has
+     * @param level level to modify
+     */
     private void changeLevelResources(String imageName, int numberOfResources, int maxNumberOfResources, int level){
         Image image;
         if(imageName == null)
@@ -199,8 +231,12 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
+    /**
+     * Update method for production cards
+     * @param player number of player's production cards to show
+     */
     @FXML
-    void updateProductionCards(int player){
+    private void updateProductionCards(int player){
         ArrayList<DevelopmentCard>[] developmentCard = guiView.game.getPlayerTurn(player).getPlayer().getPersonalBoard().getCardBoard().getDevelopmentCardsMatrix();
 
         for(int k=0;k<3;k++){
@@ -225,6 +261,12 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
+    /**
+     * Method that update personal board view setting images of production cards
+     * @param level level 1, 2 or 3 to set the image of card
+     * @param slot slot 1, 2 or 3 to set the image of card
+     * @param developmentCard DevelopmentCard to convert in an image
+     */
     private void updateSlotImage(int level,int slot, DevelopmentCard developmentCard){
         if(developmentCard!=null) {
             String nameImage = developmentCard.getImage();
@@ -234,37 +276,32 @@ public class PersonalBoardController extends GenericController {
         }
     }
 
-    @FXML
-    void initialize(){
-        personalBoardImage.setImage(personalBoardImageLoaded);
-        personalBoardController=this;
-        popeFavor = new ImageView[]{popeFavor1, popeFavor2, popeFavor3};
-        faithImagePosition = new ImageView[]{if0, if1, if2, if3, if4, if5, if6, if7, if8, if9, if10, if11, if12, if13, if14, if15, if16, if17, if18, if19, if20, if21, if22, if23, if24};
-        faithLorenzoImagePosition = new ImageView[]{ifl0, ifl1, ifl2, ifl3, ifl4, ifl5, ifl6, ifl7, ifl8, ifl9, ifl10, ifl11, ifl12, ifl13, ifl14, ifl15, ifl16, ifl17, ifl18, ifl19, ifl20, ifl21, ifl22, ifl23, ifl24};
-        level2Image = new ImageView[]{lev2_1, lev2_2};
-        level4Image = new ImageView[]{lev4_1, lev4_2};
-        level5Image = new ImageView[]{lev5_1, lev5_2};
-        level3Image = new ImageView[]{lev3_1, lev3_2, lev3_3};
-        slots = new ImageView[][]{{slot1_1, slot1_2, slot1_3},{slot2_1, slot2_2, slot2_3},{slot3_1, slot3_2, slot3_3}};
-    }
-
+    /**
+     * Getter of personalBoardController to manage it from GameBoardController
+     * @return the personalBoardController
+     */
     public static PersonalBoardController getPersonalBoardController() {
         return personalBoardController;
     }
 
+    /**
+     * Method that shows strongbox when player's mouse enters the strongbox
+     */
     public void showStrongBox() {
         strongBoxGrid.setOpacity(1);
     }
 
+    /**
+     * Method that hideStrongBox when player's mouse exits from strongbox
+     */
     public void hideStrongBox() {
         strongBoxGrid.setOpacity(0);
     }
 
-    private void setClickable(){
-        /*rPersonal.setVisible(guiView.game.getPlayerTurn(guiView.playerNumber).isAlreadyDone() ||
-                guiView.game.getPlayerTurn(guiView.playerNumber).isHandlingSwap());*/
-    }
-
+    /**
+     * Generic update for all personal board, it recalls all update methods
+     * @param player player whose board you want to see
+     */
     void updatePersonalBoard(int player){
         updateFaithTrack(player);
         updateStrongBox(player);
@@ -273,15 +310,18 @@ public class PersonalBoardController extends GenericController {
         playerName.setText(guiView.game.getPlayerTurn(player).getPlayer().getName()+" | "+ (player + 1) +"° Player");
     }
 
-
+    /**
+     * Method that is invoked when client received an updated game and update the entire personal board view
+     */
     @Override
     public void update() {
-        Platform.runLater(() -> {
-            updatePersonalBoard(guiView.playerNumber);
-            setClickable();
-        });
+        Platform.runLater(() -> updatePersonalBoard(guiView.playerNumber));
     }
 
+    /**
+     * Method that update personal boards when "showing other player" button is pressed
+     * @param player player whose personal board you want to see
+     */
     public void update(int player) {
         updatePersonalBoard(player);
     }
