@@ -18,39 +18,36 @@ import java.util.ArrayList;
 
 public class InitialLeaderSelectionController extends GenericController{
     int numberOfSelectedLeader, i;
-    private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected, isSecondResourceChosen;
+    private boolean isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected;
     private boolean isResourcesSelected;
-    Boolean isLeaderSelected[];
     private ResourceTypes temp, resourceTypes = null;
 
     @FXML
-    Label lChooseResource, lWrongNumberOfLeaders;
+    private Label lChooseResource;
 
     @FXML
-    GridPane gChooseResource, gChooseResource2;
+    private GridPane gChooseResource, gChooseResource2;
 
     @FXML
-    ImageView leader1, leader2, leader3, leader4;
+    private ImageView leader1, leader2, leader3, leader4;
 
     @FXML
-    ImageView iGold, iServant, iShield, iStone; //i = image
+    private ImageView iGold, iServant, iShield, iStone; //i = image
 
     @FXML
-    ImageView iGold2, iServant2, iShield2, iStone2;
-
-    ImageView[] leadersImage;
+    private ImageView iGold2, iServant2, iShield2, iStone2;
 
 
     @FXML
     void initialize(){
-        leadersImage = new ImageView[]{leader1, leader2, leader3, leader4};
-        isLeaderSelected = new Boolean[]{isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
+        ImageView[] leadersImage = new ImageView[]{leader1, leader2, leader3, leader4};
         ArrayList<LeaderCard> leaderCards = guiView.game.getPlayerTurn(guiView.playerNumber).getPlayer().getPersonalBoard().getLeaderBoard().getLeaderCardsInHand();
         for (LeaderCard leaders: leaderCards) {
             leaderToImageName(leaders, leadersImage[i]);
             i++;
         }
 
+        //different players has different initial requests
         switch(guiView.playerNumber){
             case 0:
                 lChooseResource.setOpacity(0);
@@ -59,11 +56,9 @@ public class InitialLeaderSelectionController extends GenericController{
                 break;
 
             case 1:
-                lChooseResource.setText("You can have one resource");
-                break;
 
             case 2:
-                lChooseResource.setText("You can have one resource and one faith point");
+                lChooseResource.setText("You can have one resource");
                 break;
 
             case 3:
@@ -73,6 +68,11 @@ public class InitialLeaderSelectionController extends GenericController{
         }
     }
 
+    /**
+     * Method invoked when player select his first resource,
+     * different scenarios after selection, depending on player number.
+     * @param mouseEvent click on first resource
+     */
     public void chooseFirstResource(MouseEvent mouseEvent) {
 
         imageResBiggerAndToResourceType(mouseEvent);
@@ -87,6 +87,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 isResourcesSelected = true;
                 break;
 
+            //only the fourth player has to choose the second resource
             case 3:
                 gChooseResource.setDisable(true);
                 gChooseResource2.setDisable(false);
@@ -97,6 +98,10 @@ public class InitialLeaderSelectionController extends GenericController{
         }
     }
 
+    /**
+     * Method invoked when fourth player select his second resource
+     * @param mouseEvent click on the second resource
+     */
     public void chooseSecondResource(MouseEvent mouseEvent) {
         imageResBiggerAndToResourceType(mouseEvent);
 
@@ -104,6 +109,11 @@ public class InitialLeaderSelectionController extends GenericController{
         gChooseResource2.setDisable(true);
     }
 
+    /**
+     * Method that keeps track of the selected leader
+     * cards and counts them thanks to sub-method
+     * @param mouseEvent click on leader card
+     */
     public void selectLeaderCard(MouseEvent mouseEvent) {
         String id = mouseEvent.getPickResult().getIntersectedNode().getId();
         switch (id){
@@ -122,28 +132,42 @@ public class InitialLeaderSelectionController extends GenericController{
         }
     }
 
+    /**
+     * Boolean method that make leader images bigger
+     * and counts how many leaders are selected
+     * @param leader image of leader selected
+     * @param isLeaderSelected boolean attribute which tells
+     *                         you if leader is clicked or not
+     * @return boolean value which tells you if leader is selected or not
+     */
     private boolean selectLeader(ImageView leader, boolean isLeaderSelected){
         if(!isLeaderSelected) {
             leader.setFitHeight(247.5);
             leader.setFitWidth(180);
             isLeaderSelected = true;
-            numberOfSelectedLeader++;
+            numberOfSelectedLeader++; //total number of leader selected
         }
         else{
             leader.setFitHeight(220);
             leader.setFitWidth(160);
             isLeaderSelected = false;
-            numberOfSelectedLeader--;
+            numberOfSelectedLeader--; //total number of leader selected
         }
         return isLeaderSelected;
     }
 
+    /**
+     * Method that checks if player has selected all of his items,
+     * sends the information to the server and open GameBoard
+     * @param actionEvent click on confirm button
+     */
     public void confirmResourcesLeaders(ActionEvent actionEvent) {
         if(numberOfSelectedLeader==2 && (isResourcesSelected || guiView.playerNumber==0)) {
 
             Integer[] numberOfLeaderToSend = new Integer[2];
             boolean[] isLeaderSelected = {isLeader1Selected, isLeader2Selected, isLeader3Selected, isLeader4Selected};
             int k = 0;
+            //set array of int related to leaders to send
             for (int j = 0; j < 4; j++) {
                 if (isLeaderSelected[j]){
                     numberOfLeaderToSend[k] = j;
@@ -151,6 +175,7 @@ public class InitialLeaderSelectionController extends GenericController{
                 }
             }
 
+            //send information to server
             try {
                 if (guiView.playerNumber == 3) {
                     guiView.setInitialResources(temp, resourceTypes);
@@ -178,11 +203,22 @@ public class InitialLeaderSelectionController extends GenericController{
         }
     }
 
+    /**
+     * Method that converts LeaderCard to ImageView
+     * @param leader LeaderCard to convert
+     * @param image image to set
+     */
     private void leaderToImageName(LeaderCard leader, ImageView image){
         String temp = "images/Cards/LeaderCards/" + leader.getImage() + "-1.png";
         image.setImage(new Image(temp));
     }
 
+    /**
+     * Method that make res images bigger and
+     * assigns correct ResourceTypes depending
+     * on which image was chosen
+     * @param mouseEvent click on image chosen
+     */
     private void imageResBiggerAndToResourceType(MouseEvent mouseEvent){
         ImageView imageView = (ImageView) mouseEvent.getSource();
         imageView.setFitWidth(50);
@@ -197,6 +233,9 @@ public class InitialLeaderSelectionController extends GenericController{
             resourceTypes = ResourceTypes.STONE;
     }
 
+    /**
+     * Method invoked from GUIView when server notify a disconnection
+     */
     public void handleDisconnect() {
         Platform.runLater(() -> {
             Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
