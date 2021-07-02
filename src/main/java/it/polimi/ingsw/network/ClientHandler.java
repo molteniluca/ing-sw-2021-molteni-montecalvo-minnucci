@@ -89,11 +89,13 @@ public class ClientHandler extends Thread{
      */
     public <T> T receiveObject(Class<? extends T> c) throws IOException, WrongObjectException {
         Object read = null;
-        heartbeatThreadServer.notifyIsWaitingForMessage();
+        if(heartbeatThreadServer!=null)
+            heartbeatThreadServer.notifyIsWaitingForMessage();
         while(read==null){
             try {
                 read = in.readObject();
-                heartbeatThreadServer.notifyMessage();
+                if(heartbeatThreadServer!=null)
+                    heartbeatThreadServer.notifyMessage();
                 if (read == null){
                     sendObject(ERROR);
                     sendObject("Unexpected object, expecting:"+c.toString()+", but got null");
@@ -119,6 +121,8 @@ public class ClientHandler extends Thread{
                 throw new WrongObjectException("Unexpected object");
             }
         }
+        if(heartbeatThreadServer!=null)
+            heartbeatThreadServer.notifyIdle();
 
         return c.cast(read);
     }

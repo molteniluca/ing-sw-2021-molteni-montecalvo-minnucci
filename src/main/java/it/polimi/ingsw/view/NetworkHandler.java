@@ -11,7 +11,9 @@ import java.net.Socket;
 
 import static it.polimi.ingsw.network.NetworkMessages.*;
 
-
+/**
+ * Object that handles a connection with the server
+ */
 public class NetworkHandler extends Thread{
     private Socket server;
     private ObjectInputStream in;
@@ -20,6 +22,13 @@ public class NetworkHandler extends Thread{
     private boolean alreadyClosed=false;
     private HeartBeatThreadClient heartBeatThreadClient;
 
+    /**
+     * Constructor of the class
+     * @param serverAddress The address of the server
+     * @param serverPort The port of the server
+     * @param view The view to be notified when events happen
+     * @throws IOException In case the communication with the server could not be established
+     */
     public NetworkHandler(String serverAddress, int serverPort, View view) throws IOException {
         this.view=view;
         server = new Socket(serverAddress, serverPort);
@@ -39,7 +48,11 @@ public class NetworkHandler extends Thread{
         }
     }
 
-
+    /**
+     * Method that receives an object from the server
+     * @return The object received
+     * @throws IOException In case the server has disconnected
+     */
     private Object receiveObject() throws IOException {
         Object read = null;
         while(read==null){
@@ -83,14 +96,26 @@ public class NetworkHandler extends Thread{
         return read;
     }
 
+    /**
+     * Sends an object to the server
+     * @param o The object to be sent
+     * @throws IOException In case the server has disconnected
+     */
     public synchronized void sendObject(Object o) throws IOException {
         out.writeObject(o);
     }
 
+    /**
+     * Sends an heartbeat to the server
+     * @throws IOException In case the server has disconnected
+     */
     public void sendHeartBeat() throws IOException {
         sendObject(HEARTBEAT);
     }
 
+    /**
+     * Closes the connection with the server
+     */
     public synchronized void closeConnection(){
         if(!alreadyClosed) {
             view.notifyResponse(ERROR);
