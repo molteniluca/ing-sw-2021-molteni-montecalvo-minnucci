@@ -30,7 +30,7 @@ Different software tools have been used in the project making:
 |IntelliJ IDEA| IDE written in Java developed by JetBrain|
 |[Apache Maven](https://maven.apache.org)|Java-based build automation and software project management tool|
 |JavaFX|Graphic library used by Java for the creation of user interfaces|
-|JUnit|Unit testing Framework (built into IntelliJ)|
+|JUnit|Unit testing Framework (embedded into IntelliJ)|
 
 
 ## Starting the game
