@@ -15,31 +15,10 @@ public class OtherPlayerBoardsController extends GenericController{
     private int currentPlayer=0;
 
     @FXML
-    AnchorPane leaderAnchorPane, personalBoardAnchorPane;
+    private AnchorPane leaderAnchorPane, personalBoardAnchorPane;
 
     @FXML
-    AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard;
-
-    public void previousPlayer(ActionEvent actionEvent) {
-        if(currentPlayer==0)
-            currentPlayer=guiView.game.getNumPlayers()-1;
-        else
-            currentPlayer--;
-        update();
-    }
-
-    public void nextPlayer(ActionEvent actionEvent) {
-        if(guiView.game.getNumPlayers()==currentPlayer+1)
-            currentPlayer=0;
-        else
-            currentPlayer++;
-        update();
-    }
-
-    public void toHomePage(ActionEvent actionEvent) throws IOException {
-        GameBoardController.goToGameBoard(actionEvent);
-    }
-
+    private AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard;
 
     @FXML
     void initialize() throws IOException {
@@ -53,6 +32,40 @@ public class OtherPlayerBoardsController extends GenericController{
         update();
     }
 
+    /**
+     * Method invoked when player wants to see previous player game board
+     */
+    public void previousPlayer() {
+        if(currentPlayer==0)
+            currentPlayer=guiView.game.getNumPlayers()-1;
+        else
+            currentPlayer--;
+        update();
+    }
+
+    /**
+     * Method invoked when player wants to see next player game board
+     */
+    public void nextPlayer() {
+        if(guiView.game.getNumPlayers()==currentPlayer+1)
+            currentPlayer=0;
+        else
+            currentPlayer++;
+        update();
+    }
+
+    /**
+     * Method invoked when player wants to return to game board
+     * @param actionEvent click on button
+     * @throws IOException if file fxml does not exits
+     */
+    public void toHomePage(ActionEvent actionEvent) throws IOException {
+        GameBoardController.goToGameBoard(actionEvent);
+    }
+
+    /**
+     * Method that is invoked when client received an updated game and update the entire otherPlayerBoard view
+     */
     @Override
     public void update() {
         Platform.runLater(() -> {

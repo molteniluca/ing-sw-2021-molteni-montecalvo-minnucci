@@ -17,39 +17,38 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameBoardController extends GenericController {
-    public static Stage stage;
+    private static Stage stage;
     @FXML
-    public Rectangle rectangleBlock;
+    private Rectangle rectangleBlock;
     @FXML
-    public Label labelWaitForPlayers;
+    private Label labelWaitForPlayers;
     @FXML
-    public ProgressIndicator spinnyThing;
+    private ProgressIndicator spinningThing;
     @FXML
-    AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane, marketAnchorPane;
+    private AnchorPane leaderAnchorPane, personalBoardAnchorPane, buttonAnchorPane, marketAnchorPane;
 
-    AnchorPane newLoadedPaneLeader, newLoadedPanePersonalBoard, newLoadedPaneButton, newLoadedAnchorPaneMarket;
+    private final ArrayList<GenericController> controllerArrayList = new ArrayList<>();
 
-    ArrayList<GenericController> controllerArrayList = new ArrayList<>();
+    private Alert alertDisconnected, alertWin, alertError;
 
-    Alert alertDisconnected, alertTurnEnded, alertWin, alertError;
 
     @FXML
-    void initialize() throws IOException {
+    public void initialize() throws IOException {
         guiView.registerStage(this);
 
-        newLoadedPaneLeader =  FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
+        AnchorPane newLoadedPaneLeader = FXMLLoader.load(ClassLoader.getSystemResource("FXML/LeaderBoard.fxml"));
         leaderAnchorPane.getChildren().add(newLoadedPaneLeader);
 
-        newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
+        AnchorPane newLoadedPanePersonalBoard = FXMLLoader.load(ClassLoader.getSystemResource("FXML/PersonalBoard.fxml"));
         personalBoardAnchorPane.getChildren().add(newLoadedPanePersonalBoard);
 
-        newLoadedAnchorPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
+        AnchorPane newLoadedAnchorPaneMarket = FXMLLoader.load(ClassLoader.getSystemResource("FXML/Market.fxml"));
         marketAnchorPane.getChildren().add(newLoadedAnchorPaneMarket);
 
-        newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
+        AnchorPane newLoadedPaneButton = FXMLLoader.load(ClassLoader.getSystemResource("FXML/ButtonBoard.fxml"));
         buttonAnchorPane.getChildren().add(newLoadedPaneButton);
         rectangleBlock.setVisible(!guiView.isMyTurn);
-        spinnyThing.setVisible(!guiView.isMyTurn);
+        spinningThing.setVisible(!guiView.isMyTurn);
         labelWaitForPlayers.setVisible(!guiView.isMyTurn);
 
         controllerArrayList.add(PersonalBoardController.getPersonalBoardController());
@@ -59,10 +58,13 @@ public class GameBoardController extends GenericController {
         notifyUpdate();
     }
 
+    /**
+     * Method that enable player to start its turn giving him an alert
+     */
     public void startTurn() {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(false);
-            spinnyThing.setVisible(false);
+            spinningThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
             if(guiView.game.getNumPlayers()!=1) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -75,26 +77,25 @@ public class GameBoardController extends GenericController {
         });
     }
 
+    /**
+     * Method that ends player turn
+     */
     public void endTurn() {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
-            spinnyThing.setVisible(true);
+            spinningThing.setVisible(true);
             labelWaitForPlayers.setVisible(true);
-            /*if(alertWin==null) {
-                alertTurnEnded = new Alert(Alert.AlertType.INFORMATION);
-                alertTurnEnded.setTitle("Your turn has ended");
-                alertTurnEnded.setHeaderText("Your turn has ended");
-                alertTurnEnded.setContentText("Wait for the other players to play");
-
-                alertTurnEnded.showAndWait();
-            }*/
         });
     }
 
+    /**
+     * Method that disable actions and warn player
+     * about a problem of connection with the server
+     */
     public void handleDisconnect() {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
-            spinnyThing.setVisible(false);
+            spinningThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
             if(alertWin==null){
                 alertDisconnected = new Alert(Alert.AlertType.ERROR);
@@ -108,16 +109,18 @@ public class GameBoardController extends GenericController {
         });
     }
 
+    /**
+     * Method that shows alert which notifies players about
+     * the end of the game and tells if player has won or lost
+     * @param youWon boolean parameter true if player has won
+     */
     public void handleGameEnd(boolean youWon) {
         Platform.runLater(() -> {
             rectangleBlock.setVisible(true);
-            spinnyThing.setVisible(false);
+            spinningThing.setVisible(false);
             labelWaitForPlayers.setVisible(false);
             if(alertError!=null){
                 alertError.close();
-            }
-            if(alertTurnEnded!=null){
-                alertTurnEnded.close();
             }
             if(alertDisconnected!=null){
                 alertDisconnected.close();
@@ -152,6 +155,10 @@ public class GameBoardController extends GenericController {
         });
     }
 
+    /**
+     * Method that shows an alert with message of error
+     * @param lastErrorMessage the error message
+     */
     public void showError(String lastErrorMessage) {
         Platform.runLater(() -> {
             alertError = new Alert(Alert.AlertType.ERROR);
@@ -172,6 +179,11 @@ public class GameBoardController extends GenericController {
         }
     }
 
+    /**
+     * Method that opens GameBoard
+     * @param actionEvent click of buttons that open GameBoard
+     * @throws IOException if fxml GameBoard file cannot be opened
+     */
     public static void goToGameBoard(ActionEvent actionEvent) throws IOException {
         Parent GameBoardViewParent = FXMLLoader.load(ClassLoader.getSystemResource("FXML/GameBoard.fxml"));
 

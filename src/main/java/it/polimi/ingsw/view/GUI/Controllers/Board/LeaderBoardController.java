@@ -26,78 +26,19 @@ public class LeaderBoardController extends GenericController {
     private ImageView ilh1, ilh2, ila1, ila2; //i = image, l = leader, h = hand, a = activated
 
     @FXML
-    public Rectangle rLeader;
-
-    public static LeaderBoardController getLeaderBoardController() {
-        return leaderBoardController;
-    }
+    private Rectangle rLeader;
 
     @FXML
     void initialize(){
         leaderBoardController=this;
     }
 
-    private void leaderToImageName(LeaderCard leader, ImageView image){
-        if(leader!=null)
-            image.setImage(new Image("images/Cards/LeaderCards/" + leader.getImage() + "-1.png"));
-        else
-            image.setImage(null);
-    }
-
-    @Override
-    public void update() {
-        Platform.runLater(()->{
-            update(guiView.playerNumber);
-        });
-    }
-
-    public void discardLeader(ActionEvent actionEvent) {
-        if(leaderSelected == -1)
-            Platform.runLater(() -> {
-                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
-                alertDisconnected.setTitle("Error!");
-                alertDisconnected.setHeaderText("You need to select a leader card");
-                alertDisconnected.setContentText("Retry");
-                alertDisconnected.showAndWait();
-            });
-        else
-            try {
-                guiView.discardLeader(leaderSelected);
-                guiView.isSuccessReceived();
-            } catch (IOException e) {
-                guiView.notifyDisconnection();
-            }
-    }
-
-    private void selectImage(ImageView im, boolean isActive) {
-        if(isActive) {
-            im.setFitWidth(140.0);
-            im.setFitHeight(210);
-        }
-        else{
-            im.setFitWidth(130.0);
-            im.setFitHeight(195.0);
-        }
-    }
-
-    public void activateLeader(ActionEvent actionEvent) {
-        if(leaderSelected == -1)
-            Platform.runLater(() -> {
-                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
-                alertDisconnected.setTitle("Error!");
-                alertDisconnected.setHeaderText("You need to select a leader card");
-                alertDisconnected.setContentText("Retry");
-                alertDisconnected.showAndWait();
-            });
-        else
-            try {
-                guiView.activateLeader(leaderSelected);
-                guiView.isSuccessReceived();
-            } catch (IOException e) {
-                guiView.notifyDisconnection();
-            }
-    }
-
+    /**
+     * Method invoked when one leader is selected,
+     * it keeps track of which leader is chosen and
+     * change layout image clicked
+     * @param mouseEvent clicked leader card
+     */
     public void leaderClick(MouseEvent mouseEvent) {
         if(mouseEvent.getPickResult().getIntersectedNode().getId().equals("ilh1")){
             if(leaderSelected==0)
@@ -126,6 +67,88 @@ public class LeaderBoardController extends GenericController {
         }
     }
 
+    /**
+     * Method invoked when player decides to discard leader card selected
+     */
+    public void discardLeader() {
+        if(leaderSelected == -1)
+            Platform.runLater(() -> {
+                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+                alertDisconnected.setTitle("Error!");
+                alertDisconnected.setHeaderText("You need to select a leader card");
+                alertDisconnected.setContentText("Retry");
+                alertDisconnected.showAndWait();
+            });
+        else
+            try {
+                guiView.discardLeader(leaderSelected);
+                guiView.isSuccessReceived();
+            } catch (IOException e) {
+                guiView.notifyDisconnection();
+            }
+    }
+
+    /**
+     * Method invoked when player decides to activate leader card selected
+     */
+    public void activateLeader() {
+        if(leaderSelected == -1)
+            Platform.runLater(() -> {
+                Alert alertDisconnected = new Alert(Alert.AlertType.ERROR);
+                alertDisconnected.setTitle("Error!");
+                alertDisconnected.setHeaderText("You need to select a leader card");
+                alertDisconnected.setContentText("Retry");
+                alertDisconnected.showAndWait();
+            });
+        else
+            try {
+                guiView.activateLeader(leaderSelected);
+                guiView.isSuccessReceived();
+            } catch (IOException e) {
+                guiView.notifyDisconnection();
+            }
+    }
+
+    /**
+     * Method that select or deselect a leader card
+     * @param im image whose layout is to be changed
+     * @param isActive boolean parameter to keep track of
+     *                 selection of leader card
+     */
+    private void selectImage(ImageView im, boolean isActive) {
+        if(isActive) {
+            im.setFitWidth(140.0);
+            im.setFitHeight(210);
+        }
+        else{
+            im.setFitWidth(130.0);
+            im.setFitHeight(195.0);
+        }
+    }
+
+    /**
+     * Method that set LeaderCard image
+     * @param leader LeaderCard to see
+     * @param image image to set
+     */
+    private void leaderToImageName(LeaderCard leader, ImageView image){
+        if(leader!=null)
+            image.setImage(new Image("images/Cards/LeaderCards/" + leader.getImage() + "-1.png"));
+        else
+            image.setImage(null);
+    }
+
+    /**
+     * Getter of leaderBoardController to manage it from GameBoardController
+     * @return the leaderBoardController
+     */
+    public static LeaderBoardController getLeaderBoardController() {
+        return leaderBoardController;
+    }
+
+    /**
+     * Method that allows or not to click in leaderBoard thanks to little-gray rectangles
+     */
     private void setClickable(int player){
         if(player == guiView.playerNumber)
             rLeader.setVisible(!guiView.game.getPlayerTurn(guiView.playerNumber).isLeaderAction() && !
@@ -136,6 +159,20 @@ public class LeaderBoardController extends GenericController {
             rLeader.setVisible(false);
     }
 
+    /**
+     * Method that is invoked when client received an updated game and update the entire leader board view
+     */
+    @Override
+    public void update() {
+        Platform.runLater(()->{
+            update(guiView.playerNumber);
+        });
+    }
+
+    /**
+     * Method that update leader board when "showing other player" button is pressed
+     * @param player player whose leader board you want to see
+     */
     public void update(int player) {
         setClickable(player);
         ImageView[] leaderInHandView=new ImageView[]{ilh1,ilh2};
