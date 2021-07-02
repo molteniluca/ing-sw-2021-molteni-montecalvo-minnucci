@@ -133,7 +133,7 @@ public class InitialLeaderSelectionController extends GenericController{
     }
 
     /**
-     * Boolean method that make leader images bigger
+     * Boolean method that makes leader images bigger
      * and counts how many leaders are selected
      * @param leader image of leader selected
      * @param isLeaderSelected boolean attribute which tells
@@ -214,7 +214,7 @@ public class InitialLeaderSelectionController extends GenericController{
     }
 
     /**
-     * Method that make res images bigger and
+     * Method that makes res images bigger and
      * assigns correct ResourceTypes depending
      * on which image was chosen
      * @param mouseEvent click on image chosen
