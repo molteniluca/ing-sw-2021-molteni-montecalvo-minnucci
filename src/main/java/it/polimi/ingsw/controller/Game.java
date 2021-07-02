@@ -12,8 +12,8 @@ import it.polimi.ingsw.model.cards.specialAbility.*;
 import it.polimi.ingsw.model.exceptions.FaithOverflowException;
 import it.polimi.ingsw.model.exceptions.CardsOfSameColorFinishedException;
 import it.polimi.ingsw.model.exceptions.WinException;
-import it.polimi.ingsw.network.ClientHandler;
-import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.server.ClientHandler;
+import it.polimi.ingsw.network.server.Server;
 
 import java.io.*;
 import java.util.*;

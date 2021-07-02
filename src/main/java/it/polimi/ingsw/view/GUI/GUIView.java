@@ -54,7 +54,7 @@ public class GUIView extends View {
      * @param youWon True if you won and false if not
      */
     @Override
-    protected void notifyEndGame(boolean youWon) {
+    public void notifyEndGame(boolean youWon) {
         gameBoardController.handleGameEnd(youWon);
     }
 

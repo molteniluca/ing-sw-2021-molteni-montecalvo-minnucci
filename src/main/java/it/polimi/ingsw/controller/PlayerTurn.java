@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.resources.ResourceTypes;
 import it.polimi.ingsw.model.resources.Resources;
-import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.network.server.ClientHandler;
 import it.polimi.ingsw.network.NetworkMessages;
 import it.polimi.ingsw.network.exceptions.WrongObjectException;
 
@@ -179,14 +179,14 @@ public class PlayerTurn implements Turn, Serializable {
             player.getPersonalBoard().getLeaderBoard().discardLeader(clientHandler.receiveObject(Integer.class));
             clientHandler.sendObject(SUCCESS);
             clientHandler.sendGame(playerNum);
-            return true;
+            return false;
         }catch (IndexOutOfBoundsException | WrongObjectException e){
             clientHandler.sendObject(ERROR);
             if(e.getMessage()==null)
                 clientHandler.sendObject("Index not valid!");
             else
                 clientHandler.sendObject(e.getMessage());
-            return false;
+            return true;
         }
     }
 
