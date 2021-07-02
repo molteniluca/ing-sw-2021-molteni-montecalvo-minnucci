@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 import static it.polimi.ingsw.model.resources.ResourceTypes.*;
-import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
 
 public class ButtonBoardController extends GenericController {
     private static ButtonBoardController buttonBoardController;

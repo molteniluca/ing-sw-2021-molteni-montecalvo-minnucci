@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static it.polimi.ingsw.model.resources.ResourceTypes.*;
-import static it.polimi.ingsw.model.resources.ResourceTypes.STONE;
 import static it.polimi.ingsw.view.CLI.ColorCLI.*;
 import static it.polimi.ingsw.view.CLI.ColoredResources.FAITH;
 

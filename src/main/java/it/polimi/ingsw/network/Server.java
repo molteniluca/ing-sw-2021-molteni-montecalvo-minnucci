@@ -105,7 +105,7 @@ public class Server {
 
     /**
      * Method that retrieves the time for log print reasons
-     * @return
+     * @return The string representing the time
      */
     public static String debugTime(){
         StringBuilder s = new StringBuilder(LocalTime.now().toString());

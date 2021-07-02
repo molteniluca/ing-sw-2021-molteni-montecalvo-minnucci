@@ -22,7 +22,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
 import static it.polimi.ingsw.model.resources.ResourceTypes.*;
-import static it.polimi.ingsw.model.resources.ResourceTypes.SERVANT;
 
 
 public class MarketController extends GenericController implements Initializable {
