@@ -17,6 +17,7 @@ import it.polimi.ingsw.network.server.Server;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that represents an entire game
@@ -190,6 +191,11 @@ public class Game implements Serializable {
             for (int i = 0; i < numPlayers; i++) {
                 turns.get(i).endGame(maxVictoryPoints == victoryPoints.get(i));
             }
+        }
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
