@@ -70,4 +70,14 @@ public class LeaderBoardTest {
         personalBoard.getDeposit().getWarehouseDepots().addResourceSwap(new Resources().set(ResourceTypes.STONE,1));
         personalBoard.getDeposit().getWarehouseDepots().moveToLevel(3,ResourceTypes.STONE,1);
     }
+
+    @Test
+    public void selectLeaderTest(){
+        LeaderCard l1= personalBoard.getLeaderBoard().getLeaderCardsInHand().get(1);
+        LeaderCard l2= personalBoard.getLeaderBoard().getLeaderCardsInHand().get(2);
+        personalBoard.getLeaderBoard().selectLeaders(new Integer[]{1,2});
+
+        personalBoard.getLeaderBoard().getLeaderCardsInHand().get(0).equals(l1);
+        personalBoard.getLeaderBoard().getLeaderCardsInHand().get(0).equals(l2);
+    }
 }

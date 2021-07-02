@@ -87,6 +87,7 @@ public class PersonalBoardTest {
 
     @Test
     public void testProduce() {
+        personalBoard.initProduce();
         try {
             personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SERVANT,1));
         } catch (FaithNotAllowedException e) {
@@ -100,6 +101,19 @@ public class PersonalBoardTest {
             assert true;
         }
 
+        try {
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SHIELD,2));
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            personalBoard.produce(ResourceTypes.SERVANT,ResourceTypes.SHIELD,ResourceTypes.FAITH);
+            assert true;
+        } catch (NegativeResourceValueException | FaithOverflowException e) {
+            assert false;
+        }
+
 
         try {
             personalBoard.playLeader(personalBoard.getLeaderBoard().getLeaderCardsInHand().get(2));
@@ -108,6 +122,7 @@ public class PersonalBoardTest {
         }
 
         assert personalBoard.handleDiscount(new Resources().set(ResourceTypes.SHIELD,2).set(ResourceTypes.STONE,1)).equals(new Resources().set(ResourceTypes.SHIELD,1).set(ResourceTypes.STONE,1));
+
     }
 
     @Test
@@ -185,17 +200,68 @@ public class PersonalBoardTest {
     }
 
     @Test
-    public void testEnqueueProduce() {
+    public void testEnqueueProduce() throws FaithNotAllowedException {
+        personalBoard.initProduce();
         try {
-            personalBoard.enqueueProduce(ResourceTypes.SHIELD,ResourceTypes.FAITH);
+            personalBoard.getCardBoard().insertCard(new DevelopmentCard(1,"a",new Resources(),'c',1,new Resources().set(ResourceTypes.SHIELD,2).set(ResourceTypes.SERVANT,1),new Resources().set(ResourceTypes.FAITH,1).set(ResourceTypes.STONE,1)),0);
+        } catch (IncompatibleCardLevelException e) {
+            e.printStackTrace();
+        } catch (WinException e) {
+            e.printStackTrace();
+        }
+        try {
+            personalBoard.produce(0);
             assert false;
         } catch (UnusableCardException e) {
             assert true;
-        } catch (NegativeResourceValueException e) {
-            assert false;
         } catch (FaithOverflowException e) {
             assert false;
         }
+
+        try {
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1));
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            personalBoard.enqueueProduce(0);
+            assert false;
+        } catch (UnusableCardException e) {
+            assert true;
+        } catch (FaithOverflowException e) {
+            assert false;
+        } catch (NegativeResourceValueException e) {
+            assert false;
+        }
+        assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1));
+
+        try {
+            personalBoard.playLeader(personalBoard.getLeaderBoard().getLeaderCardsInHand().get(2));
+        } catch (UnusableCardException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            personalBoard.enqueueProduce(0);
+            assert false;
+        } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException e) {
+            assert true;
+        }
+        assert personalBoard.getFaithTrack().getPosition()==0;
+        personalBoard.getDeposit().getStrongBox().addResource(personalBoard.getCardBoard().getDevelopmentCards().get(0).getProductionCost());
+        personalBoard.initProduce();
+        try {
+            personalBoard.enqueueProduce(0);
+            assert true;
+        } catch (UnusableCardException | FaithOverflowException | NegativeResourceValueException e) {
+            assert false;
+        }
+        personalBoard.endProduce();
+        assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.SERVANT,1).set(ResourceTypes.SHIELD,1).add(
+                personalBoard.getCardBoard().getDevelopmentCards().get(0).getProductionPower().eraseFaith()
+        ));
+        assert personalBoard.getFaithTrack().getPosition()==personalBoard.getCardBoard().getDevelopmentCards().get(0).getProductionPower().getResourceNumber(ResourceTypes.FAITH);
     }
 
     @Test
@@ -241,11 +307,70 @@ public class PersonalBoardTest {
         }
 
         Resources res=personalBoard.getAvailableResources();
+        assert res.equals(new Resources());
         assert personalBoard.getDeposit().getTotalResources().equals(new Resources().set(ResourceTypes.STONE,1));
 
     }
 
     @Test
     public void testEnqueueProduce2() {
+        personalBoard.initProduce();
+        try {
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SERVANT,1));
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            personalBoard.enqueueProduce(ResourceTypes.SERVANT,ResourceTypes.SHIELD,ResourceTypes.FAITH);
+            assert false;
+        } catch (NegativeResourceValueException | FaithOverflowException e) {
+            assert true;
+        }
+
+        try {
+            personalBoard.getDeposit().getStrongBox().addResource(new Resources().set(ResourceTypes.SHIELD,2));
+        } catch (FaithNotAllowedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            personalBoard.enqueueProduce(ResourceTypes.SERVANT,ResourceTypes.SHIELD,ResourceTypes.FAITH);
+            assert false;
+        } catch (NegativeResourceValueException | FaithOverflowException e) {
+            assert true;
+        }
+
+        personalBoard.initProduce();
+        try {
+            personalBoard.enqueueProduce(ResourceTypes.SERVANT,ResourceTypes.SHIELD,ResourceTypes.FAITH);
+            assert true;
+        } catch (NegativeResourceValueException | FaithOverflowException e) {
+            assert false;
+        }
+
+
+        try {
+            personalBoard.playLeader(personalBoard.getLeaderBoard().getLeaderCardsInHand().get(2));
+        } catch (UnusableCardException e) {
+            e.printStackTrace();
+        }
+
+        assert personalBoard.handleDiscount(new Resources().set(ResourceTypes.SHIELD,2).set(ResourceTypes.STONE,1)).equals(new Resources().set(ResourceTypes.SHIELD,1).set(ResourceTypes.STONE,1));
+
+    }
+
+    @Test
+    public void drawCard() throws FaithNotAllowedException, IncompatibleCardLevelException, NegativeResourceValueException, WinException, CardsOfSameColorFinishedException {
+        personalBoard.getDeposit().getStrongBox().addResource(personalBoard.getGeneralBoard().getCardDealer().getCost(2,1));
+
+        personalBoard.drawCard(2,1,0,true);
+
+        assert personalBoard.getCardBoard().getUpperDevelopmentCards()[0]!=null;
+    }
+
+    @Test
+    public void getVictoryPoint(){
+        assert personalBoard.getVictoryPoints()==0;
     }
 }
