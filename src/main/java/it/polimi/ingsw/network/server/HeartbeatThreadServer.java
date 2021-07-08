@@ -42,7 +42,11 @@ public class HeartbeatThreadServer extends TimerTask {
                             this.cancel();
                         }
                     }else
+                    {
+                        countFromDisconnect = 0;
                         messageReceived=false;
+                    }
+
                 }
             } catch (IOException e) {
                 clientHandler.handleDisconnect();
