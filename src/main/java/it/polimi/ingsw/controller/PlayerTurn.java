@@ -92,7 +92,7 @@ public class PlayerTurn implements Turn, Serializable {
                     break;
                 case TURNEND:
                     clientHandler.sendObject(ERROR);
-                    clientHandler.sendObject("You must complete at lest one action");
+                    clientHandler.sendObject("You must complete at least one action");
             }
             if(!error){
                 alreadyDone=true;

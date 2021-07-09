@@ -50,7 +50,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label alignment="CENTER" layoutX="469.0" layoutY="340.0" prefHeight="98.0" prefWidth="563.0" styleClass="customText" text="Choose two leaders cards" textAlignment="CENTER" AnchorPane.bottomAnchor="462.0" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="468.0">
+      <Label alignment="CENTER" layoutX="469.0" layoutY="340.0" prefHeight="98.0" prefWidth="563.0" styleClass="customText" text="Choose two leader cards" textAlignment="CENTER" AnchorPane.bottomAnchor="462.0" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="468.0">
          <font>
             <Font size="50.0" />
          </font>

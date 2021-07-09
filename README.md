@@ -4,7 +4,7 @@
 
 The final exam consists in the implementation of the game board of [Masters of Renaissance](http://www.craniocreations.it/prodotto/masters-of-renaissance/). 
 The project involves the use of a client-server architecture with a single central server in 
-which the clients can connect via socket. The project in its entirety uses the MCV architecture 
+which the clients can connect via socket. The project in its entirety uses the MVC architecture 
 (Model-View-Controller).
 
 ## Functionalities
